@@ -2,62 +2,48 @@ use dialogflow as knowledge.
 use dialogflow as actionspec.
 
 module st_event {
-	% Answering questions, through speech...
-	if percept(intent(I,[]), (I = 'answer_yes' ; I = 'answer_no')), bel(question(N,'answer_yesno')) 
-		then insert(answer(N,I)) + log(answer(N,I)).
-	if percept(intent('answer_age',[V]), integer(V), V>1, V<101), bel(question(N,'answer_age')) 
-		then insert(answer(N,V)) + log(answer(N,V)).
-	if percept(intent('answer_city',[V]), atom_length(V,L), L>1), bel(question(N,'answer_city')) 
-		then insert(answer(N,V)) + log(answer(N,V)).
-	% ... or tablet
-	if percept(answer(A)), bel(question(N,_)) 
-		then insert(answer(N,A)) + log(answer(N,A)).
-	
-	% Basic new question answering handling
+
+	%%% HANDLING DIALOG EVENTS %%%
 	if percept(intent(I,[]), (I = 'answer_yes' ; I = 'answer_no')), bel(currentState(S), state(S, question, _))
 		then insert(answer(S, I)).
 	
-	% Basic event handling
+	
+	%%% HANDLING NAO EVENTS %%%
 	if percept(event(E)), not(bel(event(E)))
 		then insert(event(E)).
 	if bel(event(E)), not(percept(event(E)))
 		then delete(event(E)).
 	if bel(event(E), waitingForEvent(E))
 		then delete(waitingForEvent(E)).
-	
-	if percept(personDetected, get_time(T))
-		then insert(personDetected(T)) + log(personDetected).
-	if percept(faceRecognized(_), get_time(T))
-		then insert(personDetected(T)) + log(personDetected).
-		
+
 	if percept(timer(S,_)), not(bel(timeout(S)))
 		then insert(timeout(S)) + log(timeout(S)).
 	if bel(timeout(S)), not(percept(timer(S,_)))
 		then delete(timeout(S)).
 		
-	if percept(audioLanguage(L)), bel(lang(Old))
-		then delete(lang(Old)) + insert(lang(L)).
-		
-		
-	% State transition handling
+	
+	%%% HANDLING STATE EVENTS %%%
+
+	%% State Type Handling%%
 	
 	% Complete logic for say state: from (1) start to (2) waiting for event 'TextDone' and 'AninDone'??? to (3) completion.
 	if bel(currentState(S), state(S, say, _), not(start), not(waitingForEvent(_)))
 		then insert(completed(S)).
 	
 	% Complete logic for question state: from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
-	if bel(currentState(S), state(S, question, [context=C]), not(start), not(waitingForEvent(_)), not(waitingForAnswer(_)))
+	if bel(currentState(S), state(S, question, [_, _, context=C]), not(start), not(waitingForEvent(_)), not(waitingForAnswer(_)))
 		then insert(waitingForAnswer(0)) + startListening(C).
 				
 	if bel(currentState(S), state(S, question, _), not(start), not(waitingForEvent(_)), waitingForAnswer(0), answer(S, A))
 		then delete(waitingForAnswer(0), answer(S, A)) + insert(completed(S), nextCondition(A)) + stopListening.
 	
-	%%% DETERMINE NEXT STATE	
-	% If state completed, then transition to next state (if condition holds TODO).
+	%% State Transition Handling %%
+	
+	% If state completed, then transition to next state.
 	if bel(currentState(S1), completed(S1), not(nextCondition(_)), next(S1, _, S2))
 		then delete(currentState(S1), completed(S1)) + insert(currentState(S2), start).
 	
-	% Branching based on nextCondition
+	% If state completed, then transition to next state given a nextCondition(C)
 	if bel(currentState(S1), completed(S1), nextCondition(C), next(S1, C, S2))
 		then delete(currentState(S1), completed(S1), nextCondition(C)) + insert(currentState(S2), start).
 

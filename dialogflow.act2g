@@ -45,39 +45,6 @@ define stopWatching with
 	pre { true }
 	post { true }
 	
-% TABLET ACTIONS
-define showImage(Url) with
-	pre { true }
-	post { true }
-
-define showCaptionedImage(Url,Text) with
-	pre { true }
-	post { true }
-	
-define showVideo(Url) with
-	pre { true }
-	post { true }
-	
-define showWebpage(Url) with
-	pre { true }
-	post { true }
-	
-define showText(Text) with
-	pre { true }
-	post { true }
-	
-define askYesNo(Question) with
-	pre { true }
-	post { true }
-	
-define askRating(Question) with
-	pre { true }
-	post { true }
-	
-define askConfirmation(Name) with
-	pre { true }
-	post { true }
-
 % DIALOGFLOW CONTROL
 define setAgent(Agent) with
 	pre { true }

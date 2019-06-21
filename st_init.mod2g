@@ -3,6 +3,5 @@ use dialogflow as actionspec.
 
 module st_init {
 	if true then
-		insert(currentState(s1), start, flow(1), mood(h), lang('nl-NL')) + 
-		setEyeColour('white') + setIdle + startWatching.
+		insert(currentState(s1), start) + setEyeColour('white'). %To do: create initialization state for all robot related initialization.
 }
