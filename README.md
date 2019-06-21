@@ -1,1 +1,1 @@
-# GoalAgent
+# HeroGoalAgent
