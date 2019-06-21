@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%
 %%% global (default) config parameters
 % give a user two tries to provide an answer to a question (of whatever type). [IDEA: Override by adding try=X option to question type states] 
-maxAnswerAttempts(2).
+maxAnswerAttempts(1).
 
 % Time to answer question
 maxAnswerTime(4000).
