@@ -1,0 +1,15 @@
+use 'DialogFlow-0.0.1-SNAPSHOT-shaded.jar' as environment with
+		server='localhost',
+		flowkey='exampleagent-d8916-45d4143bb490.json',
+		flowagent='exampleagent-d8916',
+		flowlang='nl-NL'.
+		
+define story_telling as agent {
+	use st_init as init.
+	use st_event as event.
+	use st_main as main.
+}
+
+launchpolicy{
+	when * launch story_telling.
+}
