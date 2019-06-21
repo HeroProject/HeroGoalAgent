@@ -3,9 +3,18 @@ use dialogflow as actionspec.
 
 module st_event {
 
-	%%% HANDLING DIALOG EVENTS %%%
+	%%% HANDLING INCOMMING ANSWERS %%%
+	%% Dialoglow %%
 	if percept(intent(I,[]), (I = 'answer_yes' ; I = 'answer_no')), bel(currentState(S), state(S, question, _))
 		then insert(answer(S, I)).
+	
+	%% Bumpers %%
+	% Right bumper means yes
+		if percept(event('RightBumperPressed')), bel(waitingForEvent('RightBumperPressed'), currentState(S), state(S, question, [type=Type, response=Res]), Res=touch, Type=yesno)
+			then insert(answer(S,'answer_yes')) + delete(waitingForEvent('LeftBumperPressed')).
+	% Left bumper means no
+		if percept(event('LeftBumperPressed')), bel(waitingForEvent('LeftBumperPressed'), currentState(S), state(S, question, [type=Type, response=Res]), Res=touch, Type=yesno)
+			then insert(answer(S,'answer_no'))  + delete(waitingForEvent('RightBumperPressed')).
 	
 	
 	%%% HANDLING NAO EVENTS %%%
@@ -15,6 +24,7 @@ module st_event {
 		then delete(event(E)).
 	if bel(event(E), waitingForEvent(E))
 		then delete(waitingForEvent(E)).
+
 
 	if percept(timer(S,_)), not(bel(timeout(S)))
 		then insert(timeout(S)) + log(timeout(S)).
@@ -30,12 +40,38 @@ module st_event {
 	if bel(currentState(S), state(S, say, _), not(start), not(waitingForEvent(_)))
 		then insert(completed(S)).
 	
-	% Complete logic for question state: from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
-	if bel(currentState(S), state(S, question, [_, _, context=C]), not(start), not(waitingForEvent(_)), not(waitingForAnswer(_)))
-		then insert(waitingForAnswer(0)) + startListening(C).
+	% Complete logic for question state with speech response: from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
+	if bel(currentState(S), state(S, question, [_, response=Res, context=C]), Res=speech, maxAnswerTime(MAX_AT), not(start), not(waitingForEvent(_)), not(waitingForAnswer))
+		then insert(waitingForAnswer) + startListening(C) + starttimer(S,MAX_AT,MAX_AT).
 				
-	if bel(currentState(S), state(S, question, _), not(start), not(waitingForEvent(_)), waitingForAnswer(0), answer(S, A))
-		then delete(waitingForAnswer(0), answer(S, A)) + insert(completed(S), nextCondition(A)) + stopListening.
+	if bel(currentState(S), state(S, question, [_, response=Res, _]), Res=speech, not(start), not(waitingForEvent(_)), waitingForAnswer, answer(S, A))
+		then delete(waitingForAnswer, answer(S, A)) + insert(completed(S), nextCondition(A)) + stopListening + canceltimer(S).
+		
+	% Complete logic for question state with touch response.
+	if bel(currentState(S), state(S, question, [type=Type, response=Res]), Res=touch, maxAnswerTime(MAX_AT), not(start), not(waitingForEvent(_)), not(waitingForAnswer)) then {
+		%Yesno question
+		if bel(Type=yesno)
+			then insert(waitingForAnswer, waitingForEvent('RightBumperPressed'), waitingForEvent('LeftBumperPressed')) + starttimer(S,MAX_AT,MAX_AT).
+		%Multiple choice (mc) question
+		% if bel(Type=mc) TODO
+			%then do something else
+	}
+		
+	if bel(currentState(S), state(S, question, [_, response=Res]), Res=touch, not(start), not(waitingForEvent(_)), waitingForAnswer, answer(S, A))
+		then delete(waitingForAnswer, answer(S, A)) + insert(completed(S), nextCondition(A)) + canceltimer(S).
+	
+	%TODO: solve [_, response=touch] versus [_, response=speech, context=C] problem.
+	if bel(timeout(S), waitingForAnswer, not(answer(S,_)), currentState(S), state(S, question, [_, response=Res, _]), maxAnswerAttempts(MaxAnswerAttempts), currentAttempt(CurrentAttempt), NextAttempt = CurrentAttempt+1) then {
+		if bel(Res=speech, CurrentAttempt < MaxAnswerAttempts)
+			then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+		if bel(Res=speech, CurrentAttempt >= MaxAnswerAttempts)
+			then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(completed(S), nextCondition('fail'), currentAttempt(0)).
+		if bel(Res=touch, CurrentAttempt < MaxAnswerAttempts)
+			then delete(waitingForEvent('RightBumperPressed'), waitingForEvent('LeftBumperPressed'), waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+		if bel(Res=touch, CurrentAttempt >= MaxAnswerAttempts)
+			then delete(waitingForEvent('RightBumperPressed'), waitingForEvent('LeftBumperPressed'), waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(completed(S), nextCondition('fail'), currentAttempt(0)).
+	}
+	
 	
 	%% State Transition Handling %%
 	
