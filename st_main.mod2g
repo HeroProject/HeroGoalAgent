@@ -1,13 +1,9 @@
 use dialogflow as knowledge.
 use dialogflow as actionspec.
 
+use performAction as module.
+
 module st_main {
-	
-	% Saying things
-	if bel(currentState(S), state(S, say, _), text(S, T, _))
-		then say(T).
-		
-	% Asking things
-	if bel(currentState(S), state(S, question, _), text(S, T, _))	
-		then say(T).
+	% Doing things
+	if bel(currentState(S), start) then performAction(S).
 }

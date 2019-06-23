@@ -2,6 +2,7 @@ use dialogflow as knowledge.
 use dialogflow as actionspec.
 
 module st_init {
+	% Initialize state parameters.
 	if true then
-		insert(currentState(s1), start, currentAttempt(0)) + setEyeColour('white'). %To do: create initialization state for all robot related initialization.
+		insert(currentState(s1), currentAttempt(1), start, nextCondition('true')).
 }
