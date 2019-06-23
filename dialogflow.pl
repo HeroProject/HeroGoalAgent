@@ -1,5 +1,7 @@
 % Predicates for event percept processing. 
-:-dynamic answer/2, event/1.
+:-dynamic answer/3, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
+	answers/1, % key-value list of answers from user to questions (initially empty list).
+	event/1.
 
 % Predicates related to state execution and transition handling.
 :- dynamic currentAttempt/1, currentState/1, nextCondition/1, start/0, started/0, timeout/1, waitingForAnswer/0, waitingForEvent/1.
@@ -20,7 +22,7 @@ completed(State) :- state(State, question), eventsCompleted, answerReceived.
 eventsCompleted :- started, not(waitingForEvent(_)).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
-answerReceived :- answer(_, _), not(waitingForAnswer).
+answerReceived :- answer(_, _, _), not(waitingForAnswer).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling (incl. default config params) %%%
@@ -40,7 +42,31 @@ keyValue(_, maxAnswerAttempts, 1).
 % Time (in milliseconds) a user gets to answer a question.
 keyValue(_, maxAnswerTime, 4000).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Event handling logic                                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
+feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
+feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Useful definitions                                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Text string processing (replacing all mentioned keys with their (presumably) stored values.
+% If you're using variables in text strings, make sure there always is a value for these variables in answers!
+replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
+replaceKeys([H | T], [VString | Result]) :-
+	atom_string(Key, H), answers(Answers), member((Key=Value), Answers), atom_string(Value, VString), !, replaceKeys(T, Result).
+replaceKeys([H | T], [H | Result]) :- replaceKeys(T, Result).
+replaceKeys([], []).
+
+concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R).
+concatenate([H], H).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Script		                                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(s1, say). % state s1 is of type 'say'.
 stateConfig(s1, []). % no configuration parameters for state s1 (empty list); if empty, no need to include stateConfig/2 for s1.
@@ -64,12 +90,15 @@ state(s3b, say).
 text(s3b, "Ik vind chocola ook vies!", []).
 
 state(s4, question).
-stateConfig(s4, [type=mc, response=speech, context='answer_color']).
+stateConfig(s4, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
 text(s4, "Wat is jouw lievelingskleur?", []).
 
+state(s4f, question).
+stateConfig(s4f, [type=mc, response=touch]).
+text(s4f, "Sorry ik verstond je niet goed. Kun je daarom via de bumpers antwoord geven. Hou je van chocola?", []).
+
 state(s5, say).
-% TODO: variabelen.
-text(s5, "Die kleur vind ik ook heel mooi!", []).
+text(s5, "Ik vind %favoriteColor% ook heel mooi!", []). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
 
 state(s6, say).
 text(s6, "Dat was het. Doei!", []).
@@ -83,7 +112,8 @@ next(s2f, 'answer_no', s3b).
 next(s2f, 'fail', s4).
 next(s3a, 'true', s4).
 next(s3b, 'true', s4).
-next(s4, 'true', s5).
+next(s4, 'answer_color', s5).
+next(s4, 'fail', s4f).
 next(s5, 'true', s6).
 
 %state(s5, question, [type=mc, response=speech, context='answer_pets']).

@@ -6,25 +6,19 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Percept processing                %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
-	% DialogFlow: Processing recognized intents (replies/answers)
-	if percept(intent(I,[]), (I = 'answer_yes' ; I = 'answer_no')), bel(currentState(S), state(S, question), keyValue(S, response, speech))
-		then insert(answer(S, I)).
-	
-	% Bumper event percepts
-	% Right bumper means yes (if current state is yesno question)
-	if percept(event('RightBumperPressed')), bel(currentState(S), state(S, question), keyListValues(S, [type, response], [yesno, touch]))
-		then insert(answer(S,'answer_yes')).
-	% Left bumper means no (if current state is yesno question)
-	if percept(event('LeftBumperPressed')), bel(currentState(S), state(S, question), keyListValues(S, [type, response], [yesno, touch]))
-		then insert(answer(S,'answer_no')).
-	
+
 	% NAO event percepts
-	if percept(event(E)), not(bel(event(E)))
+	if percept(event(E)), not(bel(event(E))) 
 		then insert(event(E)).
 	if bel(event(E)), not(percept(event(E)))
 		then delete(event(E)).
-		
+	
+	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
+	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
+	if percept(intent(Type, Params)), bel(currentState(S), waitingForAnswer)
+		then delete(waitingForAnswer) + insert(answer(S, Type, Params))
+			+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Event and timeout logic           %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,16 +27,25 @@ module st_event {
 	% ... for NAO events
 	if bel(event(E), waitingForEvent(E))
 		then delete(waitingForEvent(E)).
-	% ... for answers to questions
-	if bel(answer(S, I), waitingForAnswer, nextCondition(C))
-		then delete(waitingForAnswer, nextCondition(C))
-		+ insert(nextCondition(I))
-		+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
+	
+	% Right bumper means yes and left bumper means no (if current state is yesno question with touch response)
+	if bel(feetBumperEventAnswer(Type), currentState(S), waitingForAnswer, state(S, question), keyListValues(S, [type, response], [yesno, touch]))
+		then delete(waitingForAnswer) + insert(answer(S, Type, [])).
+		
+	% ... for answers to questions (stop listening if we received an answer)
+	if bel(currentState(S), answer(S, Type, _), nextCondition(C), not(C=Type))
+		then delete(nextCondition(C)) + insert(nextCondition(Type)).
+	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
+	% assumes reply is a list with single item (Answer).
+	if bel(answer(S, Type, [Answer]), state(S, question), not(keyValue(S, type, yesno)), answers(Answers),
+		keyListValues(S, [context, key], [Type, Key]), not(member((Key=Answer), Answers)),
+		append(Answers, [Key=Answer], NewAnswers))
+		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 
 	% Detecting timeouts
-	if percept(timer(S,_)), not(bel(timeout(S)))
+	if percept(timer(S, _)), not(bel(timeout(S)))
 		then insert(timeout(S)) + log(timeout(S)).
-	if bel(timeout(S)), not(percept(timer(S,_)))
+	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
 
 	% Handling timeouts (important to do this after other event processing above!).
@@ -55,7 +58,7 @@ module st_event {
 		if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(C))
 			% we need to leave the state, so insert fake answer for completion but with a 'fail' condition (substituted for default next condition).
 			then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt), nextCondition(C))
-				+ insert(answer(S, 'fail'), nextCondition('fail'), currentAttempt(1)).
+				+ insert(answer(S, 'fail', []), nextCondition('fail'), currentAttempt(1)).
 	}
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -65,13 +68,13 @@ module st_event {
 	%% Question state
 	% Start listening (with timeout by starting timer) and set waitingForAnswer flag
 	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _)), 
+	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)), 
 		keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
 		then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
 	% Start timer for question state with touch response and set waitingForAnswer flag
 	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _)),
+	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
 		keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
 		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
@@ -86,6 +89,6 @@ module st_event {
 	then {
 		if true then delete(currentState(S1), nextCondition(C), started) + insert(currentState(S2), start, nextCondition('true')).
 		% If state has been completed (S1), remove all answers (if any).
-		forall bel(answer(S1, I)) do delete(answer(S1, I)).
+		forall bel(answer(S1, I, Params)) do delete(answer(S1, I, Params)).
 	}
 }

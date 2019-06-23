@@ -4,5 +4,5 @@ use dialogflow as actionspec.
 module st_init {
 	% Initialize state parameters.
 	if true then
-		insert(currentState(s1), currentAttempt(1), start, nextCondition('true')).
+		insert(currentState(s1), currentAttempt(1), start, nextCondition('true'), answers([])).
 }
