@@ -1,4 +1,5 @@
 use dialogflow as knowledge.
+use script as knowledge.
 use dialogflow as actionspec.
 
 module st_event {
@@ -8,7 +9,7 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% NAO event percepts
-	if percept(event(E)), not(bel(event(E))) 
+	if percept(event(E)), not(bel(event(E)))
 		then insert(event(E)).
 	if bel(event(E)), not(percept(event(E)))
 		then delete(event(E)).
@@ -50,7 +51,7 @@ module st_event {
 		then delete(nextCondition(C)) + insert(nextCondition(Type)).
 	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
 	% assumes reply is a list with single item (Answer).
-	if bel(answer(S, Type, [Answer]), state(S, question), not(keyValue(S, type, yesno)), answers(Answers),
+	if bel(answer(S, Type, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
 		keyListValues(S, [context, key], [Type, Key]), not(member((Key=Answer), Answers)),
 		append(Answers, [Key=Answer], NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
@@ -62,7 +63,7 @@ module st_event {
 		then delete(timeout(S)).
 
 	% Handling timeouts (important to do this after other event processing above!).
-	if bel(currentState(S), state(S, question), timeout(S), waitingForAnswer,
+	if bel(currentState(S), state(_, S, question), timeout(S), waitingForAnswer,
 		keyValue(S, maxAnswerAttempts, MaxAnswerAttempts),
 		currentAttempt(CurrentAttempt), NextAttempt is CurrentAttempt + 1)
 	then { % (doesn't harm to perform stopListening if robot is not listening, e.g., using bumpers for input)
@@ -83,37 +84,51 @@ module st_event {
 	%% Question state
 	% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)), 
+	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)), 
 		keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
 		then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
 	% Start timer for question state with touch response and set waitingForAnswer flag.
 	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
+	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
 		keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
 		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
 	% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
 	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
+	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
 		keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
 		mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 
 	%% State transition handling
-	% If state has been completed, then transition to next state (and reset nextCondition to default value 'true').
-	if bel(currentState(S1), completed(S1), nextCondition(C), next(S1, C, S2))
-		% cleanup (remove current state, nextCondition, and other state tracking facts.) and progress
-	then {
+	% If state has been completed,  
+	if bel(currentTopic(T), completed(S), nextCondition(C))
+	then { % ... clean up (and reset nextCondition to default value 'true') ...
 		% Cleanup: remove all answers (if any).
-		forall bel(answer(S1, I, Params)) do delete(answer(S1, I, Params)).
+		forall bel(answer(S, I, Params)) do delete(answer(S, I, Params)).
 		% Cleanup: remove state specific parameters (if any).
-		if bel(keyValue(S1, options, _), mcCounter(C)) then delete(mcCounter(C)).
-		% Progress: move to next state.
+		if bel(keyValue(S, options, _), mcCounter(C)) then delete(mcCounter(C)).
+		% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
 		if bel(currentAttempt(Attempt))
-			then delete(currentState(S1), nextCondition(C), started, currentAttempt(Attempt))
-				+ insert(currentState(S2), start, nextCondition('true'), currentAttempt(1)).
-		% Initialize: set state specific parameters for new state (if any).
-		if bel(keyValue(S2, options, _)) then insert(mcCounter(0)).
+			then delete(currentState(S), started, nextCondition(C), currentAttempt(Attempt))
+				+ insert(start, nextCondition('true'), currentAttempt(1)).
+
+		% ... and transition to next state (if there is one) ...
+		if bel(next(T, S, C, Snext))
+			then insert(currentState(Snext)). % Progress: move to next state
+			
+		% ... or go to next topic if a topic has been completed (no next state has been specified for the topic).
+		if goal(topics(AllTopics)), not(bel(next(T, S, C, _)))
+		then {
+			if bel(topics(TopicsDone), append(TopicsDone, [T], NewTopicsDone))
+				then delete(topics(TopicsDone)) + insert(topics(NewTopicsDone)).
+			% get new topic (if any is left).
+			if bel(topics(TopicsDone), append(TopicsDone, [H | _], AllTopics))
+				then delete(currentTopic(T)) + insert(currentTopic(H), currentState(s1)).
+		}
+				
+		% And, finally, initialize state specific parameters for new state (if any).
+		if bel(currentState(Snow), keyValue(Snow, options, _)) then insert(mcCounter(0)).
 	}
 }

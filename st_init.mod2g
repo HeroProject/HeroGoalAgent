@@ -1,8 +1,14 @@
 use dialogflow as knowledge.
+use script as knowledge.
 use dialogflow as actionspec.
 
 module st_init {
 	% Initialize state parameters.
 	if true then
-		insert(currentState(s1), currentAttempt(1), start, nextCondition('true'), answers([])).
+		insert(currentState(s1), currentAttempt(1), start, nextCondition('true'), answers([]), topics([]))
+		% Adopt a list of topics that the agent will perform.
+		+ adopt(topics([intro, theend])).
+		
+	% Retrieve first topic from adopted goal.
+	if goal(topics([H | _])) then insert(currentTopic(H)).
 }

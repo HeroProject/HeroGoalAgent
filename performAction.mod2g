@@ -1,16 +1,17 @@
 use dialogflow as knowledge.
+use script as knowledge.
 use dialogflow as actionspec.
 
 order=linearall.
 
 % Performs all action (modalities) at the start of a state.
-module performAction(State) {
+module performAction(Topic, State) {
 	% Say what needs to be said.
-	if bel(text(State, T, _), replaceVar(T, Result)) then say(Result).
+	if bel(text(Topic, State, T), replaceVar(T, Result)) then say(Result).
 	% Perform gesture.
-	if bel(anim(State, G, _)) then gesture(G).
+	if bel(anim(Topic, State, G)) then gesture(G).
 	% Set eye colors.
-	if bel(leds(State, C, _)) then setEyeColour(C).
+	if bel(leds(Topic, State, C)) then setEyeColour(C).
 
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

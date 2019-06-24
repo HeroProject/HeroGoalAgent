@@ -5,5 +5,5 @@ use performAction as module.
 
 module st_main {
 	% Doing things
-	if bel(currentState(S), start) then performAction(S).
+	if bel(currentTopic(T), currentState(S), start) then performAction(T, S).
 }
