@@ -1,10 +1,12 @@
 % Predicates for event percept processing. 
 :-dynamic answer/3, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
 	answers/1, % key-value list of answers from user to questions (initially empty list).
-	event/1.
+	event/1. % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 
 % Predicates related to state execution and transition handling.
-:- dynamic currentAttempt/1, currentState/1, nextCondition/1, start/0, started/0, timeout/1, waitingForAnswer/0, waitingForEvent/1.
+:- dynamic currentAttempt/1, currentState/1, 
+	mcCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
+	nextCondition/1, start/0, started/0, timeout/1, waitingForAnswer/0, waitingForEvent/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
@@ -40,7 +42,7 @@ keyValue(State, Key, Value) :- stateConfig(State, Pairs), member((Key=Value), Pa
 keyValue(_, maxAnswerAttempts, 1).
 
 % Time (in milliseconds) a user gets to answer a question.
-keyValue(_, maxAnswerTime, 4000).
+keyValue(_, maxAnswerTime, 5000).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -81,7 +83,7 @@ text(s2, "Hou je van chocola?", []).
 % In second instance try touch (feet bumpers)
 state(s2f, question).
 stateConfig(s2f, [type=yesno, response=touch]).
-text(s2f, "Sorry ik verstond je niet goed. Kun je daarom via de bumpers antwoord geven. Hou je van chocola?", []).
+text(s2f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Hou je van chocola?", []).
 
 state(s3a, say).
 text(s3a, "Ik houd ook van chocola!", []).
@@ -94,8 +96,8 @@ stateConfig(s4, [type=mc, response=speech, context='answer_color', key='favorite
 text(s4, "Wat is jouw lievelingskleur?", []).
 
 state(s4f, question).
-stateConfig(s4f, [type=mc, response=touch]).
-text(s4f, "Sorry ik verstond je niet goed. Kun je daarom via de bumpers antwoord geven. Hou je van chocola?", []).
+stateConfig(s4f, [type=mc, response=touch, options = ["blauw", "geel", "groen", "rood"], context='answer_color', key='favoriteColor']). % "wit", "oranje", "rood", "roze", "blauw", "geel", "groen", "paars", "zwart", "bruin"
+text(s4f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Ik vertel je alle mogelijke antwoorden. Druk op het knopje bij de ja sticker als je je antwoord hoort.", []).
 
 state(s5, say).
 text(s5, "Ik vind %favoriteColor% ook heel mooi!", []). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
@@ -103,7 +105,7 @@ text(s5, "Ik vind %favoriteColor% ook heel mooi!", []). % favoriteColor is a var
 state(s6, say).
 text(s6, "Dat was het. Doei!", []).
 
-next(s1, 'true', s2).
+next(s1, 'true', s4).
 next(s2, 'answer_yes', s3a).
 next(s2, 'answer_no', s3b).
 next(s2, 'fail', s2f).
@@ -114,6 +116,8 @@ next(s3a, 'true', s4).
 next(s3b, 'true', s4).
 next(s4, 'answer_color', s5).
 next(s4, 'fail', s4f).
+next(s4f, 'answer_color', s5).
+next(s4f, 'fail', s6).
 next(s5, 'true', s6).
 
 %state(s5, question, [type=mc, response=speech, context='answer_pets']).

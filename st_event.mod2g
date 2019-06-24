@@ -14,6 +14,7 @@ module st_event {
 		then delete(event(E)).
 	
 	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
+	% Stop listening if we received an answer.
 	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
 	if percept(intent(Type, Params)), bel(currentState(S), waitingForAnswer)
 		then delete(waitingForAnswer) + insert(answer(S, Type, Params))
@@ -28,11 +29,23 @@ module st_event {
 	if bel(event(E), waitingForEvent(E))
 		then delete(waitingForEvent(E)).
 	
-	% Right bumper means yes and left bumper means no (if current state is yesno question with touch response)
-	if bel(feetBumperEventAnswer(Type), currentState(S), waitingForAnswer, state(S, question), keyListValues(S, [type, response], [yesno, touch]))
-		then delete(waitingForAnswer) + insert(answer(S, Type, [])).
+	% Right bumper means yes and left bumper means no (if current state is yes/no question with touch response).
+	if bel(feetBumperEventAnswer(Type), currentState(S), waitingForAnswer, keyListValues(S, [type, response], [yesno, touch]))
+		then delete(waitingForAnswer) + insert(answer(S, Type, [])) + canceltimer(S).
 		
-	% ... for answers to questions (stop listening if we received an answer)
+	% Right bumper means current option is selected (if current state is mc question with touch response).
+	if bel(feetBumperEventAnswer('answer_yes'), currentState(S), waitingForAnswer,
+		keyListValues(S, [type, response, context, options], [mc, touch, Type, Values]), mcCounter(C), nth0(C, Values, Answer))
+		then delete(waitingForAnswer) + insert(answer(S, Type, [Answer])) + canceltimer(S).
+	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
+	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer,
+		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), newC is C + 1)
+		then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(newC)) + canceltimer(S).
+	% Handle case where we have run out of options for mc question (fail).
+	if bel(mcCounter(C), currentState(S), keyValue(S, options, Values), length(Values, L), C=L)
+		then insert(answer(S, 'fail', [])).
+		
+	% ... for answers to questions
 	if bel(currentState(S), answer(S, Type, _), nextCondition(C), not(C=Type))
 		then delete(nextCondition(C)) + insert(nextCondition(Type)).
 	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
@@ -53,42 +66,54 @@ module st_event {
 		keyValue(S, maxAnswerAttempts, MaxAnswerAttempts),
 		currentAttempt(CurrentAttempt), NextAttempt is CurrentAttempt + 1)
 	then { % (doesn't harm to perform stopListening if robot is not listening, e.g., using bumpers for input)
-		if bel(CurrentAttempt < MaxAnswerAttempts)
+		if bel(CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
 			then stopListening + delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(C))
+		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
 			% we need to leave the state, so insert fake answer for completion but with a 'fail' condition (substituted for default next condition).
 			then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt), nextCondition(C))
 				+ insert(answer(S, 'fail', []), nextCondition('fail'), currentAttempt(1)).
+		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
+			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
-		
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% (Internal) state transition handling %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	%% Question state
-	% Start listening (with timeout by starting timer) and set waitingForAnswer flag
+	% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 	% when events have been completed (and we're not already waiting for an answer).
 	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)), 
 		keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
 		then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
-	% Start timer for question state with touch response and set waitingForAnswer flag
+	% Start timer for question state with touch response and set waitingForAnswer flag.
 	% when events have been completed (and we're not already waiting for an answer).
 	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
 		keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
 		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
-	%Multiple choice (mc) question
-		% if bel(Type=mc) TODO
-			%then do something else
+	% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
+	% when events have been completed (and we're not already waiting for an answer).
+	if bel(currentState(S), state(S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
+		keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
+		mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
+		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 
 	%% State transition handling
 	% If state has been completed, then transition to next state (and reset nextCondition to default value 'true').
 	if bel(currentState(S1), completed(S1), nextCondition(C), next(S1, C, S2))
-		% cleanup (remove current state, nextCondition, and other state tracking facts.)
+		% cleanup (remove current state, nextCondition, and other state tracking facts.) and progress
 	then {
-		if true then delete(currentState(S1), nextCondition(C), started) + insert(currentState(S2), start, nextCondition('true')).
-		% If state has been completed (S1), remove all answers (if any).
+		% Cleanup: remove all answers (if any).
 		forall bel(answer(S1, I, Params)) do delete(answer(S1, I, Params)).
+		% Cleanup: remove state specific parameters (if any).
+		if bel(keyValue(S1, options, _), mcCounter(C)) then delete(mcCounter(C)).
+		% Progress: move to next state.
+		if bel(currentAttempt(Attempt))
+			then delete(currentState(S1), nextCondition(C), started, currentAttempt(Attempt))
+				+ insert(currentState(S2), start, nextCondition('true'), currentAttempt(1)).
+		% Initialize: set state specific parameters for new state (if any).
+		if bel(keyValue(S2, options, _)) then insert(mcCounter(0)).
 	}
 }
