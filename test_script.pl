@@ -1,5 +1,3 @@
-:- dynamic audio/3.
-
 state(test, s1, say). % state s1 is of type 'say'.
 stateConfig(test, s1, []). % no configuration parameters for state s1 (empty list); if empty, no need to include stateConfig/2 for s1.
 text(test, s1, "Hallo, ik ben Hero.").
@@ -43,6 +41,29 @@ next(test, s4f, 'answer_color', s5).
 
 state(test, s5, say).
 text(test, s5, "Ik vind %favoriteColor% ook heel mooi!"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
+next(test, s5, 'true', s6).
+
+state(test, s6, say).
+text(test, s6, "Kom, laten we samen een olifant nadoen! 3, 2, 1,"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
+next(test, s6, 'true', s7).
+
+state(test, s7, say).
+anim(test, s7, "elephant-bf57b3/behavior_1").
+next(test, s7, 'true', s8).
+
+state(test, s8, say).
+text(test, s8, "Ik a nu een los geluidje afspelen. Ik ga piepen als een vrachtwagen.").
+leds(test, s8, 'white').
+next(test, s8, 'true', s9).
+
+state(test, s9, say).
+audio(test, s9, 'truck.wav').
+leds(test, s9, 'red').
+next(test, s9, 'true', s10).
+
+state(test, s10, say).
+text(test, s10, "Nu praat ik terwijl er een muziekje afspeelt.").
+audio(test, s10, 'short_test_song.wav').
 
 state(theend, s1, say).
 text(theend, s1, "Dat was het. Doei!"). 
