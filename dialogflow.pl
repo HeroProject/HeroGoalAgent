@@ -38,3 +38,7 @@ replaceKeys([], []).
 
 concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R).
 concatenate([H], H).
+
+% Simply append an answer to the list if not yet present; otherwise, replace.
+updateAnswers(Answers, Key, Answer, NewAnswers) :- not(member((Key=Answer), Answers)), append(Answers, [Key=Answer], NewAnswers).
+updateAnswers(Answers, Key, Answer, NewAnswers) :- member((Key=Value), Answers), delete(Answers, (Key=Value), AnswersTemp), append(AnswersTemp, [Key=Answer], NewAnswers).
