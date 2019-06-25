@@ -9,7 +9,7 @@ keyListValues(_, [], []).
 % (use of cut ! to prevent returning default values for keys).
 keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
 
-%% Global (default) configuration parameters
+%% Global and/or default configuration parameters
 % (override config param for specific state by using key-label in key-value list associated with that state).
 % Number of tries a user gets to provide an answer to a question (of whatever type).
 keyValue(_, maxAnswerAttempts, 1).
@@ -77,7 +77,7 @@ next(intro, s13, _, s13answer).
 state(intro, s13answer, say). text(intro, s13answer, "Je zegt dat ik de kleur %naoColor% heb."). next(intro, s13answer, 'true', s14).
 
 state(intro, s14, question). text(intro, s14, "Ik wil graag weten hoe je heet. Wat is jouw naam?").
-stateConfig(intro, s14, [type=mc, response=speech, context='answer_name', key='userName']).
+stateConfig(intro, s14, [type=mc, response=speech, context='answer_name', key='userName', defaultAnswer=""]).
 next(intro, s14, _, s15).
 
 state(intro, s15, say). text(intro, s15, "Oh, %userName%, dat vind ik een mooie naam"). next(intro, s15, 'true', s16).

@@ -52,8 +52,7 @@ module st_event {
 	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
 	% assumes reply is a list with single item (Answer).
 	if bel(answer(S, Type, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		keyListValues(S, [context, key], [Type, Key]), not(member((Key=Answer), Answers)),
-		append(Answers, [Key=Answer], NewAnswers))
+		keyListValues(S, [context, key], [Type, Key]), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 
 	% Detecting timeouts
@@ -71,7 +70,7 @@ module st_event {
 			then stopListening + delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
 			% we need to leave the state, so insert fake answer for completion but with a 'fail' condition (substituted for default next condition).
-			then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt), nextCondition(C))
+		then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt), nextCondition(C))
 				+ insert(answer(S, 'fail', []), nextCondition('fail'), currentAttempt(1)).
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
@@ -82,24 +81,28 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	%% Question state
-	% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
-	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)), 
-		keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
+	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)))
+	then {
+		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
+		% when events have been completed (and we're not already waiting for an answer).
+		if bel(keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
 		then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
-	% Start timer for question state with touch response and set waitingForAnswer flag.
-	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
-		keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
+		% Start timer for question state with touch response and set waitingForAnswer flag.
+		% when events have been completed (and we're not already waiting for an answer).
+		if bel(keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
 		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
-	% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
-	% when events have been completed (and we're not already waiting for an answer).
-	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)),
-		keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
-		mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
+		% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
+		% when events have been completed (and we're not already waiting for an answer).
+		if bel(keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
+			mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
+		
+		% Add defaultAnswer (if any is given for question state)
+		if bel(keyListValues(S, [key, defaultAnswer], [Key, Answer]), answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
+			then delete(answers(Answers)) + insert(answers(NewAnswers)).
+	}
 
 	%% State transition handling
 	% If state has been completed,  
