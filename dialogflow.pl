@@ -1,12 +1,13 @@
 % Predicates for event percept processing. 
 :-dynamic answer/3, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
 	answers/1, % key-value list of answers from user to questions (initially empty list).
-	event/1. % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	audioRecording/2.
 
 % Predicates related to state execution and transition handling.
 :- dynamic currentAttempt/1, currentState/1, currentTopic/1, 
 	mcCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1.
+	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -20,6 +21,8 @@ eventsCompleted :- started, not(waitingForEvent(_)).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
 answerReceived :- answer(_, _, _), not(waitingForAnswer).
+
+audioReceived :- audioRecording(_,_), not(waitingForAudio).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%

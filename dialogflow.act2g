@@ -4,6 +4,10 @@ use dialogflow as knowledge.
 define say(Text) with
 	pre { true }
 	post { waitingForEvent('TextDone') }
+
+define sayAnimated(Text) with
+	pre { true }
+	post { waitingForEvent('TextDone') }
 	
 define gesture(Gesture) with
 	pre { true }
@@ -12,6 +16,10 @@ define gesture(Gesture) with
 define setEyeColour(Colour)  with
 	pre { true }
 	post { true }
+
+define playAudio(Url) with
+	pre { true }
+	post { waitingForEvent('PlayAudioDone') }
 	
 % Robot start/stop actions (input modalities)
 define startListening with

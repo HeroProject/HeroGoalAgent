@@ -1,5 +1,5 @@
 use dialogflow as knowledge.
-use script as knowledge.
+use graafmachine as knowledge.
 use dialogflow as actionspec.
 
 module st_event {
@@ -20,6 +20,9 @@ module st_event {
 	if percept(intent(Type, Params)), bel(currentState(S), waitingForAnswer)
 		then delete(waitingForAnswer) + insert(answer(S, Type, Params))
 			+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
+	
+	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
+		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Event and timeout logic           %%%
@@ -76,6 +79,9 @@ module st_event {
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
+	
+	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
+		then stopListening + delete(waitingForAudio).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% (Internal) state transition handling %%%
@@ -100,6 +106,11 @@ module st_event {
 		keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
 		mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
+	
+	% Audio handling
+	if bel(currentState(S), state(_, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(_,_)),
+		keyListValues(S, [recordTime], [RT]))
+		then startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 
 	%% State transition handling
 	% If state has been completed,  
