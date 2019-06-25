@@ -1,6 +1,6 @@
 use dialogflow as knowledge.
+use graafmachine as knowledge.
 use dialogflow as actionspec.
-
 use performAction as module.
 
 module st_main {

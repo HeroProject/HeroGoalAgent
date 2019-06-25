@@ -1,4 +1,5 @@
 use dialogflow as knowledge.
+use graafmachine as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with

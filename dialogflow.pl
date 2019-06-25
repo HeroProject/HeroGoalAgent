@@ -5,7 +5,7 @@
 	audioRecording/2.
 
 % Predicates related to state execution and transition handling.
-:- dynamic currentAttempt/1, currentState/1, currentTopic/1, 
+:-dynamic currentAttempt/1, currentState/1, currentTopic/1, 
 	mcCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0.
 
@@ -42,3 +42,36 @@ concatenate([H], H).
 % Simply append an answer to the list if not yet present; otherwise, replace.
 updateAnswers(Answers, Key, Answer, NewAnswers) :- not(member((Key=Answer), Answers)), append(Answers, [Key=Answer], NewAnswers).
 updateAnswers(Answers, Key, Answer, NewAnswers) :- member((Key=Value), Answers), delete(Answers, (Key=Value), AnswersTemp), append(AnswersTemp, [Key=Answer], NewAnswers).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% State parameter handling.                              %%%
+%%% Define default configuration parameters here.          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Returns values for all keys in list of condition Pairs in state.
+keyListValues(State, [Key | Keys], [Value | Values]) :- keyValue(State, Key, Value), keyListValues(State, Keys, Values).
+keyListValues(_, [], []).
+% Returns value for (one) key in list of condition Pairs in state.
+% (use of cut ! to prevent returning default values for keys).
+keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
+
+%% Global and/or default configuration parameters
+% (override config param for specific state by using key-label in key-value list associated with that state).
+% Number of tries a user gets to provide an answer to a question (of whatever type).
+keyValue(_, maxAnswerAttempts, 1).
+
+% Time (in milliseconds) a user gets to answer a question.
+keyValue(_, maxAnswerTime, 5000).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% State completion logic               		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% A say state is completed if after starting it, all events that were started have been completed.
+% That is, a say state transitions from (1) start to (2) waiting for event completion ('TextDone', 'GestureDone', etc.) to (3) completion.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted.
+% A question state is completed if after starting it, all events that were started have been completed,
+% and an answer has been received, or a timeout occurred.
+% That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived.
+
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived.
