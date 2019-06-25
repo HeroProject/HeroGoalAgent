@@ -23,11 +23,11 @@ keyValue(_, maxAnswerTime, 5000).
 
 % A say state is completed if after starting it, all events that were started have been completed.
 % That is, a say state transitions from (1) start to (2) waiting for event completion ('TextDone', 'GestureDone', etc.) to (3) completion.
-completed(State) :- currentState(State), state(_, State, say), eventsCompleted.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted.
 % A question state is completed if after starting it, all events that were started have been completed,
 % and an answer has been received, or a timeout occurred.
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
-completed(State) :- currentState(State), state(_, State, question), eventsCompleted, answerReceived.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived.
 
 
 
@@ -94,45 +94,51 @@ stateConfig(test, s1, []). % no configuration parameters for state s1 (empty lis
 text(test, s1, "Hallo, ik ben Hero.").
 anim(test, s1, 'animations/Stand/Gestures/Hey_1').
 leds(test, s1, 'white').
+next(test, s1, 'true', s2).
 
 state(test, s2, question).
 stateConfig(test, s2, [type=yesno, response=speech, context='answer_yesno']).
 text(test, s2, "Hou je van chocola?").
+next(test, s2, 'answer_yes', s3a).
+next(test, s2, 'answer_no', s3b).
+next(test, s2, 'fail', s2f).
 
 % In second instance try touch (feet bumpers)
 state(test, s2f, question).
 stateConfig(test, s2f, [type=yesno, response=touch]).
 text(test, s2f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Hou je van chocola?").
+next(test, s2f, 'answer_yes', s3a).
+next(test, s2f, 'answer_no', s3b).
+next(test, s2f, 'fail', s4).
 
 state(test, s3a, say).
 text(test, s3a, "Ik houd ook van chocola!").
+next(test, s3a, 'true', s4).
 
 state(test, s3b, say).
 text(test, s3b, "Ik vind chocola ook vies!").
+next(test, s3b, 'true', s4).
 
 state(test, s4, question).
 stateConfig(test, s4, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
 text(test, s4, "Wat is jouw lievelingskleur?").
+next(test, s4, 'answer_color', s5).
+next(test, s4, 'fail', s4f).
 
 state(test, s4f, question).
 stateConfig(test, s4f, [type=mc, response=touch, options = ["blauw", "geel", "groen", "rood"], context='answer_color', key='favoriteColor']). % "wit", "oranje", "rood", "roze", "blauw", "geel", "groen", "paars", "zwart", "bruin"
 text(test, s4f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Ik vertel je alle mogelijke antwoorden. Druk op het knopje bij de ja sticker als je je antwoord hoort.").
+next(test, s4f, 'answer_color', s5).
 
 state(test, s5, say).
 text(test, s5, "Ik vind %favoriteColor% ook heel mooi!"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
 
-next(test, s1, 'true', s2).
-next(test, s2, 'answer_yes', s3a).
-next(test, s2, 'answer_no', s3b).
-next(test, s2, 'fail', s2f).
-next(test, s2f, 'answer_yes', s3a).
-next(test, s2f, 'answer_no', s3b).
-next(test, s2f, 'fail', s4).
-next(test, s3a, 'true', s4).
-next(test, s3b, 'true', s4).
-next(test, s4, 'answer_color', s5).
-next(test, s4, 'fail', s4f).
-next(test, s4f, 'answer_color', s5).
+
+
+
+
+
+
 
 
 
