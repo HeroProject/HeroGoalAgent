@@ -1,5 +1,5 @@
 use dialogflow as knowledge.
-use graafmachine as knowledge.
+use script as knowledge.
 use dialogflow as actionspec.
 
 module st_event {
@@ -77,7 +77,7 @@ module st_event {
 				+ insert(answer(S, 'fail', []), nextCondition('fail'), currentAttempt(1)).
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
-	}
+	} % TODO: give some time after stopListening for an answer to come in from dialogflow
 	
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
 		then stopListening + delete(waitingForAudio).

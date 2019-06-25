@@ -32,7 +32,7 @@ text(intro, s8, "Waardoor ik piepte als een muis als ik achteruit reed.").
 audio(intro, s8, "truck.wav").
 
 state(intro, s9, audioInput).
-stateConfig(intro, s9, [recordTime = 3]).
+stateConfig(intro, s9, [recordTime = 3000]).
 
 next(intro, s1, "answer_color", s2).
 next(intro, s1, "fail", s1f).
@@ -43,3 +43,4 @@ next(intro, s4, "true", s5).
 next(intro, s5, "true", s6).
 next(intro, s6, "true", s7).
 next(intro, s7, "true", s8).
+next(intro, s8, "true", s9).

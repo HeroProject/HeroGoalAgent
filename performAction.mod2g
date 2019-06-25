@@ -1,5 +1,5 @@
 use dialogflow as knowledge.
-use graafmachine as knowledge.
+use script as knowledge.
 use dialogflow as actionspec.
 
 order=linearall.
