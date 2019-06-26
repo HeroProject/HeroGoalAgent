@@ -89,6 +89,6 @@ audio(test, s10, 'short_test_song.wav').
 
 % Topic: theend
 state(theend, s1, say). text(theend, s1, "Dat was het.").
-next(s1, 'true', s2).
+next(theend, s1, 'true', s2).
 
 state(theend, s2, say). text(theend, s2, "Tot snel weer. Doei!").
