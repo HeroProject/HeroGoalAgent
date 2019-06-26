@@ -61,7 +61,7 @@ keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pa
 keyValue(_, maxAnswerAttempts, 1).
 
 % Time (in milliseconds) a user gets to answer a question.
-keyValue(_, maxAnswerTime, 5000).
+keyValue(_, maxAnswerTime, 4000).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

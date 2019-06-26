@@ -25,7 +25,7 @@ module st_event {
 		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Event and timeout logic           %%%
+	%%% Event and answer logic            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Handling of event waiting logic...
@@ -57,6 +57,10 @@ module st_event {
 	if bel(answer(S, Type, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
 		keyListValues(S, [context, key], [Type, Key]), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+		
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Timeout logic		              %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Detecting timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))
@@ -65,28 +69,34 @@ module st_event {
 		then delete(timeout(S)).
 
 	% Handling timeouts (important to do this after other event processing above!).
-	if bel(currentState(S), state(_, S, question), timeout(S), waitingForAnswer,
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer,
 		keyValue(S, maxAnswerAttempts, MaxAnswerAttempts),
 		currentAttempt(CurrentAttempt), NextAttempt is CurrentAttempt + 1)
 	then { % (doesn't harm to perform stopListening if robot is not listening, e.g., using bumpers for input)
 		if bel(CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
 			then stopListening + delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
-			% we need to leave the state, so insert fake answer for completion but with a 'fail' condition (substituted for default next condition).
-		then stopListening + delete(waitingForAnswer, currentAttempt(CurrentAttempt), nextCondition(C))
-				+ insert(answer(S, 'fail', []), nextCondition('fail'), currentAttempt(1)).
+		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
+		% we run out of attempts so we stop listening here but start a new timer (1s) to still wait a little longer for response from dialogflow.
+		then stopListening + starttimer(dialogflow, 1000, 1000) + delete(currentAttempt(CurrentAttempt)) + insert(currentAttempt(1)).
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
-	} % TODO: give some time after stopListening for an answer to come in from dialogflow
+	}
 	
+	% Handle case with timer to delay moving to next state to wait longer for response from dialogflow.
+	% If this timer has timed out, and we still have no answer, we need to leave the state, and
+	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(dialogflow), waitingForAnswer, nextCondition(C))
+		then delete(waitingForAnswer, nextCondition(C)) + insert(answer(S, 'fail', []), nextCondition('fail')).
+	
+	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
 		then stopListening + delete(waitingForAudio).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% (Internal) state transition handling %%%
+	%%% Setting things up for input handling %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	%% Question state
+	% Question
 	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)))
 	then {
 		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
@@ -110,13 +120,15 @@ module st_event {
 			then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	}
 	
-	% Audio handling
+	% Audiorecording
 	if bel(currentState(S), state(_, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(_,_)),
 		keyListValues(S, [recordTime], [RT]))
 		then startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% State transition handling            %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	%% State transition handling
 	% If state has been completed,  
 	if bel(currentTopic(T), completed(S), nextCondition(C))
 	then { % ... clean up (and reset nextCondition to default value 'true') ...

@@ -25,7 +25,7 @@ stateConfig(test, s1, []). % no configuration parameters for state s1 (empty lis
 text(test, s1, "Hallo, ik ben Hero.").
 anim(test, s1, 'animations/Stand/Gestures/Hey_1').
 leds(test, s1, 'white').
-next(test, s1, 'true', s2).
+next(test, s1, 'true', s4).
 
 state(test, s2, question).
 stateConfig(test, s2, [type=yesno, response=speech, context='answer_yesno']).
