@@ -12,10 +12,11 @@
 % - perform choregraph behavior (see also resources folder)
 % - play audio fragment (see also resources folder)
 % - talk while playing a music fragment (see also resources folder)
+% - question state: branching & default answer
 % - topic switch
 %
 % BEFORE RUNNING THIS SCRIPT, CHECK:
-% - Check Choregraph ID of behaviors using in script below (see for instructions also resources folder).
+% - Install the choregraphe behaviors in the resouce folder followin the instructions.
 % - Check flags in mas3g file (e.g. recordaudio).
 % - Check whether relative path ../tablet-core/laptop/html from this directory gets you to html folder, or
 %     set correct relative path using option htmldir = '...' in mas3g file.
