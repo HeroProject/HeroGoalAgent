@@ -13,6 +13,7 @@
 % - play audio fragment (see also resources folder)
 % - talk while playing a music fragment (see also resources folder)
 % - question state: branching & default answer
+% - record and replay of sound effect.
 % - topic switch
 %
 % BEFORE RUNNING THIS SCRIPT, CHECK:
@@ -23,7 +24,7 @@
 
 state(test, s1, say).
 anim(test, s1, "wakeup/behavior_1").
-next(test, s1, "true", s11).
+next(test, s1, "true", s2).
 
 state(test, s2, say). % state s2 is of type 'say'.
 stateConfig(test, s2, []). % no configuration parameters for state s2 (empty list); if empty, no need to include stateConfig/2 for s2.
@@ -84,14 +85,14 @@ leds(test, s9, 'white').
 next(test, s9, 'true', s10).
 
 state(test, s10, say).
-audio(test, s10, 'truck.wav').
+audio(test, s10, server, 'truck.wav').
 leds(test, s10, 'red').
 next(test, s10, 'true', s11).
 
 state(test, s11, say).
 text(test, s11, "Nu praat ik terwijl er een muziekje afspeelt.").
 leds(test, s11, 'white').
-audio(test, s11, 'short_test_song.wav').
+audio(test, s11, server, 'short_test_song.wav').
 next(test, s11, 'true', s12).
 
 state(test, s12, question).
@@ -126,6 +127,24 @@ next(test, s12f, "schaatsen", s13c).
 next(test, s12, "fail", s12f).
 next(test, s12f, "true", s12ff).
 next(test, s12ff, "true", s13a).
+next(test, s13a, "true", s14).
+next(test, s13b, "true", s14).
+next(test, s13c, "true", s14).
+
+state(test, s14, say).
+text(test, s14, "Doe het geluid van een Koe na.").
+next(test, s14, "true", s15).
+
+state(test, s15, audioInput).
+stateConfig(test, s15, [recordTime=2000]).
+next(test, s15, "true", s16).
+
+state(test, s16, say).
+text(test, s16, "Dankjewel").
+next(test, s16, "true", s17).
+
+state(test, s17, say).
+audio(test, s17, recorded, s15).
 
 % Topic: theend
 state(theend, s1, say).
