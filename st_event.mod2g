@@ -48,10 +48,13 @@ module st_event {
 	% Handle case where we have run out of options for mc question (fail).
 	if bel(mcCounter(C), currentState(S), keyValue(S, options, Values), length(Values, L), C=L)
 		then insert(answer(S, 'fail', [])).
-		
-	% ... for answers to questions
-	if bel(currentState(S), answer(S, Type, _), nextCondition(C), not(C=Type))
+	% Prepare the nextCondition for non-branching question: the Type (Dialogflow Context) is the condition.
+	if bel(currentState(S), not(keyListValues(S, [branching], [yes])), answer(S, Type, _), nextCondition(C), not(C=Type))
 		then delete(nextCondition(C)) + insert(nextCondition(Type)).
+	% Prepare the nextCondition for branching question: for each answer a different branch should exist. 
+	% The answer itself is the discriminating factor to select the branch.
+	if bel(currentState(S), keyListValues(S, [branching], [yes]), answer(S, _, [Answer]), nextCondition(C), not(C=Answer))
+		then delete(nextCondition(C)) + insert(nextCondition(Answer)).
 	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
 	% assumes reply is a list with single item (Answer).
 	if bel(answer(S, Type, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),

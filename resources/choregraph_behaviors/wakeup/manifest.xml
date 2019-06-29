@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package version="0.0.0" uuid="elephant-8e1ea8">
+<package version="0.0.0" uuid="wakeup">
  <names>
-  <name lang="en_US">elephant</name>
+  <name lang="en_US">wakeup</name>
  </names>
  <descriptionLanguages>
   <language>en_US</language>
@@ -10,6 +10,7 @@
   <behaviorContent path="behavior_1">
    <userRequestable/>
    <nature>interactive</nature>
+   <autonomous/>
    <permissions/>
   </behaviorContent>
  </contents>

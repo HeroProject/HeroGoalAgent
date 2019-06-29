@@ -1,94 +1,259 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Test script                                            %%%
-%%% Run to evaluate various functions for script handling. %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functionality included in this test script:
-% - say state with gesture (animation) and leds
-% - question state: yes/no with speech
-% - question state: yes/no with touch
-% - question state: mc with speech
-% - question state: mc with touch
-% - variable %var% (with var a key filled by an earlier question)
-% - perform choregraph behavior (see also resources folder)
-% - play audio fragment (see also resources folder)
-% - talk while playing a music fragment (see also resources folder)
-% - topic switch
-%
-% BEFORE RUNNING THIS SCRIPT, CHECK:
-% - Check Choregraph ID of behaviors using in script below (see for instructions also resources folder).
-% - Check flags in mas2g file (e.g. recordaudio).
-% - Check whether relative path ../tablet-core/laptop/html from this directory gets you to html folder, or
-%     set correct relative path using option htmldir = '...' in mas2g file.
-
-state(test, s1, say). % state s1 is of type 'say'.
-stateConfig(test, s1, []). % no configuration parameters for state s1 (empty list); if empty, no need to include stateConfig/2 for s1.
-text(test, s1, "Hallo, ik ben Hero.").
-anim(test, s1, 'animations/Stand/Gestures/Hey_1').
-leds(test, s1, 'white').
-next(test, s1, 'true', s4).
-
-state(test, s2, question).
-stateConfig(test, s2, [type=yesno, response=speech, context='answer_yesno']).
-text(test, s2, "Hou je van chocola?").
-next(test, s2, 'answer_yes', s3a).
-next(test, s2, 'answer_no', s3b).
-next(test, s2, 'fail', s2f).
-
-% In second instance try touch (feet bumpers)
-state(test, s2f, question).
-stateConfig(test, s2f, [type=yesno, response=touch]).
-text(test, s2f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Hou je van chocola?").
-next(test, s2f, 'answer_yes', s3a).
-next(test, s2f, 'answer_no', s3b).
-next(test, s2f, 'fail', s4).
-
-state(test, s3a, say).
-text(test, s3a, "Ik houd ook van chocola!").
-next(test, s3a, 'true', s4).
-
-state(test, s3b, say).
-text(test, s3b, "Ik vind chocola ook vies!").
-next(test, s3b, 'true', s4).
-
-state(test, s4, question).
-stateConfig(test, s4, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
-text(test, s4, "Wat is jouw lievelingskleur?").
-next(test, s4, 'answer_color', s5).
-next(test, s4, 'fail', s4f).
-
-state(test, s4f, question).
-stateConfig(test, s4f, [type=mc, response=touch, options = ["blauw", "geel", "groen", "rood"], context='answer_color', key='favoriteColor']). % "wit", "oranje", "rood", "roze", "blauw", "geel", "groen", "paars", "zwart", "bruin"
-text(test, s4f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken?").
-next(test, s4f, 'answer_color', s5).
-
-state(test, s5, say).
-text(test, s5, "Ik vind %favoriteColor% ook heel mooi!"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
-next(test, s5, 'true', s6).
-
-state(test, s6, say).
-text(test, s6, "Kom, laten we samen een olifant nadoen! 3, 2, 1,").
-next(test, s6, 'true', s7).
-
-state(test, s7, say).
-anim(test, s7, "elephant-8e1ea8/behavior_1"). % check choregraph ID for this behavior.
-next(test, s7, 'true', s8).
-
-state(test, s8, say).
-text(test, s8, "Ik ga nu een los geluidje afspelen. Ik ga piepen als een vrachtwagen.").
-leds(test, s8, 'white').
-next(test, s8, 'true', s9).
-
-state(test, s9, say).
-audio(test, s9, 'truck.wav').
-leds(test, s9, 'red').
-next(test, s9, 'true', s10).
-
-state(test, s10, say).
-text(test, s10, "Nu praat ik terwijl er een muziekje afspeelt.").
-audio(test, s10, 'short_test_song.wav').
-
-% Topic: theend
-state(theend, s1, say). text(theend, s1, "Dat was het.").
-next(theend, s1, 'true', s2).
-
-state(theend, s2, say). text(theend, s2, "Tot snel weer. Doei!").
+launching 'C:\Users\VUuser\PhD\Repositories\cbsr\HeroGoalAgent\Interactive_storytelling.mas2g'.
+received a new entity named 'pepper'.
+connecting agent 'storytelling' to entity 'pepper'.
+start-up complete.
+waiting for the first agent to be launched...
+Waiting for action...
+Got stop listening on action_audio
+Waiting for action...
+Got nl-NL on audio_language
+Waiting for action...
+[storytelling] starting agent.
+[storytelling] +++++++ Cycle 1 +++++++
+[storytelling] started agent (took 15ms).
+[storytelling] inserted 'currentState(s1), currentAttempt(1), start, nextCondition(true), answers([]), topics([])' into beliefbase storytelling.
+[storytelling] adopted 'topics([test,theend])' into goalbase main.
+[storytelling] inserted 'currentTopic(test)' into beliefbase storytelling.
+Got wakeup/behavior_1 on action_gesture
+[storytelling] inserted 'waitingForEvent(GestureDone)' into beliefbase storytelling.
+Waiting for action...
+[storytelling] deleted 'start' from beliefbase storytelling.
+[storytelling] inserted 'started' into beliefbase storytelling.
+[storytelling] performed 'performAction(test, s1)'.
+[storytelling] +++++++ Cycle 2 +++++++
+[storytelling] inserted 'event(LanguageChanged)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 3 +++++++
+[storytelling] inserted 'event(GestureStarted)' into beliefbase storytelling.
+[storytelling] deleted 'event(LanguageChanged)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 4 +++++++
+[storytelling] deleted 'event(GestureStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 5 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 6 +++++++
+[storytelling] inserted 'event(GestureDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(GestureDone)' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s1), started, nextCondition(true), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] inserted 'currentState(s11)' into beliefbase storytelling.
+Got Nu praat ik terwijl er een muziekje afspeelt. on action_say_animated
+[storytelling] inserted 'waitingForEvent(TextDone)' into beliefbase storytelling.
+[storytelling] empty update on beliefbase storytelling.
+Waiting for action...
+Got white on action_eyecolour
+[storytelling] inserted 'waitingForEvent(PlayAudioDone)' into beliefbase storytelling.
+Waiting for action...
+Got short_test_song.wav on action_play_audio
+[storytelling] deleted 'start' from beliefbase storytelling.
+Waiting for action...
+[storytelling] inserted 'started' into beliefbase storytelling.
+[storytelling] performed 'performAction(test, s11)'.
+[storytelling] +++++++ Cycle 7 +++++++
+[storytelling] deleted 'event(GestureDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 8 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 9 +++++++
+[storytelling] inserted 'event(TextStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 10 +++++++
+[storytelling] inserted 'event(EyeColourStarted)' into beliefbase storytelling.
+[storytelling] deleted 'event(TextStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 11 +++++++
+[storytelling] deleted 'event(EyeColourStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 12 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 13 +++++++
+[storytelling] inserted 'event(EyeColourDone)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 14 +++++++
+[storytelling] deleted 'event(EyeColourDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 15 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 16 +++++++
+[storytelling] inserted 'event(PlayAudioStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 17 +++++++
+[storytelling] deleted 'event(PlayAudioStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 18 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 19 +++++++
+[storytelling] inserted 'event(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 20 +++++++
+[storytelling] deleted 'event(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 21 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 22 +++++++
+[storytelling] inserted 'event(PlayAudioDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(PlayAudioDone)' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s11), started, nextCondition(true), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] inserted 'currentState(s12)' into beliefbase storytelling.
+Got Wat zal ik eens gaan doen. Zal ik muziek maken? Of zal ik kunstwerken maken? Of toch liever schaatsen? Jij mag het kiezen! on action_say_animated
+[storytelling] inserted 'waitingForEvent(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'start' from beliefbase storytelling.
+[storytelling] inserted 'started' into beliefbase storytelling.
+Waiting for action...
+[storytelling] performed 'performAction(test, s12)'.
+[storytelling] +++++++ Cycle 23 +++++++
+[storytelling] deleted 'event(PlayAudioDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 24 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 25 +++++++
+[storytelling] inserted 'event(TextStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 26 +++++++
+[storytelling] deleted 'event(TextStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 27 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 28 +++++++
+[storytelling] inserted 'event(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(TextDone)' from beliefbase storytelling.
+[storytelling] empty update on beliefbase storytelling.
+Got start listening on action_audio
+Waiting for action...
+[storytelling] inserted 'waitingForAnswer' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 29 +++++++
+START INTENT DETECTION
+[storytelling] deleted 'event(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 30 +++++++
+[storytelling] going to sleep.
+CONTEXT: answer_graafmachine_branch_1
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: ''
+====================
+====================
+Recognised Text: 'kunstwerken maken'
+Detected Intent: answer_graafmachine_kunstwerken (confidence 1.000000)
+====================
+Got kunstwerken maken on text_speech
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 31 +++++++
+Waiting for action...
+[storytelling] deleted 'waitingForAnswer' from beliefbase storytelling.
+[storytelling] inserted 'answer(s12,answer_graafmachine_kunstwerken,[])' into beliefbase storytelling.
+[storytelling] empty update on beliefbase storytelling.
+Got stop listening on action_audio
+Waiting for action...
+[storytelling] deleted 'nextCondition(true)' from beliefbase storytelling.
+[storytelling] inserted 'nextCondition(answer_graafmachine_kunstwerken)' into beliefbase storytelling.
+STOPPED INTENT DETECTION
+[storytelling] deleted 'answer(s12,answer_graafmachine_kunstwerken,[])' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s12), started, nextCondition(answer_graafmachine_kunstwerken), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] inserted 'currentState(s13b)' into beliefbase storytelling.
+Got Ja! Dan kunnen mensen mijn mooie kunstwerken komen bekijken, dat vinden ze leuk! on action_say_animated
+[storytelling] inserted 'waitingForEvent(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'start' from beliefbase storytelling.
+[storytelling] inserted 'started' into beliefbase storytelling.
+[storytelling] performed 'performAction(test, s13b)'.
+Waiting for action...
+[storytelling] +++++++ Cycle 32 +++++++
+[storytelling] +++++++ Cycle 33 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 34 +++++++
+[storytelling] inserted 'event(TextStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 35 +++++++
+[storytelling] deleted 'event(TextStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 36 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 37 +++++++
+[storytelling] inserted 'event(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(TextDone)' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s13b), started, nextCondition(true), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] deleted 'topics([])' from beliefbase storytelling.
+[storytelling] inserted 'topics([test])' into beliefbase storytelling.
+[storytelling] deleted 'currentTopic(test)' from beliefbase storytelling.
+[storytelling] inserted 'currentTopic(theend), currentState(s1)' into beliefbase storytelling.
+Got Dat was het. on action_say_animated
+[storytelling] inserted 'waitingForEvent(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'start' from beliefbase storytelling.
+[storytelling] inserted 'started' into beliefbase storytelling.
+Waiting for action...
+[storytelling] performed 'performAction(theend, s1)'.
+[storytelling] +++++++ Cycle 38 +++++++
+[storytelling] deleted 'event(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 39 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 40 +++++++
+[storytelling] inserted 'event(TextStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 41 +++++++
+[storytelling] deleted 'event(TextStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 42 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 43 +++++++
+[storytelling] inserted 'event(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(TextDone)' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s1), started, nextCondition(true), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] inserted 'currentState(s2)' into beliefbase storytelling.
+Got Tot snel weer. Doei! on action_say_animated
+[storytelling] inserted 'waitingForEvent(TextDone)' into beliefbase storytelling.
+[storytelling] inserted 'waitingForEvent(GestureDone)' into beliefbase storytelling.
+Waiting for action...
+Got rest/behavior_1 on action_gesture
+[storytelling] deleted 'start' from beliefbase storytelling.
+[storytelling] inserted 'started' into beliefbase storytelling.
+Waiting for action...
+[storytelling] performed 'performAction(theend, s2)'.
+[storytelling] +++++++ Cycle 44 +++++++
+[storytelling] deleted 'event(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 45 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 46 +++++++
+[storytelling] inserted 'event(TextStarted)' into beliefbase storytelling.
+[storytelling] +++++++ Cycle 47 +++++++
+[storytelling] inserted 'event(GestureStarted)' into beliefbase storytelling.
+[storytelling] deleted 'event(TextStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 48 +++++++
+[storytelling] deleted 'event(GestureStarted)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 49 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 50 +++++++
+[storytelling] inserted 'event(TextDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 51 +++++++
+[storytelling] deleted 'event(TextDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 52 +++++++
+[storytelling] going to sleep.
+[storytelling] woke up.
+[storytelling] +++++++ Cycle 53 +++++++
+[storytelling] inserted 'event(GestureDone)' into beliefbase storytelling.
+[storytelling] deleted 'waitingForEvent(GestureDone)' from beliefbase storytelling.
+[storytelling] deleted 'currentState(s2), started, nextCondition(true), currentAttempt(1)' from beliefbase storytelling.
+[storytelling] inserted 'start, nextCondition(true), currentAttempt(1)' into beliefbase storytelling.
+[storytelling] deleted 'topics([test])' from beliefbase storytelling.
+[storytelling] inserted 'topics([test,theend])' into beliefbase storytelling.
+[storytelling] dropped 'topics([test,theend])' from goalbase main.
+[storytelling] +++++++ Cycle 54 +++++++
+[storytelling] deleted 'event(GestureDone)' from beliefbase storytelling.
+[storytelling] +++++++ Cycle 55 +++++++
+[storytelling] going to sleep.
