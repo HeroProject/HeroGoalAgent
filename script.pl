@@ -17,20 +17,22 @@
 % - topic switch
 %
 % BEFORE RUNNING THIS SCRIPT, CHECK:
-% - Install the choregraphe behaviors in the resouce folder followin the instructions.
-% - Check flags in mas3g file (e.g. recordaudio).
+% - Install the choregraphe behaviors in the resource folder following the instructions.
+% - Check flags in mas2g file (e.g. recordaudio).
 % - Check whether relative path ../tablet-core/laptop/html from this directory gets you to html folder, or
 %     set correct relative path using option htmldir = '...' in mas3g file.
 
+topicOrder([test, theend]).
+
 state(test, s1, say).
 anim(test, s1, "wakeup/behavior_1").
+leds(test, s1, "white").
 next(test, s1, "true", s2).
 
 state(test, s2, say). % state s2 is of type 'say'.
 stateConfig(test, s2, []). % no configuration parameters for state s2 (empty list); if empty, no need to include stateConfig/2 for s2.
 text(test, s2, "Hallo, ik ben Hero.").
 anim(test, s2, 'animations/Stand/Gestures/Hey_1').
-leds(test, s2, 'white').
 next(test, s2, 'true', s3).
 
 state(test, s3, question).
