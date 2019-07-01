@@ -1,5 +1,5 @@
 % Predicates for event percept processing. 
-:-dynamic answer/3, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
+:-dynamic answer/4, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
 	answers/1, % key-value list of answers from user to questions (initially empty list).
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/2.
@@ -21,7 +21,7 @@ feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 eventsCompleted :- started, not(waitingForEvent(_)).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
-answerReceived :- answer(_, _, _), not(waitingForAnswer).
+answerReceived :- answer(_, _, _, _), not(waitingForAnswer).
 
 audioReceived :- audioRecording(_,_), not(waitingForAudio).
 
@@ -43,6 +43,8 @@ concatenate([H], H).
 % Simply append an answer to the list if not yet present; otherwise, replace.
 updateAnswers(Answers, Key, Answer, NewAnswers) :- not(member((Key=Answer), Answers)), append(Answers, [Key=Answer], NewAnswers).
 updateAnswers(Answers, Key, Answer, NewAnswers) :- member((Key=Value), Answers), delete(Answers, (Key=Value), AnswersTemp), append(AnswersTemp, [Key=Answer], NewAnswers).
+
+getAnswer(Key, Answer) :- atom_string(KeyA, Key), answers(Pairs), member((KeyA=Value), Pairs), atom_string(Value, Answer), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%

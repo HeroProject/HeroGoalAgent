@@ -1,6 +1,8 @@
+topicOrder([story, theend]).
+
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
-next(story, s1, "true", s2).
+leds(story, s1, "white").next(story, s1, "true", s2).
 
 state(story, s2, question).
 stateConfig(story, s2, [type = mc, response = speech, context = "answer_color", key = "favoriteColor"]).
@@ -85,7 +87,7 @@ text(story, s18, "Graven is saai, zei ze.").
 next(story, s18, "true", s19).
 
 state(story, s19, say).
-text(story, s19, "Kan ik niet iets leuks doen zoals muziek maken? Of zal ik kunstwerken maken? Of toch liever kunstschaatsen?").
+text(story, s19, "Kan ik niet iets leuks doen zoals muziek maken? Of zal ik kunstwerken maken? Of toch liever schaatsen?").
 next(story, s19, "true", s20).
 
 state(story, s20, question).
@@ -184,9 +186,18 @@ state(story, s38, say).
 text(story, s38, "Ik vond tussen al de modder een mooie ketting.").
 next(story, s38, "true", s39).
 
-state(story, s39, say).
+state(story, s39, question).
+stateConfig(story, s39, [type = mc, response = speech, altEnding=yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
 text(story, s39, "Pakte ik die op of gooide ik die weg?").
+
+state(story, s39f, question).
+stateConfig(story, s39f, [type = mc, response = touch, options = ["oppakken","weggooien"], altEnding = yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
+text(story, s39f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Pakte ik die op of gooide ik die weg?").
+
 next(story, s39, "true", s40).
+next(story, s39, "fail", s39f).
+next(story, s39f, "true", s40).
+next(story, s39f, "fail", s40).
 
 state(story, s40, say).
 text(story, s40, "Ik groef de modder weg.").
@@ -418,7 +429,7 @@ text(story, s91, "Maar dan is hij veel lichter dan als je hem gewoon omhoog zou 
 next(story, s91, "true", s92).
 
 state(story, s92, say).
-text(story, s92, "Gek hè?").
+text(story, s92, "Gek he?").
 next(story, s92, "true", s93).
 
 state(story, s93, say).
@@ -508,33 +519,25 @@ text(story, s110, "En in het museum te verzamelen.").
 next(story, s110, "true", s111).
 
 state(story, s111, say).
-text(story, s111, "Leuk voor haar, hè?").
-next(story, s111, "true", s114).
+text(story, s111, "Leuk voor haar, he?").
+next(story, s111, "true", s112).
 
-%%% Left out WIP %%%%
-state(story, s112, question).
-stateConfig(story, s112, [type = mc, response = speech, context = "answer_graafmachine_branch_3", key = "graafmachine_keuze_4"]).
-text(story, s112, "Pakte ik die op of gooide ik die weg?").
-
-state(story, s112f, question).
-stateConfig(story, s112f, [type = mc, response = touch, options = ["Oppakken","Weggooien"], branching = yes,context = "answer_graafmachine_branch_3", key = "graafmachine_keuze_4",defaultAnswer="oppakken"]).
-text(story, s112f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Pakte ik die op of gooide ik die weg?").
+state(story, s112, say).
+stateConfig(story, s112, [selectEnding = yes, key = "graafmachine_alt_ending"]).
+text(story, s112, "Weet je nog dat ik die ketting vond?").
 
 state(story, s113a, say).
-text(story, s113a, "Weet je nog, die ketting die je mij liet oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn nichtje en ze is er ontzettend blij mee!").
+text(story, s113a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %familyMember% en ze is er ontzettend blij mee!").
 
 state(story, s113b, say).
-text(story, s113b, "Weet je nog die ketting die in de modder lag? Misschien had ik die toch maar mee moeten nemen, lijkt perfect voor in het museum, volgende keer neem ik alles mee wat ik tegenkom!").
+text(story, s113b, "Maar goed dat je mij hem liet weggooien. Er ruste namelijk een vloek op. Maar dat is een verhaal voor een andere keer.").
 
-next(story, s112, "CHANGE_ME", s113a).
-next(story, s112f, "Oppakken", s113a).
-next(story, s113a, "true", s114).
-next(story, s112, "CHANGE_ME", s113b).
-next(story, s112f, "Weggooien", s113b).
-next(story, s113b, "true", s114).
-next(story, s112, "fail", s112f).
+state(story, s113f, say).
+text(story, s113f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn %familyMember% en ze is er ontzettend blij mee!").
 
-%%% Left out WIP %%%%
+next(story, s112, "oppakken", s113a).
+next(story, s112, "weggooien", s113b).
+next(story, s112, "fail", s113f).
 
-state(story, s114, say).
-anim(story, s114, "rest/behavior_1").
+state(theend, s112, say).
+anim(theend, s112, "rest/behavior_1").

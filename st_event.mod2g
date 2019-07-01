@@ -17,8 +17,8 @@ module st_event {
 	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
 	% Stop listening if we received an answer.
 	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
-	if percept(intent(Type, Params)), bel(currentState(S), waitingForAnswer)
-		then delete(waitingForAnswer) + insert(answer(S, Type, Params))
+	if percept(intent(Intent, Params)), bel(currentState(S), waitingForAnswer, keyListValues(S, [context], [Context]))
+		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, Params))
 			+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
 	
 	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
@@ -34,31 +34,40 @@ module st_event {
 		then delete(waitingForEvent(E)).
 	
 	% Right bumper means yes and left bumper means no (if current state is yes/no question with touch response).
-	if bel(feetBumperEventAnswer(Type), currentState(S), waitingForAnswer, keyListValues(S, [type, response], [yesno, touch]))
-		then delete(waitingForAnswer) + insert(answer(S, Type, [])) + canceltimer(S).
+	if bel(feetBumperEventAnswer(Intent), currentState(S), waitingForAnswer, keyListValues(S, [type, response, context], [yesno, touch, Context]))
+		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, [])) + canceltimer(S).
 		
 	% Right bumper means current option is selected (if current state is mc question with touch response).
 	if bel(feetBumperEventAnswer('answer_yes'), currentState(S), waitingForAnswer,
-		keyListValues(S, [type, response, context, options], [mc, touch, Type, Values]), mcCounter(C), nth0(C, Values, Answer))
-		then delete(waitingForAnswer) + insert(answer(S, Type, [Answer])) + canceltimer(S).
+		keyListValues(S, [type, response, context, options], [mc, touch, Context, Values]), mcCounter(C), nth0(C, Values, Answer))
+		then delete(waitingForAnswer) + insert(answer(S, Context, Context, [Answer])) + canceltimer(S).
 	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
 	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer,
 		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), newC is C + 1)
 		then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(newC)) + canceltimer(S).
 	% Handle case where we have run out of options for mc question (fail).
-	if bel(mcCounter(C), currentState(S), keyValue(S, options, Values), length(Values, L), C=L)
-		then insert(answer(S, 'fail', [])).
-	% Prepare the nextCondition for non-branching question: the Type (Dialogflow Context) is the condition.
-	if bel(currentState(S), not(keyListValues(S, [branching], [yes])), answer(S, Type, _), nextCondition(C), not(C=Type))
-		then delete(nextCondition(C)) + insert(nextCondition(Type)).
-	% Prepare the nextCondition for branching question: for each answer a different branch should exist. 
-	% The answer itself is the discriminating factor to select the branch.
-	if bel(currentState(S), keyListValues(S, [branching], [yes]), answer(S, _, [Answer]), nextCondition(C), not(C=Answer))
+	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context], [Values, Context]), length(Values, L), C=L)
+		then insert(answer(S, Context, 'fail', [])).
+	% Prepaire the nextCondition (excluding altEnding).
+	if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
+		then delete(nextCondition(C)) + insert(nextCondition(Intent)).
+	% Prepaire the nextCondition in the case branching is true and the user answer via the bumpers. %ToDo fix this.
+	if bel(currentState(S), not(keyValue(S, altEnding, yes)), keyValue(S, branching, yes), answer(S, _, _, [Answer]), nextCondition(C), not(C=Answer))
 		then delete(nextCondition(C)) + insert(nextCondition(Answer)).
-	% store (specific) answers to questions in answers-list (if not already done and question is not yes/no question);
+	if bel(currentState(S), not(keyValue(S, altEnding, yes)), keyValue(S, branching, yes), answer(S, _, Intent, []), nextCondition(C), not(C=Intent))
+		then delete(nextCondition(C)) + insert(nextCondition(Intent)).
+	%Prepaire nextConditions for alternative ending.
+	if bel(currentState(S), keyListValues(S, [selectEnding, key], [yes, Key]), getAnswer(Key, Answer), nextCondition(C), not(C=Answer))
+		then delete(nextCondition(C)) + insert(nextCondition(Answer)).
+	% store answers to questions in answers-list (if not already done and question is not yes/no question);
 	% assumes reply is a list with single item (Answer).
-	if bel(answer(S, Type, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		keyListValues(S, [context, key], [Type, Key]), updateAnswers(Answers, Key, Answer, NewAnswers))
+	% If there is a specific answer store that answer (e.g. Entity recognized).
+	if bel(answer(S, Context, _, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
+		keyListValues(S, [context, key], [Context, Key]), updateAnswers(Answers, Key, Answer, NewAnswers))
+		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+	% If the intent itself is the answer (and no specific entity is known), store that answer.
+	if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
+		keyValue(S, key, Key), updateAnswers(Answers, Key, Intent, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,8 +97,8 @@ module st_event {
 	% Handle case with timer to delay moving to next state to wait longer for response from dialogflow.
 	% If this timer has timed out, and we still have no answer, we need to leave the state, and
 	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(dialogflow), waitingForAnswer, nextCondition(C))
-		then delete(waitingForAnswer, nextCondition(C)) + insert(answer(S, 'fail', []), nextCondition('fail')).
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), timeout(dialogflow), waitingForAnswer, nextCondition(C))
+		then delete(waitingForAnswer, nextCondition(C)) + insert(answer(S, Context, 'fail', []), nextCondition('fail')).
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
@@ -100,7 +109,7 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Question
-	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _)))
+	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _, _)))
 	then {
 		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 		% when events have been completed (and we're not already waiting for an answer).
@@ -136,7 +145,7 @@ module st_event {
 	if bel(currentTopic(T), completed(S), nextCondition(C))
 	then { % ... clean up (and reset nextCondition to default value 'true') ...
 		% Cleanup: remove all answers (if any).
-		forall bel(answer(S, I, Params)) do delete(answer(S, I, Params)).
+		forall bel(answer(S, Context, I, Params)) do delete(answer(S, Context, I, Params)).
 		% Cleanup: remove state specific parameters (if any).
 		if bel(keyValue(S, options, _), mcCounter(C)) then delete(mcCounter(C)).
 		% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
