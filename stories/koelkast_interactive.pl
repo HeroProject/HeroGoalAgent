@@ -278,12 +278,8 @@ next(story, s57, "melk", s58b).
 next(story, s57, "fail", s58f).
 
 state(theend, s1, say).
-text(theend, s1, "Maar goed, toen was ik dus een koelkast.").
+text(theend, s1, "Dat was het. Ik ga nu weer even rusten").
 next(theend, s1, "true", s2).
 
 state(theend, s2, say).
-text(theend, s2, "Dat was het. Ik ga nu weer even rusten").
-next(theend, s2, "true", s3).
-
-state(theend, s3, say).
-anim(theend, s3, "rest/behavior_1"). 
+anim(theend, s2, "rest/behavior_1"). 

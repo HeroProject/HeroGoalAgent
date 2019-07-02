@@ -69,7 +69,12 @@ module st_event {
 	if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
 		keyValue(S, key, Key), updateAnswers(Answers, Key, Intent, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
-		
+	% If the touch based repair mechanism fails to give an answer, use the default answer if there is any.
+	if bel(answer(S, _, "fail", []), state(_, S, question), keyListValues(S, [resposne, key, defaultAnswer], [touch, Key, Answer]), 
+		answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
+		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Timeout logic		              %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,8 +133,8 @@ module st_event {
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
 		% Add defaultAnswer (if any is given for question state)
-		if bel(keyListValues(S, [key, defaultAnswer], [Key, Answer]), answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
-			then delete(answers(Answers)) + insert(answers(NewAnswers)).
+		%if bel(keyListValues(S, [key, defaultAnswer], [Key, Answer]), answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
+			%then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	}
 	
 	% Audiorecording
