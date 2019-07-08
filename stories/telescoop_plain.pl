@@ -1,6 +1,6 @@
 :- dynamic audio/4, stateConfig/3.
 
-topicOrder([intro, story, theend]).
+topicOrder([story, theend]).
 
 state(intro, s1, say).
 anim(intro, s1, "wakeup/behavior_1").
@@ -42,8 +42,13 @@ text(intro, s9, "Dit eerste verhaal heet telescoop.").
 %%%%% START PLAIN STORY %%%%%%%%
 
 state(story, s1, say).
-text(story, s1, "Heb jij wel eens gehoord van het mannetje op de maan?").
-next(story, s1, "true", s7).
+anim(story, s1, "wakeup/behavior_1").
+leds(story, s1, "white").
+next(story, s1, "true", s1b).
+
+state(story, s1b, say).
+text(story, s1b, "Heb jij wel eens gehoord van het mannetje op de maan?").
+next(story, s1b, "true", s7).
 
 state(story, s7, say).
 text(story, s7, "Dat verhaal werd vaak aan mij verteld voordat ik in de slaapmodus ging.").
@@ -195,11 +200,7 @@ next(story, s43, "true", s44).
 
 state(story, s44, say).
 text(story, s44, "Hij zag mij ook!").
-next(story, s44, "true", s45).
-
-state(story, s45, say).
-text(story, s45, "Wat deed ik toen?").
-next(story, s45, "true", s47).
+next(story, s44, "true", s47).
 
 state(story, s47, say).
 text(story, s47, "Ik had de robot, zo nieuwsgierig, gezien die alles wist en alles had gezien.").
@@ -223,4 +224,4 @@ text(theend, s1, "Dat was het. Ik ga nu weer even rusten").
 next(theend, s1, "true", s2).
 
 state(theend, s2, say).
-anim(theend, s2, "rest/behavior_1").
+anim(theend, s2, "rest/behavior_1"). 

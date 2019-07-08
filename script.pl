@@ -40,7 +40,7 @@ stateConfig(story, s9, [type = mc, response = speech, context = "answer_fruit", 
 text(story, s9, "Wat is jouw favoriete fruit?").
 
 state(story, s9f, question).
-stateConfig(story, s9f, [type = mc, response = touch, options = ["appel","banaan","aardbei","kers","kiwi","peer"], context = "answer_fruit", key = "fruit", defaultAnswer="appel"]).
+stateConfig(story, s9f, [type = mc, response = touch, options = ["aardbei", "appel", "banaan","kers","kiwi"], context = "answer_fruit", key = "fruit", defaultAnswer="appel"]).
 text(story, s9f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Wat is jouw favoriete fruit?").
 next(story, s9, "answer_fruit", s10).
 next(story, s9, "fail", s9f).
@@ -48,11 +48,11 @@ next(story, s9f, "answer_fruit", s10).
 next(story, s9f, "fail", s10).
 
 state(story, s10, say).
-text(story, s10, "Dat is grappig, %fruit% is bij mij beter bekend als deejay."). %deejay
+text(story, s10, "Dat is grappig, %fruit% is bij mij beter bekend als deejay.").
 next(story, s10, "true", s11).
 
 state(story, s11, say).
-text(story, s11, "deejay %fruit% draaide de lekkerste plaatjes met de lekkerste bietjes.").
+text(story, s11, "Deejay %fruit% draaide de lekkerste plaatjes met de lekkerste bietjes.").
 next(story, s11, "true", s12).
 
 state(story, s12, say).
@@ -170,8 +170,12 @@ next(story, s30f, "true", s31).
 next(story, s30f, "fail", s31).
 
 state(story, s31, say).
-text(story, s31, "En weet je wat ik stiekem nog het ergste vond: ik deed niks.").
-next(story, s31, "true", s32).
+text(story, s31, "Dankje. We gaan straks zien of jij gelijk hebt.").
+next(story, s31, "true", s31b).
+
+state(story, s31b, say).
+text(story, s31b, "En weet je wat ik stiekem nog het ergste vond: ik deed niks.").
+next(story, s31b, "true", s32).
 
 state(story, s32, say).
 text(story, s32, "Ik had eigenlijk mijn koelkast deur potdicht moeten houden, zodat er geen hand naar binnen kon.").
@@ -262,7 +266,6 @@ next(story, s54, "true", s57).
 
 state(story, s57, say).
 stateConfig(story, s57, [selectEnding = yes, key = "koelkast_alt_ending"]).
-%text(story, s57, "Blaat").
 
 state(story, s58a, say).
 text(story, s58a, "Je had inderdaad gelijk dat Chocolaatje %saus% het meest miste. Ze viel hem direct in de armen").
@@ -278,12 +281,8 @@ next(story, s57, "melk", s58b).
 next(story, s57, "fail", s58f).
 
 state(theend, s1, say).
-text(theend, s1, "Maar goed, toen was ik dus een koelkast.").
+text(theend, s1, "Dat was het. Ik ga nu weer even rusten").
 next(theend, s1, "true", s2).
 
 state(theend, s2, say).
-text(theend, s2, "Dat was het. Ik ga nu weer even rusten").
-next(theend, s2, "true", s3).
-
-state(theend, s3, say).
-anim(theend, s3, "rest/behavior_1"). 
+anim(theend, s2, "rest/behavior_1"). 
