@@ -69,8 +69,9 @@ module st_event {
 	if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
 		keyValue(S, key, Key), updateAnswers(Answers, Key, Intent, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+	
 	% If the touch based repair mechanism fails to give an answer, use the default answer if there is any.
-	if bel(answer(S, _, "fail", []), state(_, S, question), keyListValues(S, [resposne, key, defaultAnswer], [touch, Key, Answer]), 
+	if bel(answer(S, _, "fail", []), state(_, S, question), keyListValues(S, [response, key, defaultAnswer], [touch, Key, Answer]), 
 		answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 
@@ -95,6 +96,7 @@ module st_event {
 		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
 		% we run out of attempts so we stop listening here but start a new timer (1s) to still wait a little longer for response from dialogflow.
 		then stopListening + starttimer(dialogflow, 1000, 1000) + delete(currentAttempt(CurrentAttempt)) + insert(currentAttempt(1)).
+		
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
@@ -131,10 +133,6 @@ module st_event {
 		if bel(keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
 			mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
-		
-		% Add defaultAnswer (if any is given for question state)
-		%if bel(keyListValues(S, [key, defaultAnswer], [Key, Answer]), answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
-			%then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	}
 	
 	% Audiorecording
