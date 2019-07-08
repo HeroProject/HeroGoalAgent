@@ -136,7 +136,7 @@ module st_event {
 	}
 	
 	% Audiorecording
-	if bel(currentState(S), state(_, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(_,_)),
+	if bel(currentState(S), state(_, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(S,_)),
 		keyListValues(S, [recordTime], [RT]))
 		then startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 
