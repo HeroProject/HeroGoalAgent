@@ -41,7 +41,7 @@ next(story, s9, "fail", s9f).
 
 state(story, s9f, question).
 stateConfig(story, s9f, [type = mc, response = touch, options = ["aardbei", "appel", "banaan","kers","kiwi"], context = "answer_fruit", key = "fruit", defaultAnswer="appel"]).
-text(story, s9f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Wat is jouw favoriete fruit?").
+text(story, s9f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wat is jouw favoriete fruit?").
 next(story, s9f, "answer_fruit", s10).
 next(story, s9f, "fail", s10f).
 
@@ -63,12 +63,12 @@ next(story, s11a, "true", s11b).
 
 state(story, s11b, say).
 anim(story, s11b, "disco/behavior_1").
-leds(story, s11b, "purple").
+leds(story, s11b, "magenta").
 next(story, s11b, "true", s12).
 
 state(story, s12, say).
 text(story, s12, "Leuk! Pak Melk en Sinaasappelsap waren de hele tijd aan het breek dansen - het was altijd feest.").
-leds(story, s1, "white").
+leds(story, s12, "white").
 next(story, s12, "true", s13).
 
 state(story, s13, question).
@@ -79,7 +79,7 @@ next(story, s13, "fail", s13f).
 
 state(story, s13f, question).
 stateConfig(story, s13f, [type = mc, response = touch, options = ["ketchup", "mayonaise", "curry", "joppie", "pindasaus"], context = "answer_saus", key = "saus", defaultAnswer="ketchup"]).
-text(story, s13f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Welke saus was er ook bij denk je?").
+text(story, s13f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Welke saus was er ook bij denk je?").
 next(story, s13f, "answer_saus", s14).
 next(story, s13f, "fail", s14f).
 
@@ -105,7 +105,7 @@ next(story, s18, "fail", s18f).
 
 state(story, s18f, question).
 stateConfig(story, s18f, [type = mc, response = touch, options = ["dansen","zingen","muziek maken"], branching = yes,context = "answer_koelkast_branch_1", key = "koelkast_keuze_1", defaultAnswer="dansen"]).
-text(story, s18f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Wat zouden wij op dat feestje hebben gedaan denk je?").
+text(story, s18f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wat zouden wij op dat feestje hebben gedaan denk je?").
 next(story, s18f, "dansen", s19a).
 next(story, s18f, "zingen", s19b).
 next(story, s18f, "muziek maken", s19c).
@@ -187,7 +187,7 @@ next(story, s30, "fail", s30f).
 
 state(story, s30f, question).
 stateConfig(story, s30f, [type = mc, response = touch, options = ["chocolaatje","mevrouw Melk"], altEnding = yes, context = "answer_koelkast_alt_ending", key = "koelkast_alt_ending", defaulAnswer="chocolaatje"]).
-text(story, s30f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Wie miste %saus% het meeste volgens jou?").
+text(story, s30f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wie miste %saus% het meeste volgens jou?").
 next(story, s30f, "true", s31).
 next(story, s30f, "fail", s31).
 
@@ -224,7 +224,7 @@ next(story, s39, "fail", s39f).
 
 state(story, s39f, question).
 stateConfig(story, s39f, [type = mc, response = touch, options = ["deur openen","afwachten"], branching = yes, context = "answer_koelkast_branch_2", key = "koelkast_keuze_2", defaultAnswer="afwachten"]).
-text(story, s39f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Zou jij de deur openen of wachten?").
+text(story, s39f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Zou jij de deur openen of wachten?").
 next(story, s39f, "deur openen", s40a).
 next(story, s39f, "afwachten", s40b).
 next(story, s39f, "fail", s40f).
@@ -282,11 +282,11 @@ text(story, s49, "Niet allemaal tegelijk riep %saus%.").
 next(story, s49, "true", s50).
 
 state(story, s50, say).
-text(story, s50, "Hij liep naar het midden van de koelkast en ging in een dappere pose staan.").
+text(story, s50, "Hij liep naar het midden van de koelkast en ging in een stoere pose staan.").
 next(story, s50, "true", s50a).
 
 state(story, s50a, say).
-text(story, s50a, "Kom laten wij ook in een dappere pose gaan zitten.").
+text(story, s50a, "Kom laten wij ook in een stoere pose gaan staan.").
 next(story, s50a, "true", s50b).
 
 state(story, s50b, say).
@@ -295,7 +295,7 @@ anim(story, s50b, "bravepose/behavior_1").
 next(story, s50b, "true", s51).
 
 state(story, s51, say).
-text(story, s51, "Top! %saus% zei: mensen zien er raar uit.").
+text(story, s51, "Top, laten we weer gaan zitten. %saus% zei: mensen zien er raar uit.").
 next(story, s51, "true", s52).
 
 state(story, s52, say).
