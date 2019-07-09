@@ -9,10 +9,10 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% NAO event percepts
-	if percept(event(E)), not(bel(event(E)))
-		then insert(event(E)).
-	if bel(event(E)), not(percept(event(E)))
-		then delete(event(E)).
+	forall percept(event(E)), not(bel(event(E)))
+		do insert(event(E)).
+	forall bel(event(E)), not(percept(event(E)))
+		do delete(event(E)).
 	
 	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
 	% Stop listening if we received an answer.
