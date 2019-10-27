@@ -1,11 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package version="0.0.0" uuid="rest-0fcf78">
+<package uuid="rest" version="0.0.0">
  <names>
-  <name lang="en_US">Untitled</name>
+  <name lang="en_US">rest</name>
  </names>
- <supportedLanguages>
-  <language>en_US</language>
- </supportedLanguages>
  <descriptionLanguages>
   <language>en_US</language>
  </descriptionLanguages>
@@ -13,7 +10,6 @@
   <behaviorContent path="behavior_1">
    <userRequestable/>
    <nature>interactive</nature>
-   <autonomous/>
    <permissions/>
   </behaviorContent>
  </contents>

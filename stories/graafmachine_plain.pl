@@ -1,3 +1,5 @@
+:- dynamic stateConfig/3, audio/4.
+
 topicOrder([story, theend]).
 
 state(story, s1, say).

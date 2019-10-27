@@ -40,7 +40,7 @@ next(story, s9, "answer_fruit", s10).
 next(story, s9, "fail", s9f).
 
 state(story, s9f, question).
-stateConfig(story, s9f, [type = mc, response = touch, options = ["aardbei", "appel", "banaan","kers","kiwi"], context = "answer_fruit", key = "fruit", defaultAnswer="appel"]).
+stateConfig(story, s9f, [type = mc, response = touch, options = ["appel", "aardbei", "banaan","kers","kiwi"], context = "answer_fruit", key = "fruit", defaultAnswer="appel"]).
 text(story, s9f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wat is jouw favoriete fruit?").
 next(story, s9f, "answer_fruit", s10).
 next(story, s9f, "fail", s10f).
