@@ -1,1 +1,1 @@
-# HeroGoalAgent
+# GOAL agent for the hero project.
