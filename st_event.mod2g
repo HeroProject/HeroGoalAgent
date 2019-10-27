@@ -21,6 +21,7 @@ module st_event {
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, Params))
 			+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
 	
+	%Audio recording
 	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
 		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
 
@@ -82,30 +83,31 @@ module st_event {
 
 	% Detecting timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))
-		then insert(timeout(S)) + log(timeout(S)).
+		then insert(timeout(S)).
 	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
+	if percept(timer(S, _), S \= dialogflow) 
+		then log(timeout(S)).
 
 	% Handling timeouts (important to do this after other event processing above!).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer,
-		keyValue(S, maxAnswerAttempts, MaxAnswerAttempts),
-		currentAttempt(CurrentAttempt), NextAttempt is CurrentAttempt + 1)
-	then { % (doesn't harm to perform stopListening if robot is not listening, e.g., using bumpers for input)
-		if bel(CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
-			then stopListening + delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])))
-		% we run out of attempts so we stop listening here but start a new timer (1s) to still wait a little longer for response from dialogflow.
-		then stopListening + starttimer(dialogflow, 1000, 1000) + delete(currentAttempt(CurrentAttempt)) + insert(currentAttempt(1)).
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer)
+		then stopListening + starttimer(dialogflow, 1000, 1000).
+		
+	% Handle case with timer to delay moving to next state to wait longer for response from dialogflow.
+	% If this timer has timed out, and we still have no answer, we need to leave the state, and
+	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
+		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentAttempt(CurrentAttempt))
+	then {
+		if bel(CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
+			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
+			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
+			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
 		
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
-	
-	% Handle case with timer to delay moving to next state to wait longer for response from dialogflow.
-	% If this timer has timed out, and we still have no answer, we need to leave the state, and
-	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), timeout(dialogflow), waitingForAnswer, nextCondition(C))
-		then delete(waitingForAnswer, nextCondition(C)) + insert(answer(S, Context, 'fail', []), nextCondition('fail')).
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
