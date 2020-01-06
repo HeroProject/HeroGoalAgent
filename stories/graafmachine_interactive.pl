@@ -22,7 +22,7 @@ text(story, s7, "Ik zag eruit als een olifant van ijzer.").
 next(story, s7, "true", s8).
 
 state(story, s8, say).
-text(story, s8, "Wil je samen met mij een olifant uitbeelden? Kom op dan doen we het samen, in 3, 2, 1, start").
+text(story, s8, "Wil je samen met mij een olifant uitbeelden? Kom op dan doen we het samen, in 3, 2, 1").
 next(story, s8, "true", s8b).
 
 state(story, s8b, say).
@@ -94,7 +94,7 @@ text(story, s21, "Wil jij voor mijh het geluid van een piepende muis na doen? Da
 next(story, s21, "true", s22).
 
 state(story, s22, say).
-text(story, s22, "Piep als een muis in 3, 2, 1, start.").
+text(story, s22, "Piep als een muis in 3, 2, 1").
 next(story, s22, "true", s23).
 
 state(story, s23, audioInput).
@@ -220,7 +220,7 @@ text(story, s52, "Hij blies met zijn stoom alle aarde om mijn %lichaamsdeel% weg
 next(story, s52, "true", s57b).
 
 state(story, s57b, say).
-text(story, s57b, "Wil jij mijn opa helpen blazen? Je kunt blazen in 3, 2, 1, start").
+text(story, s57b, "Wil jij mijn opa helpen blazen? Je kunt blazen in 3, 2, 1").
 next(story, s57b, "true", s57c).
 
 state(story, s57c, audioInput).
@@ -260,7 +260,7 @@ text(story, s74, "En dat dat vreemde ding een katrol heet.").
 next(story, s74, "true", s75).
 
 state(story, s75, say).
-text(story, s75, "Wil jij samen met mij doen alsof we aan het katrol trekken? Laten we het samen doen, in 3, 2, 1, start.").
+text(story, s75, "Wil jij samen met mij doen alsof we aan het katrol trekken? Laten we het samen doen, in 3, 2, 1").
 next(story, s75, "true", s75b).
 
 state(story, s75b, say).

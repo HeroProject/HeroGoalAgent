@@ -132,11 +132,11 @@ text(story, s20, "Tot opeens het licht aan ging. We wisten allemaal wat dit bete
 next(story, s20, "true", s20a).
 
 state(story, s20a, say).
-text(story, s20a, "Kun jij voor mij een schrik geluid maken? In 3, 2, 1, start.").
+text(story, s20a, "Kun jij voor mij een schrik geluid maken? In 3, 2, 1.").
 next(story, s20a, "true", s20b).
 
 state(story, s20b, audioInput).
-stateConfig(story, s20b, [recordTime=3000]).
+stateConfig(story, s20b, [recordTime=2000]).
 next(story, s20b, "true", s21).
 
 state(story, s21, say).
@@ -246,11 +246,11 @@ text(story, s41, "Iedereen wilde roepen en schreeuwen, maar de hand was er nog d
 next(story, s41, "true", s41a).
 
 state(story, s41a, say).
-text(story, s41a, "Kun jij voor mij het geluid van een dichtslaande deur maken? In 3, 2, 1, start.").
+text(story, s41a, "Kun jij voor mij het geluid van een dichtslaande deur maken? In 3, 2, 1").
 next(story, s41a, "true", s41b).
 
 state(story, s41b, audioInput).
-stateConfig(story, s41b, [recordTime=3000]).
+stateConfig(story, s41b, [recordTime=2000]).
 next(story, s41b, "true", s42).
 
 state(story, s42, say).
@@ -295,7 +295,7 @@ anim(story, s50b, "bravepose/behavior_1").
 next(story, s50b, "true", s51).
 
 state(story, s51, say).
-text(story, s51, "Top, laten we weer gaan zitten. %saus% zei: mensen zien er raar uit.").
+text(story, s51, "Gaaf zeg! %saus% zei: mensen zien er raar uit.").
 next(story, s51, "true", s52).
 
 state(story, s52, say).
