@@ -19,11 +19,15 @@ module st_event {
 	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
 	if percept(intent(Intent, Params)), bel(currentState(S), waitingForAnswer, keyListValues(S, [context], [Context]))
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, Params))
-			+ stopListening + canceltimer(S). % (doesn't harm to perform stopListening if robot is not listening)
+			+ stopListening + canceltimer(S) + log(Intent) + log(Params). % (doesn't harm to perform stopListening if robot is not listening)
 	
 	%Audio recording
 	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
 		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
+	
+	%Emotion detection
+	if percept(emotionDetected(Emotion)), bel(currentState(S))
+		then insert(emotion(S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Event and answer logic            %%%
@@ -44,11 +48,19 @@ module st_event {
 		then delete(waitingForAnswer) + insert(answer(S, Context, Context, [Answer])) + canceltimer(S).
 	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
 	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer,
-		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), newC is C + 1)
-		then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(newC)) + canceltimer(S).
+		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
+		then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)) + canceltimer(S).
 	% Handle case where we have run out of options for mc question (fail).
-	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context], [Values, Context]), length(Values, L), C=L)
-		then insert(answer(S, Context, 'fail', [])).
+	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
+		length(Values, L), C=L, currentAttempt(CurrentAttempt))
+		then {					
+			if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+				then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(C)) + 
+					insert(start, currentAttempt(NextAttempt), mcCounter(0)).
+			if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(C))
+				then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C)) + 
+					insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
+		}
 	% Prepaire the nextCondition (excluding altEnding).
 	if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
 		then delete(nextCondition(C)) + insert(nextCondition(Intent)).
@@ -75,6 +87,10 @@ module st_event {
 	if bel(answer(S, _, "fail", []), state(_, S, question), keyListValues(S, [response, key, defaultAnswer], [touch, Key, Answer]), 
 		answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+	
+	% If an emotion is expected and present, set that as the next condition.
+	if bel(currentState(S), state(_, S, emotion), emotion(S,E), nextCondition(C), not(C=E))
+		then delete(nextCondition(C)) + insert(nextCondition(E)).
 
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -90,10 +106,10 @@ module st_event {
 		then log(timeout(S)).
 
 	% Handling timeouts (important to do this after other event processing above!).
+	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
 	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer)
 		then stopListening + starttimer(dialogflow, 1000, 1000).
 		
-	% Handle case with timer to delay moving to next state to wait longer for response from dialogflow.
 	% If this timer has timed out, and we still have no answer, we need to leave the state, and
 	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
 	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
@@ -105,6 +121,7 @@ module st_event {
 			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
 			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
 		
+		%TODO: This needs to be taken outside this loop.
 		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
@@ -113,6 +130,10 @@ module st_event {
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
 		then stopListening + delete(waitingForAudio).
 
+	% When timeout occurs while waiting for emotion, emotion detection is stopped.
+	if bel(currentState(S), state(_, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
+		then stopWatching + insert(emotion(S, 'fail')) + delete(waitingForEmotion).
+		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Setting things up for input handling %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -138,9 +159,13 @@ module st_event {
 	}
 	
 	% Audiorecording
-	if bel(currentState(S), state(_, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(S,_)),
+	if bel(currentState(S), state(_, S, audioInput), not(waitingForAudio), not(audioRecording(S,_)),
 		keyListValues(S, [recordTime], [RT]))
 		then startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
+	
+	% Emotion
+	if bel(currentState(S), state(_, S, emotion), not(waitingForEmotion), not(emotion(S,_)))
+		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% State transition handling            %%%
