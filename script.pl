@@ -1,6 +1,7 @@
 :- dynamic audio/4.
 
 topicOrder([intro, theend]).
+speechSpeed(85).
 
 state(intro, s1, say).
 anim(intro, s1, "wakeup/behavior_1").

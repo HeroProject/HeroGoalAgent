@@ -50,6 +50,8 @@ updateAnswers(Answers, Key, Answer, NewAnswers) :- member((Key=Value), Answers),
 
 getAnswer(Key, Answer) :- atom_string(KeyA, Key), answers(Pairs), member((KeyA=Value), Pairs), atom_string(Value, Answer), !.
 
+addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
 %%% Define default configuration parameters here.          %%%
