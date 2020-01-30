@@ -53,13 +53,13 @@ module st_event {
 	% Handle case where we have run out of options for mc question (fail).
 	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
 		length(Values, L), C=L, currentAttempt(CurrentAttempt))
-		then {					
+		then {
+			if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(Con))
+				then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(Con)) + 
+					insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).					
 			if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 				then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(C)) + 
 					insert(start, currentAttempt(NextAttempt), mcCounter(0)).
-			if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(C))
-				then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C)) + 
-					insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
 		}
 	% Prepaire the nextCondition (excluding altEnding).
 	if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
@@ -104,6 +104,8 @@ module st_event {
 		then delete(timeout(S)).
 	if percept(timer(S, _), S \= dialogflow) 
 		then log(timeout(S)).
+	if percept(speechText(_)), bel(currentState(S), waitingForAnswer) % heard something but it didn't match what we want
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow)).
 
 	% Handling timeouts (important to do this after other event processing above!).
 	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
@@ -115,9 +117,9 @@ module st_event {
 	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
 		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentAttempt(CurrentAttempt))
 	then {
-		if bel(CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
+		if bel(started, CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
 			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		if bel(CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
 			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
 			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
 		
