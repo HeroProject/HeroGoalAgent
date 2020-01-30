@@ -68,8 +68,12 @@ keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pa
 % Number of tries a user gets to provide an answer to a question (of whatever type).
 keyValue(_, maxAnswerAttempts, 2).
 
-% Time (in milliseconds) a user gets to answer a question.
-keyValue(_, maxAnswerTime, 4000).
+% Time (in milliseconds) a user gets to answer a question with touch.
+keyValue(_, maxAnswerTimeTouch, 3000).
+
+% Time (in milliseconds) a users gets to answer a first and second speech attempt.
+keyValue(_, maxAnswerTimeFirst, 6000).
+keyValue(_, maxAnswerTimeSecond, 4000).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

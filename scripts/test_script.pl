@@ -80,7 +80,7 @@ next(test, s7, 'true', s8).
 
 state(test, s8, say).
 anim(test, s8, "elephant/behavior_1"). % check choregraph ID for this behavior.
-next(test, s8, 'true', s9).
+%next(test, s8, 'true', s9).
 
 state(test, s9, say).
 text(test, s9, "Ik vond tussen al de modder een mooie ketting.").

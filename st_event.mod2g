@@ -141,21 +141,25 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Question
-	if bel(currentState(S), state(_, S, question), eventsCompleted, not(waitingForAnswer), not(answer(_, _, _, _)))
+	if bel(currentState(S), state(_, S, question), eventsCompleted, currentAttempt(CurrentAttempt), not(waitingForAnswer), not(answer(_, _, _, _)))
 	then {
 		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 		% when events have been completed (and we're not already waiting for an answer).
-		if bel(keyListValues(S, [response, context, maxAnswerTime], [speech, C, MAX_AT]))
-		then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+		% the first attempt has a different default waiting time than the subsequent attempts.
+		if bel(CurrentAttempt == 1, keyListValues(S, [response, context, maxAnswerTimeFirst], [speech, C, MAX_AT]))
+			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+		
+		if bel(CurrentAttempt > 1, keyListValues(S, [response, context, maxAnswerTimeSecond], [speech, C, MAX_AT]))
+			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
 		% Start timer for question state with touch response and set waitingForAnswer flag.
 		% when events have been completed (and we're not already waiting for an answer).
-		if bel(keyListValues(S, [type, response, maxAnswerTime], [yesno, touch, MAX_AT]))
+		if bel(keyListValues(S, [type, response, maxAnswerTimeTouch], [yesno, touch, MAX_AT]))
 		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
 		% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
 		% when events have been completed (and we're not already waiting for an answer).
-		if bel(keyListValues(S, [type, response, maxAnswerTime, options], [mc, touch, MAX_AT, Values]),
+		if bel(keyListValues(S, [type, response, maxAnswerTimeTouch, options], [mc, touch, MAX_AT, Values]),
 			mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 	}
