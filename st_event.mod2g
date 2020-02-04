@@ -17,10 +17,11 @@ module st_event {
 	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
 	% Stop listening if we received an answer.
 	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
-	if percept(intent(Intent, Params)), bel(currentState(S), waitingForAnswer, keyListValues(S, [context], [Context]))
+	if percept(intent(Intent, Params)), bel(currentState(S), waitingForAnswer, keyListValues(S, [context, numParams], [Context, NumParams]), length(Params, NumParams))
+	
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, Params))
 			+ stopListening + canceltimer(S) + log(Intent) + log(Params). % (doesn't harm to perform stopListening if robot is not listening)
-	
+
 	%Audio recording
 	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
 		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
@@ -104,14 +105,36 @@ module st_event {
 		then delete(timeout(S)).
 	if percept(timer(S, _), S \= dialogflow) 
 		then log(timeout(S)).
-	if percept(speechText(_)), bel(currentState(S), waitingForAnswer) % heard something but it didn't match what we want
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow)).
+	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentAttempt(CurrentAttempt)) % heard something but it didn't match what we want
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
 
 	% Handling timeouts (important to do this after other event processing above!).
 	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
 	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer)
 		then stopListening + starttimer(dialogflow, 1000, 1000).
 		
+	% If this timer has timed out, and we still have no answer, we need to leave the state, and
+	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
+		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentAttempt(CurrentAttempt))
+	then {
+		%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
+			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
+			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).				
+		
+		%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
+			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+		
+		%If the number of attempts are not reached, the user will get a next speech recognition attempt.
+		if bel(started, CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
+			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+		%TODO: This needs to be taken outside this loop.
+		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
+			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
+	}
+	
 	% If this timer has timed out, and we still have no answer, we need to leave the state, and
 	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
 	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
@@ -130,7 +153,7 @@ module st_event {
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
-		then stopListening + delete(waitingForAudio).
+		then stopListening + disableRecording + delete(waitingForAudio).
 
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
 	if bel(currentState(S), state(_, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
@@ -148,7 +171,7 @@ module st_event {
 		% the first attempt has a different default waiting time than the subsequent attempts.
 		if bel(CurrentAttempt == 1, keyListValues(S, [response, context, maxAnswerTimeFirst], [speech, C, MAX_AT]))
 			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
-		
+		% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
 		if bel(CurrentAttempt > 1, keyListValues(S, [response, context, maxAnswerTimeSecond], [speech, C, MAX_AT]))
 			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
@@ -167,7 +190,7 @@ module st_event {
 	% Audiorecording
 	if bel(currentState(S), state(_, S, audioInput), not(waitingForAudio), not(audioRecording(S,_)),
 		keyListValues(S, [recordTime], [RT]))
-		then startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
+		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 	
 	% Emotion
 	if bel(currentState(S), state(_, S, emotion), not(waitingForEmotion), not(emotion(S,_)))

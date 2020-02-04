@@ -23,18 +23,19 @@
 %     set correct relative path using option htmldir = '...' in mas3g file.
 
 topicOrder([test, theend]).
-speechSpeed(85).
+
+speechSpeed(100).
 
 state(test, s1, say).
 anim(test, s1, "wakeup/behavior_1").
 leds(test, s1, "white").
-next(test, s1, "true", s2).
+next(test, s1, "true", s5).
 
 state(test, s2, say). % state s2 is of type 'say'.
 stateConfig(test, s2, []). % no configuration parameters for state s2 (empty list); if empty, no need to include stateConfig/2 for s2.
 text(test, s2, "Hallo, ik ben Hero.").
 anim(test, s2, 'animations/Stand/Gestures/Hey_1').
-next(test, s2, 'true', s5).
+next(test, s2, 'true', s3).
 
 state(test, s3, question).
 stateConfig(test, s3, [type=yesno, response=speech, context='answer_yesno']).
@@ -60,7 +61,7 @@ text(test, s4b, "Ik vind chocola ook vies!").
 next(test, s4b, 'true', s5).
 
 state(test, s5, question).
-stateConfig(test, s5, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
+stateConfig(test, s5, [type=mc, response=speech, context='answer_color', key='favoriteColor', numParams=1]).
 text(test, s5, "Wat is jouw lievelingskleur?").
 next(test, s5, 'answer_color', s6).
 next(test, s5, 'fail', s5f).
@@ -81,7 +82,7 @@ next(test, s7, 'true', s8).
 
 state(test, s8, say).
 anim(test, s8, "elephant/behavior_1"). % check choregraph ID for this behavior.
-next(test, s8, 'true', s9).
+%next(test, s8, 'true', s9).
 
 state(test, s9, say).
 text(test, s9, "Ik vond tussen al de modder een mooie ketting.").

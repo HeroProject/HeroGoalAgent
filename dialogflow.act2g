@@ -54,6 +54,14 @@ define startWatching with
 define stopWatching with
 	pre { true }
 	post { true }
+
+define enableRecording with
+	pre { true }
+	post { true }
+
+define disableRecording with
+	pre { true }
+	post { true }
 	
 % DialogFlow Control
 define setAgent(Agent) with

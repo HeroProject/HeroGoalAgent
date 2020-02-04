@@ -8,7 +8,8 @@
 % Predicates related to state execution and transition handling.
 :-dynamic currentAttempt/1, currentState/1, currentTopic/1, 
 	mcCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0.
+	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0,
+	speechText/3. %used to signal that a user did not say anything detectable.  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -74,6 +75,9 @@ keyValue(_, maxAnswerTimeTouch, 3000).
 % Time (in milliseconds) a users gets to answer a first and second speech attempt.
 keyValue(_, maxAnswerTimeFirst, 6000).
 keyValue(_, maxAnswerTimeSecond, 4000).
+
+% Check if the intent result is correct (DialogFlow allows partial intent matching)
+keyValue(_, numParams, 0).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

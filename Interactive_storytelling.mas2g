@@ -2,8 +2,7 @@ use 'cbsr-eis-connector.jar' as environment with
 		server='localhost',
 		flowkey='dialogflowagent.json',
 		flowagent='mikeagent-dsvpjs',
-		flowlang='nl-NL',
-		recordaudio='yes'.
+		flowlang='nl-NL'.
 		
 define storytelling as agent {
 	use st_init as init.
