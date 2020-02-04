@@ -153,7 +153,7 @@ module st_event {
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
-		then stopListening + disableRecording + delete(waitingForAudio).
+		then stopListening + disableRecording.
 
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
 	if bel(currentState(S), state(_, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))

@@ -1,5 +1,7 @@
 topicOrder([story, theend]).
 
+speechSpeed(85).
+
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
 leds(story, s1, "white").
@@ -34,7 +36,7 @@ text(story, s8, "Iedereen kwam graag op het feest. De groentes, alle sausjes en 
 next(story, s8, "true", s9).
 
 state(story, s9, question).
-stateConfig(story, s9, [type = mc, response = speech, context = "answer_fruit", key = "fruit"]).
+stateConfig(story, s9, [type = mc, response = speech, context = "answer_fruit", key = "fruit", numParams=1]).
 text(story, s9, "Wat is jouw favoriete fruit?").
 next(story, s9, "answer_fruit", s10).
 next(story, s9, "fail", s9f).
@@ -72,7 +74,7 @@ leds(story, s12, "white").
 next(story, s12, "true", s13).
 
 state(story, s13, question).
-stateConfig(story, s13, [type = mc, response = speech, context = "answer_saus", key = "saus"]).
+stateConfig(story, s13, [type = mc, response = speech, context = "answer_saus", key = "saus", numParams=1]).
 text(story, s13, "Welke saus was er ook bij denk je?").
 next(story, s13, "answer_saus", s14).
 next(story, s13, "fail", s13f).
