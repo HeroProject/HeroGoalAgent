@@ -18,7 +18,6 @@ module st_event {
 	% Stop listening if we received an answer.
 	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
 	if percept(intent(Intent, Params)), bel(currentState(S), waitingForAnswer, keyListValues(S, [context, numParams], [Context, NumParams]), length(Params, NumParams))
-	
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, Params))
 			+ stopListening + canceltimer(S) + log(Intent) + log(Params). % (doesn't harm to perform stopListening if robot is not listening)
 
@@ -50,7 +49,7 @@ module st_event {
 	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
 	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer,
 		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
-		then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)) + canceltimer(S).
+		then canceltimer(S) + delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	% Handle case where we have run out of options for mc question (fail).
 	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
 		length(Values, L), C=L, currentAttempt(CurrentAttempt))
@@ -103,8 +102,8 @@ module st_event {
 		then insert(timeout(S)).
 	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
-	if percept(timer(S, _), S \= dialogflow) 
-		then log(timeout(S)).
+	if percept(timer(S, _), S \= dialogflow), bel(currentAttempt(CurrentAttempt)) 
+		then log(timeout(S, CurrentAttempt)).
 	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentAttempt(CurrentAttempt)) % heard something but it didn't match what we want
 		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
 
@@ -130,26 +129,12 @@ module st_event {
 		%If the number of attempts are not reached, the user will get a next speech recognition attempt.
 		if bel(started, CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
 			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		%TODO: This needs to be taken outside this loop.
-		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
-			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 	}
 	
-	% If this timer has timed out, and we still have no answer, we need to leave the state, and
-	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
-		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentAttempt(CurrentAttempt))
-	then {
-		if bel(started, CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
-			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
-			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
-			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).
-		
-		%TODO: This needs to be taken outside this loop.
-		if bel(keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
-			then delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
-	}
+	% When timeout occures while waiting for a touch based answer option, go to the next answer option.
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyListValues(S, [type, response], [mc, touch]), 
+	timeout(S), waitingForAnswer, mcCounter(C), Cnew is C + 1)
+		then delete(mcCounter(C), waitingForAnswer) + insert(mcCounter(Cnew)).
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
 	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)

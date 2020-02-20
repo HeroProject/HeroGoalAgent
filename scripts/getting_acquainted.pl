@@ -2,6 +2,8 @@
 
 topicOrder([intro, theend]).
 
+speechSpeed(100).
+
 state(intro, s1, say).
 anim(intro, s1, "wakeup/behavior_1").
 leds(intro, s1, "white").

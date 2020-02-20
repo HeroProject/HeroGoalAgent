@@ -70,7 +70,7 @@ keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pa
 keyValue(_, maxAnswerAttempts, 2).
 
 % Time (in milliseconds) a user gets to answer a question with touch.
-keyValue(_, maxAnswerTimeTouch, 3000).
+keyValue(_, maxAnswerTimeTouch, 6000).
 
 % Time (in milliseconds) a users gets to answer a first and second speech attempt.
 keyValue(_, maxAnswerTimeFirst, 6000).

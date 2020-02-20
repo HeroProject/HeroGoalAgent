@@ -1,11 +1,11 @@
 topicOrder([story, theend]).
 
-speechSpeed(85).
+speechSpeed(100).
 
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
 leds(story, s1, "white").
-next(story, s1, "true", s20a).
+next(story, s1, "true", s2).
 
 state(story, s2, say).
 text(story, s2, "Graag vertel ik jou een verhaal van de tijd toen ik een koelkast was.").
