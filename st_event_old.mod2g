@@ -39,18 +39,17 @@ module st_event {
 		then delete(waitingForEvent(E)).
 	
 	% Right bumper means yes and left bumper means no (if current state is yes/no question with touch response).
-	if bel(feetBumperEventAnswer(Intent), currentState(S), waitingForAnswer, currentInputModality(touch), keyListValues(S, [type, context], [yesno, Context]))
+	if bel(feetBumperEventAnswer(Intent), currentState(S), waitingForAnswer, keyListValues(S, [type, response, context], [yesno, touch, Context]))
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, [])) + canceltimer(S).
 		
 	% Right bumper means current option is selected (if current state is mc question with touch response).
-	if bel(feetBumperEventAnswer('answer_yes'), currentState(S), waitingForAnswer, currentInputModality(touch),
-		keyListValues(S, [type, context, options], [Type, Context, Values]), Type \= yesno, mcCounter(C), nth0(C, Values, Answer))
+	if bel(feetBumperEventAnswer('answer_yes'), currentState(S), waitingForAnswer,
+		keyListValues(S, [type, response, context, options], [mc, touch, Context, Values]), mcCounter(C), nth0(C, Values, Answer))
 		then delete(waitingForAnswer) + insert(answer(S, Context, Context, [Answer])) + canceltimer(S).
 	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
-	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer, currentInputModality(touch),
-		not(keyValue(S, type, yesno)), mcCounter(C), Cnew is C + 1)
+	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer,
+		keyListValues(S, [type, response], [mc, touch]), mcCounter(C), Cnew is C + 1)
 		then canceltimer(S) + delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
-		
 	% Handle case where we have run out of options for mc question (fail).
 	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
 		length(Values, L), C=L, currentAttempt(CurrentAttempt))
@@ -62,7 +61,6 @@ module st_event {
 				then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(C)) + 
 					insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 		}
-		
 	% Prepaire the nextCondition (excluding altEnding).
 	if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
 		then delete(nextCondition(C)) + insert(nextCondition(Intent)).
@@ -78,17 +76,16 @@ module st_event {
 	% assumes reply is a list with single item (Answer).
 	% If there is a specific answer store that answer (e.g. Entity recognized).
 	if bel(answer(S, Context, _, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		keyValue(S, context, Context), updateAnswers(Answers, Context, Answer, NewAnswers))
+		keyListValues(S, [context, key], [Context, Key]), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
-	
 	% If the intent itself is the answer (and no specific entity is known), store that answer.
 	if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		keyValue(S, context, Context), updateAnswers(Answers, Context, Intent, NewAnswers))
+		keyValue(S, key, Key), updateAnswers(Answers, Key, Intent, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	
 	% If the touch based repair mechanism fails to give an answer, use the default answer if there is any.
-	if bel(answer(S, _, "fail", []), state(_, S, question), currentInputModality(touch), keyListValues(S, [context, defaultAnswer], [Context, Answer]), 
-		answers(Answers), updateAnswers(Answers, Context, Answer, NewAnswers))
+	if bel(answer(S, _, "fail", []), state(_, S, question), keyListValues(S, [response, key, defaultAnswer], [touch, Key, Answer]), 
+		answers(Answers), updateAnswers(Answers, Key, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	
 	% If an emotion is expected and present, set that as the next condition.
@@ -117,34 +114,34 @@ module st_event {
 		
 	% If this timer has timed out, and we still have no answer, we need to leave the state, and
 	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), waitingForAnswer,
-		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentInputModality(speech), currentAttempt(CurrentAttempt))
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyValue(S, context, Context), waitingForAnswer,
+		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentAttempt(CurrentAttempt))
 	then {
 		%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _))
-			then delete(currentAttempt(CurrentAttempt), currentInputModality(speech), waitingForAnswer, started)
-			+ insert(start, currentInputModality(touch), currentAttempt(1)).				
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), not(keyListValues(S, [type, response], [mc, touch])), nextCondition(C))
+			then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(C))
+			+ insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).				
 		
 		%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
 			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
 		
 		%If the number of attempts are not reached, the user will get a next speech recognition attempt.
-		if bel(started, CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+		if bel(started, CurrentAttempt < MaxAnswerAttempts, not(keyListValues(S, [type, response], [mc, touch])), NextAttempt is CurrentAttempt + 1)
 			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 	}
 	
 	% When timeout occures while waiting for a touch based answer option, go to the next answer option.
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), currentInputModality(touch), 
-	not(keyValue(S, type, yesno)), timeout(S), waitingForAnswer, mcCounter(C), Cnew is C + 1)
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), keyListValues(S, [type, response], [mc, touch]), 
+	timeout(S), waitingForAnswer, mcCounter(C), Cnew is C + 1)
 		then delete(mcCounter(C), waitingForAnswer) + insert(mcCounter(Cnew)).
 	
 	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, audioInput), timeout(S), waitingForAudio)
+	if bel(currentState(S), state(_, S, audioInput), timeout(S), waitingForAudio)
 		then stopListening + disableRecording.
 
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
+	if bel(currentState(S), state(_, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
 		then stopWatching + insert(emotion(S, 'fail')) + delete(waitingForEmotion).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,41 +149,36 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Question
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), eventsCompleted, currentInputModality(CurrentInputModality), currentAttempt(CurrentAttempt), not(waitingForAnswer), not(answer(_, _, _, _)))
+	if bel(currentState(S), state(_, S, question), eventsCompleted, currentAttempt(CurrentAttempt), not(waitingForAnswer), not(answer(_, _, _, _)))
 	then {
 		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 		% when events have been completed (and we're not already waiting for an answer).
 		% the first attempt has a different default waiting time than the subsequent attempts.
-		if bel(CurrentInputModality == speech, CurrentAttempt == 1, keyListValues(S, [context, maxAnswerTimeFirst], [Context, MAX_AT]))
-			then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+		if bel(CurrentAttempt == 1, keyListValues(S, [response, context, maxAnswerTimeFirst], [speech, C, MAX_AT]))
+			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
-		if bel(CurrentInputModality == speech, CurrentAttempt > 1, keyListValues(S, [context, maxAnswerTimeSecond], [Context, MAX_AT]))
-			then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+		if bel(CurrentAttempt > 1, keyListValues(S, [response, context, maxAnswerTimeSecond], [speech, C, MAX_AT]))
+			then startListening(C) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
 		
-		if bel(CurrentInputModality == touch)
-			then {
-				% Start timer for question state with touch response and set waitingForAnswer flag.
-				% when events have been completed (and we're not already waiting for an answer).
-				if bel(keyListValues(S, [type, maxAnswerTimeTouch], [yesno, MAX_AT]))
-					then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
-				
-				% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
-				% when events have been completed (and we're not already waiting for an answer).	
-				if bel(keyListValues(S, [type, maxAnswerTimeTouch, options], [Type, MAX_AT, Values]), Type \= yesno,
-						mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
-					then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
-			}
+		% Start timer for question state with touch response and set waitingForAnswer flag.
+		% when events have been completed (and we're not already waiting for an answer).
+		if bel(keyListValues(S, [type, response, maxAnswerTimeTouch], [yesno, touch, MAX_AT]))
+		then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 		
-
+		% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
+		% when events have been completed (and we're not already waiting for an answer).
+		if bel(keyListValues(S, [type, response, maxAnswerTimeTouch, options], [mc, touch, MAX_AT, Values]),
+			mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
+		then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 	}
 	
 	% Audiorecording
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, audioInput), not(waitingForAudio), not(audioRecording(S,_)),
+	if bel(currentState(S), state(_, S, audioInput), not(waitingForAudio), not(audioRecording(S,_)),
 		keyListValues(S, [recordTime], [RT]))
 		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 	
 	% Emotion
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, emotion), not(waitingForEmotion), not(emotion(S,_)))
+	if bel(currentState(S), state(_, S, emotion), not(waitingForEmotion), not(emotion(S,_)))
 		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -201,9 +193,9 @@ module st_event {
 		% Cleanup: remove state specific parameters (if any).
 		if bel(keyValue(S, options, _), mcCounter(C)) then delete(mcCounter(C)).
 		% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
-		if bel(currentAttempt(Attempt), currentInputModality(Modality))
-			then delete(currentState(S), started, nextCondition(C), currentAttempt(Attempt), currentInputModality(Modality))
-				+ insert(start, nextCondition('true'), currentAttempt(1), currentInputModality(speech)). %todo load from inputModalityOrder
+		if bel(currentAttempt(Attempt))
+			then delete(currentState(S), started, nextCondition(C), currentAttempt(Attempt))
+				+ insert(start, nextCondition('true'), currentAttempt(1)).
 
 		% ... and transition to next state (if there is one) ...
 		if bel(next(T, S, C, Snext))

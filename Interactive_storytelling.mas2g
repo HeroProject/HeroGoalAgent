@@ -1,5 +1,5 @@
 use 'cbsr-eis-connector.jar' as environment with
-		server='localhost',
+		server='192.168.1.26',
 		flowkey='dialogflowagent.json',
 		flowagent='mikeagent-dsvpjs',
 		flowlang='nl-NL'.
