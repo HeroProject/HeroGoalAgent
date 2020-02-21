@@ -52,12 +52,21 @@ module st_event {
 		then canceltimer(S) + delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
 		
 	% Handle case where we have run out of options for mc question (fail).
-	if bel(mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
+	if bel(currentInputModality(touch), mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
 		length(Values, L), C=L, currentAttempt(CurrentAttempt))
 		then {
-			if bel(CurrentAttempt >= MaxAnswerAttempts, nextCondition(Con))
-				then delete(currentAttempt(CurrentAttempt), waitingForAnswer, nextCondition(Con)) + 
-					insert(currentAttempt(1), answer(S, Context, 'fail', []), nextCondition('fail')) + log(failed(S)).					
+			if bel(CurrentAttempt >= MaxAnswerAttempts, keyValue(S, inputModalityOrder, Order), modalityCounter(ModCount), length(Order, NModalities), NewModCount is ModCount + 1)
+				then {
+				% If there are no other input modalities, this question failed.
+					if bel(NModalities=NewModCount, nextCondition(Con), keyValue(S, context, Context))
+		 				then delete(waitingForAnswer, nextCondition(Con)) + 
+					insert(answer(S, Context, 'fail', []), nextCondition('fail')).
+				% If there are other input modalities left, switch modalities.
+				if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+					then delete(currentInputModality(touch), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+						+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+				}
+			
 			if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 				then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(C)) + 
 					insert(start, currentAttempt(NextAttempt), mcCounter(0)).
@@ -84,11 +93,6 @@ module st_event {
 	% If the intent itself is the answer (and no specific entity is known), store that answer.
 	if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
 		keyValue(S, context, Context), updateAnswers(Answers, Context, Intent, NewAnswers))
-		then delete(answers(Answers)) + insert(answers(NewAnswers)).
-	
-	% If the touch based repair mechanism fails to give an answer, use the default answer if there is any.
-	if bel(answer(S, _, "fail", []), state(_, S, question), currentInputModality(touch), keyListValues(S, [context, defaultAnswer], [Context, Answer]), 
-		answers(Answers), updateAnswers(Answers, Context, Answer, NewAnswers))
 		then delete(answers(Answers)) + insert(answers(NewAnswers)).
 	
 	% If an emotion is expected and present, set that as the next condition.
@@ -121,9 +125,17 @@ module st_event {
 		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentInputModality(speech), currentAttempt(CurrentAttempt))
 	then {
 		%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _))
-			then delete(currentAttempt(CurrentAttempt), currentInputModality(speech), waitingForAnswer, started)
-			+ insert(start, currentInputModality(touch), currentAttempt(1)).				
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), keyValue(S, inputModalityOrder, Order), modalityCounter(ModCount), length(Order, NModalities), NewModCount is ModCount + 1)
+			then {
+				% If there are no input modalities left, this question has failed completly.
+				if bel(NModalities=NewModCount, nextCondition(C), keyValue(S, context, Context))
+					then delete(waitingForAnswer, nextCondition(C))
+						+ insert(answer(S, Context, 'fail', []), nextCondition('fail')).
+				% If there are other input modalities left, switch modalities.
+				if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+					then delete(currentInputModality(speech), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+						+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+			}				
 		
 		%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
 		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
@@ -150,20 +162,24 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Setting things up for input handling %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+	
 	% Question
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), eventsCompleted, currentInputModality(CurrentInputModality), currentAttempt(CurrentAttempt), not(waitingForAnswer), not(answer(_, _, _, _)))
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), eventsCompleted, currentAttempt(CurrentAttempt), not(waitingForAnswer), not(answer(_, _, _, _)))
 	then {
-		% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
-		% when events have been completed (and we're not already waiting for an answer).
-		% the first attempt has a different default waiting time than the subsequent attempts.
-		if bel(CurrentInputModality == speech, CurrentAttempt == 1, keyListValues(S, [context, maxAnswerTimeFirst], [Context, MAX_AT]))
-			then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
-		% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
-		if bel(CurrentInputModality == speech, CurrentAttempt > 1, keyListValues(S, [context, maxAnswerTimeSecond], [Context, MAX_AT]))
-			then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+		if bel(currentInputModality(speech))
+			then {
+				% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
+				% when events have been completed (and we're not already waiting for an answer).
+				% the first attempt has a different default waiting time than the subsequent attempts.
+				if bel(CurrentAttempt == 1, keyListValues(S, [context, maxAnswerTimeFirst], [Context, MAX_AT]))
+					then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+				
+				% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
+				if bel(CurrentAttempt > 1, keyListValues(S, [context, maxAnswerTimeSecond], [Context, MAX_AT]))
+					then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+			}
 		
-		if bel(CurrentInputModality == touch)
+		if bel(currentInputModality(touch))
 			then {
 				% Start timer for question state with touch response and set waitingForAnswer flag.
 				% when events have been completed (and we're not already waiting for an answer).
@@ -176,8 +192,6 @@ module st_event {
 						mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 					then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
 			}
-		
-
 	}
 	
 	% Audiorecording
@@ -193,18 +207,27 @@ module st_event {
 	%%% State transition handling            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+	% If the final input modality fails to give an answer, use the default answer if there is any.
+	if bel(currentTopic(T), answer(S, _, "fail", []), state(T, S, question), keyListValues(S, [context, defaultAnswer], [Context, Answer]), 
+		answers(Answers), updateAnswers(Answers, Context, Answer, NewAnswers))
+		then delete(answers(Answers)) + insert(answers(NewAnswers)).
+
 	% If state has been completed,  
 	if bel(currentTopic(T), completed(S), nextCondition(C))
 	then { % ... clean up (and reset nextCondition to default value 'true') ...
 		% Cleanup: remove all answers (if any).
-		forall bel(answer(S, Context, I, Params)) do delete(answer(S, Context, I, Params)).
-		% Cleanup: remove state specific parameters (if any).
-		if bel(keyValue(S, options, _), mcCounter(C)) then delete(mcCounter(C)).
+		forall bel(answer(S, Context, Intent, Params)) do delete(answer(S, Context, Intent, Params)).
+		
+		% Cleanup: remove state specific parameters (if any).	
+		if bel(state(T, S, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
+			then delete(modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count)). 
+		
 		% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
-		if bel(currentAttempt(Attempt), currentInputModality(Modality))
-			then delete(currentState(S), started, nextCondition(C), currentAttempt(Attempt), currentInputModality(Modality))
-				+ insert(start, nextCondition('true'), currentAttempt(1), currentInputModality(speech)). %todo load from inputModalityOrder
-
+		if bel(currentState(S), started)
+			then delete(currentState(S), started, nextCondition(C))
+				+ insert(start, nextCondition('true')).
+		
+	
 		% ... and transition to next state (if there is one) ...
 		if bel(next(T, S, C, Snext))
 			then insert(currentState(Snext)). % Progress: move to next state
@@ -220,6 +243,7 @@ module st_event {
 		}
 				
 		% And, finally, initialize state specific parameters for new state (if any).
-		if bel(currentState(Snow), keyValue(Snow, options, _)) then insert(mcCounter(0)).
+		if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), keyValue(Snew, inputModalityOrder, Order), nth0(0, Order, NewModality)) 
+			then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 	}
 }
