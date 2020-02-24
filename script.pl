@@ -23,32 +23,72 @@
 %     set correct relative path using option htmldir = '...' in mas3g file.
 :- dynamic audio/4.
 
-topicOrder([test, theend]).
+topicOrder([startup, party, theend]).
 
 speechSpeed(100).
 
-state(test, s1, say).
-anim(test, s1, "wakeup/behavior_1").
-leds(test, s1, "white").
-next(test, s1, "true", s2).
+%%% Start up %%%
+state(startup, s1, say).
+anim(startup, s1, "wakeup/behavior_1").
+leds(startup, s1, "white").
+next(startup, s1, "true", s2).
 
-state(test, s2, say).
-text(test, s2, "Hallo, ik ben Hero").
-next(test, s2, "true", s3).
+state(startup, s2, say).
+text(startup, s2, "Hallo, ik ben Hero").
 
-state(test, s3, question).
-stateConfig(test, s3, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], numParams=1, defaultAnswer="rood"]).
-text(test, s3, "Wat is jouw lievelingskleur?").
-next(test, s3, 'answer_color', s4).
-next(test, s3, 'fail', s4f).
+%%% Chocolate - yesno %%%
+state(chocolate, s1, question).
+stateConfig(chocolate, s1, [type=yesno, response=speech, context='answer_yesno']).
+text(chocolate, s1, "Hou je van chocola?").
+next(chocolate, s1, 'answer_yes', s2y).
+next(chocolate, s1, 'answer_no', s2n).
+next(chocolate, s1, 'fail', s2f).
 
-state(test, s4, say).
-text(test, s4, "Ik vind %answer_color% ook heel mooi!").
+state(chocolate, s2y, say).
+text(chocolate, s2y, "Ik houd ook van chocola!").
 
-state(test, s4f, say).
-text(test, s4f, "Mijn levelingskleur is %answer_color%.").
+state(chocolate, s2n, say).
+text(chocolate, s2n, "Ik vind chocola ook vies!").
 
-% Topic: theend
+state(chocolate, s2f, say).
+text(chocolate, s2f, "Ik vind het ook een lastige keuze").
+
+%%% Color - input %%%
+state(color, s1, question).
+stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], defaultAnswer="rood"]).
+text(color, s1, "Wat is jouw lievelingskleur?").
+next(color, s1, 'success', s2).
+next(color, s1, 'fail', s2f).
+
+state(color, s2, say).
+text(color, s2, "Ik vind %answer_color% ook heel mooi!").
+
+state(color, s2f, say).
+text(color, s2f, "Mijn levelingskleur is %answer_color%.").
+
+%%% Party - branch %%%
+state(party, s1, question).
+stateConfig(party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], 
+branchIntents=['answer_koelkast_dansen' = 'dansen', 'answer_koelkast_zingen' = 'zingen', 'answer_koelkast_muziek' = 'muziek maken']]).
+text(party, s1, "Wat zouden wij op dat feestje hebben gedaan denk je? Dansen, zingen, of muziek maken?").
+next(party, s1, "dansen", s2a).
+next(party, s1, "zingen", s2b).
+next(party, s1, "muziek maken", s2c).
+next(party, s1, "fail", s2f).
+
+state(party, s2a, say).
+text(party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s2b, say).
+text(party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s2c, say).
+text(party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s2f, say).
+text(party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+%%% The end %%%
 state(theend, s1, say).
 text(theend, s1, "Dat was het.").
 next(theend, s1, 'true', s2).
