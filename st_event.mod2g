@@ -5,7 +5,7 @@ use dialogflow as actionspec.
 module st_event {
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Percept processing                %%%
+	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% NAO event percepts
@@ -13,6 +13,17 @@ module st_event {
 		do insert(event(E)).
 	forall bel(event(E)), not(percept(event(E)))
 		do delete(event(E)).
+		
+	% Handling of event waiting logic...
+	% ... for NAO events
+	if bel(event(E), waitingForEvent(E))
+		then delete(waitingForEvent(E)).
+	
+	% Handling timeouts
+	if percept(timer(S, _)), not(bel(timeout(S)))
+		then insert(timeout(S)).
+	if bel(timeout(S)), not(percept(timer(S, _)))
+		then delete(timeout(S)).
 	
 	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
 	% Stop listening if we received an answer.
@@ -29,29 +40,72 @@ module st_event {
 	if percept(emotionDetected(Emotion)), bel(currentState(S))
 		then insert(emotion(S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 
+		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Event and answer logic            %%%
+	%%% Recognition and Repair            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-	% Handling of event waiting logic...
-	% ... for NAO events
-	if bel(event(E), waitingForEvent(E))
-		then delete(waitingForEvent(E)).
 	
+	%%% SPEECH %%%
+	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentAttempt(CurrentAttempt)) % heard something but it didn't match what we want
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
+
+	% Handling timeouts (important to do this after other event processing above!).
+	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer)
+		then stopListening + starttimer(dialogflow, 1000, 1000).
+		
+	% Handling a timeout when dialogflow does not turn up witn an answer.
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), waitingForAnswer,
+		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentInputModality(speech), currentAttempt(CurrentAttempt))
+	then {
+		%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), keyValue(S, inputModalityOrder, Order), modalityCounter(ModCount), length(Order, NModalities), NewModCount is ModCount + 1)
+			then {
+				% If there are no input modalities left, this question has failed completly.
+				if bel(NModalities=NewModCount, nextCondition(C), keyValue(S, context, Context))
+					then delete(waitingForAnswer, nextCondition(C))
+						+ insert(answer(S, Context, 'fail', []), nextCondition('fail')).
+				% If there are other input modalities left, switch modalities.
+				if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+					then delete(currentInputModality(speech), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+						+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+			}				
+		
+		%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
+		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+		
+		%If the number of attempts are not reached, the user will get a next speech recognition attempt.
+		if bel(started, CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+	}
+	
+	%%% TOUCH - YESNO %%%
 	% Right bumper means yes and left bumper means no (if current state is yes/no question with touch response).
 	if bel(feetBumperEventAnswer(Intent), currentState(S), waitingForAnswer, currentInputModality(touch), keyListValues(S, [type, context], [yesno, Context]))
 		then delete(waitingForAnswer) + insert(answer(S, Context, Intent, [])) + canceltimer(S).
-		
-	% Right bumper means current option is selected (if current state is mc question with touch response).
+	
+	%%% TOUCH - OTHER %%%		
+	% Select answer %
+	% Right bumper means current option is selected (if current state is not a yesno question with touch response).
 	if bel(feetBumperEventAnswer('answer_yes'), currentState(S), waitingForAnswer, currentInputModality(touch),
 		keyListValues(S, [type, context, options], [Type, Context, Values]), Type \= yesno, mcCounter(C), nth0(C, Values, Answer))
 		then delete(waitingForAnswer) + insert(answer(S, Context, Context, [Answer])) + canceltimer(S).
-	% Left bumper means current option is NOT selected (if current state is mc question with touch response).
+	
+	% Explictly not select answer %
+	% Left bumper means current option is NOT selected (if current state is not a yesno question with touch response).
 	if bel(feetBumperEventAnswer('answer_no'), currentState(S), waitingForAnswer, currentInputModality(touch),
 		not(keyValue(S, type, yesno)), mcCounter(C), Cnew is C + 1)
 		then canceltimer(S) + delete(waitingForAnswer, mcCounter(C)) + insert(mcCounter(Cnew)).
-		
-	% Handle case where we have run out of options for mc question (fail).
+	
+	% Implictly not select answer %
+	% When timeout occures while waiting for a touch based answer option, go to the next answer option.
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), currentInputModality(touch), 
+	not(keyValue(S, type, yesno)), timeout(S), waitingForAnswer, mcCounter(C), Cnew is C + 1)
+		then delete(mcCounter(C), waitingForAnswer) + insert(mcCounter(Cnew)).
+	
+	% No options left %
+	% Handle case where we have run out of options for a question (fail).
 	if bel(currentInputModality(touch), mcCounter(C), currentState(S), keyListValues(S, [options, context, maxAnswerAttempts], [Values, Context, MaxAnswerAttempts]), 
 		length(Values, L), C=L, currentAttempt(CurrentAttempt))
 		then {
@@ -71,6 +125,21 @@ module st_event {
 				then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(C)) + 
 					insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 		}
+	
+	%%% AUDIO RECORDING %%%
+	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, audioInput), timeout(S), waitingForAudio)
+		then stopListening + disableRecording.
+
+	%%% EMOTION RECOGNITION %%%	
+	% When timeout occurs while waiting for emotion, emotion detection is stopped.
+	if bel(currentTopic(Topic), currentState(S), state(Topic, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
+		then stopWatching + insert(emotion(S, 'fail')) + delete(waitingForEmotion).
+	
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Answer processing			      %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		
 	% Prepaire the nextCondition (excluding altEnding).
 	if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
@@ -99,65 +168,6 @@ module st_event {
 	if bel(currentState(S), state(_, S, emotion), emotion(S,E), nextCondition(C), not(C=E))
 		then delete(nextCondition(C)) + insert(nextCondition(E)).
 
-
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Timeout logic		              %%%
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-	% Detecting timeouts
-	if percept(timer(S, _)), not(bel(timeout(S)))
-		then insert(timeout(S)).
-	if bel(timeout(S)), not(percept(timer(S, _)))
-		then delete(timeout(S)).
-	if percept(timer(S, _), S \= dialogflow), bel(currentAttempt(CurrentAttempt)) 
-		then log(timeout(S, CurrentAttempt)).
-	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentAttempt(CurrentAttempt)) % heard something but it didn't match what we want
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
-
-	% Handling timeouts (important to do this after other event processing above!).
-	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), timeout(S), waitingForAnswer)
-		then stopListening + starttimer(dialogflow, 1000, 1000).
-		
-	% If this timer has timed out, and we still have no answer, we need to leave the state, and
-	% we insert a fake answer for completion but with a 'fail' condition (substituted for default next condition).
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), waitingForAnswer,
-		timeout(dialogflow), keyValue(S, maxAnswerAttempts, MaxAnswerAttempts), currentInputModality(speech), currentAttempt(CurrentAttempt))
-	then {
-		%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), keyValue(S, inputModalityOrder, Order), modalityCounter(ModCount), length(Order, NModalities), NewModCount is ModCount + 1)
-			then {
-				% If there are no input modalities left, this question has failed completly.
-				if bel(NModalities=NewModCount, nextCondition(C), keyValue(S, context, Context))
-					then delete(waitingForAnswer, nextCondition(C))
-						+ insert(answer(S, Context, 'fail', []), nextCondition('fail')).
-				% If there are other input modalities left, switch modalities.
-				if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
-					then delete(currentInputModality(speech), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
-						+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
-			}				
-		
-		%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
-		if bel(started, CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
-			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
-		
-		%If the number of attempts are not reached, the user will get a next speech recognition attempt.
-		if bel(started, CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
-			then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
-	}
-	
-	% When timeout occures while waiting for a touch based answer option, go to the next answer option.
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, question), currentInputModality(touch), 
-	not(keyValue(S, type, yesno)), timeout(S), waitingForAnswer, mcCounter(C), Cnew is C + 1)
-		then delete(mcCounter(C), waitingForAnswer) + insert(mcCounter(Cnew)).
-	
-	% When timeout occurs while waiting for audio, audio recording is completed, so stop listening (and waiting for audio input). 
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, audioInput), timeout(S), waitingForAudio)
-		then stopListening + disableRecording.
-
-	% When timeout occurs while waiting for emotion, emotion detection is stopped.
-	if bel(currentTopic(Topic), currentState(S), state(Topic, S, emotion), timeout(S), waitingForEmotion, not(emotion(S,_)))
-		then stopWatching + insert(emotion(S, 'fail')) + delete(waitingForEmotion).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Setting things up for input handling %%%
@@ -226,7 +236,6 @@ module st_event {
 		if bel(currentState(S), started)
 			then delete(currentState(S), started, nextCondition(C))
 				+ insert(start, nextCondition('true')).
-		
 	
 		% ... and transition to next state (if there is one) ...
 		if bel(next(T, S, C, Snext))
