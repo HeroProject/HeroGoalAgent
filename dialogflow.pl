@@ -9,7 +9,8 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0, answerProcessed/0,
-	speechText/3. %used to signal that a user did not say anything detectable.  
+	speechText/3, %used to signal that a user did not say anything detectable.  
+	branchingPointDecisions/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -49,11 +50,14 @@ concatenate([H], H).
 updateUserInput(UserInput, Key, Input, NewUserInput) :- not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
 updateUserInput(UserInput, Key, Input, NewUserInput) :- member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
 
-%getUserInput(Key, Input) :- atom_string(KeyA, Key), userInput(Pairs), member((KeyA=Value), Pairs), atom_string(Value, Input), !.
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
+getBranchingPointDecision(BP, Decision) :- branchingPointDecisions(BPDs), member((BP=Decision), BPDs).
+
+addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, TempBPDs),  addDecisionToBranchingPoints(T, Decision, TempBPDs, NewBPDs).
+addDecisionToBranchingPoints([H | []], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, NewBPDs).
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
-
-%getValueWithKey(KeyValueList, Key, Value) :- member((Key=Value), KeyValueList), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
@@ -95,3 +99,5 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived.
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived.
+
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted.

@@ -38,7 +38,7 @@ module st_event {
 			if bel(Type=input, length(Params, 1), nth0(0, Params, Ans))
 				then insert(answer(T, S, Ans, [Context])).
 			
-			if bel(Type=branch, length(Params, 0), keyValue(S, branchIntents, BranchIntents), member((Intent=Branch), BranchIntents))
+			if bel(Type=branch, length(Params, 0), keyValue(S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
 				then insert(answer(T, S, Branch, [])).
 			
 			if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(S, correctAnswer, CorrectAnswer))
@@ -194,6 +194,17 @@ module st_event {
 					%If a default answer is provided for an input question, that is stored userInput key-value list
 					if bel(Type=input, keyValue(S, defaultAnswer, DefaultAns), keyValue(S, context, Context), userInput(Input), updateUserInput(Input, Context, DefaultAns, UpdatedInput))
 						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
+					
+					%There are two ways a branching decision can deal with a fail.
+					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(S, branchingPoints, BranchingPoints))
+						then {
+							%If a default answer is available add that decision to the branching point.
+							if bel(keyValue(S, defaultAnswer, DefaultAns), addDecisionToBranchingPoints(BranchingPoints, DefaultAns, BPDs, UpdatedBPDs))
+								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)).		
+							%If a default answer is not provided, add a fail flag to the decision of the branching point.
+							if bel(not(keyValue(S, defaultAnswer, _)), addDecisionToBranchingPoints(BranchingPoints, 'fail', BPDs, UpdatedBPDs))
+								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)). 
+						}		
 				}
 			
 			% If an answer was given
@@ -206,13 +217,16 @@ module st_event {
 					if bel(Type=input, nth0(0, Details, Context), userInput(Input), updateUserInput(Input, Context, Ans, UpdatedInput))
 						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
 					%if the type of question was a branch.
-					if bel(Type=branch)
-						then insert(nextCondition(Ans)).
+					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
+						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 				}
 			
 			% Flag that the answer has been processed.
 			if true then insert(answerProcessed).
 		}
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
 	% Prepaire the nextCondition (excluding altEnding).
 	%if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))

@@ -23,7 +23,7 @@
 %     set correct relative path using option htmldir = '...' in mas3g file.
 :- dynamic audio/4.
 
-topicOrder([startup, party, theend]).
+topicOrder([startup, party, party2, theend]).
 
 speechSpeed(100).
 
@@ -68,25 +68,62 @@ text(color, s2f, "Mijn levelingskleur is %answer_color%.").
 
 %%% Party - branch %%%
 state(party, s1, question).
-stateConfig(party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], 
-branchIntents=['answer_koelkast_dansen' = 'dansen', 'answer_koelkast_zingen' = 'zingen', 'answer_koelkast_muziek' = 'muziek maken']]).
-text(party, s1, "Wat zouden wij op dat feestje hebben gedaan denk je? Dansen, zingen, of muziek maken?").
-next(party, s1, "dansen", s2a).
-next(party, s1, "zingen", s2b).
-next(party, s1, "muziek maken", s2c).
+stateConfig(party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
+branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[party, s3], [party2, s2]]]).
+text(party, s1, "Dansen, zingen, of muziek maken?").
+next(party, s1, "success", s2).
 next(party, s1, "fail", s2f).
 
-state(party, s2a, say).
-text(party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
-
-state(party, s2b, say).
-text(party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
-
-state(party, s2c, say).
-text(party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+state(party, s2, say).
+text(party, s2, "Ik hou je nog even in spanning.").
+next(party, s2, 'true', s3).
 
 state(party, s2f, say).
-text(party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(party, s2f, "Ik kies zelf voor zingen.").
+next(party, s2f, 'true', s3).
+
+state(party, s3, branchingPoint).
+next(party, s3, "dansen", s3a).
+next(party, s3, "zingen", s3b).
+next(party, s3, "muziek maken", s3c).
+next(party, s3, "fail", s3f).
+
+state(party, s3a, say).
+text(party, s3a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3b, say).
+text(party, s3b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3c, say).
+text(party, s3c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3f, say).
+text(party, s3f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+%%% Party II - branchingPoint %%%
+
+state(party2, s1, say).
+text(party2, s1, "Ik ben een nieuw topic").
+next(party2, s1, "true", s2).
+
+state(party2, s2, branchingPoint).
+next(party2, s2, "dansen", s2a).
+next(party2, s2, "zingen", s2b).
+next(party2, s2, "muziek maken", s2c).
+next(party2, s2, "fail", s2f).
+
+state(party2, s2a, say).
+text(party2, s2a, "Er is gekozen voor dansen.").
+
+state(party2, s2b, say).
+text(party2, s2b, "Er is gekozen voor zingen.").
+
+state(party2, s2c, say).
+text(party2, s2c, "Er is gekozen voor muziek maken.").
+
+state(party2, s2f, say).
+text(party2, s2f, "Je hebt geen geldig antwoord gegeven.").
+
 
 %%% The end %%%
 state(theend, s1, say).

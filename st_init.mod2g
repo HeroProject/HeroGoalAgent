@@ -5,7 +5,7 @@ use dialogflow as actionspec.
 module st_init {
 	% Initialize state parameters.
 	if true then
-		insert(currentState(s1), start, nextCondition('true'), userInput([]), topics([])).
+		insert(topics([]), currentState(s1), start, nextCondition('true'), userInput([]), branchingPointDecisions([])).
 		% Adopt a list of topics that the agent will perform.
 	if bel(topicOrder(Order)) then
 		adopt(topics(Order)).
