@@ -1,5 +1,7 @@
 topicOrder([story, theend]).
 
+speechSpeed(100).
+
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
 leds(story, s1, "white").
@@ -38,23 +40,17 @@ text(story, s9, "Ik reed met mijn familie in een optocht naar de graaf plek. Ik 
 next(story, s9, "true", s10).
 
 state(story, s10, question).
-stateConfig(story, s10, [type = mc, response = speech, context = "answer_female_family_member", key = "familyMember"]).
+stateConfig(story, s10, [type = input, context = "answer_female_family_member", options = ["nichtje","zusje","tante"],  defaultAnswer="nichtje"]).
 text(story, s10, "Wie zou mijn lievelings graafmachine zijn, mijn nichtje, zusje of tante?").
-next(story, s10, "answer_female_family_member", s11).
-next(story, s10, "fail", s10f).
-
-state(story, s10f, question).
-stateConfig(story, s10f, [type = mc, response = touch, options = ["nichtje","zusje","tante"], context = "answer_female_family_member", key = "familyMember", defaultAnswer="nichtje"]).
-text(story, s10f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wie zou mijn lievelings graafmachine zijn?").
-next(story, s10f, "answer_female_family_member", s11).
-next(story, s10f, "fail", s11f).
+next(story, s10, "success", s11).
+next(story, s10, "fail", s11f).
 
 state(story, s11, say).
-text(story, s11, "Jaa, super gezellig, met mijn %familyMember% in de optocht!").
+text(story, s11, "Jaa, super gezellig, met mijn %answer_female_family_member% in de optocht!").
 next(story, s11, "true", s12).
 
 state(story, s11f, say).
-text(story, s11f, "Het was mijn %familyMember% achter mij in de optocht!").
+text(story, s11f, "Het was mijn %answer_female_family_member% achter mij in de optocht!").
 next(story, s11f, "true", s12).
 
 state(story, s12, say).
@@ -74,7 +70,7 @@ text(story, s15, "Ik vind elektriciteit het lekkerste wat er is.").
 next(story, s15, "true", s16).
 
 state(story, s16, say).
-text(story, s16, "Mijn %familyMember% werkt op waterstof maar ik weet niet precies wat dat is.").
+text(story, s16, "Mijn %answer_female_family_member% werkt op waterstof maar ik weet niet precies wat dat is.").
 next(story, s16, "true", s18).
 
 state(story, s18, say).
@@ -90,7 +86,7 @@ text(story, s20, "Als ik achteruit reed, piepte ik als een muis.").
 next(story, s20, "true", s21).
 
 state(story, s21, say).
-text(story, s21, "Wil jij voor mijh het geluid van een piepende muis na doen? Dan kan ik het gebruiken als geluidseffect.").
+text(story, s21, "Wil jij voor mijh het geluid van een piepende muis na doen?").
 next(story, s21, "true", s22).
 
 state(story, s22, say).
@@ -130,35 +126,39 @@ text(story, s33, "Ik vond tussen al de modder een mooie ketting.").
 next(story, s33, "true", s34).
 
 state(story, s34, question).
-stateConfig(story, s34, [type = mc, response = speech, altEnding=yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
+stateConfig(story, s34, [type = branch, context = "answer_graafmachine_branch_3", options = ["oppakken","weggooien"],
+branchIntents=["oppakken"="answer_graafmachine_oppakken","weggooien"="answer_graafmachine_weggooien"], branchingPoints=[[story, s90]]]).
 text(story, s34, "Pakte ik die op of gooide ik die weg?").
-next(story, s34, "true", s35).
-next(story, s34, "fail", s34f).
-
-state(story, s34f, question).
-stateConfig(story, s34f, [type = mc, response = touch, options = ["oppakken","weggooien"], altEnding = yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
-text(story, s34f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wat deed ik met de ketting?").
-next(story, s34f, "true", s35).
-next(story, s34f, "fail", s35).
+next(story, s34, "success", s35).
+next(story, s34, "fail", s35f).
 
 state(story, s35, say).
-text(story, s35, "Slim. Ik groef verder de modder weg.").
-next(story, s35, "true", s37).
+text(story, s35, "We gaan straks zien of dat slim was.").
+next(story, s35, "true", s36).
+
+state(story, s35f, say).
+text(story, s35f, "Weet je wat, ik pak hem gewoon op.").
+next(story, s35f, "true", s36).
+
+state(story, s36, say).
+text(story, s36, "Ik groef verder de modder weg.").
+next(story, s36, "true", s37).
 
 state(story, s37, say).
 text(story, s37, "Achter me ontstond een steeds grotere berg.").
 next(story, s37, "true", s38).
 
 state(story, s38, say).
-text(story, s38, "En af en toe gooide ik expres een beetje modder over mijn %familyMember% heen.").
+text(story, s38, "En af en toe gooide ik expres een beetje modder over mijn %answer_female_family_member% heen.").
 next(story, s38, "true", s39).
 
 state(story, s39, say).
 text(story, s39, "En dan werd ze woedend, en moest opa zijn arm om haar heen slaan terwijl ze waterstofstoom afblies.").
-next(story, s39, "true", s39b).
+next(story, s39, "true", s40).
 
+%TODO: fix steam sound
 state(story, s39b, say).
-audio(story, s39b, server, "steam.wav").
+audio(story, s39b, server, "steam.ogg").
 leds(story, s39b, "red").
 next(story, s39b, "true", s40).
 
@@ -172,19 +172,13 @@ text(story, s41, "En toen zat ik opeens vast.").
 next(story, s41, "true", s42).
 
 state(story, s42, question).
-stateConfig(story, s42, [type = mc, response = speech, context = "answer_body_part", key = "lichaamsdeel"]).
+stateConfig(story, s42, [type = input, context = "answer_body_part", options = ["arm","hoofd","been"], defaultAnswer="arm"]).
 text(story, s42, "Met welk lichaamsdeel zat ik vast?").
-next(story, s42, "answer_body_part", s45).
-next(story, s42, "fail", s42f).
-
-state(story, s42f, question).
-stateConfig(story, s42f, [type = mc, response = touch, options = ["arm","hoofd","been"], context = "answer_body_part", key = "lichaamsdeel", defaultAnswer="arm"]).
-text(story, s42f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Met welk lichaamsdeel zat ik vast?").
-next(story, s42f, "answer_body_part", s45).
-next(story, s42f, "fail", s45).
+next(story, s42, "success", s45).
+next(story, s42, "fail", s45).
 
 state(story, s45, say).
-text(story, s45, "Ik kon mijn %lichaamsdeel% niet meer bewegen, als ik hem probeerde op te halen, duwde ik in plaats van mijn %lichaamsdeel% mijn lichaam omhoog.").
+text(story, s45, "Ik kon mijn %answer_body_part% niet meer bewegen, als ik hem probeerde op te halen, duwde ik in plaats van mijn %answer_body_part% mijn lichaam omhoog.").
 next(story, s45, "true", s46).
 
 state(story, s46, say).
@@ -208,15 +202,15 @@ text(story, s49, "Maar gelukkig had mijn opa me horen piepen en dus kwam hij op 
 next(story, s49, "true", s50).
 
 state(story, s50, say).
-text(story, s50, "En hij werd eerst heel boos dat ik mijn %lichaamsdeel% vast had laten zitten.").
+text(story, s50, "En hij werd eerst heel boos dat ik mijn %answer_body_part% vast had laten zitten.").
 next(story, s50, "true", s51).
 
 state(story, s51, say).
-text(story, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger te werk zou gaan en toen ging hij me helpen met mijn %lichaamsdeel% losmaken.").
+text(story, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger te werk zou gaan en toen ging hij me helpen met mijn %answer_body_part% losmaken.").
 next(story, s51, "true", s52).
 
 state(story, s52, say).
-text(story, s52, "Hij blies met zijn stoom alle aarde om mijn %lichaamsdeel% weg.").
+text(story, s52, "Hij blies met zijn stoom alle aarde om mijn %answer_body_part% weg.").
 next(story, s52, "true", s57b).
 
 state(story, s57b, say).
@@ -273,7 +267,7 @@ next(story, s75c, "true", s75d).
 
 state(story, s75d, say).
 text(story, s75d, "En toen heeft ze het katrol heel precies schoongeblazen.").
-audio(story, s75d, server, "steam.wav").
+audio(story, s75d, recorded, s57c).
 next(story, s75d, "true", s76).
 
 state(story, s76, say).
@@ -285,18 +279,15 @@ text(story, s77, "Wat deed ik toen?").
 next(story, s77, "true", s78).
 
 state(story, s78, question).
-stateConfig(story, s78, [type = mc, response = speech, context = "answer_graafmachine_branch_2", key = "graafmachine_keuze_3"]).
+stateConfig(story, s78, [type = branch, context = "answer_graafmachine_branch_2", options = ["ik werd boos","laten spelen"],
+branchIntents=["ik werd boos"="answer_graafmachine_boos","laten spelen"="answer_graafmachine_spelen"], branchingPoints=[[story, s79]]]).
 text(story, s78, "Werd ik boos op haar of liet ik haar met het katrol spelen?").
-next(story, s78, "answer_graafmachine_boos", s79a).
-next(story, s78, "answer_graafmachine_spelen", s79b).
-next(story, s78, "fail", s78f).
+next(story, s78, "success", s79).
+next(story, s78, "fail", s79a).
 
-state(story, s78f, question).
-stateConfig(story, s78f, [type = mc, response = touch, options = ["ik werd boos","laten spelen"], branching = yes,context = "answer_graafmachine_branch_2", key = "graafmachine_keuze_3",defaultAnswer="boos"]).
-text(story, s78f, "Sorry ik verstond je niet. Kun je daarom via de knop op mijn teen antwoord geven. Wat deed ik toen?").
-next(story, s78f, "ik werd boos", s79a).
-next(story, s78f, "laten spelen", s79b).
-next(story, s78f, "fail", s79b).
+state(story, s79, branchingPoint).
+next(story, s79, "ik werd boos", s79a).
+next(story, s79, "laten spelen", s79b).
 
 state(story, s79a, say).
 text(story, s79a, "En toen wilde ik eerst super boos op haar worden want ik had hem gevonden en zij was hem aan het stelen. Maar toen zei opa dat ik dat niet mocht doen.").
@@ -323,28 +314,27 @@ text(story, s84, "Dat is een heel leuk museum.").
 next(story, s84, "true", s85).
 
 state(story, s85, say).
-text(story, s85, "En mijn %familyMember% werkt daar nu.").
+text(story, s85, "En mijn %answer_female_family_member% werkt daar nu.").
 next(story, s85, "true", s89).
 
 state(story, s89, say).
 text(story, s89, "Leuk voor haar, he?").
 next(story, s89, "true", s90).
 
-state(story, s90, say).
-stateConfig(story, s90, [selectEnding = yes, key = "graafmachine_alt_ending"]).
+state(story, s90, branchingPoint).
 text(story, s90, "Weet je nog dat ik die ketting vond?").
 next(story, s90, "oppakken", s91a).
 next(story, s90, "weggooien", s91b).
 next(story, s90, "fail", s91f).
 
 state(story, s91a, say).
-text(story, s91a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %familyMember% en ze is er ontzettend blij mee!").
+text(story, s91a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %answer_female_family_member% en ze is er ontzettend blij mee!").
 
 state(story, s91b, say).
 text(story, s91b, "Maar goed dat je mij hem liet weggooien. Er ruste namelijk een vloek op. Maar dat is een verhaal voor een andere keer.").
 
 state(story, s91f, say).
-text(story, s91f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn %familyMember% en ze is er ontzettend blij mee!").
+text(story, s91f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn %answer_female_family_member% en ze is er ontzettend blij mee!").
 
 
 %%%% THE END %%%%%

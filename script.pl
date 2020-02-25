@@ -2,9 +2,7 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:- dynamic audio/4.
-
-topicOrder([startup, chocolate, color, party, party2, color2, theend]).
+topicOrder([startup, theend]).
 
 speechSpeed(100).
 
@@ -16,6 +14,11 @@ next(startup, s1, "true", s2).
 
 state(startup, s2, say).
 text(startup, s2, "Hallo, ik ben Hero").
+next(startup, s2, "true", s3).
+
+state(startup, s3, say).
+audio(startup, s3, server, 'steam.ogg').
+
 
 %%% Chocolate - yesno %%%
 state(chocolate, s1, question).

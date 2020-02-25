@@ -1,6 +1,6 @@
 topicOrder([story, theend]).
 
-speechSpeed(100).
+speechSpeed(85).
 
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").

@@ -63,7 +63,7 @@ module st_event {
 				}
 				
 			if bel(not(answer(T,S, _, _)))
-				then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S)).
+				then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S, Intent, Params)).
 		}
 	
 	%% Dialogflow tweaks %%
