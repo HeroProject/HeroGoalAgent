@@ -73,7 +73,7 @@ keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pa
 %% Global and/or default configuration parameters
 % (override config param for specific state by using key-label in key-value list associated with that state).
 % Number of tries a user gets to provide an answer to a question (of whatever type).
-keyValue(_, maxAnswerAttempts, 2).
+keyValue(_, maxAnswerAttempts, 1).
 
 % Time (in milliseconds) a user gets to answer a question with touch.
 keyValue(_, maxAnswerTimeTouch, 3500).

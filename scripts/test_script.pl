@@ -2,193 +2,131 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functionality included in this test script:
-% - say state with gesture (animation) and leds
-% - question state: yes/no with speech
-% - question state: yes/no with touch
-% - question state: mc with speech
-% - question state: mc with touch
-% - variable %var% (with var a key filled by an earlier question)
-% - perform choregraph behavior (see also resources folder)
-% - play audio fragment (see also resources folder)
-% - talk while playing a music fragment (see also resources folder)
-% - question state: branching & default answer
-% - record and replay of sound effect.
-% - topic switch
-%
-% BEFORE RUNNING THIS SCRIPT, CHECK:
-% - Install the choregraphe behaviors in the resource folder following the instructions.
-% - Check flags in mas2g file (e.g. recordaudio).
-% - Check whether relative path ../tablet-core/laptop/html from this directory gets you to html folder, or
-%     set correct relative path using option htmldir = '...' in mas3g file.
+:- dynamic audio/4.
 
-topicOrder([test, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, theend]).
 
-state(test, s1, say).
-anim(test, s1, "wakeup/behavior_1").
-leds(test, s1, "white").
-next(test, s1, "true", s2).
+speechSpeed(100).
 
-state(test, s2, say). % state s2 is of type 'say'.
-stateConfig(test, s2, []). % no configuration parameters for state s2 (empty list); if empty, no need to include stateConfig/2 for s2.
-text(test, s2, "Hallo, ik ben Hero.").
-anim(test, s2, 'animations/Stand/Gestures/Hey_1').
-next(test, s2, 'true', s3).
+%%% Start up %%%
+state(startup, s1, say).
+anim(startup, s1, "wakeup/behavior_1").
+leds(startup, s1, "white").
+next(startup, s1, "true", s2).
 
-state(test, s3, question).
-stateConfig(test, s3, [type=yesno, response=speech, context='answer_yesno']).
-text(test, s3, "Hou je van chocola?").
-next(test, s3, 'answer_yes', s4a).
-next(test, s3, 'answer_no', s4b).
-next(test, s3, 'fail', s3f).
+state(startup, s2, say).
+text(startup, s2, "Hallo, ik ben Hero").
 
-% In second instance try touch (feet bumpers)
-state(test, s3f, question).
-stateConfig(test, s3f, [type=yesno, response=touch, context='answer_yesno']).
-text(test, s3f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Hou je van chocola?").
-next(test, s3f, 'answer_yes', s4a).
-next(test, s3f, 'answer_no', s4b).
-next(test, s3f, 'fail', s5).
+%%% Chocolate - yesno %%%
+state(chocolate, s1, question).
+stateConfig(chocolate, s1, [type=yesno, response=speech, context='answer_yesno']).
+text(chocolate, s1, "Hou je van chocola?").
+next(chocolate, s1, 'answer_yes', s2y).
+next(chocolate, s1, 'answer_no', s2n).
+next(chocolate, s1, 'fail', s2f).
 
-state(test, s4a, say).
-text(test, s4a, "Ik houd ook van chocola!").
-next(test, s4a, 'true', s5).
+state(chocolate, s2y, say).
+text(chocolate, s2y, "Ik houd ook van chocola!").
 
-state(test, s4b, say).
-text(test, s4b, "Ik vind chocola ook vies!").
-next(test, s4b, 'true', s5).
+state(chocolate, s2n, say).
+text(chocolate, s2n, "Ik vind chocola ook vies!").
 
-state(test, s5, question).
-stateConfig(test, s5, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
-text(test, s5, "Wat is jouw lievelingskleur?").
-next(test, s5, 'answer_color', s6).
-next(test, s5, 'fail', s5f).
+state(chocolate, s2f, say).
+text(chocolate, s2f, "Ik vind het ook een lastige keuze").
 
-state(test, s5f, question).
-stateConfig(test, s5f, [type=mc, response=touch, options = ["blauw", "geel", "groen", "rood"], context='answer_color', key='favoriteColor']). % "wit", "oranje", "rood", "roze", "blauw", "geel", "groen", "paars", "zwart", "bruin"
-text(test, s5f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken?").
-next(test, s5f, 'answer_color', s6).
-next(test, s5f, 'fail', s7).
+%%% Color - input %%%
+state(color, s1, question).
+stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], defaultAnswer="rood"]).
+text(color, s1, "Wat is jouw lievelingskleur?").
+next(color, s1, 'success', s2).
+next(color, s1, 'fail', s2f).
 
-state(test, s6, say).
-text(test, s6, "Ik vind %favoriteColor% ook heel mooi!"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s5).
-next(test, s6, 'true', s7).
+state(color, s2, say).
+text(color, s2, "Ik vind %answer_color% ook heel mooi!").
 
-state(test, s7, say).
-text(test, s7, "Kom, laten we samen een olifant nadoen! 3, 2, 1,").
-next(test, s7, 'true', s8).
+state(color, s2f, say).
+text(color, s2f, "Mijn levelingskleur is %answer_color%.").
 
-state(test, s8, say).
-anim(test, s8, "elephant/behavior_1"). % check choregraph ID for this behavior.
-%next(test, s8, 'true', s9).
+%%% Party - branch %%%
+state(party, s1, question).
+stateConfig(party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
+branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[party, s3], [party2, s2]]]).
+text(party, s1, "Dansen, zingen, of muziek maken?").
+next(party, s1, "success", s2).
+next(party, s1, "fail", s2f).
 
-state(test, s9, say).
-text(test, s9, "Ik vond tussen al de modder een mooie ketting.").
-next(test, s9, "true", s10).
+state(party, s2, say).
+text(party, s2, "Ik hou je nog even in spanning.").
+next(party, s2, 'true', s3).
 
-state(test, s10, question).
-stateConfig(test, s10, [type = mc, response = speech, altEnding = yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
-text(test, s10, "Pakte ik die op of gooide ik die weg?").
+state(party, s2f, say).
+text(party, s2f, "Ik kies zelf voor zingen.").
+next(party, s2f, 'true', s3).
 
-state(test, s10f, question).
-stateConfig(test, s10f, [type = mc, response = touch, options = ["oppakken","weggooien"], altEnding = yes, context = "answer_graafmachine_branch_3", key = "graafmachine_alt_ending"]).
-text(test, s10f, "Sorry ik verstond je niet. Kun je daarom via de knoppen op mijn tenen antwoord geven. Pakte ik die op of gooide ik die weg?").
+state(party, s3, branchingPoint).
+next(party, s3, "dansen", s3a).
+next(party, s3, "zingen", s3b).
+next(party, s3, "muziek maken", s3c).
+next(party, s3, "fail", s3f).
 
-next(test, s10, "true", s11).
-next(test, s10, "fail", s10f).
-next(test, s10f, "true", s11).
-next(test, s10f, "fail", s11).
+state(party, s3a, say).
+text(party, s3a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
 
-state(test, s11, say).
-text(test, s11, "Ik ga nu een los geluidje afspelen. Ik ga piepen als een vrachtwagen.").
-leds(test, s11, 'white').
-next(test, s11, 'true', s12).
+state(party, s3b, say).
+text(party, s3b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
 
-state(test, s12, say).
-audio(test, s12, server, 'truck.wav').
-leds(test, s12, 'red').
-next(test, s12, 'true', s13).
+state(party, s3c, say).
+text(party, s3c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
 
-state(test, s13, say).
-text(test, s13, "Nu praat ik terwijl er een muziekje afspeelt.").
-leds(test, s13, 'white').
-audio(test, s13, server, 'short_test_song.wav').
-next(test, s13, 'true', s14).
+state(party, s3f, say).
+text(party, s3f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
 
-state(test, s14, question).
-stateConfig(test, s14, [type = mc, response = speech, branching = yes, context = "answer_graafmachine_branch_1", key = "graafmachine_keuze_1"]).
-text(test, s14, "Wat zal ik eens gaan doen. Zal ik muziek maken? Of zal ik kunstwerken maken? Of toch liever schaatsen? Jij mag het kiezen!").
+%%% Party II - branchingPoint %%%
 
-state(test, s14f, question).
-stateConfig(test, s14f, [type = mc, response = touch, options = ["muziek maken","kunstwerken maken","schaatsen"], branching = yes, context = "answer_graafmachine_branch_1", key = "graafmachine_keuze_1", defaultAnswer="muziek maken"]).
-text(test, s14f, "Sorry ik versta je niet. Ik noem de antwoorden even op. Je kunt op de ja knop drukken om te kiezen.").
+state(party2, s1, say).
+text(party2, s1, "Ik ben een nieuw topic").
+next(party2, s1, "true", s2).
 
-state(test, s14ff, say).
-text(test, s14ff, "Ik kies dan zelf voor muziek maken").
+state(party2, s2, branchingPoint).
+next(party2, s2, "dansen", s2a).
+next(party2, s2, "zingen", s2b).
+next(party2, s2, "muziek maken", s2c).
+next(party2, s2, "fail", s2f).
 
-state(test, s15a, say).
-text(test, s15a, "Ja! Dan kunnen er mensen lekker dansen, dat vinden mensen leuk").
+state(party2, s2a, say).
+text(party2, s2a, "Er is gekozen voor dansen.").
 
-state(test, s15b, say).
-text(test, s15b, "Ja! Dan kunnen mensen mijn mooie kunstwerken komen bekijken, dat vinden ze leuk!").
+state(party2, s2b, say).
+text(party2, s2b, "Er is gekozen voor zingen.").
 
-state(test, s15c, say).
-text(test, s15c, "Ja! Dan kunnnen alle mensen met me mee doen en kunnen we kijken wie het mooist schaatst!").
+state(party2, s2c, say).
+text(party2, s2c, "Er is gekozen voor muziek maken.").
 
-next(test, s14, "answer_graafmachine_muziek", s15a).
-next(test, s14f, "muziek maken", s15a).
+state(party2, s2f, say).
+text(party2, s2f, "Je hebt geen geldig antwoord gegeven.").
 
-next(test, s14, "answer_graafmachine_kunstwerken", s15b).
-next(test, s14f, "kunstwerken maken", s15b).
+%%% Color II - quiz %%%
+state(color2, s1, question).
+stateConfig(color2, s1, [type=quiz, context='answer_color', options=['rood', 'grijs', 'blauw', 'wit'], correctAnswer=['grijs', 'wit']]).
+text(color2, s1, "Kun je me vertellen welke kleur ik ben?").
+next(color2, s1, 'correct', s2cor).
+next(color2, s1, 'incorrect', s2incor).
+next(color2, s1, 'fail', s2f).
 
-next(test, s14, "answer_graafmachine_schaatsen", s15c).
-next(test, s14f, "schaatsen", s15c).
+state(color2, s2cor, say).
+text(color2, s2cor, "Ja klopt! Ik ben grijs met wit.").
 
-next(test, s14, "fail", s14f).
-next(test, s14f, "fail", s14ff).
-next(test, s14ff, "true", s15a).
-next(test, s15a, "true", s16).
-next(test, s15b, "true", s16).
-next(test, s15c, "true", s16).
+state(color2, s2incor, say).
+text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs met wit.").
 
-state(test, s16, say).
-text(test, s16, "Doe het geluid van een Koe na.").
-next(test, s16, "true", s17).
+state(color2, s2f, say).
+text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
 
-state(test, s17, audioInput).
-stateConfig(test, s17, [recordTime=2000]).
-next(test, s17, "true", s18).
-
-state(test, s18, say).
-text(test, s18, "Dankjewel").
-next(test, s18, "true", s19).
-
-state(test, s19, say).
-audio(test, s19, recorded, s17).
-next(test, s19, "true", s20).
-
-state(test, s20, say).
-stateConfig(test, s20, [selectEnding=yes, key="graafmachine_alt_ending"]).
-text(test, s20, "Weet je nog dat ik die ketting vond?").
-
-next(test, s20, "oppakken", s21a).
-next(test, s20, "weggooien", s21b).
-next(test, s20, "fail", s21f).
-
-state(test, s21a, say).
-text(test, s21a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %familyMember% en ze is er ontzettend blij mee!").
-
-state(test, s21b, say).
-text(test, s21b, "Maar goed dat je mij hem liet weggooien. Er ruste namelijk een vloek op. Maar dat is een verhaal voor een andere keer.").
-
-state(test, s21f, say).
-text(test, s21f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn zusje en ze is er ontzettend blij mee!").
-
-% Topic: theend
+%%% The end %%%
 state(theend, s1, say).
 text(theend, s1, "Dat was het.").
 next(theend, s1, 'true', s2).
 
 state(theend, s2, say). 
 text(theend, s2, "Tot snel weer. Doei!").
-anim(theend, s2, "rest/behavior_1").
+anim(theend, s2, "rest/behavior_1"). 

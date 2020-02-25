@@ -2,28 +2,9 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Functionality included in this test script:
-% - say state with gesture (animation) and leds
-% - question state: yes/no with speech
-% - question state: yes/no with touch
-% - question state: mc with speech
-% - question state: mc with touch
-% - variable %var% (with var a key filled by an earlier question)
-% - perform choregraph behavior (see also resources folder)
-% - play audio fragment (see also resources folder)
-% - talk while playing a music fragment (see also resources folder)
-% - question state: branching & default answer
-% - record and replay of sound effect.
-% - topic switch
-%
-% BEFORE RUNNING THIS SCRIPT, CHECK:
-% - Install the choregraphe behaviors in the resource folder following the instructions.
-% - Check flags in mas2g file (e.g. recordaudio).
-% - Check whether relative path ../tablet-core/laptop/html from this directory gets you to html folder, or
-%     set correct relative path using option htmldir = '...' in mas3g file.
 :- dynamic audio/4.
 
-topicOrder([startup, color2, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, theend]).
 
 speechSpeed(100).
 
@@ -148,4 +129,4 @@ next(theend, s1, 'true', s2).
 
 state(theend, s2, say). 
 text(theend, s2, "Tot snel weer. Doei!").
-anim(theend, s2, "rest/behavior_1").
+anim(theend, s2, "rest/behavior_1"). 
