@@ -1,17 +1,21 @@
 % Predicates for event percept processing. 
-:-dynamic answer/3, % answer(State, Type, Params) keeps track of answer types and answers in Params in a state.
-	answers/1, % key-value list of answers from user to questions (initially empty list).
+:-dynamic answer/4, % answer(S, Context, Intent, Params) keeps track of answer types and answers in Params in a state.
+	userInput/1, % key-value list of answers from user to questions (initially empty list).
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
-	audioRecording/2.
+	audioRecording/2,
+	emotion/2.
 
 % Predicates related to state execution and transition handling.
-:-dynamic currentAttempt/1, currentState/1, currentTopic/1, 
-	mcCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0.
+:-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
+	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
+	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0, answerProcessed/0,
+	speechText/3, %used to signal that a user did not say anything detectable.  
+	branchingPointDecisions/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
@@ -20,10 +24,13 @@ feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 eventsCompleted :- started, not(waitingForEvent(_)).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
-answerReceived :- answer(_, _, _), not(waitingForAnswer).
+answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
 
+% Audio has been received, not longer waiting for audio.
 audioReceived :- audioRecording(_,_), not(waitingForAudio).
 
+% Emotion has been received, no longer waiting for emotion.
+emotionReceived :- emotion(_,_), not(waitingForEmotion).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -32,7 +39,7 @@ audioReceived :- audioRecording(_,_), not(waitingForAudio).
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
 replaceKeys([H | T], [VString | Result]) :-
-	atom_string(Key, H), answers(Answers), member((Key=Value), Answers), atom_string(Value, VString), !, replaceKeys(T, Result).
+	atom_string(Key, H), userInput(Input), member((Key=Value), Input), atom_string(Value, VString), !, replaceKeys(T, Result).
 replaceKeys([H | T], [H | Result]) :- replaceKeys(T, Result).
 replaceKeys([], []).
 
@@ -40,8 +47,17 @@ concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R
 concatenate([H], H).
 
 % Simply append an answer to the list if not yet present; otherwise, replace.
-updateAnswers(Answers, Key, Answer, NewAnswers) :- not(member((Key=Answer), Answers)), append(Answers, [Key=Answer], NewAnswers).
-updateAnswers(Answers, Key, Answer, NewAnswers) :- member((Key=Value), Answers), delete(Answers, (Key=Value), AnswersTemp), append(AnswersTemp, [Key=Answer], NewAnswers).
+updateUserInput(UserInput, Key, Input, NewUserInput) :- not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
+updateUserInput(UserInput, Key, Input, NewUserInput) :- member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
+
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
+getBranchingPointDecision(BP, Decision) :- branchingPointDecisions(BPDs), member((BP=Decision), BPDs).
+
+addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, TempBPDs),  addDecisionToBranchingPoints(T, Decision, TempBPDs, NewBPDs).
+addDecisionToBranchingPoints([H | []], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, NewBPDs).
+
+addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
@@ -59,8 +75,14 @@ keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pa
 % Number of tries a user gets to provide an answer to a question (of whatever type).
 keyValue(_, maxAnswerAttempts, 1).
 
-% Time (in milliseconds) a user gets to answer a question.
-keyValue(_, maxAnswerTime, 5000).
+% Time (in milliseconds) a user gets to answer a question with touch.
+keyValue(_, maxAnswerTimeTouch, 3500).
+
+% Time (in milliseconds) a users gets to answer a first and second speech attempt.
+keyValue(_, maxAnswerTimeFirst, 6000).
+keyValue(_, maxAnswerTimeSecond, 4000).
+
+keyValue(_, inputModalityOrder, [speech, touch]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
@@ -72,6 +94,10 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 % A question state is completed if after starting it, all events that were started have been completed,
 % and an answer has been received, or a timeout occurred.
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived(Topic, State).
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived.
+
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived.
+
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted.

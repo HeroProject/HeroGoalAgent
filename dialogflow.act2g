@@ -35,6 +35,10 @@ define stopListening with
 	pre { true }
 	post { true }
 
+define setSpeechParam(Param,Value) with
+	pre { true }
+	post { true }
+
 define setIdle with
 	pre { true }
 	post { true }
@@ -48,6 +52,14 @@ define startWatching with
 	post { true }
 	
 define stopWatching with
+	pre { true }
+	post { true }
+
+define enableRecording with
+	pre { true }
+	post { true }
+
+define disableRecording with
 	pre { true }
 	post { true }
 	

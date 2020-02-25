@@ -1,69 +1,135 @@
-state(test, s1, say). % state s1 is of type 'say'.
-stateConfig(test, s1, []). % no configuration parameters for state s1 (empty list); if empty, no need to include stateConfig/2 for s1.
-text(test, s1, "Hallo, ik ben Hero.").
-anim(test, s1, 'animations/Stand/Gestures/Hey_1').
-leds(test, s1, 'white').
-next(test, s1, 'true', s2).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test script                                            %%%
+%%% Run to evaluate various functions for script handling. %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+topicOrder([startup, theend]).
 
-state(test, s2, question).
-stateConfig(test, s2, [type=yesno, response=speech, context='answer_yesno']).
-text(test, s2, "Hou je van chocola?").
-next(test, s2, 'answer_yes', s3a).
-next(test, s2, 'answer_no', s3b).
-next(test, s2, 'fail', s2f).
+speechSpeed(100).
 
-% In second instance try touch (feet bumpers)
-state(test, s2f, question).
-stateConfig(test, s2f, [type=yesno, response=touch]).
-text(test, s2f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Hou je van chocola?").
-next(test, s2f, 'answer_yes', s3a).
-next(test, s2f, 'answer_no', s3b).
-next(test, s2f, 'fail', s4).
+%%% Start up %%%
+state(startup, s1, say).
+anim(startup, s1, "wakeup/behavior_1").
+leds(startup, s1, "white").
+next(startup, s1, "true", s2).
 
-state(test, s3a, say).
-text(test, s3a, "Ik houd ook van chocola!").
-next(test, s3a, 'true', s4).
+state(startup, s2, say).
+text(startup, s2, "Hallo, ik ben Hero").
+next(startup, s2, "true", s3).
 
-state(test, s3b, say).
-text(test, s3b, "Ik vind chocola ook vies!").
-next(test, s3b, 'true', s4).
+state(startup, s3, say).
+audio(startup, s3, server, 'steam.ogg').
 
-state(test, s4, question).
-stateConfig(test, s4, [type=mc, response=speech, context='answer_color', key='favoriteColor']).
-text(test, s4, "Wat is jouw lievelingskleur?").
-next(test, s4, 'answer_color', s5).
-next(test, s4, 'fail', s4f).
 
-state(test, s4f, question).
-stateConfig(test, s4f, [type=mc, response=touch, options = ["blauw", "geel", "groen", "rood"], context='answer_color', key='favoriteColor']). % "wit", "oranje", "rood", "roze", "blauw", "geel", "groen", "paars", "zwart", "bruin"
-text(test, s4f, "Sorry ik versta je niet. Wil je daarom antwoord geven door de knopjes bij mijn tenen aan te raken? Ik vertel je alle mogelijke antwoorden. Druk op het knopje bij de ja sticker als je je antwoord hoort.").
-next(test, s4f, 'answer_color', s5).
+%%% Chocolate - yesno %%%
+state(chocolate, s1, question).
+stateConfig(chocolate, s1, [type=yesno, response=speech, context='answer_yesno']).
+text(chocolate, s1, "Hou je van chocola?").
+next(chocolate, s1, 'answer_yes', s2y).
+next(chocolate, s1, 'answer_no', s2n).
+next(chocolate, s1, 'fail', s2f).
 
-state(test, s5, say).
-text(test, s5, "Ik vind %favoriteColor% ook heel mooi!"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
-next(test, s5, 'true', s6).
+state(chocolate, s2y, say).
+text(chocolate, s2y, "Ik houd ook van chocola!").
 
-state(test, s6, say).
-text(test, s6, "Kom, laten we samen een olifant nadoen! 3, 2, 1,"). % favoriteColor is a variable that is replaced with an answer given by user for key 'favoriteColor' (see s4).
-next(test, s6, 'true', s7).
+state(chocolate, s2n, say).
+text(chocolate, s2n, "Ik vind chocola ook vies!").
 
-state(test, s7, say).
-anim(test, s7, "elephant-bf57b3/behavior_1").
-next(test, s7, 'true', s8).
+state(chocolate, s2f, say).
+text(chocolate, s2f, "Ik vind het ook een lastige keuze").
 
-state(test, s8, say).
-text(test, s8, "Ik a nu een los geluidje afspelen. Ik ga piepen als een vrachtwagen.").
-leds(test, s8, 'white').
-next(test, s8, 'true', s9).
+%%% Color - input %%%
+state(color, s1, question).
+stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], defaultAnswer="rood"]).
+text(color, s1, "Wat is jouw lievelingskleur?").
+next(color, s1, 'success', s2).
+next(color, s1, 'fail', s2f).
 
-state(test, s9, say).
-audio(test, s9, 'truck.wav').
-leds(test, s9, 'red').
-next(test, s9, 'true', s10).
+state(color, s2, say).
+text(color, s2, "Ik vind %answer_color% ook heel mooi!").
 
-state(test, s10, say).
-text(test, s10, "Nu praat ik terwijl er een muziekje afspeelt.").
-audio(test, s10, 'short_test_song.wav').
+state(color, s2f, say).
+text(color, s2f, "Mijn levelingskleur is %answer_color%.").
 
+%%% Party - branch %%%
+state(party, s1, question).
+stateConfig(party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
+branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[party, s3], [party2, s2]]]).
+text(party, s1, "Dansen, zingen, of muziek maken?").
+next(party, s1, "success", s2).
+next(party, s1, "fail", s2f).
+
+state(party, s2, say).
+text(party, s2, "Ik hou je nog even in spanning.").
+next(party, s2, 'true', s3).
+
+state(party, s2f, say).
+text(party, s2f, "Ik kies zelf voor zingen.").
+next(party, s2f, 'true', s3).
+
+state(party, s3, branchingPoint).
+next(party, s3, "dansen", s3a).
+next(party, s3, "zingen", s3b).
+next(party, s3, "muziek maken", s3c).
+next(party, s3, "fail", s3f).
+
+state(party, s3a, say).
+text(party, s3a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3b, say).
+text(party, s3b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3c, say).
+text(party, s3c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+state(party, s3f, say).
+text(party, s3f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+
+%%% Party II - branchingPoint %%%
+
+state(party2, s1, say).
+text(party2, s1, "Ik ben een nieuw topic").
+next(party2, s1, "true", s2).
+
+state(party2, s2, branchingPoint).
+next(party2, s2, "dansen", s2a).
+next(party2, s2, "zingen", s2b).
+next(party2, s2, "muziek maken", s2c).
+next(party2, s2, "fail", s2f).
+
+state(party2, s2a, say).
+text(party2, s2a, "Er is gekozen voor dansen.").
+
+state(party2, s2b, say).
+text(party2, s2b, "Er is gekozen voor zingen.").
+
+state(party2, s2c, say).
+text(party2, s2c, "Er is gekozen voor muziek maken.").
+
+state(party2, s2f, say).
+text(party2, s2f, "Je hebt geen geldig antwoord gegeven.").
+
+%%% Color II - quiz %%%
+state(color2, s1, question).
+stateConfig(color2, s1, [type=quiz, context='answer_color', options=['rood', 'grijs', 'blauw', 'wit'], correctAnswer=['grijs', 'wit']]).
+text(color2, s1, "Kun je me vertellen welke kleur ik ben?").
+next(color2, s1, 'correct', s2cor).
+next(color2, s1, 'incorrect', s2incor).
+next(color2, s1, 'fail', s2f).
+
+state(color2, s2cor, say).
+text(color2, s2cor, "Ja klopt! Ik ben grijs met wit.").
+
+state(color2, s2incor, say).
+text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs met wit.").
+
+state(color2, s2f, say).
+text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
+
+%%% The end %%%
 state(theend, s1, say).
-text(theend, s1, "Dat was het. Doei!"). 
+text(theend, s1, "Dat was het.").
+next(theend, s1, 'true', s2).
+
+state(theend, s2, say). 
+text(theend, s2, "Tot snel weer. Doei!").
+anim(theend, s2, "rest/behavior_1"). 

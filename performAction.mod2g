@@ -7,13 +7,16 @@ order=linearall.
 % Performs all action (modalities) at the start of a state.
 module performAction(Topic, State) {
 	% Say what needs to be said.
-	if bel(text(Topic, State, T), replaceVar(T, Result)) then sayAnimated(Result).
+	if bel(text(Topic, State, T), speechSpeed(Speed), replaceVar(T, T2), addSpeechSpeed(T2, Speed, Result)) then sayAnimated(Result).
 	% Perform gesture.
 	if bel(anim(Topic, State, G)) then gesture(G).
 	% Set eye colors.
 	if bel(leds(Topic, State, C)) then setEyeColour(C).
-	% Play audio
-	if bel(audio(Topic, State, A)) then playAudio(A).
+	% Play audio from server.
+	if bel(audio(Topic, State, server, A)) then playAudio(A).
+	% Play recorded audio.
+	if bel(audio(Topic, State, recorded, S), audioRecording(S, A)) then playAudio(A).
+	
 
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

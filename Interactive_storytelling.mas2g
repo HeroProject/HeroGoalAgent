@@ -1,9 +1,8 @@
-use 'DialogFlow-0.0.1-SNAPSHOT-shaded.jar' as environment with
-		server='localhost',
+use 'cbsr-eis-connector.jar' as environment with
+		server='192.168.178.35',
 		flowkey='dialogflowagent.json',
 		flowagent='mikeagent-dsvpjs',
-		flowlang='nl-NL',
-		recordaudio='yes'.
+		flowlang='nl-NL'.
 		
 define storytelling as agent {
 	use st_init as init.
