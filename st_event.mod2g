@@ -24,40 +24,12 @@ module st_event {
 		then insert(timeout(S)).
 	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
-	
-	% DialogFlow: Processing recognized intents (assuming these are always replies/answers here).
-	% Stop listening if we received an answer.
-	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
-	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), keyListValues(S, [type, context], [Type, Context]))
-		then {
-			if true then delete(waitingForAnswer) + stopListening + canceltimer(S).
-				
-			if bel(Type=yesno, length(Params, 0))
-				then insert(answer(T, S, Intent, [])).
-			
-			if bel(Type=input, length(Params, 1), nth0(0, Params, Ans))
-				then insert(answer(T, S, Ans, [Context])).
-			
-			if bel(Type=branch, length(Params, 0), keyValue(S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
-				then insert(answer(T, S, Branch, [])).
-			
-			if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(S, correctAnswer, CorrectAnswer))
-				then {
-					if bel(CorrectAnswer=Ans)
-						then insert(answer(T, S, correct, [Ans])).
-					if bel(CorrectAnswer \= Ans)
-						then insert(answer(T, S, incorrect, [Ans])).
-				}
-				
-			if bel(not(answer(T,S, _, _)))
-				then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S)).
-		}
 		
-	%Audio recording
+	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(currentState(S), waitingForAudio)
 		then delete(waitingForAudio) + insert(audioRecording(S, FileName)).
 	
-	%Emotion detection
+	%Emotion detection percepts
 	if percept(emotionDetected(Emotion)), bel(currentState(S))
 		then insert(emotion(S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 
@@ -67,8 +39,34 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%%% SPEECH %%%
+	%% Dialogflow produces an input %%
+	% Need to check here for cases Params=[] as we sometimes get this from DialogFlow even with required parameters(!?) : (Params=[] -> Type=yesno ; nth0(0, Params, _))
+	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), keyListValues(S, [type, context], [Type, Context]))
+		then {
+			if true then delete(waitingForAnswer) + stopListening + canceltimer(S).
+			% yesno questions -> answer_yes or answer_no are the expected answers.	
+			if bel(Type=yesno, length(Params, 0))
+				then insert(answer(T, S, Intent, [])).
+			% input questions -> expects an entity to be returned.
+			if bel(Type=input, length(Params, 1), nth0(0, Params, Ans))
+				then insert(answer(T, S, Ans, [Context])).
+			% branch questions -> matches the intent to a specific branch
+			if bel(Type=branch, length(Params, 0), keyValue(S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
+				then insert(answer(T, S, Branch, [])).
+			% quiz questions -> checks whether the answer is correct or not.
+			if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(S, correctAnswer, CorrectAnswer))
+				then {
+					if bel(member(Ans, CorrectAnswer))
+						then insert(answer(T, S, correct, [Ans])).
+					if bel(not(member(Ans, CorrectAnswer)))
+						then insert(answer(T, S, incorrect, [Ans])).
+				}
+				
+			if bel(not(answer(T,S, _, _)))
+				then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S)).
+		}
 	
-	% Dialogflow tweaks
+	%% Dialogflow tweaks %%
 	% Cut of listening if user already answered something that did not match anything.
 	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
 		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
@@ -123,9 +121,9 @@ module st_event {
 			
 			if bel(Type=quiz, keyValue(S, correctAnswer, CorrectAnswer))
 				then {
-					if bel(CorrectAnswer=Ans)
+					if bel(member(Ans, CorrectAnswer))
 						then insert(answer(T, S, correct, [Ans])).
-					if bel(CorrectAnswer \= Ans)
+					if bel(not(member(Ans, CorrectAnswer)))
 						then insert(answer(T, S, incorrect, [Ans])).
 				}
 		}
@@ -216,41 +214,22 @@ module st_event {
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
 					if bel(Type=input, nth0(0, Details, Context), userInput(Input), updateUserInput(Input, Context, Ans, UpdatedInput))
 						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
-					%if the type of question was a branch.
+					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
+					%for quiz questions
+					if bel(Type=quiz)
+						then insert(nextCondition(Ans)).
 				}
 			
 			% Flag that the answer has been processed.
 			if true then insert(answerProcessed).
 		}
 	
+	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
 	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
-	% Prepaire the nextCondition (excluding altEnding).
-	%if bel(currentState(S), not(keyValue(S, altEnding, yes)), not(keyValue(S, branching, yes)), answer(S, _, Intent, _), nextCondition(C), not(C=Intent))
-		%then delete(nextCondition(C)) + insert(nextCondition(Intent)).
-	% Prepaire the nextCondition in the case branching is true and the user answer via the bumpers. %ToDo fix this.
-	%if bel(currentState(S), not(keyValue(S, altEnding, yes)), keyValue(S, branching, yes), answer(S, _, _, [Answer]), nextCondition(C), not(C=Answer))
-		%then delete(nextCondition(C)) + insert(nextCondition(Answer)).
-	%if bel(currentState(S), not(keyValue(S, altEnding, yes)), keyValue(S, branching, yes), answer(S, _, Intent, []), nextCondition(C), not(C=Intent))
-		%then delete(nextCondition(C)) + insert(nextCondition(Intent)).
-	%Prepaire nextConditions for alternative ending.
-	%if bel(currentState(S), keyListValues(S, [selectEnding, key], [yes, Key]), getAnswer(Key, Answer), nextCondition(C), not(C=Answer))
-		%then delete(nextCondition(C)) + insert(nextCondition(Answer)).
-	% store answers to questions in answers-list (if not already done and question is not yes/no question);
-	% assumes reply is a list with single item (Answer).
-	% If there is a specific answer store that answer (e.g. Entity recognized).
-	%if bel(answer(S, Context, _, [Answer]), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		%keyValue(S, context, Context), updateAnswers(Answers, Context, Answer, NewAnswers))
-		%then delete(answers(Answers)) + insert(answers(NewAnswers)).
-	
-	% If the intent itself is the answer (and no specific entity is known), store that answer.
-	%if bel(answer(S, _, Intent, []), not(Intent="fail"), state(_, S, question), not(keyValue(S, type, yesno)), answers(Answers),
-		%keyValue(S, context, Context), updateAnswers(Answers, Context, Intent, NewAnswers))
-		%then delete(answers(Answers)) + insert(answers(NewAnswers)).
-	
 	% If an emotion is expected and present, set that as the next condition.
 	if bel(currentState(S), state(_, S, emotion), emotion(S,E), nextCondition(C), not(C=E))
 		then delete(nextCondition(C)) + insert(nextCondition(E)).

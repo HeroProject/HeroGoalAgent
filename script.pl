@@ -23,7 +23,7 @@
 %     set correct relative path using option htmldir = '...' in mas3g file.
 :- dynamic audio/4.
 
-topicOrder([startup, party, party2, theend]).
+topicOrder([startup, color2, theend]).
 
 speechSpeed(100).
 
@@ -124,6 +124,22 @@ text(party2, s2c, "Er is gekozen voor muziek maken.").
 state(party2, s2f, say).
 text(party2, s2f, "Je hebt geen geldig antwoord gegeven.").
 
+%%% Color II - quiz %%%
+state(color2, s1, question).
+stateConfig(color2, s1, [type=quiz, context='answer_color', options=['rood', 'grijs', 'blauw', 'wit'], correctAnswer=['grijs', 'wit']]).
+text(color2, s1, "Kun je me vertellen welke kleur ik ben?").
+next(color2, s1, 'correct', s2cor).
+next(color2, s1, 'incorrect', s2incor).
+next(color2, s1, 'fail', s2f).
+
+state(color2, s2cor, say).
+text(color2, s2cor, "Ja klopt! Ik ben grijs met wit.").
+
+state(color2, s2incor, say).
+text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs met wit.").
+
+state(color2, s2f, say).
+text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
 
 %%% The end %%%
 state(theend, s1, say).
