@@ -84,6 +84,8 @@ keyValue(_, maxAnswerTimeSecond, 4000).
 
 keyValue(_, inputModalityOrder, [speech, touch]).
 
+keyValue(_, speechSpeed, 100).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

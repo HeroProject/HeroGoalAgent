@@ -2,20 +2,17 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:- dynamic audio/4.
-
 topicOrder([startup, chocolate, color, party, party2, color2, theend]).
-
-speechSpeed(100).
 
 %%% Start up %%%
 state(startup, s1, say).
 anim(startup, s1, "wakeup/behavior_1").
+audio(startup, s1, server, "short_test_song.wav").
 leds(startup, s1, "white").
 next(startup, s1, "true", s2).
 
 state(startup, s2, say).
-text(startup, s2, "Hallo, ik ben Hero").
+text(startup, s2, "Hallo, ik ben Hero. Dit is een snelheidstest.").
 
 %%% Chocolate - yesno %%%
 state(chocolate, s1, question).

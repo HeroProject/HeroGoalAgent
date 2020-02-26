@@ -1,7 +1,5 @@
 topicOrder([story, theend]).
 
-speechSpeed(85).
-
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
 leds(story, s1, "white").

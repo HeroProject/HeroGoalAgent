@@ -7,7 +7,7 @@ order=linearall.
 % Performs all action (modalities) at the start of a state.
 module performAction(Topic, State) {
 	% Say what needs to be said.
-	if bel(text(Topic, State, T), speechSpeed(Speed), replaceVar(T, T2), addSpeechSpeed(T2, Speed, Result)) then sayAnimated(Result).
+	if bel(text(Topic, State, T), keyValue(State, speechSpeed, Speed), replaceVar(T, T2), addSpeechSpeed(T2, Speed, Result)) then sayAnimated(Result).
 	% Perform gesture.
 	if bel(anim(Topic, State, G)) then gesture(G).
 	% Set eye colors.
