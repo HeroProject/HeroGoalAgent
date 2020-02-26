@@ -2,9 +2,7 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-topicOrder([startup, theend]).
-
-speechSpeed(100).
+topicOrder([startup, chocolate, color, party, party2, color2, sound, theend]).
 
 %%% Start up %%%
 state(startup, s1, say).
@@ -13,12 +11,7 @@ leds(startup, s1, "white").
 next(startup, s1, "true", s2).
 
 state(startup, s2, say).
-text(startup, s2, "Hallo, ik ben Hero").
-next(startup, s2, "true", s3).
-
-state(startup, s3, say).
-audio(startup, s3, server, 'steam.ogg').
-
+text(startup, s2, "Hallo, ik ben Hero.").
 
 %%% Chocolate - yesno %%%
 state(chocolate, s1, question).
@@ -45,10 +38,10 @@ next(color, s1, 'success', s2).
 next(color, s1, 'fail', s2f).
 
 state(color, s2, say).
-text(color, s2, "Ik vind %answer_color% ook heel mooi!").
+text(color, s2, "Ik vind %color_s1% ook heel mooi!").
 
 state(color, s2f, say).
-text(color, s2f, "Mijn levelingskleur is %answer_color%.").
+text(color, s2f, "Mijn levelingskleur is %color_s1%.").
 
 %%% Party - branch %%%
 state(party, s1, question).
@@ -124,6 +117,10 @@ text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs me
 
 state(color2, s2f, say).
 text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
+
+%%% Sound - sound %%%
+state(sound, s1, say).
+audio(sound, s1, server, "short_test_song.wav").
 
 %%% The end %%%
 state(theend, s1, say).

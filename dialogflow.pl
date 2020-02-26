@@ -1,6 +1,7 @@
 % Predicates for event percept processing. 
-:-dynamic answer/4, % answer(S, Context, Intent, Params) keeps track of answer types and answers in Params in a state.
+:-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	userInput/1, % key-value list of answers from user to questions (initially empty list).
+	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/2,
 	emotion/2.
@@ -9,8 +10,36 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0, answerProcessed/0,
-	speechText/3, %used to signal that a user did not say anything detectable.  
-	branchingPointDecisions/1.
+	speechText/3. %used to signal that a user did not say anything detectable.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% State parameter handling.                              %%%
+%%% Define default configuration parameters here.          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Returns values for all keys in list of condition Pairs in state.
+keyListValues(Topic, State, [Key | Keys], [Value | Values]) :- keyValue(Topic, State, Key, Value), keyListValues(Topic, State, Keys, Values).
+keyListValues(_, _, [], []).
+% Returns value for (one) key in list of condition Pairs in state.
+% (use of cut ! to prevent returning default values for keys).
+keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
+
+%% Global and/or default configuration parameters
+% (override config param for specific state by using key-label in key-value list associated with that state).
+% Number of tries a user gets to provide an answer to a question (of whatever type).
+keyValue(_, _, maxAnswerAttempts, 2).
+
+% Time (in milliseconds) a user gets to answer a question with touch.
+keyValue(_, _, maxAnswerTimeTouch, 3500).
+
+% Time (in milliseconds) a users gets to answer a first and second speech attempt.
+keyValue(_, _, maxAnswerTimeFirst, 6000).
+keyValue(_, _, maxAnswerTimeSecond, 4000).
+
+% Order for input modalities. Available modalities are speech and touch.
+keyValue(_, _, inputModalityOrder, [speech, touch]).
+
+% Default speech speed (value between 1-100)
+keyValue(_, _, speechSpeed, 100).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -31,6 +60,7 @@ audioReceived :- audioRecording(_,_), not(waitingForAudio).
 
 % Emotion has been received, no longer waiting for emotion.
 emotionReceived :- emotion(_,_), not(waitingForEmotion).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,7 +68,7 @@ emotionReceived :- emotion(_,_), not(waitingForEmotion).
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
-replaceKeys([H | T], [VString | Result]) :-
+replaceKeys([H | T], [VString | Result]) :- 
 	atom_string(Key, H), userInput(Input), member((Key=Value), Input), atom_string(Value, VString), !, replaceKeys(T, Result).
 replaceKeys([H | T], [H | Result]) :- replaceKeys(T, Result).
 replaceKeys([], []).
@@ -58,31 +88,6 @@ addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPD
 addDecisionToBranchingPoints([H | []], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, NewBPDs).
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% State parameter handling.                              %%%
-%%% Define default configuration parameters here.          %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Returns values for all keys in list of condition Pairs in state.
-keyListValues(State, [Key | Keys], [Value | Values]) :- keyValue(State, Key, Value), keyListValues(State, Keys, Values).
-keyListValues(_, [], []).
-% Returns value for (one) key in list of condition Pairs in state.
-% (use of cut ! to prevent returning default values for keys).
-keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
-
-%% Global and/or default configuration parameters
-% (override config param for specific state by using key-label in key-value list associated with that state).
-% Number of tries a user gets to provide an answer to a question (of whatever type).
-keyValue(_, maxAnswerAttempts, 1).
-
-% Time (in milliseconds) a user gets to answer a question with touch.
-keyValue(_, maxAnswerTimeTouch, 3500).
-
-% Time (in milliseconds) a users gets to answer a first and second speech attempt.
-keyValue(_, maxAnswerTimeFirst, 6000).
-keyValue(_, maxAnswerTimeSecond, 4000).
-
-keyValue(_, inputModalityOrder, [speech, touch]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

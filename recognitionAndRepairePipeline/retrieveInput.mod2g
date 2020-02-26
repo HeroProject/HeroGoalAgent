@@ -1,0 +1,62 @@
+use '../dialogflow' as knowledge.
+use '../script' as knowledge.
+use '../dialogflow' as actionspec.
+
+module retrieveInput(T, S, Intent, Params) {
+	if bel(keyValue(T, S, type, Type))
+		then {
+			if bel(currentInputModality(speech))
+				then {
+					if true then delete(waitingForAnswer) + stopListening + canceltimer(S).
+					% yesno questions -> answer_yes or answer_no are the expected answers.	
+					if bel(Type=yesno, length(Params, 0))
+						then insert(answer(T, S, Intent, [])).
+					% input questions -> expects an entity to be returned.
+					if bel(Type=input, length(Params, 1), nth0(0, Params, Ans))
+						then insert(answer(T, S, Ans, [])).
+					% branch questions -> matches the intent to a specific branch
+					if bel(Type=branch, length(Params, 0), keyValue(T, S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
+						then insert(answer(T, S, Branch, [])).
+					% quiz questions -> checks whether the answer is correct or not.
+					if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(T, S, correctAnswer, CorrectAnswer))
+						then {
+							if bel(member(Ans, CorrectAnswer))
+								then insert(answer(T, S, correct, [Ans])).
+							if bel(not(member(Ans, CorrectAnswer)))
+								then insert(answer(T, S, incorrect, [Ans])).
+						}
+						
+					if bel(not(answer(T,S, _, _)))
+						then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S, Intent, Params)).
+				}
+				
+			if bel(currentInputModality(touch))
+				then {
+			
+					if true then delete(waitingForAnswer) + canceltimer(S).
+					
+					if bel(Type=yesno)
+						then insert(answer(T, S, Intent, [])).
+					
+					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(T, S, options, Options), mcCounter(Count), nth0(Count, Options, Ans))
+						then {
+							if bel(Type=input)
+								then insert(answer(T, S, Ans, [])).
+							
+							if bel(Type=branch)
+								then insert(answer(T, S, Ans, [])).
+							
+							if bel(Type=quiz, keyValue(T, S, correctAnswer, CorrectAnswer))
+								then {
+									if bel(member(Ans, CorrectAnswer))
+										then insert(answer(T, S, correct, [Ans])).
+									if bel(not(member(Ans, CorrectAnswer)))
+										then insert(answer(T, S, incorrect, [Ans])).
+								}
+						}
+					
+					if bel(Type \= yesno, Intent = 'answer_no', mcCounter(Count), CountNew is Count + 1)
+						then delete(mcCounter(Count)) + insert(mcCounter(CountNew)).
+				}
+		}
+}

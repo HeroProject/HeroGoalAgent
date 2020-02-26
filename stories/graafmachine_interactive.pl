@@ -1,7 +1,5 @@
 topicOrder([story, theend]).
 
-speechSpeed(100).
-
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
 leds(story, s1, "white").
@@ -46,11 +44,11 @@ next(story, s10, "success", s11).
 next(story, s10, "fail", s11f).
 
 state(story, s11, say).
-text(story, s11, "Jaa, super gezellig, met mijn %answer_female_family_member% in de optocht!").
+text(story, s11, "Jaa, super gezellig, met mijn %story_s10% in de optocht!").
 next(story, s11, "true", s12).
 
 state(story, s11f, say).
-text(story, s11f, "Het was mijn %answer_female_family_member% achter mij in de optocht!").
+text(story, s11f, "Het was mijn %story_s10% achter mij in de optocht!").
 next(story, s11f, "true", s12).
 
 state(story, s12, say).
@@ -70,7 +68,7 @@ text(story, s15, "Ik vind elektriciteit het lekkerste wat er is.").
 next(story, s15, "true", s16).
 
 state(story, s16, say).
-text(story, s16, "Mijn %answer_female_family_member% werkt op waterstof maar ik weet niet precies wat dat is.").
+text(story, s16, "Mijn %story_s10% werkt op waterstof maar ik weet niet precies wat dat is.").
 next(story, s16, "true", s18).
 
 state(story, s18, say).
@@ -149,7 +147,7 @@ text(story, s37, "Achter me ontstond een steeds grotere berg.").
 next(story, s37, "true", s38).
 
 state(story, s38, say).
-text(story, s38, "En af en toe gooide ik expres een beetje modder over mijn %answer_female_family_member% heen.").
+text(story, s38, "En af en toe gooide ik expres een beetje modder over mijn %story_s10% heen.").
 next(story, s38, "true", s39).
 
 state(story, s39, say).
@@ -178,7 +176,7 @@ next(story, s42, "success", s45).
 next(story, s42, "fail", s45).
 
 state(story, s45, say).
-text(story, s45, "Ik kon mijn %answer_body_part% niet meer bewegen, als ik hem probeerde op te halen, duwde ik in plaats van mijn %answer_body_part% mijn lichaam omhoog.").
+text(story, s45, "Ik kon mijn %story_s42% niet meer bewegen, als ik hem probeerde op te halen, duwde ik in plaats van mijn %story_s42% mijn lichaam omhoog.").
 next(story, s45, "true", s46).
 
 state(story, s46, say).
@@ -202,15 +200,15 @@ text(story, s49, "Maar gelukkig had mijn opa me horen piepen en dus kwam hij op 
 next(story, s49, "true", s50).
 
 state(story, s50, say).
-text(story, s50, "En hij werd eerst heel boos dat ik mijn %answer_body_part% vast had laten zitten.").
+text(story, s50, "En hij werd eerst heel boos dat ik mijn %story_s42% vast had laten zitten.").
 next(story, s50, "true", s51).
 
 state(story, s51, say).
-text(story, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger te werk zou gaan en toen ging hij me helpen met mijn %answer_body_part% losmaken.").
+text(story, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger te werk zou gaan en toen ging hij me helpen met mijn %story_s42% losmaken.").
 next(story, s51, "true", s52).
 
 state(story, s52, say).
-text(story, s52, "Hij blies met zijn stoom alle aarde om mijn %answer_body_part% weg.").
+text(story, s52, "Hij blies met zijn stoom alle aarde om mijn %story_s42% weg.").
 next(story, s52, "true", s57b).
 
 state(story, s57b, say).
@@ -314,7 +312,7 @@ text(story, s84, "Dat is een heel leuk museum.").
 next(story, s84, "true", s85).
 
 state(story, s85, say).
-text(story, s85, "En mijn %answer_female_family_member% werkt daar nu.").
+text(story, s85, "En mijn %story_s10% werkt daar nu.").
 next(story, s85, "true", s89).
 
 state(story, s89, say).
@@ -328,13 +326,13 @@ next(story, s90, "weggooien", s91b).
 next(story, s90, "fail", s91f).
 
 state(story, s91a, say).
-text(story, s91a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %answer_female_family_member% en ze is er ontzettend blij mee!").
+text(story, s91a, "Gelukkig liet jij mij hem oppakken? Die is perfect voor in het museum. Ik geef hem aan mijn %story_s10% en ze is er ontzettend blij mee!").
 
 state(story, s91b, say).
 text(story, s91b, "Maar goed dat je mij hem liet weggooien. Er ruste namelijk een vloek op. Maar dat is een verhaal voor een andere keer.").
 
 state(story, s91f, say).
-text(story, s91f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn %answer_female_family_member% en ze is er ontzettend blij mee!").
+text(story, s91f, "Gelukkig had ik de ketting opgepakt. Die is perfect voor in het museum. Ik geef hem aan mijn %story_s10% en ze is er ontzettend blij mee!").
 
 
 %%%% THE END %%%%%

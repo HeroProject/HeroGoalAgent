@@ -1,0 +1,55 @@
+use '../dialogflow' as knowledge.
+use '../script' as knowledge.
+use '../dialogflow' as actionspec.
+
+module processAnswer(T, S, Ans) {
+
+	if bel(keyValue(T, S, type, Type), nextCondition(Condition))
+		then {
+			% the default nextCondition will be replaced.
+			if true then delete(nextCondition(Condition)).
+			
+			% If no answer was given
+			if bel(Ans=failure)
+				then {
+					%The next condition is given the 'fail'  flag.
+					if true then insert(nextCondition('fail')).
+					
+					%If a default answer is provided for an input question, that is stored userInput key-value list
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, DefaultAns, UpdatedInput))
+						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
+					
+					%There are two ways a branching decision can deal with a fail.
+					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
+						then {
+							%If a default answer is available add that decision to the branching point.
+							if bel(keyValue(T, S, defaultAnswer, DefaultAns), addDecisionToBranchingPoints(BranchingPoints, DefaultAns, BPDs, UpdatedBPDs))
+								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)).		
+							%If a default answer is not provided, add a fail flag to the decision of the branching point.
+							if bel(not(keyValue(T, S, defaultAnswer, _)), addDecisionToBranchingPoints(BranchingPoints, 'fail', BPDs, UpdatedBPDs))
+								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)). 
+						}		
+				}
+			
+			% If an answer was given
+			if bel(Ans \= failure)
+				then {
+					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
+					if bel(Type=yesno)
+						then insert(nextCondition(Ans)).
+					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
+					if bel(Type=input, userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, Ans, UpdatedInput))
+						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
+					%for branch questions
+					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
+						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
+					%for quiz questions
+					if bel(Type=quiz)
+						then insert(nextCondition(Ans)).
+				}
+			
+			% Flag that the answer has been processed.
+			if true then insert(answerProcessed).
+		}
+	
+}
