@@ -190,7 +190,7 @@ module st_event {
 					if true then insert(nextCondition('fail')).
 					
 					%If a default answer is provided for an input question, that is stored userInput key-value list
-					if bel(Type=input, keyValue(S, defaultAnswer, DefaultAns), keyValue(S, context, Context), userInput(Input), updateUserInput(Input, Context, DefaultAns, UpdatedInput))
+					if bel(Type=input, keyValue(S, defaultAnswer, DefaultAns), userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, DefaultAns, UpdatedInput))
 						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
 					
 					%There are two ways a branching decision can deal with a fail.
@@ -212,7 +212,7 @@ module st_event {
 					if bel(Type=yesno)
 						then insert(nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
-					if bel(Type=input, nth0(0, Details, Context), userInput(Input), updateUserInput(Input, Context, Ans, UpdatedInput))
+					if bel(Type=input, userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, Ans, UpdatedInput))
 						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
@@ -231,8 +231,8 @@ module st_event {
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
 	% If an emotion is expected and present, set that as the next condition.
-	if bel(currentState(S), state(_, S, emotion), emotion(S,E), nextCondition(C), not(C=E))
-		then delete(nextCondition(C)) + insert(nextCondition(E)).
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(S,Emotion), nextCondition(Con), not(Con=Emotion))
+		then delete(nextCondition(Con)) + insert(nextCondition(Emotion)).
 
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

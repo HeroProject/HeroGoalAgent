@@ -40,19 +40,19 @@ next(story, s9, "success", s10).
 next(story, s9, "fail", s10f).
 
 state(story, s10, say).
-text(story, s10, "Dat is grappig, %answer_fruit% is bij mij beter bekend als deejay.").
+text(story, s10, "Dat is grappig, %story_s9% is bij mij beter bekend als deejay.").
 next(story, s10, "true", s11).
 
 state(story, s10f, say).
-text(story, s10f, "Oke. Mijn favorite fruit is %answer_fruit%.").
+text(story, s10f, "Oke. Mijn favorite fruit is %story_s9%.").
 next(story, s10f, "true", s10).
 
 state(story, s11, say).
-text(story, s11, "Deejay %answer_fruit% draaide de lekkerste plaatjes met de lekkerste bietjes.").
+text(story, s11, "Deejay %story_s9% draaide de lekkerste plaatjes met de lekkerste bietjes.").
 next(story, s11, "true", s11a).
 
 state(story, s11a, say).
-text(story, s11a, "Zullen we samen dansen op de muziek van Deejay %answer_fruit%? Doe mij maar na.").
+text(story, s11a, "Zullen we samen dansen op de muziek van Deejay %story_s9%? Doe mij maar na.").
 next(story, s11a, "true", s11b).
 
 state(story, s11b, say).
@@ -72,11 +72,11 @@ next(story, s13, "success", s14).
 next(story, s13, "fail", s14f).
 
 state(story, s14, say).
-text(story, s14, "Ja, %answer_saus% was er ook altijd!").
+text(story, s14, "Ja, %story_s13% was er ook altijd!").
 next(story, s14, "true", s17).
 
 state(story, s14f, say).
-text(story, s14f, "Wist je dat %answer_saus% er ook altijd bij was?").
+text(story, s14f, "Wist je dat %story_s13% er ook altijd bij was?").
 next(story, s14f, "true", s17).
 
 state(story, s17, say).
@@ -124,7 +124,7 @@ stateConfig(story, s20b, [recordTime=2000]).
 next(story, s20b, "true", s21).
 
 state(story, s21, say).
-text(story, s21, "deejay %answer_fruit% had net op tijd zijn slamix weggedraaid, en alle producten schrokken en bleven als bevroren op de dansvloer staan."). %licht aan
+text(story, s21, "deejay %story_s9% had net op tijd zijn slamix weggedraaid, en alle producten schrokken en bleven als bevroren op de dansvloer staan."). %licht aan
 next(story, s21, "true", s21a).
 
 state(story, s21a, say).
@@ -136,7 +136,7 @@ text(story, s22, "Opeens kwam een grote, vlezige mensenhand in beeld.").
 next(story, s22, "true", s23).
 
 state(story, s23, say).
-text(story, s23, "De dikkige hand zweefde even voor het groepje eieren, en sloeg toen toe: %answer_saus% werd gegrepen!").
+text(story, s23, "De dikkige hand zweefde even voor het groepje eieren, en sloeg toen toe: %story_s13% werd gegrepen!").
 next(story, s23, "true", s24).
 
 state(story, s24, say).
@@ -166,7 +166,7 @@ next(story, s29, "true", s30).
 state(story, s30, question).
 stateConfig(story, s30, [type = branch, context = "answer_koelkast_alt_ending", options = ["chocolaatje","mevrouw melk"], defaultAnswer="chocolaatje",
 branchIntents=["chocolaatje"="answer_koelkast_chocolaatje" ,"mevrouw melk"="answer_koelkast_mevrouw_melk"], branchingPoints=[[story, s57]]]).
-text(story, s30, "Wie miste %answer_saus% het meeste volgens jou? Was dat chocolaatje of mevrouw Melk?").
+text(story, s30, "Wie miste %story_s13% het meeste volgens jou? Was dat chocolaatje of mevrouw Melk?").
 next(story, s30, "success", s31).
 next(story, s30, "fail", s31f).
 
@@ -210,15 +210,15 @@ next(story, s40, "deur openen", s40a).
 next(story, s40, "afwachten", s40b).
 
 state(story, s40a, say).
-text(story, s40a, "Op jouw advies gooide ik de deur open. Daar zagen we de enge hand, hij had %answer_saus% vast!").
+text(story, s40a, "Op jouw advies gooide ik de deur open. Daar zagen we de enge hand, hij had %story_s13% vast!").
 next(story, s40a, "true", s41).
 
 state(story, s40b, say).
-text(story, s40b, "Op jouw advies besloten we te wachten. En toen ging opeens het licht weer aan! De enge hand verscheen opnieuw, hij had %answer_saus% vast!").
+text(story, s40b, "Op jouw advies besloten we te wachten. En toen ging opeens het licht weer aan! De enge hand verscheen opnieuw, hij had %story_s13% vast!").
 next(story, s40b, "true", s41).
 
 state(story, s40f, say).
-text(story, s40f, "Ik besloot toch te wachten. En toen ging opeens het licht weer aan! De enge hand verscheen opnieuw, hij had %answer_saus% vast!").
+text(story, s40f, "Ik besloot toch te wachten. En toen ging opeens het licht weer aan! De enge hand verscheen opnieuw, hij had %story_s13% vast!").
 next(story, s40f, "true", s41).
 
 state(story, s41, say).
@@ -234,7 +234,7 @@ stateConfig(story, s41b, [recordTime=2000]).
 next(story, s41b, "true", s42).
 
 state(story, s42, say).
-text(story, s42, "Hij zette %answer_saus% op de plank en deed de deur dicht."). % licht aan.
+text(story, s42, "Hij zette %story_s13% op de plank en deed de deur dicht."). % licht aan.
 next(story, s42, "true", s42a).
 
 state(story, s42a, say).
@@ -242,7 +242,7 @@ audio(story, s42a, recorded, s41b).
 next(story, s42a, "true", s43).
 
 state(story, s43, say).
-text(story, s43, "Maar goed dat je me hebt geholpen in de goeie keuze te maken, we hebben %answer_saus% weer terug gekregen.").
+text(story, s43, "Maar goed dat je me hebt geholpen in de goeie keuze te maken, we hebben %story_s13% weer terug gekregen.").
 next(story, s43, "true", s44).
 
 state(story, s44, say).
@@ -258,7 +258,7 @@ text(story, s46, "Was de mens vriendelijk?").
 next(story, s46, "true", s49).
 
 state(story, s49, say).
-text(story, s49, "Niet allemaal tegelijk riep %answer_saus%.").
+text(story, s49, "Niet allemaal tegelijk riep %story_s13%.").
 next(story, s49, "true", s50).
 
 state(story, s50, say).
@@ -275,7 +275,7 @@ anim(story, s50b, "bravepose/behavior_1").
 next(story, s50b, "true", s51).
 
 state(story, s51, say).
-text(story, s51, "Gaaf zeg! %answer_saus% zei: mensen zien er raar uit.").
+text(story, s51, "Gaaf zeg! %story_s13% zei: mensen zien er raar uit.").
 next(story, s51, "true", s52).
 
 state(story, s52, say).
@@ -283,11 +283,11 @@ text(story, s52, "Ze hebben helemaal geen draaidopje en zitten niet met zijn all
 next(story, s52, "true", s53).
 
 state(story, s53, say).
-text(story, s53, "Eigenlijk was het best wel saai, zei %answer_saus% stoer.").
+text(story, s53, "Eigenlijk was het best wel saai, zei %story_s13% stoer.").
 next(story, s53, "true", s54).
 
 state(story, s54, say).
-text(story, s54, "Om te vieren dat %answer_saus% terug was gingen we weer een feestje bouwen.").
+text(story, s54, "Om te vieren dat %story_s13% terug was gingen we weer een feestje bouwen.").
 next(story, s54, "true", s57).
 
 state(story, s57, branchingPoint).
@@ -296,13 +296,13 @@ next(story, s57, "mevrouw melk", s58b).
 next(story, s57, "fail", s58f).
 
 state(story, s58a, say).
-text(story, s58a, "Je had inderdaad gelijk dat Chocolaatje %answer_saus% het meest miste. Ze viel hem direct in de armen").
+text(story, s58a, "Je had inderdaad gelijk dat Chocolaatje %story_s13% het meest miste. Ze viel hem direct in de armen").
 
 state(story, s58b, say).
-text(story, s58b, "Je had inderdaad gelijk dat mevrouw Melk %answer_saus% het meest miste. Ze viel hem direct in de armen").
+text(story, s58b, "Je had inderdaad gelijk dat mevrouw Melk %story_s13% het meest miste. Ze viel hem direct in de armen").
 
 state(story, s58f, say).
-text(story, s58f, "Het was Chocolaatje die %answer_saus% het meest miste. Ze viel hem direct in de armen.").
+text(story, s58f, "Het was Chocolaatje die %story_s13% het meest miste. Ze viel hem direct in de armen.").
 
 %%%% THE END %%%%%
 
