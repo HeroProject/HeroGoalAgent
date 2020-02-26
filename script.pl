@@ -2,8 +2,7 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%topicOrder([startup, chocolate, color, party, party2, color2, sound, theend]).
-topicOrder([startup, color, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, sound, theend]).
 
 %%% Start up %%%
 state(startup, s1, say).

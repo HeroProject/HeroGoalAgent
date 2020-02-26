@@ -17,29 +17,29 @@
 %%% Define default configuration parameters here.          %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Returns values for all keys in list of condition Pairs in state.
-keyListValues(State, [Key | Keys], [Value | Values]) :- keyValue(State, Key, Value), keyListValues(State, Keys, Values).
-keyListValues(_, [], []).
+keyListValues(Topic, State, [Key | Keys], [Value | Values]) :- keyValue(Topic, State, Key, Value), keyListValues(Topic, State, Keys, Values).
+keyListValues(_, _, [], []).
 % Returns value for (one) key in list of condition Pairs in state.
 % (use of cut ! to prevent returning default values for keys).
-keyValue(State, Key, Value) :- currentTopic(Topic), stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
+keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
 
 %% Global and/or default configuration parameters
 % (override config param for specific state by using key-label in key-value list associated with that state).
 % Number of tries a user gets to provide an answer to a question (of whatever type).
-keyValue(_, maxAnswerAttempts, 1).
+keyValue(_, _, maxAnswerAttempts, 2).
 
 % Time (in milliseconds) a user gets to answer a question with touch.
-keyValue(_, maxAnswerTimeTouch, 3500).
+keyValue(_, _, maxAnswerTimeTouch, 3500).
 
 % Time (in milliseconds) a users gets to answer a first and second speech attempt.
-keyValue(_, maxAnswerTimeFirst, 6000).
-keyValue(_, maxAnswerTimeSecond, 4000).
+keyValue(_, _, maxAnswerTimeFirst, 6000).
+keyValue(_, _, maxAnswerTimeSecond, 4000).
 
 % Order for input modalities. Available modalities are speech and touch.
-keyValue(_, inputModalityOrder, [speech, touch]).
+keyValue(_, _, inputModalityOrder, [speech, touch]).
 
 % Default speech speed (value between 1-100)
-keyValue(_, speechSpeed, 100).
+keyValue(_, _, speechSpeed, 100).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%

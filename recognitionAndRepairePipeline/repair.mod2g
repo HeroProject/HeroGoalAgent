@@ -1,0 +1,75 @@
+use '../dialogflow' as knowledge.
+use '../script' as knowledge.
+use '../dialogflow' as actionspec.
+
+% add started to call
+module repair(T, S) {
+	if bel(keyListValues(T, S, [inputModalityOrder, maxAnswerAttempts], [Order, MaxAnswerAttempts]), modalityCounter(ModCount), currentAttempt(CurrentAttempt))
+		then {
+			if bel(currentInputModality(speech), started)
+				then {
+					%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
+					if bel(CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), length(Order, NModalities), NewModCount is ModCount + 1)
+						then {
+							% If there are no input modalities left, this question has failed completly.
+							if bel(NModalities=NewModCount)
+								then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
+							% If there are other input modalities left, switch modalities.
+							if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+								then delete(currentInputModality(speech), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+									+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+						}				
+					
+					%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
+					if bel(CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+					
+					%If the number of attempts are not reached, the user will get a next speech recognition attempt.
+					if bel(started, CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+			}
+
+			if bel(currentInputModality(touch), keyValue(T, S, type, Type), started)
+				then {
+					if bel(Type = yesno)
+						then {
+							if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
+								then {
+									% If there are no other input modalities, this question failed.
+									if bel(NModalities=NewModCount)
+						 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
+									% If there are other input modalities left, switch modalities.
+									if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+										then delete(currentInputModality(touch), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+											+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+								}
+							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
+									insert(start, currentAttempt(NextAttempt)).
+						}
+				
+					if bel(Type \= yesno, mcCounter(Count), CountNew is Count + 1, keyValue(T, S, options, Options), length(Options, NOptions))
+						then {
+							if bel(CountNew < NOptions) then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
+						
+							if bel(CountNew >= NOptions)
+								then {
+									if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
+										then {
+										% If there are no other input modalities, this question failed.
+											if bel(NModalities=NewModCount)
+								 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
+										% If there are other input modalities left, switch modalities.
+										if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+											then delete(currentInputModality(touch), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
+												+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+										}
+							
+									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
+											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
+								}
+						}
+				}
+		}
+}
