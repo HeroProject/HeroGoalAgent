@@ -15,7 +15,7 @@ text(startup, s2, "Hallo, ik ben Hero.").
 
 %%% Chocolate - yesno %%%
 state(chocolate, s1, question).
-stateConfig(chocolate, s1, [type=yesno, response=speech, context='answer_yesno']).
+stateConfig(chocolate, s1, [type=yesno, context='answer_yesno']).
 text(chocolate, s1, "Hou je van chocola?").
 next(chocolate, s1, 'answer_yes', s2y).
 next(chocolate, s1, 'answer_no', s2n).

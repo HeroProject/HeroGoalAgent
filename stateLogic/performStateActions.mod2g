@@ -1,11 +1,11 @@
-use dialogflow as knowledge.
-use script as knowledge.
-use dialogflow as actionspec.
+use '../dialogflow' as knowledge.
+use '../script' as knowledge.
+use '../dialogflow' as actionspec.
 
 order=linearall.
 
 % Performs all action (modalities) at the start of a state S for topic T.
-module performAction(T, S) {
+module performStateActions(T, S) {
 	% Say what needs to be said.
 	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcssed)) then sayAnimated(TextProcssed).
 	% Perform gesture.
