@@ -13,9 +13,6 @@ module st_event {
 	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	%forall percept(intent(Intent, Params)), not(bel(intent(Intent, Params)))
-		%do insert(intent(Intent, Params)) + log(insertIntent(Intent, Params)).
-
 	% NAO event percepts
 	forall percept(event(E)), not(bel(event(E)))
 		do insert(event(E)).

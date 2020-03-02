@@ -28,21 +28,33 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 % Number of tries a user gets to provide an answer to a question (of whatever type).
 keyValue(_, _, maxAnswerAttempts, 2).
 
-% Time (in milliseconds) a user gets to answer a question with touch.
-keyValue(_, _, maxAnswerTimeTouch, 3500).
-
-% Time (in milliseconds) a users gets to answer a first and second speech attempt.
-keyValue(_, _, maxAnswerTimeFirst, 6000).
-keyValue(_, _, maxAnswerTimeSecond, 4000).
-
 % Order for input modalities. Available modalities are speech and touch.
-keyValue(_, _, inputModalityOrder, [speech]).
+keyValue(_, _, inputModalityOrder, [speech, touch]).
 
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 100).
 
+keyValue(_, _, maxAnswerTime, [	touch=3000, 
+				speechyesnofirst=2500, 
+				speechyesnononinitial=2000, 
+				speechinputfirst=5000, 
+				speechinputnoninitial=3500,
+				speechbranchfirst=6000,
+				speechbranchnoninitial=4000,
+				speechquizfirst=5000,
+				speechquiznoninitial=3500]).
+
+getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt = 1, 
+								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
+								  member((Key=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt > 1, 
+								  atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
+								  member((Key=MaxAnswerTime), Times), !.
+								 
+
 % Default responses of robot to an input modality switch.
-keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Ik zal wat opties voor je opnoemen.', 
+keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
 
 getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
