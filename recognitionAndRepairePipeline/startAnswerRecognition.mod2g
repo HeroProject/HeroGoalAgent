@@ -12,11 +12,11 @@ module startAnswerRecognition(T, S) {
 					% when events have been completed (and we're not already waiting for an answer).
 					% the first attempt has a different default waiting time than the subsequent attempts.
 					if bel(CurrentAttempt == 1, keyListValues(T, S, [context, maxAnswerTimeFirst], [Context, MAX_AT]))
-						then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+						then insert(waitingForAnswer) + starttimer(S, MAX_AT, MAX_AT) + startListening(Context).
 					
 					% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
 					if bel(CurrentAttempt > 1, keyListValues(T, S, [context, maxAnswerTimeSecond], [Context, MAX_AT]))
-						then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
+						then insert(waitingForAnswer) + starttimer(S, MAX_AT, MAX_AT) + startListening(Context).
 				}
 			
 			if bel(currentInputModality(touch))

@@ -7,7 +7,8 @@ module retrieveInput(T, S, Intent, Params) {
 		then {
 			if bel(currentInputModality(speech))
 				then {
-					if true then delete(waitingForAnswer) + stopListening + canceltimer(S).
+					if true then delete(waitingForAnswer) + stopListening + canceltimer(S) + canceltimer(dialogflow).
+									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
 					if bel(Type=yesno, length(Params, 0))
 						then insert(answer(T, S, Intent, [])).

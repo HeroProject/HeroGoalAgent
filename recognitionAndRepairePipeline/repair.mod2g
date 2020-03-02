@@ -1,6 +1,7 @@
 use '../dialogflow' as knowledge.
 use '../script' as knowledge.
 use '../dialogflow' as actionspec.
+use modalitySwitch as module.
 
 % add started to call
 module repair(T, S) {
@@ -16,8 +17,7 @@ module repair(T, S) {
 								then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
 							% If there are other input modalities left, switch modalities.
 							if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
-								then delete(currentInputModality(speech), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
-									+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+								then modalitySwitch(T, S, speech, NewModality).
 						}				
 					
 					%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
@@ -40,8 +40,7 @@ module repair(T, S) {
 						 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 									% If there are other input modalities left, switch modalities.
 									if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
-										then delete(currentInputModality(touch), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
-											+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+										then modalitySwitch(T, S, touch, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
@@ -61,8 +60,7 @@ module repair(T, S) {
 								 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 										% If there are other input modalities left, switch modalities.
 										if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
-											then delete(currentInputModality(touch), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started)
-												+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
+											then modalitySwitch(T, S, touch, NewModality).
 										}
 							
 									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)

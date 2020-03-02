@@ -36,10 +36,16 @@ keyValue(_, _, maxAnswerTimeFirst, 6000).
 keyValue(_, _, maxAnswerTimeSecond, 4000).
 
 % Order for input modalities. Available modalities are speech and touch.
-keyValue(_, _, inputModalityOrder, [speech, touch]).
+keyValue(_, _, inputModalityOrder, [speech]).
 
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 100).
+
+% Default responses of robot to an input modality switch.
+keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Ik zal wat opties voor je opnoemen.', 
+					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
+
+getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%

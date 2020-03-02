@@ -12,6 +12,9 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	%forall percept(intent(Intent, Params)), not(bel(intent(Intent, Params)))
+		%do insert(intent(Intent, Params)) + log(insertIntent(Intent, Params)).
 
 	% NAO event percepts
 	forall percept(event(E)), not(bel(event(E)))
@@ -37,27 +40,27 @@ module st_event {
 	%Emotion detection percepts
 	if percept(emotionDetected(Emotion)), bel(currentState(S))
 		then insert(emotion(S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
-
+	
 	%% Dialogflow tweaks %%
-	% Cut of listening if user already answered something that did not match anything.
-	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
-		
 	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(speech))
 		then stopListening + starttimer(dialogflow, 1000, 1000).
 		
+	% Cut of listening if user already answered something that did not match anything.
+	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%%% SPEECH %%%
 	% Dialogflow produces an input. Retrieve answer.
-	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer)
+	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), state(T, S, question), currentInputModality(speech), waitingForAnswer)
 		then retrieveInput(T, S, Intent, Params).
-		
+			
 	% Dialogflow does not produce an input. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow))
+	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow), currentInputModality(speech))
 		then repair(T, S).
 	
 	%%% TOUCH %%%
@@ -66,7 +69,7 @@ module st_event {
 		then retrieveInput(T, S, Intent, []).
 	
 	% No answer has been selected. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer)
+	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
 		then repair(T, S).
 		
 	%%% AUDIO RECORDING %%%
@@ -105,12 +108,12 @@ module st_event {
 		then startAnswerRecognition(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), not(waitingForAudio), not(audioRecording(S,_)),
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(audioRecording(S,_)),
 		keyListValues(T, S, recordTime, RT))
 		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
 	
 	% Emotion
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), not(waitingForEmotion), not(emotion(S,_)))
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(S,_)))
 		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

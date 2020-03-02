@@ -5,5 +5,5 @@ use 'stateLogic/performStateActions' as module.
 
 module st_main {
 	% Doing things
-	if bel(currentTopic(T), currentState(S), start) then performStateActions(T, S).
+	if bel(currentTopic(T), currentState(S), start, not(waitingForEvent(_))) then performStateActions(T, S).
 }
