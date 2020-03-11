@@ -140,38 +140,38 @@ state(sound, s5, say).
 text(sound, s5, "Gaaf zeg.").
 
 %%% Emotion %%%
-state(emotion, s2, say).
-text(emotion, s2, "Laat mij je gezicht eens goed bekijken.").
-next(emotion, s2, "true", s4).
+state(emotion, s1, say).
+text(emotion, s1, "Laat mij je gezicht eens goed bekijken.").
+next(emotion, s1, "true", s2).
 
-state(emotion, s4, emotion).
-next(emotion, s4, happy, s5h).
-next(emotion, s4, sad, s5s).
-next(emotion, s4, neutral, s5n).
-next(emotion, s4, "fail", s5f).
+state(emotion, s2, emotion).
+next(emotion, s2, happy, s3h).
+next(emotion, s2, sad, s3s).
+next(emotion, s2, neutral, s3n).
+next(emotion, s2, "fail", s3f).
 
-state(emotion, s5h, say).
-leds(emotion, s5h, "green").
-text(emotion, s5h, "Wauw, wat een blij gezicht!").
-next(emotion, s5h, "true", s6).
+state(emotion, s3h, say).
+leds(emotion, s3h, "green").
+text(emotion, s3h, "Wauw, wat een blij gezicht!").
+next(emotion, s3h, "true", s4).
 
-state(emotion, s5s, say).
-leds(emotion, s5s, "red").
-text(emotion, s5s, "Wauw, wat een zielig gezicht!").
-next(emotion, s5s, "true", s6).
+state(emotion, s3s, say).
+leds(emotion, s3s, "red").
+text(emotion, s3s, "Wauw, wat een zielig gezicht!").
+next(emotion, s3s, "true", s4).
 
-state(emotion, s5n, say).
-leds(emotion, s5n, "cyan").
-text(emotion, s5n, "Wauw, wat kijk jij nietszeggend.").
-next(emotion, s5n, "true", s6).
+state(emotion, s3n, say).
+leds(emotion, s3n, "cyan").
+text(emotion, s3n, "Wauw, wat kijk jij nietszeggend.").
+next(emotion, s3n, "true", s4).
 
-state(emotion, s5f, say).
-leds(emotion, s5f, "white").
-text(emotion, s5f, "Ik kon helaas niks zien.").
-next(emotion, s5f, "true", s6).
+state(emotion, s3f, say).
+leds(emotion, s3f, "white").
+text(emotion, s3f, "Ik kon helaas niks zien.").
+next(emotion, s3f, "true", s4).
 
-state(emotion, s6, say).
-leds(emotion, s6, "white").
+state(emotion, s4, say).
+leds(emotion, s4, "white").
 
 %%% Sound - sound2 %%%
 state(sound2, s1, say).
