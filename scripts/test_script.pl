@@ -2,21 +2,20 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-topicOrder([startup, chocolate, color, party, party2, color2, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, sound, emotion, sound2, theend]).
 
 %%% Start up %%%
 state(startup, s1, say).
 anim(startup, s1, "wakeup/behavior_1").
-audio(startup, s1, server, "short_test_song.wav").
 leds(startup, s1, "white").
 next(startup, s1, "true", s2).
 
 state(startup, s2, say).
-text(startup, s2, "Hallo, ik ben Hero. Dit is een snelheidstest.").
+text(startup, s2, "Hallo, ik ben Hero.").
 
 %%% Chocolate - yesno %%%
 state(chocolate, s1, question).
-stateConfig(chocolate, s1, [type=yesno, response=speech, context='answer_yesno']).
+stateConfig(chocolate, s1, [type=yesno, context='answer_yesno']).
 text(chocolate, s1, "Hou je van chocola?").
 next(chocolate, s1, 'answer_yes', s2y).
 next(chocolate, s1, 'answer_no', s2n).
@@ -33,16 +32,17 @@ text(chocolate, s2f, "Ik vind het ook een lastige keuze").
 
 %%% Color - input %%%
 state(color, s1, question).
-stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], defaultAnswer="rood"]).
+stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], 
+defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(color, s1, "Wat is jouw lievelingskleur?").
 next(color, s1, 'success', s2).
 next(color, s1, 'fail', s2f).
 
 state(color, s2, say).
-text(color, s2, "Ik vind %answer_color% ook heel mooi!").
+text(color, s2, "Ik vind %color_s1% ook heel mooi!").
 
 state(color, s2f, say).
-text(color, s2f, "Mijn levelingskleur is %answer_color%.").
+text(color, s2f, "Mijn levelingskleur is %color_s1%.").
 
 %%% Party - branch %%%
 state(party, s1, question).
@@ -118,6 +118,64 @@ text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs me
 
 state(color2, s2f, say).
 text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
+
+%%% Sound recording%%%%
+state(sound, s1, say).
+text(sound, s1, "Brul als een leeuw in 3, 2, 1.").
+next(sound, s1, "true", s2).
+
+state(sound, s2, audioInput).
+stateConfig(sound, s2, [recordTime=2000]).
+next(sound, s2, "true", s3).
+
+state(sound, s3, say).
+text(sound, s3, "En de leeuw brulde.").
+next(sound, s3, "true", s4).
+
+state(sound, s4, say).
+audio(sound, s4, recorded, [sound, s2]).
+next(sound, s4, "true", s5).
+
+state(sound, s5, say).
+text(sound, s5, "Gaaf zeg.").
+
+%%% Emotion %%%
+state(emotion, s2, say).
+text(emotion, s2, "Laat mij je gezicht eens goed bekijken.").
+next(emotion, s2, "true", s4).
+
+state(emotion, s4, emotion).
+next(emotion, s4, happy, s5h).
+next(emotion, s4, sad, s5s).
+next(emotion, s4, neutral, s5n).
+next(emotion, s4, "fail", s5f).
+
+state(emotion, s5h, say).
+leds(emotion, s5h, "green").
+text(emotion, s5h, "Wauw, wat een blij gezicht!").
+next(emotion, s5h, "true", s6).
+
+state(emotion, s5s, say).
+leds(emotion, s5s, "red").
+text(emotion, s5s, "Wauw, wat een zielig gezicht!").
+next(emotion, s5s, "true", s6).
+
+state(emotion, s5n, say).
+leds(emotion, s5n, "cyan").
+text(emotion, s5n, "Wauw, wat kijk jij nietszeggend.").
+next(emotion, s5n, "true", s6).
+
+state(emotion, s5f, say).
+leds(emotion, s5f, "white").
+text(emotion, s5f, "Ik kon helaas niks zien.").
+next(emotion, s5f, "true", s6).
+
+state(emotion, s6, say).
+leds(emotion, s6, "white").
+
+%%% Sound - sound2 %%%
+state(sound2, s1, say).
+audio(sound2, s1, server, "short_test_song.wav").
 
 %%% The end %%%
 state(theend, s1, say).

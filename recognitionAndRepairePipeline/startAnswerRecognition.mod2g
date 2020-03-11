@@ -10,7 +10,7 @@ module startAnswerRecognition(T, S) {
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.
 			if bel(currentInputModality(speech), keyListValues(T, S, [type, context], [Type, Context]), getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime))
-				then insert(waitingForAnswer) + starttimer(S, MaxAnswerTime, MaxAnswerTime) + startListening(Context).
+				then startListening(Context) + insert(waitingForAnswer) + starttimer(S, MaxAnswerTime, MaxAnswerTime).
 			
 			if bel(currentInputModality(touch), getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime))
 				then {

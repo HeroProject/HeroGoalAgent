@@ -32,7 +32,7 @@ module performStateTransition(T, S, C) {
 		}
 				
 		% And, finally, initialize state specific parameters for new state (if any).
-		if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), keyValue(Tnew, Snew, inputModalityOrder, Order), nth0(0, Order, NewModality)) 
+		if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 
 			then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 	}
 }

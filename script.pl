@@ -2,8 +2,7 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%topicOrder([startup, chocolate, color, party, party2, color2, sound, theend]).
-topicOrder([startup, chocolate, color, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, sound, emotion, sound2, theend]).
 
 %%% Start up %%%
 state(startup, s1, say).
@@ -120,9 +119,63 @@ text(color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs me
 state(color2, s2f, say).
 text(color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
 
-%%% Sound - sound %%%
+%%% Sound recording%%%%
 state(sound, s1, say).
-audio(sound, s1, server, "short_test_song.wav").
+text(sound, s1, "Brul als een leeuw in 3, 2, 1.").
+next(sound, s1, "true", s2).
+
+state(sound, s2, audioInput).
+stateConfig(sound, s2, [recordTime=2000]).
+next(sound, s2, "true", s3).
+
+state(sound, s3, say).
+text(sound, s3, "En de leeuw brulde.").
+next(sound, s3, "true", s4).
+
+state(sound, s4, say).
+audio(sound, s4, recorded, [sound, s2]).
+next(sound, s4, "true", s5).
+
+state(sound, s5, say).
+text(sound, s5, "Gaaf zeg.").
+
+%%% Emotion %%%
+state(emotion, s2, say).
+text(emotion, s2, "Laat mij je gezicht eens goed bekijken.").
+next(emotion, s2, "true", s4).
+
+state(emotion, s4, emotion).
+next(emotion, s4, happy, s5h).
+next(emotion, s4, sad, s5s).
+next(emotion, s4, neutral, s5n).
+next(emotion, s4, "fail", s5f).
+
+state(emotion, s5h, say).
+leds(emotion, s5h, "green").
+text(emotion, s5h, "Wauw, wat een blij gezicht!").
+next(emotion, s5h, "true", s6).
+
+state(emotion, s5s, say).
+leds(emotion, s5s, "red").
+text(emotion, s5s, "Wauw, wat een zielig gezicht!").
+next(emotion, s5s, "true", s6).
+
+state(emotion, s5n, say).
+leds(emotion, s5n, "cyan").
+text(emotion, s5n, "Wauw, wat kijk jij nietszeggend.").
+next(emotion, s5n, "true", s6).
+
+state(emotion, s5f, say).
+leds(emotion, s5f, "white").
+text(emotion, s5f, "Ik kon helaas niks zien.").
+next(emotion, s5f, "true", s6).
+
+state(emotion, s6, say).
+leds(emotion, s6, "white").
+
+%%% Sound - sound2 %%%
+state(sound2, s1, say).
+audio(sound2, s1, server, "short_test_song.wav").
 
 %%% The end %%%
 state(theend, s1, say).

@@ -3,8 +3,8 @@
 	userInput/1, % key-value list of answers from user to questions (initially empty list).
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
-	audioRecording/2,
-	emotion/2.
+	audioRecording/3,
+	emotion/3.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
@@ -25,15 +25,17 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 
 %% Global and/or default configuration parameters
 % (override config param for specific state by using key-label in key-value list associated with that state).
-% Number of tries a user gets to provide an answer to a question (of whatever type).
-keyValue(_, _, maxAnswerAttempts, 2).
 
-% Order for input modalities. Available modalities are speech and touch.
-keyValue(_, _, inputModalityOrder, [speech, touch]).
+% Order for input modalities and respective maximum number of attempts. Available modalities are speech and touch.
+keyValue(_, _, inputModality, [speech=2, touch=2]).
+
+% If no answer is given, add an additional attempt to the max. number of attempts.
+keyValue(_, _, additionalAttempt, false).
 
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 100).
 
+% Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	touch=3000, 
 				speechyesnofirst=2500, 
 				speechyesnononinitial=2000, 
@@ -42,22 +44,12 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 				speechbranchfirst=6000,
 				speechbranchnoninitial=4000,
 				speechquizfirst=5000,
-				speechquiznoninitial=3500]).
-
-getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
-getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt = 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
-								  member((Key=MaxAnswerTime), Times), !.
-getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt > 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
-								  member((Key=MaxAnswerTime), Times), !.
-								 
+				speechquiznoninitial=3500]).						 
 
 % Default responses of robot to an input modality switch.
 keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
 
-getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -74,10 +66,10 @@ eventsCompleted :- started, not(waitingForEvent(_)).
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
 
 % Audio has been received, not longer waiting for audio.
-audioReceived :- audioRecording(_,_), not(waitingForAudio).
+audioReceived :- audioRecording(_,  _,_), not(waitingForAudio).
 
 % Emotion has been received, no longer waiting for emotion.
-emotionReceived :- emotion(_,_), not(waitingForEmotion).
+emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
@@ -106,6 +98,22 @@ addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPD
 addDecisionToBranchingPoints([H | []], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, NewBPDs).
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
+
+getInputModalityOrder(T, S, Order) :- keyValue(T, S, inputModality, Modalities), getKeys(Modalities, Order).
+getMaxAnswerAttempts(T, S, Modality, MaxAnsAttempts) :- keyValue(T, S, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
+
+getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
+getKeys([], []).
+
+getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt = 1, 
+								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
+								  member((Key=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt > 1, 
+								  atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
+								  member((Key=MaxAnswerTime), Times), !.
+								  
+getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

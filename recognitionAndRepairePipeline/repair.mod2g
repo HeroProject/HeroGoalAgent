@@ -5,31 +5,57 @@ use modalitySwitch as module.
 
 % add started to call
 module repair(T, S) {
-	if bel(keyListValues(T, S, [inputModalityOrder, maxAnswerAttempts], [Order, MaxAnswerAttempts]), modalityCounter(ModCount), currentAttempt(CurrentAttempt))
+	if bel(getInputModalityOrder(T, S, Order), modalityCounter(ModCount), currentAttempt(CurrentAttempt), started)
 		then {
-			if bel(currentInputModality(speech), started)
+			if bel(currentInputModality(speech), getMaxAnswerAttempts(T, S, speech, MaxAnswerAttempts))
 				then {
-					%If the number of attempts are reached and the user attempted to answer the first time, the speech recognition part failed.
-					if bel(CurrentAttempt >= MaxAnswerAttempts, speechText(S, 1, _), length(Order, NModalities), NewModCount is ModCount + 1)
+					%If the number of attempts are reached.
+					if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 						then {
-							% If there are no input modalities left, this question has failed completly.
-							if bel(NModalities=NewModCount)
+							%If there are no repair modalities left and the user is not entitled to an additional attempt: return a failure.
+							if bel(NModalities=NewModCount, keyValue(T, S, additionalAttempt, false))
 								then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
-							% If there are other input modalities left, switch modalities.
-							if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+							
+							%If there are no repair modalities left and the user is entiteled to an addtional attempt: 
+							% check if the user qualitifies for an addtional attempt.
+							if bel(NModalities=NewModCount, keyValue(T, S, additionalAttempt, true))
+								then {
+									% The user does not qualify (= an answer is given the first attempt): return a failure.
+									if bel(speechText(S, 1, _))
+										then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
+									
+									% The user qualifies (= no answer given the first attempt): give bonus attempt.
+									if bel(not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
+											+ insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+								}
+								
+							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
+							if bel(not(NModalities=NewModCount), keyValue(T, S, additionalAttempt, false), nth0(NewModCount, Order, NewModality))	
 								then modalitySwitch(T, S, speech, NewModality).
+							
+							%If there are other input modalities lef and the user is entiteled to an addtional attempt: 
+							% check if the user qualitifies for an addtional attempt.
+							if bel(not(NModalities=NewModCount), keyValue(T, S, additionalAttempt, true))
+								then {								
+									% The user does not qualify (= an answer is given the first attempt): switch modalities
+									if bel(speechText(S, 1, _), nth0(NewModCount, Order, NewModality))
+										then modalitySwitch(T, S, speech, NewModality).
+									
+									% The user qualifies (= no answer given the first attempt): give bonus attempt.
+									if bel(not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
+											+ insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+								}	
+								
 						}				
-					
-					%If the number of attempts are reached and the user and if and only if the user did not used the first attempt, the user gets one additional attempt.
-					if bel(CurrentAttempt >= MaxAnswerAttempts, not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
-						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
-					
+										
 					%If the number of attempts are not reached, the user will get a next speech recognition attempt.
-					if bel(started, CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+					if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(speech), started)
 						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 			}
 
-			if bel(currentInputModality(touch), keyValue(T, S, type, Type), started)
+			if bel(currentInputModality(touch), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, touch, MaxAnswerAttempts), started)
 				then {
 					if bel(Type = yesno)
 						then {
@@ -48,12 +74,10 @@ module repair(T, S) {
 						}
 				
 					if bel(Type \= yesno, mcCounter(Count), CountNew is Count + 1, keyValue(T, S, options, Options), length(Options, NOptions))
-						then {
-							if bel(CountNew < NOptions) then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
-						
+						then {						
 							if bel(CountNew >= NOptions)
 								then {
-									if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
+									if bel(started, CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 										then {
 										% If there are no other input modalities, this question failed.
 											if bel(NModalities=NewModCount)
@@ -63,10 +87,12 @@ module repair(T, S) {
 											then modalitySwitch(T, S, touch, NewModality).
 										}
 							
-									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
+									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(touch), started)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 								}
+								
+							if bel(CountNew < NOptions) then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
 						}
 				}
 		}

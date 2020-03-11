@@ -14,6 +14,6 @@ module st_init {
 	if goal(topics([H | _])) then insert(currentTopic(H)).
 	
 	% If first state is a question state, initialize required properties
-	if bel(currentTopic(T), currentState(S), state(T, S, question), keyValue(T, S, inputModalityOrder, Order), nth0(0, Order, NewModality)) 
-			then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
+	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 
+			then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)) + print("Hoi2").
 }
