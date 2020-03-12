@@ -10,7 +10,7 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0, answerProcessed/0,
-	speechText/3. %used to signal that a user did not say anything detectable.  
+	speechText/4. %used to signal that a user did not say anything detectable.  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
@@ -29,14 +29,15 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech and touch.
 keyValue(_, _, inputModality, [speech=2, touch=2]).
 
-% If no answer is given, add an additional attempt to the max. number of attempts.
-keyValue(_, _, additionalAttempt, false).
+% If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
+keyValue(_, _, additionalAttempt, true).
 
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 100).
 
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	touch=3000, 
+				speechopenend=10000,
 				speechyesnofirst=2500, 
 				speechyesnononinitial=2000, 
 				speechinputfirst=5000, 
@@ -87,8 +88,8 @@ concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R
 concatenate([H], H).
 
 % Simply append an answer to the list if not yet present; otherwise, replace.
-updateUserInput(UserInput, Key, Input, NewUserInput) :- not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
-updateUserInput(UserInput, Key, Input, NewUserInput) :- member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
+updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
+updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
 
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
@@ -106,6 +107,7 @@ getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
 
 getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, speech, openend, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !.
 getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt = 1, 
 								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
 								  member((Key=MaxAnswerTime), Times), !.

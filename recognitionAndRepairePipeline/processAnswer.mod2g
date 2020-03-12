@@ -16,7 +16,7 @@ module processAnswer(T, S, Ans) {
 					if true then insert(nextCondition('fail')).
 					
 					%If a default answer is provided for an input question, that is stored userInput key-value list
-					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, DefaultAns, UpdatedInput))
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), updateUserInput(T, S, Input, DefaultAns, UpdatedInput))
 						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
 					
 					%There are two ways a branching decision can deal with a fail.
@@ -38,14 +38,17 @@ module processAnswer(T, S, Ans) {
 					if bel(Type=yesno)
 						then insert(nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
-					if bel(Type=input, userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, Ans, UpdatedInput))
+					if bel(Type=input, userInput(Input), updateUserInput(T, S, Input, Ans, UpdatedInput))
 						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 					%for quiz questions
-					if bel(Type=quiz)
-						then insert(nextCondition(Ans)).
+					if bel(Type=quiz, userInput(Input), updateUserInput(T, S, Input, Ans, UpdatedInput))
+						then delete(userInput(Input)) + insert(nextCondition(Ans), userInput(UpdatedInput)).
+					%for open questions
+					if bel(Type=openend)
+						then insert(nextCondition('success')).
 				}
 			
 			% Flag that the answer has been processed.

@@ -45,8 +45,8 @@ module st_event {
 		then stopListening + starttimer(dialogflow, 1000, 1000).
 		
 	% Cut of listening if user already answered something that did not match anything.
-	if percept(speechText(Text)), bel(currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(S, CurrentAttempt, Text)).
+	if percept(speechText(Text)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(T, S, CurrentAttempt, Text)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
@@ -59,7 +59,10 @@ module st_event {
 			
 	% Dialogflow does not produce an input. Try a repair action.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow), currentInputModality(speech))
-		then repair(T, S).
+		then {
+			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, []).
+			if bel(not(keyValue(T, S, type, openend))) then repair(T, S).
+		}
 	
 	%%% TOUCH %%%
 	% An answer has been selected. Retrieve answer.

@@ -21,13 +21,13 @@ module repair(T, S) {
 							if bel(NModalities=NewModCount, keyValue(T, S, additionalAttempt, true))
 								then {
 									% The user does not qualify (= an answer is given the first attempt): return a failure.
-									if bel(speechText(S, 1, _))
+									if bel(speechText(T, S, 1, _))
 										then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
 									
 									% The user qualifies (= no answer given the first attempt): give bonus attempt.
-									if bel(not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+									if bel(not(speechText(T, S, 1, _)), NextAttempt is CurrentAttempt + 1)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
-											+ insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+											+ insert(start, currentAttempt(NextAttempt), speechText(T, S, 1, 'fail')).
 								}
 								
 							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
@@ -39,13 +39,13 @@ module repair(T, S) {
 							if bel(not(NModalities=NewModCount), keyValue(T, S, additionalAttempt, true))
 								then {								
 									% The user does not qualify (= an answer is given the first attempt): switch modalities
-									if bel(speechText(S, 1, _), nth0(NewModCount, Order, NewModality))
+									if bel(speechText(T, S, 1, _), nth0(NewModCount, Order, NewModality))
 										then modalitySwitch(T, S, speech, NewModality).
 									
 									% The user qualifies (= no answer given the first attempt): give bonus attempt.
-									if bel(not(speechText(S, 1, _)), NextAttempt is CurrentAttempt + 1)
+									if bel(not(speechText(T, S, 1, _)), NextAttempt is CurrentAttempt + 1)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
-											+ insert(start, currentAttempt(NextAttempt), speechText(S, 1, 'fail')).
+											+ insert(start, currentAttempt(NextAttempt), speechText(T, S, 1, 'fail')).
 								}	
 								
 						}				

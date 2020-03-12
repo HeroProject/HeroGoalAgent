@@ -26,6 +26,13 @@ module retrieveInput(T, S, Intent, Params) {
 							if bel(not(member(Ans, CorrectAnswer)))
 								then insert(answer(T, S, incorrect, [Ans])).
 						}
+					
+					if bel(Type=openend, length(Params, 0))
+						then {
+							if bel(speechText(T, S, 1, Text)) then insert(answer(T, S, any, [Text])).
+							
+							if bel(not(speechText(T, S, _, _))) then insert(answer(T, S, empty, [])).
+						}
 						
 					if bel(not(answer(T,S, _, _)))
 						then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S, Intent, Params)).
