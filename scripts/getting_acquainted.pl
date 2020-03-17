@@ -1,34 +1,37 @@
 :- dynamic audio/4.
 
-topicOrder([intro, prac_speech, prac_touch, theend]).
+topicOrder([wakeup, intro, prac_speech, prac_touch, sports, theend]).
+
+%%%%%%%%%%%%%%%
+%%% WAKE UP %%%
+%%%%%%%%%%%%%%%
+
+state(wakeup, s1, say).
+anim(wakeup, s1, "wakeup/behavior_1").
+leds(wakeup, s1, "white").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% GENERAL INTRODUCTION %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(intro, s1, say).
-anim(intro, s1, "wakeup/behavior_1").
-leds(intro, s1, "white").
-next(intro, s1, "true", s2).
+text(intro,  s1, "Hoi, ik ben Hero.").
+next(intro,  s1, "true",  s2).
 
 state(intro, s2, say).
-text(intro,  s2, "Hoi, ik ben Hero.").
+text(intro,  s2, "Ik ben aan het leren om een zorg robot te worden.").
 next(intro,  s2, "true",  s3).
 
 state(intro, s3, say).
-text(intro,  s3, "Ik ben aan het leren om een zorg robot te worden.").
+text(intro,  s3, "Daarom ben ik hier nu. \pau=300\ ").
 next(intro,  s3, "true",  s4).
 
 state(intro, s4, say).
-text(intro,  s4, "Daarom ben ik hier nu. \pau=300\ ").
+text(intro,  s4, "Wat fijn dat jij mij wilt helpen.").
 next(intro,  s4, "true",  s5).
 
 state(intro, s5, say).
-text(intro,  s5, "Wat fijn dat jij mij wilt helpen.").
-next(intro,  s5, "true",  s6).
-
-state(intro, s6, say).
-text(intro,  s6, "Ik vind het leuk om te kletsen en om verhaaltjes te vertellen. \pau=300\ ").
+text(intro,  s5, "Ik vind het leuk om te kletsen en om verhaaltjes te vertellen. \pau=300\ ").
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% SPEECH TUTORIAL %%%
@@ -113,6 +116,44 @@ text(prac_touch, s8incor, "Helaas. Ik wou dat ik die kleur had, maar mijn schoud
 
 state(prac_touch, s8f, say).
 text(prac_touch, s8f, "Mijn schouders zijn donker grijs. Vergeet niet de knopjes goed in te drukken de volgende keer.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BRRIDGE TO CONVERSATION %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+state(bridge, s1, say).
+text(bridge,  s1, "Nu is het tijd om elkaar een beetje te leren kennen.").
+
+%%%%%%%%%%%%%%%
+%%% SPORTS %%%
+%%%%%%%%%%%%%%%
+
+state(sports, s1, say).
+text(sports,  s1, "Het lijkt mij leuk om over sport te praten. De sporten die ik zelf graag doe zijn dansen of voetballen met andere robots").
+next(sports, s1, "true", s2).
+
+state(sports, s2, question).
+stateConfig(sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], 
+defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Zou je willen kiezen uit de volgende antwoorden.']]).
+text(sports, s2, "Wat is jouw lievelings sport?").
+next(sports, s2, 'success', s3).
+next(sports, s2, 'fail', s5f).
+
+state(sports, s3, say).
+text(sports,  s3, "Wat gaaf zeg!").
+next(sports, s3, "true", s4).
+
+state(sports, s4, question).
+stateConfig(sports, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(sports, s4, "Wat vind je zo leuk aan %sports_s2%?").
+next(sports, s4, 'success', s5).
+next(sports, s4, 'fail', s5f).
+
+state(sports, s5, say).
+text(sports,  s5, "%sports_s2% klinkt inderdaad erg leuk! ").
+
+state(sports, s5f, say).
+text(sports,  s5f, "Laten we verder gaan naar de volgende vraag.").
 
 %%%%%%%%%%%%%%%
 %%% THE END %%%

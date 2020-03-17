@@ -62,6 +62,22 @@ define enableRecording with
 define disableRecording with
 	pre { true }
 	post { true }
+
+define wakeup with
+	pre { true }
+	post { waitingForEvent('WakeUpDone') }
+
+define rest with
+	pre { true }
+	post { waitingForEvent('RestDone') }
+
+define setBreathing(Bodypart, Value) with
+	pre { true }
+	post { waitingForEvent('BreathingChanged') }
+
+define storeInteractionHistory(UserID, Data) with
+	pre { true }
+	post { true }
 	
 % DialogFlow Control
 define setAgent(Agent) with

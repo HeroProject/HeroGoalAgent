@@ -19,6 +19,12 @@ module st_event {
 	forall bel(event(E)), not(percept(event(E)))
 		do delete(event(E)).
 		
+	% Memory event percepts
+	forall percept(memoryEvent(E)), not(bel(memoryEvent(E)))
+		do insert(memoryEvent(E)) + log(memoryEvent(E)).
+	forall bel(memoryEvent(E)), not(percept(memoryEvent(E)))
+		do delete(memoryEvent(E)).
+		
 	% Handling of event waiting logic...
 	% ... for NAO events
 	if bel(event(E), waitingForEvent(E))

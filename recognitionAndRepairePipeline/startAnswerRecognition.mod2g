@@ -6,6 +6,8 @@ module startAnswerRecognition(T, S) {
 
 	if bel(currentAttempt(CurrentAttempt))
 		then {
+			if bel(currentInputModality(CurrentModality), createMemoryEntry("interaction_history", [T, S, CurrentModality, CurrentAttempt], Entry))
+				then storeInteractionHistory("1", Entry) + log(Entry). 
 			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.

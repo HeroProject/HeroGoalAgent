@@ -2,7 +2,7 @@
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	userInput/1, % key-value list of answers from user to questions (initially empty list).
 	branchingPointDecisions/1,
-	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	event/1, memoryEvent/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
 	emotion/3.
 
@@ -116,6 +116,8 @@ getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S,
 								  member((Key=MaxAnswerTime), Times), !.
 								  
 getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
+
+createMemoryEntry(MemoryType, ListOfAtoms, Entry) :- atomics_to_string(ListOfAtoms, ', ', Data), string_concat(MemoryType, "(", A), string_concat(A, Data, B), string_concat(B, ")", Entry).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
