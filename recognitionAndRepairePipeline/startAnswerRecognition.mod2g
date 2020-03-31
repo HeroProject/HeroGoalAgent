@@ -7,7 +7,7 @@ module startAnswerRecognition(T, S) {
 
 	if bel(currentAttempt(CurrentAttempt))
 		then {
-			if bel(currentInputModality(CurrentModality)) then logging([topic=T, state=S, action=startRecognition, currentModality=CurrentModality, currentAttempt=CurrentAttempt]).
+			%if bel(currentInputModality(CurrentModality)) then logging([topic=T, state=S, action=startRecognition, currentModality=CurrentModality, currentAttempt=CurrentAttempt]).
 			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.

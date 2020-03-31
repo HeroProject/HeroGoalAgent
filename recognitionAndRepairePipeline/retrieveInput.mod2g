@@ -1,6 +1,7 @@
 use '../dialogflow' as knowledge.
 use '../script' as knowledge.
 use '../dialogflow' as actionspec.
+use repair as module.
 
 module retrieveInput(T, S, Intent, Params) {
 	if bel(keyValue(T, S, type, Type), currentAttempt(CurrentAttempt))
@@ -10,8 +11,12 @@ module retrieveInput(T, S, Intent, Params) {
 					if true then delete(waitingForAnswer) + stopListening + canceltimer(S) + canceltimer(dialogflow).
 									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
-					if bel(Type=yesno, length(Params, 0), speechText(T, S, CurrentAttempt, Text))
-						then insert(answer(T, S, Intent, [text=Text])).
+					if bel(Type=yesno, length(Params, 0))
+						then {
+							if bel(speechText(T, S, CurrentAttempt, Text)) then insert(answer(T, S, Intent, [text=Text])).
+							if bel(not(speechText(_, _, _, _))) then insert(answer(T, S, Intent, [text=""])).
+						}
+						
 					% input questions -> expects an entity to be returned.
 					if bel(Type=input, length(Params, 1), nth0(0, Params, Ans), speechText(T, S, CurrentAttempt, Text))
 						then insert(answer(T, S, Ans, [text=Text])).
@@ -63,8 +68,8 @@ module retrieveInput(T, S, Intent, Params) {
 								}
 						}
 					
-					if bel(Type \= yesno, Intent = 'answer_no', mcCounter(Count), CountNew is Count + 1)
-						then delete(mcCounter(Count)) + insert(mcCounter(CountNew)).
+					if bel(Type \= yesno, Intent = 'answer_no')
+						then repair(T,S).
 				}
 		}
 }

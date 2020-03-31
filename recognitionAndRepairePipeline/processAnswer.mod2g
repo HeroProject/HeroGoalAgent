@@ -55,8 +55,6 @@ module processAnswer(T, S, Ans, Data) {
 					%Logging
 					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
 						then logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
-					%if bel(not(member((text=_), Data)), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
-						%then logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=Ans, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 				}
 			
 			% Flag that the answer has been processed.

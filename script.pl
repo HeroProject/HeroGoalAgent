@@ -3,7 +3,7 @@
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-topicOrder([startup, chocolate, color, party, party2, color2, animation, sound, emotion, sound2, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, animation, sound, emotion, theend]).
 userId(1).
 
 %%% Start up %%%
@@ -38,7 +38,7 @@ text(chocolate, s2f, "Ik vind het ook een lastige keuze").
 
 %%% Color - input %%%
 state(color, s1, question).
-stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw'], 
+stateConfig(color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
 defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(color, s1, "Wat is jouw lievelingskleur?").
 next(color, s1, 'success', s2).
