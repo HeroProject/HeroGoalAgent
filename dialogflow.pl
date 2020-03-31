@@ -51,6 +51,9 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
 
+% Name of memory database to connect to.
+database("hero_memory").
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Event handling logic                                   %%%
@@ -117,7 +120,11 @@ getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S,
 								  
 getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
-createMemoryEntry(MemoryType, ListOfAtoms, Entry) :- atomics_to_string(ListOfAtoms, ', ', Data), string_concat(MemoryType, "(", A), string_concat(A, Data, B), string_concat(B, ")", Entry).
+% Parse list of key-value pairs to a string representation.
+createMemoryEntry(Pairs, Entry) :- createMemoryEntryPacket(Pairs, "", Packet), string_concat("{", Packet, FirstHalf), string_concat(FirstHalf, "}", Entry).
+createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_concat(In, StringPair, Out).
+createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
+pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), term_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%

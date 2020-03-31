@@ -94,8 +94,8 @@ module st_event {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
-	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, _), not(answerProcessed))
-		then processAnswer(T, S, Ans).
+	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
+		then processAnswer(T, S, Ans, Data).
 		
 	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
 	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))

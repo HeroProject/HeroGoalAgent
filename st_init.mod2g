@@ -6,9 +6,14 @@ module st_init {
 	% Initialize state parameters.
 	if true then
 		insert(topics([]), currentState(s1), start, nextCondition('true'), userInput([]), branchingPointDecisions([])).
-		% Adopt a list of topics that the agent will perform.
+	
+	% Adopt a list of topics that the agent will perform.
 	if bel(topicOrder(Order)) then
 		adopt(topics(Order)).
+	
+	% Set-up connection with database.
+	if bel(database(DB)) then
+		setMemoryDatabase(DB).
 			
 	% Retrieve first topic from adopted goal.
 	if goal(topics([H | _])) then insert(currentTopic(H)).

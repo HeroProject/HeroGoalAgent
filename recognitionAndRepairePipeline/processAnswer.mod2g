@@ -1,8 +1,9 @@
 use '../dialogflow' as knowledge.
 use '../script' as knowledge.
 use '../dialogflow' as actionspec.
+use '../util/logging' as module.
 
-module processAnswer(T, S, Ans) {
+module processAnswer(T, S, Ans, Data) {
 
 	if bel(keyValue(T, S, type, Type), nextCondition(Condition))
 		then {
@@ -13,7 +14,8 @@ module processAnswer(T, S, Ans) {
 			if bel(Ans=failure)
 				then {
 					%The next condition is given the 'fail'  flag.
-					if true then insert(nextCondition('fail')).
+					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
+						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userInput key-value list
 					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), updateUserInput(T, S, Input, DefaultAns, UpdatedInput))
@@ -44,11 +46,17 @@ module processAnswer(T, S, Ans) {
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 					%for quiz questions
-					if bel(Type=quiz, userInput(Input), updateUserInput(T, S, Input, Ans, UpdatedInput))
+					if bel(Type=quiz, userInput(Input), member((entity=Entity), Data), updateUserInput(T, S, Input, Entity, UpdatedInput))
 						then delete(userInput(Input)) + insert(nextCondition(Ans), userInput(UpdatedInput)).
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).
+					
+					%Logging
+					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
+						then logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+					%if bel(not(member((text=_), Data)), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
+						%then logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=Ans, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 				}
 			
 			% Flag that the answer has been processed.

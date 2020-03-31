@@ -1,0 +1,9 @@
+use '../dialogflow' as knowledge.
+use '../script' as knowledge.
+use '../dialogflow' as actionspec.
+
+module logging(Data) {
+	
+	if bel(userId(UID), append([userID=UID], Data, CompletedData), createMemoryEntry(CompletedData,Entry)) 
+		then addInteractionHistoryEntry(Entry) + log(Entry).
+}

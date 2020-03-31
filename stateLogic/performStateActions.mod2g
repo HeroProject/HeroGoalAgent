@@ -21,7 +21,8 @@ module performStateActions(T, S) {
 	% Rest
 	if bel(rest(T, S)) then rest.
 	% Set breathing
-	if bel(setBreathing(T, S, Body, Value)) then setBreathing(Body, Value).
+	if bel(enableBreathing(T, S)) then enableBreathing.
+	if bel(disableBreathing(T, S)) then disableBreathing.
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

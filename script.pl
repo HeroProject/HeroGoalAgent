@@ -2,20 +2,18 @@
 %%% Test script                                            %%%
 %%% Run to evaluate various functions for script handling. %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%topicOrder([startup, chocolate, color, party, party2, color2, sound, emotion, sound2, theend]).
-:-dynamic anim/3.
 
-topicOrder([startup, chocolate, color, theend]).
+topicOrder([startup, chocolate, color, party, party2, color2, animation, sound, emotion, sound2, theend]).
+userId(1).
 
 %%% Start up %%%
 state(startup, s1, say).
-%anim(startup, s1, "wakeup/behavior_1").
 wakeup(startup, s1).
 leds(startup, s1, "white").
 next(startup, s1, "true", s2).
 
 state(startup, s2, say).
-setBreathing(startup, s2, 'Body', 'true').
+enableBreathing(startup, s2).
 next(startup, s2, "true", s3).
 
 state(startup, s3, say).
@@ -185,12 +183,17 @@ leds(emotion, s4, "white").
 state(sound2, s1, say).
 audio(sound2, s1, server, "short_test_song.wav").
 
+%%% Animation - animation %%%
+state(animation, s1, say).
+text(animation, s1, "Ik doe nu een standaard animatie").
+anim(animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
+
 %%% The end %%%
 state(theend, s1, say).
 text(theend, s1, "Dat was het.").
+disableBreathing(theend, s1).
 next(theend, s1, 'true', s2).
 
 state(theend, s2, say). 
 text(theend, s2, "Tot snel weer. Doei!").
-%anim(theend, s2, "rest/behavior_1").
 rest(theend, s2).
