@@ -18,9 +18,21 @@ define setEyeColour(Colour)  with
 	pre { true }
 	post { true }
 
-define playAudio(Url) with
+define playLoadedAudio(AudioID) with
 	pre { true }
 	post { waitingForEvent('PlayAudioDone') }
+
+define playRawAudio(Url) with
+	pre { true }
+	post { waitingForEvent('PlayAudioDone') }
+
+define loadAudio(Url) with
+	pre { true }
+	post { true }
+
+define clearAudio with
+	pre { true }
+	post { waitingForEvent('ClearAudioDone') }
 	
 % Robot start/stop actions (input modalities)
 define startListening with

@@ -131,19 +131,23 @@ text(sound, s1, "Brul als een leeuw in 3, 2, 1.").
 next(sound, s1, "true", s2).
 
 state(sound, s2, audioInput).
-stateConfig(sound, s2, [recordTime=2000]).
+stateConfig(sound, s2, [recordTime=3000]).
 next(sound, s2, "true", s3).
 
 state(sound, s3, say).
-text(sound, s3, "En de leeuw brulde.").
+text(sound, s3, "We reden met onze jeep over de savannen en toen ineens hoorden we het.").
 next(sound, s3, "true", s4).
 
 state(sound, s4, say).
-audio(sound, s4, recorded, [sound, s2]).
+text(sound, s4, "Het was het gebrul van de leeuw").
 next(sound, s4, "true", s5).
 
 state(sound, s5, say).
-text(sound, s5, "Gaaf zeg.").
+audio(sound, s5, recorded, [sound, s2]).
+next(sound, s5, "true", s6).
+
+state(sound, s6, say).
+text(sound, s6, "Gaaf zeg.").
 
 %%% Emotion %%%
 state(emotion, s1, say).

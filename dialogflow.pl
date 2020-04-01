@@ -9,7 +9,8 @@
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForEmotion/0, answerProcessed/0,
+	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
+	waitingForEmotion/0, answerProcessed/0,
 	speechText/4. %used to signal that a user did not say anything detectable.  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,7 +71,7 @@ eventsCompleted :- started, not(waitingForEvent(_)).
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
 
 % Audio has been received, not longer waiting for audio.
-audioReceived :- audioRecording(_,  _,_), not(waitingForAudio).
+audioReceived :- not(waitingForAudio).
 
 % Emotion has been received, no longer waiting for emotion.
 emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
