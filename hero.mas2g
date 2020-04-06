@@ -4,12 +4,12 @@ use 'cbsr-eis-connector.jar' as environment with
 		flowagent='mikeagent-dsvpjs',
 		flowlang='nl-NL'.
 		
-define storytelling as agent {
-	use st_init as init.
-	use st_event as event.
-	use st_main as main.
+define hero as agent {
+	use hero_init as init.
+	use hero_events as event.
+	use hero_main as main.
 }
 
 launchpolicy{
-	when * launch storytelling.
+	when * launch hero.
 }

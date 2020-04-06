@@ -1,6 +1,8 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use '../util/util' as knowledge.
+use '../util/defaults' as knowledge.
+use '../topics' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
 
 module performStateTransition(T, S, C) {
 	if true then { 
@@ -22,14 +24,8 @@ module performStateTransition(T, S, C) {
 			then insert(currentState(Snext)). % Progress: move to next state
 			
 		% ... or go to next topic if a topic has been completed (no next state has been specified for the topic).
-		if goal(topics(AllTopics)), not(bel(next(T, S, C, _)))
-		then {
-			if bel(topics(TopicsDone), append(TopicsDone, [T], NewTopicsDone))
-				then delete(topics(TopicsDone)) + insert(topics(NewTopicsDone)).
-			% get new topic (if any is left).
-			if bel(topics(TopicsDone), append(TopicsDone, [H | _], AllTopics))
-				then delete(currentTopic(T)) + insert(currentTopic(H), currentState(s1)).
-		}
+		if goal(topics([])), not(bel(next(T, S, C, _))), bel(topics(AllTopics), pop(AllTopics, NewTopic, RemainingTopics))
+			then delete(currentTopic(T), topics(AllTopics)) + insert(currentTopic(NewTopic), topics(RemainingTopics), currentState(s1)).
 				
 		% And, finally, initialize state specific parameters for new state (if any).
 		if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 

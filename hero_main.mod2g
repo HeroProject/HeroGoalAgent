@@ -1,0 +1,25 @@
+use 'util/util' as knowledge.
+use 'util/defaults' as knowledge.
+use topics as knowledge.
+use sessions as knowledge.
+use hero_actions as actionspec.
+use 'stateLogic/performStateActions' as module.
+use 'memory/loadUserData' as module.
+
+module hero_main {
+	if not(goal(topics([]))), bel(waitingForInitFromMemory, userId(UserId), userModel(UserId, SessionNumber), sessionOrder(SessionOrder), 
+		nth1(SessionNumber, SessionOrder, SessionID), session(SessionID, Topics), nth0(0, Topics, FirstTopic, RestOfTopics))
+			then delete(waitingForInitFromMemory) + insert(currentTopic(FirstTopic), topics(RestOfTopics), waitingForLoadedUserInput) 
+				+ loadUserData(Topics) + adopt(topics([])).
+	
+	% Doing things
+	if bel(currentTopic(T), currentState(S), start, not(waitingForEvent(_)), not(waitingForMemoryEvent(_))) then 
+	{
+		if bel(not(audio(T, S, recorded, _))) then performStateActions(T, S).
+		
+		if bel(audio(T, S, recorded, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), audioRecording(Tsource, Ssource, _))
+			then performStateActions(T, S).
+	}
+}
+	
+	

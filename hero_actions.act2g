@@ -1,5 +1,7 @@
-use dialogflow as knowledge.
-use script as knowledge.
+use 'util/util' as knowledge.
+use 'util/defaults' as knowledge.
+use topics as knowledge.
+use sessions as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with
@@ -47,17 +49,17 @@ define stopListening with
 	pre { true }
 	post { true }
 
-define setSpeechParam(Param,Value) with
-	pre { true }
-	post { true }
+%define setSpeechParam(Param,Value) with
+	%pre { true }
+	%post { true }
 
-define setIdle with
-	pre { true }
-	post { true }
+%define setIdle with
+	%pre { true }
+	%post { true }
 	
-define setNonIdle with
-	pre { true }
-	post { true }
+%define setNonIdle with
+	%pre { true }
+	%post { true }
 	
 define startWatching with
 	pre { true }
@@ -91,13 +93,13 @@ define disableBreathing with
 	pre { true }
 	post { waitingForEvent('BreathingDisabled') }
 
-define enableBreathing(Bodypart) with
-	pre { true }
-	post { waitingForEvent('BreathingEnabled') }
+%define enableBreathing(Bodypart) with
+	%pre { true }
+	%post { waitingForEvent('BreathingEnabled') }
 	
-define disableBreathing(Bodypart) with
-	pre { true }
-	post { waitingForEvent('BreathingDisabled') }
+%define disableBreathing(Bodypart) with
+	%pre { true }
+	%post { waitingForEvent('BreathingDisabled') }
 
 % Agent external memory / database control
 define setMemoryDatabase(Name) with
@@ -107,21 +109,33 @@ define setMemoryDatabase(Name) with
 define addInteractionHistoryEntry(Data) with
 	pre { true }
 	post { true }
-	
-define addUserModelEntry(Data) with
+
+define createUser(ID) with
 	pre { true }
 	post { true }
+
+define userExists(ID) with
+	pre { true }
+	post { true }
+
+define setUserData(ID, Key, Value) with
+	pre { true }
+	post { true }
+
+define getUserData(ID, Key) with
+	pre { true }
+	post { waitingForMemoryEvent('UserDataRetrieved') }
 	
 % DialogFlow Control
-define setAgent(Agent) with
-	pre { true }
-	post { true }
+%define setAgent(Agent) with
+	%pre { true }
+	%post { true }
 	
-define setLanguage(Lang) with
-	pre { true }
-	post { true }
+%define setLanguage(Lang) with
+	%pre { true }
+	%post { true }
 	
 % Special actions
-define takePicture with
-	pre { true }
-	post { true }
+%define takePicture with
+	%pre { true }
+	%post { true }

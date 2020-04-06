@@ -1,6 +1,8 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use util as knowledge.
+use defaults as knowledge.
+use '../topics' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
 
 module logging(Data) {
 	

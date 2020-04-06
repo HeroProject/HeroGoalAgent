@@ -1,13 +1,16 @@
-use dialogflow as knowledge.
-use script as knowledge.
-use dialogflow as actionspec.
+use 'util/util' as knowledge.
+use 'util/defaults' as knowledge.
+use topics as knowledge.
+use sessions as knowledge.
+use hero_actions as actionspec.
 use 'recognitionAndRepairePipeline/startAnswerRecognition' as module.
 use 'recognitionAndRepairePipeline/retrieveInput' as module.
 use 'recognitionAndRepairePipeline/repair' as module.
 use 'recognitionAndRepairePipeline/processAnswer' as module.
 use 'stateLogic/performStateTransition' as module.
+use 'memory/handleMemoryData' as module.
 
-module st_event {
+module hero_events {
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Percept and event processing      %%%
@@ -24,11 +27,18 @@ module st_event {
 		do insert(memoryEvent(E)).
 	forall bel(memoryEvent(E)), not(percept(memoryEvent(E)))
 		do delete(memoryEvent(E)).
+	
+	% Memory data percepts
+	forall percept(memoryData(Key, Event)), not(bel(memoryData(Key, Event)))
+		do insert(memoryData(Key, Event)) + handleMemoryData.
 
 	% Handling of event waiting logic...
 	% ... for NAO events
 	if bel(event(E), waitingForEvent(E))
 		then delete(waitingForEvent(E)).
+	% ... for memory events
+	if bel(memoryEvent(E), waitingForMemoryEvent(E))
+		then delete(waitingForMemoryEvent(E)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))

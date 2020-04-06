@@ -1,6 +1,8 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use '../util/util' as knowledge.
+use '../util/defaults' as knowledge.
+use '../topics' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 
 module processAnswer(T, S, Ans, Data) {
@@ -18,8 +20,8 @@ module processAnswer(T, S, Ans, Data) {
 						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userInput key-value list
-					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), updateUserInput(T, S, Input, DefaultAns, UpdatedInput))
-						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), getKey(T, S, Key), updateUserInput(Key, DefaultAns, Input, UpdatedInput), userId(UserId))
+						then delete(userInput(Input)) + insert(userInput(UpdatedInput)) + setUserData(UserId, Key, DefaultAns).
 					
 					%There are two ways a branching decision can deal with a fail.
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
@@ -40,14 +42,14 @@ module processAnswer(T, S, Ans, Data) {
 					if bel(Type=yesno)
 						then insert(nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
-					if bel(Type=input, userInput(Input), updateUserInput(T, S, Input, Ans, UpdatedInput))
-						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
+					if bel(Type=input, userInput(Input),  getKey(T, S, Key), updateUserInput(Key, Ans, Input, UpdatedInput), userId(UserId))
+						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)) + setUserData(UserId, Key, Ans).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 					%for quiz questions
-					if bel(Type=quiz, userInput(Input), member((entity=Entity), Data), updateUserInput(T, S, Input, Entity, UpdatedInput))
-						then delete(userInput(Input)) + insert(nextCondition(Ans), userInput(UpdatedInput)).
+					if bel(Type=quiz, userInput(Input), member((entity=Entity), Data),  getKey(T, S, Key), updateUserInput(Key, Entity, Input, UpdatedInput), userId(UserId))
+						then delete(userInput(Input)) + insert(nextCondition(Ans), userInput(UpdatedInput)) + setUserData(UserId, Key, Entity).
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).

@@ -1,0 +1,16 @@
+use '../util/util' as knowledge.
+use '../util/defaults' as knowledge.
+use '../topics' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use loadUserDataHelper as module.
+
+module loadUserData(Topics) {
+		if bel(nth0(0, Topics, Topic, RestOfTopics))
+			then {
+				forall bel(text(Topic, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
+					do loadUserDataHelper(Keys).
+				
+				if not(bel(length(RestOfTopics,0))) then loadUserData(RestOfTopics).
+		}
+}

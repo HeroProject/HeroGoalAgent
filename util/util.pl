@@ -1,10 +1,19 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Predicates                                             %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Predicates for event percept processing. 
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	userInput/1, % key-value list of answers from user to questions (initially empty list).
 	branchingPointDecisions/1,
-	event/1, memoryEvent/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
 	emotion/3.
+
+% Predicates for memory processing
+:-dynamic memoryEvent/1, waitingForMemoryEvent/1,
+	waitingForInitFromMemory/0, waitingForLoadedUserInput/0,
+	memoryData/2, waitingForUserData/1,
+	userModel/2.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
@@ -15,7 +24,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
-%%% Define default configuration parameters here.          %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Returns values for all keys in list of condition Pairs in state.
 keyListValues(Topic, State, [Key | Keys], [Value | Values]) :- keyValue(Topic, State, Key, Value), keyListValues(Topic, State, Keys, Values).
@@ -24,61 +32,12 @@ keyListValues(_, _, [], []).
 % (use of cut ! to prevent returning default values for keys).
 keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((Key=Value), Pairs), !.
 
-%% Global and/or default configuration parameters
-% (override config param for specific state by using key-label in key-value list associated with that state).
-
-% Order for input modalities and respective maximum number of attempts. Available modalities are speech and touch.
-keyValue(_, _, inputModality, [speech=2, touch=2]).
-
-% If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
-keyValue(_, _, additionalAttempt, true).
-
-% Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 100).
-
-% Default response times for different input modalities, question types, and attempt numbers
-keyValue(_, _, maxAnswerTime, [	touch=3000, 
-				speechopenend=10000,
-				speechyesnofirst=2500, 
-				speechyesnononinitial=2000, 
-				speechinputfirst=5000, 
-				speechinputnoninitial=3500,
-				speechbranchfirst=6000,
-				speechbranchnoninitial=4000,
-				speechquizfirst=5000,
-				speechquiznoninitial=3500]).						 
-
-% Default responses of robot to an input modality switch.
-keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
-					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
-
-% Name of memory database to connect to.
-database("hero_memory").
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Event handling logic                                   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
-feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
-feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
-
-% All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
-eventsCompleted :- started, not(waitingForEvent(_)).
-
-% An answer has been received when there is an answer and we're no longer waiting for an answer.
-answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
-
-% Audio has been received, not longer waiting for audio.
-audioReceived :- not(waitingForAudio).
-
-% Emotion has been received, no longer waiting for emotion.
-emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
+feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
+feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
@@ -92,8 +51,15 @@ concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R
 concatenate([H], H).
 
 % Simply append an answer to the list if not yet present; otherwise, replace.
-updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
-updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
+%updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
+%updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
+
+updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), not(member((Key=Value), OldUserInput)), append(OldUserInput, [Key=Value], NewUserInput).
+updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), member((Key=OldValue), OldUserInput), not(OldValue = Value), delete(OldUserInput, (Key=OldValue), UserInputTemp), append(UserInputTemp, [Key=Value], NewUserInput).
+updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), member((Key=OldValue), OldUserInput), OldValue = Value, NewUserInput = OldUserInput.
+updateUserInput(_, Value, OldUserInput, NewUserInput) :- Value = 'null', NewUserInput = OldUserInput.
+
+getKey(T, S, Key) :- atomics_to_string([T, S], '_', Key).
 
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
@@ -127,9 +93,32 @@ createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_
 createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
 pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), term_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
 
+% Pop first element out of list.
+pop([H | T], H, T).
+
+% get all odd elements of list
+odd_elements([], []).
+odd_elements([_ | []], []):-  !.
+odd_elements([_, X], [X]) :- !.
+odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
+eventsCompleted :- started, not(waitingForEvent(_)).
+
+% All memory events have been completed when all memory events indicating database actions have been done (storing and retrieving user data, etc.) have been received.
+%memoryEventsCompleted :- not(waitingForMemoryEvent(_)).
+
+% An answer has been received when there is an answer and we're no longer waiting for an answer.
+answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
+
+% Audio has been received, not longer waiting for audio.
+audioReceived :- not(waitingForAudio).
+
+% Emotion has been received, no longer waiting for emotion.
+emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
 
 % A say state is completed if after starting it, all events that were started have been completed.
 % That is, a say state transitions from (1) start to (2) waiting for event completion ('TextDone', 'GestureDone', etc.) to (3) completion.
