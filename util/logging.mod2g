@@ -1,6 +1,5 @@
-use util as knowledge.
-use defaults as knowledge.
-use '../topics' as knowledge.
+use '*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 

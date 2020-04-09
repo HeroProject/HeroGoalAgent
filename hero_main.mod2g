@@ -1,6 +1,5 @@
-use 'util/util' as knowledge.
-use 'util/defaults' as knowledge.
-use topics as knowledge.
+use 'util/*.pl' as knowledge.
+use 'topics/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'stateLogic/performStateActions' as module.
@@ -17,7 +16,7 @@ module hero_main {
 	{
 		if bel(not(audio(T, S, recorded, _))) then performStateActions(T, S).
 		
-		if bel(audio(T, S, recorded, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), audioRecording(Tsource, Ssource, _))
+		if bel(audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, _))
 			then performStateActions(T, S).
 	}
 }
