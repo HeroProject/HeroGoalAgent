@@ -198,6 +198,23 @@ text(test_animation, s1, "Ik doe nu een standaard animatie").
 anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% leds - Testing led option			           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_leds, s1, say).
+text(test_leds, s1, "Kijk mijn ogen zijn nu paars").
+leds(test_leds, s1, "magenta").
+next(test_leds, s1, "true", s2).
+
+state(test_leds, s2, say).
+text(test_leds, s2, "Kijk mijn ogen zijn nu groen").
+leds(test_leds, s2, "green").
+next(test_leds, s2, "true", s3).
+
+state(test_leds, s3, say).
+text(test_leds, s3, "Kijk mijn ogen zijn nu blauw").
+leds(test_leds, s3, "blue").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test sound 2 - Testing playing sound from server	   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'ga_sports' topic		           		   %%%

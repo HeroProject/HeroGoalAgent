@@ -101,11 +101,7 @@ define disableBreathing with
 	%post { waitingForEvent('BreathingDisabled') }
 
 % Agent external memory / database control
-define setMemoryDatabase(Name) with
-	pre { true }
-	post { true }
-	
-define addInteractionHistoryEntry(Data) with
+define addInteractionHistoryEntry(ID, Data) with
 	pre { true }
 	post { true }
 

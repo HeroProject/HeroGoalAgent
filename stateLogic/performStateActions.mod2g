@@ -7,12 +7,12 @@ order=linearall.
 
 % Performs all action (modalities) at the start of a state S for topic T.
 module performStateActions(T, S) {
+	% Set eye colors.
+	if bel(leds(T, S, C)) then setEyeColour(C).
 	% Say what needs to be said.
 	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcssed)) then sayAnimated(TextProcssed).
 	% Perform gesture.
 	if bel(anim(T, S, G)) then gesture(G).
-	% Set eye colors.
-	if bel(leds(T, S, C)) then setEyeColour(C).
 	% Play audio from server.
 	if bel(audio(T, S, server, A)) then playRawAudio(A).
 	% Play recorded audio.

@@ -20,6 +20,7 @@ enableBreathing(general_wakeup, s2).
 state(general_rest, s1, say).
 text(general_rest, s1, "Ik ga nu weer rusten.").
 disableBreathing(general_rest, s1).
+leds(general_rest, s1, "white").
 next(general_rest, s1, 'true', s2).
 
 state(general_rest, s2, say). 

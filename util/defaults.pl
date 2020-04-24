@@ -23,5 +23,3 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 % Default responses of robot to an input modality switch.
 keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
-% Name of memory database to connect to.
-database("hero_memory"). 

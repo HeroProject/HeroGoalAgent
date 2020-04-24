@@ -13,8 +13,8 @@ module hero_init {
 		insert(currentState(s1), start, nextCondition('true'), userInput([]), branchingPointDecisions([])).
 
 	% Set-up connection with database.
-	if bel(database(DB), userId(UserId)) then
-		setMemoryDatabase(DB) + userExists(UserId) + insert(waitingForInitFromMemory).
+	if bel(userId(UserId)) then
+		userExists(UserId) + insert(waitingForInitFromMemory).
 			
 	% If first state is a question state, initialize required properties
 	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 
