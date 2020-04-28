@@ -6,13 +6,14 @@ use 'stateLogic/performStateActions' as module.
 use 'memory/loadUserData' as module.
 
 module hero_main {
-	if not(goal(topics([]))), bel(waitingForInitFromMemory, userId(UserId), userModel(UserId, SessionNumber), sessionOrder(SessionOrder), 
+	% Adapt topic goal if all the necessary information is loaded from the database. 
+	if not(goal(topics([]))), bel(waitingForUserModelInit, memoryTasksCompleted, getUserModelValue('session_number', SessionNumber), sessionOrder(SessionOrder), 
 		nth1(SessionNumber, SessionOrder, SessionID), session(SessionID, Topics), nth0(0, Topics, FirstTopic, RestOfTopics))
-			then delete(waitingForInitFromMemory) + insert(currentTopic(FirstTopic), topics(RestOfTopics), waitingForLoadedUserInput) 
+			then delete(waitingForUserModelInit) + insert(currentTopic(FirstTopic), topics(RestOfTopics), waitingForLoadedUserModel) 
 				+ loadUserData(Topics) + adopt(topics([])).
 	
-	% Doing things
-	if bel(currentTopic(T), currentState(S), start, not(waitingForEvent(_)), not(waitingForMemoryEvent(_))) then 
+	% Execute the state actions
+	if bel(currentTopic(T), currentState(S), start, not(waitingForEvent(_)), memoryTasksCompleted) then 
 	{
 		if bel(not(audio(T, S, recorded, _))) then performStateActions(T, S).
 		

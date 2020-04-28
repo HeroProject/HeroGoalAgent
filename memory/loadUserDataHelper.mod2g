@@ -7,7 +7,7 @@ module loadUserDataHelper(Keys) {
 
 	if bel(nth0(0, Keys, Key, RestOfKeys), userId(UserId)) 
 		then {
-			if true then getUserData(UserId, Key) + insert(waitingForUserData(Key)).
+			if true then getUserData(UserId, Key).
 			
 			if not(bel(length(RestOfKeys,0))) then loadUserDataHelper(RestOfKeys).
 		}

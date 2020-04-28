@@ -28,16 +28,16 @@ module hero_events {
 		do delete(memoryEvent(E)).
 	
 	% Memory data percepts
-	forall percept(memoryData(Key, Event)), not(bel(memoryData(Key, Event)))
-		do insert(memoryData(Key, Event)) + handleMemoryData.
+	forall percept(memoryData(Key, Value))
+		do handleMemoryData(Key, Value).
 
 	% Handling of event waiting logic...
 	% ... for NAO events
-	if bel(event(E), waitingForEvent(E))
-		then delete(waitingForEvent(E)).
+	forall bel(event(E), waitingForEvent(E))
+		do delete(waitingForEvent(E)).
 	% ... for memory events
-	if bel(memoryEvent(E), waitingForMemoryEvent(E))
-		then delete(waitingForMemoryEvent(E)).
+	forall bel(memoryEvent(E), waitingForMemoryEvent(E))
+		do delete(waitingForMemoryEvent(E)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))
@@ -46,8 +46,6 @@ module hero_events {
 		then delete(timeout(S)).
 		
 	%Audio recording percepts
-	%if percept(audioRecording(FileName)), bel(currentTopic(T), currentState(S), waitingForAudioFile)
-		%then insert(audioRecording(T, S, FileName)) + delete(waitingForAudioFile).
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
 		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
 	
@@ -57,7 +55,6 @@ module hero_events {
 	%Emotion detection percepts
 	if percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
 		then insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
-	
 	
 	%% Dialogflow tweaks %%
 	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.

@@ -101,25 +101,21 @@ define disableBreathing with
 	%post { waitingForEvent('BreathingDisabled') }
 
 % Agent external memory / database control
-define addInteractionHistoryEntry(ID, Data) with
+define memoryInit(ID) with
 	pre { true }
-	post { true }
-
-define createUser(ID) with
+	post { waitingForMemoryEvent('MemoryInitDone'), waitingForMemoryData('session_number') }
+	
+define addMemoryEntry(ID, Key, Data) with
 	pre { true }
-	post { true }
-
-define userExists(ID) with
-	pre { true }
-	post { true }
+	post { waitingForMemoryEvent('MemoryEntryStored') }
 
 define setUserData(ID, Key, Value) with
 	pre { true }
-	post { true }
+	post { waitingForMemoryEvent('UserDataSet') }
 
 define getUserData(ID, Key) with
 	pre { true }
-	post { waitingForMemoryEvent('UserDataRetrieved') }
+	post { waitingForMemoryEvent('UserDataRetrieved'), waitingForMemoryData(Key) }
 	
 % DialogFlow Control
 %define setAgent(Agent) with

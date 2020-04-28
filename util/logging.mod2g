@@ -6,5 +6,5 @@ use '../hero_actions' as actionspec.
 module logging(Data) {
 	
 	if bel(userId(UID), createMemoryEntry(Data,Entry)) 
-		then addInteractionHistoryEntry(UID, Entry) + log(UID, Entry).
+		then addMemoryEntry(UID, 'interaction_history', Entry) + log(UID, 'interaction_history', Entry).
 }

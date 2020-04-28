@@ -3,7 +3,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Predicates for event percept processing. 
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
-	userInput/1, % key-value list of answers from user to questions (initially empty list).
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
@@ -11,9 +10,8 @@
 
 % Predicates for memory processing
 :-dynamic memoryEvent/1, waitingForMemoryEvent/1,
-	waitingForInitFromMemory/0, waitingForLoadedUserInput/0,
-	memoryData/2, waitingForUserData/1,
-	userModel/2.
+	memoryData/2, waitingForMemoryData/1,
+	userModel/1, waitingForUserModelInit/0, waitingForLoadedUserModel/0.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
@@ -39,27 +37,29 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
+%Local instance of the user model.
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), not(member((Key=_), OldUserModel)), append(OldUserModel, [Key=Value], NewUserModel).
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel).
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel.
+updateUserModel(_, Value, OldUserModel, NewUserModel) :- Value = 'None', NewUserModel = OldUserModel.
+
+getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
+%isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
+
+
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
 replaceKeys([H | T], [VString | Result]) :- 
-	atom_string(Key, H), userInput(Input), member((Key=Value), Input), atom_string(Value, VString), !, replaceKeys(T, Result).
+	atom_string(Key, H), getUserModelValue(Key, Value), atom_string(Value, VString), !, replaceKeys(T, Result).
 replaceKeys([H | T], [H | Result]) :- replaceKeys(T, Result).
 replaceKeys([], []).
 
 concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R).
 concatenate([H], H).
 
-% Simply append an answer to the list if not yet present; otherwise, replace.
-%updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), not(member((Key=Input), UserInput)), append(UserInput, [Key=Input], NewUserInput).
-%updateUserInput(T, S, UserInput, Input, NewUserInput) :- atomics_to_string([T, S], '_', Key), member((Key=Value), UserInput), delete(UserInput, (Key=Value), UserInputTemp), append(UserInputTemp, [Key=Input], NewUserInput).
-
-updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), not(member((Key=Value), OldUserInput)), append(OldUserInput, [Key=Value], NewUserInput).
-updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), member((Key=OldValue), OldUserInput), not(OldValue = Value), delete(OldUserInput, (Key=OldValue), UserInputTemp), append(UserInputTemp, [Key=Value], NewUserInput).
-updateUserInput(Key, Value, OldUserInput, NewUserInput) :- not(Value = 'null'), member((Key=OldValue), OldUserInput), OldValue = Value, NewUserInput = OldUserInput.
-updateUserInput(_, Value, OldUserInput, NewUserInput) :- Value = 'null', NewUserInput = OldUserInput.
-
-getKey(T, S, Key) :- atomics_to_string([T, S], '_', Key).
+%Generate a key in the form of Topic_State for referencing a particular topic-state pair.
+generateKeyFromTopicAndState(T, S, Key) :- atomics_to_string([T, S], '_', Key).
 
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
@@ -108,8 +108,8 @@ odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)).
 
-% All memory events have been completed when all memory events indicating database actions have been done (storing and retrieving user data, etc.) have been received.
-%memoryEventsCompleted :- not(waitingForMemoryEvent(_)).
+% All memory tasks have been completed when all expected memory events and data have been received.
+memoryTasksCompleted :- not(waitingForMemoryEvent(_)).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.

@@ -18,9 +18,9 @@ module processAnswer(T, S, Ans, Data) {
 					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
 						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
-					%If a default answer is provided for an input question, that is stored userInput key-value list
-					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), getKey(T, S, Key), updateUserInput(Key, DefaultAns, Input, UpdatedInput), userId(UserId))
-						then delete(userInput(Input)) + insert(userInput(UpdatedInput)) + setUserData(UserId, Key, DefaultAns).
+					%If a default answer is provided for an input question, that is stored userModel key-value list
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userModel(UserModel), generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setUserData(UserId, Key, DefaultAns).
 					
 					%There are two ways a branching decision can deal with a fail.
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
@@ -40,15 +40,15 @@ module processAnswer(T, S, Ans, Data) {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
 					if bel(Type=yesno)
 						then insert(nextCondition(Ans)).
-					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
-					if bel(Type=input, userInput(Input),  getKey(T, S, Key), updateUserInput(Key, Ans, Input, UpdatedInput), userId(UserId))
-						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)) + setUserData(UserId, Key, Ans).
+					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
+					if bel(Type=input, userModel(UserModel),  generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, Ans, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 					%for quiz questions
-					if bel(Type=quiz, userInput(Input), member((entity=Entity), Data),  getKey(T, S, Key), updateUserInput(Key, Entity, Input, UpdatedInput), userId(UserId))
-						then delete(userInput(Input)) + insert(nextCondition(Ans), userInput(UpdatedInput)) + setUserData(UserId, Key, Entity).
+					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data),  generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, Entity, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity).
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).

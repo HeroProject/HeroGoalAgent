@@ -4,17 +4,13 @@ use sessions as knowledge.
 use hero_actions as actionspec.
 
 module hero_init {
-	% Retrieve list of topics, start with the first one, and end when there are no more left.
-	%if bel(topicOrder([H | T])) then
-		%insert(currentTopic(H), topics(T)) + adopt(topics([])).
-
 	% Initialize state parameters.
 	if true then
-		insert(currentState(s1), start, nextCondition('true'), userInput([]), branchingPointDecisions([])).
+		insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
 
-	% Set-up connection with database.
+	% Initialize robot memory / database.
 	if bel(userId(UserId)) then
-		userExists(UserId) + insert(waitingForInitFromMemory).
+		insert(userModel([]), waitingForUserModelInit) + memoryInit(UserId).
 			
 	% If first state is a question state, initialize required properties
 	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 

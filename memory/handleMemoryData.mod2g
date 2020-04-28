@@ -3,21 +3,8 @@ use '../topics/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
-module handleMemoryData {
+module handleMemoryData(Key, Value) {
 	
-	if bel(memoryData('user_exists', IsExistingUser), userId(UserId))
-		then {			
-			if bel(IsExistingUser = 'true') then getUserData(UserId, 'session_number').
-			if bel(IsExistingUser = 'false') then createUser(UserId) + insert(userModel(UserId, 1)).
-			
-			if true then delete(memoryData('user_exists', IsExistingUser)).
-		}
-	
-	if bel(memoryData('session_number', SessionNumber), NewSessionNumber is SessionNumber + 1, number_string(NewSessionNumber, NewSessionNumberString), userId(UserId))
-		then setUserData(UserId, 'session_number', NewSessionNumberString) 
-		+ insert(userModel(UserId, NewSessionNumber))
-		+ delete(memoryData('session_number', SessionNumber)).
-	
-	if bel(memoryData(Key, Value), waitingForUserData(Key), userInput(UserInput), updateUserInput(Key, Value, UserInput, NewUserInput))
-		then delete(userInput(UserInput), waitingForUserData(Key), memoryData(Key, Value)) + insert(userInput(NewUserInput)).
+	if bel(waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
+		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
 }
