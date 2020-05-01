@@ -1,0 +1,132 @@
+use 'util/*.pl' as knowledge.
+use 'topics/*.pl' as knowledge.
+use sessions as knowledge.
+
+% Basic expressive actions (output modalities)
+define say(Text) with
+	pre { true }
+	post { waitingForEvent('TextDone') }
+
+define sayAnimated(Text) with
+	pre { true }
+	post { waitingForEvent('TextDone') }
+	
+define gesture(Gesture) with
+	pre { true }
+	post { waitingForEvent('GestureDone') }
+
+define setEyeColour(Colour)  with
+	pre { true }
+	post { true }
+
+define playLoadedAudio(AudioID) with
+	pre { true }
+	post { waitingForEvent('PlayAudioDone') }
+
+define playAudio(Url) with
+	pre { true }
+	post { waitingForEvent('PlayAudioDone') }
+
+define loadAudio(Url) with
+	pre { true }
+	post { true }
+
+define clearLoadedAudio with
+	pre { true }
+	post { waitingForEvent('ClearLoadedAudioDone') }
+	
+% Robot start/stop actions (input modalities)
+define startListening with
+	pre { true }
+	post { true }
+	
+define startListening(Context) with
+	pre { true }
+	post { true }
+	
+define stopListening with
+	pre { true }
+	post { true }
+
+%define setSpeechParam(Param,Value) with
+	%pre { true }
+	%post { true }
+
+%define setIdle with
+	%pre { true }
+	%post { true }
+	
+%define setNonIdle with
+	%pre { true }
+	%post { true }
+	
+define startWatching with
+	pre { true }
+	post { true }
+	
+define stopWatching with
+	pre { true }
+	post { true }
+
+define enableRecording with
+	pre { true }
+	post { true }
+
+define disableRecording with
+	pre { true }
+	post { true }
+
+define wakeUp with
+	pre { true }
+	post { waitingForEvent('WakeUpDone') }
+
+define rest with
+	pre { true }
+	post { waitingForEvent('RestDone') }
+
+define enableBreathing with
+	pre { true }
+	post { waitingForEvent('BreathingEnabled') }
+	
+define disableBreathing with
+	pre { true }
+	post { waitingForEvent('BreathingDisabled') }
+
+%define enableBreathing(Bodypart) with
+	%pre { true }
+	%post { waitingForEvent('BreathingEnabled') }
+	
+%define disableBreathing(Bodypart) with
+	%pre { true }
+	%post { waitingForEvent('BreathingDisabled') }
+
+% Agent external memory / database control
+define getUserSession(ID) with
+	pre { true }
+	post { waitingForMemoryData('session_number') }
+	
+define addMemoryEntry(ID, Key, Data) with
+	pre { true }
+	post { waitingForMemoryEvent('MemoryEntryStored') }
+
+define setUserData(ID, Key, Value) with
+	pre { true }
+	post { waitingForMemoryEvent('UserDataSet') }
+
+define getUserData(ID, Key) with
+	pre { true }
+	post { waitingForMemoryData(Key) }
+	
+% DialogFlow Control
+%define setAgent(Agent) with
+	%pre { true }
+	%post { true }
+	
+%define setLanguage(Lang) with
+	%pre { true }
+	%post { true }
+	
+% Special actions
+%define takePicture with
+	%pre { true }
+	%post { true }

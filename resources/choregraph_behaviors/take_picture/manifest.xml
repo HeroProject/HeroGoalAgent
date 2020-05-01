@@ -1,8 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package uuid="wakeup" version="0.0.0">
+<package version="0.0.0" uuid="take_picture-bbb031">
  <names>
-  <name lang="en_US">wakeup</name>
+  <name lang="en_US">Untitled</name>
  </names>
+ <supportedLanguages>
+  <language>en_US</language>
+ </supportedLanguages>
  <descriptionLanguages>
   <language>en_US</language>
  </descriptionLanguages>
@@ -10,6 +13,7 @@
   <behaviorContent path="behavior_1">
    <userRequestable/>
    <nature>interactive</nature>
+   <autonomous/>
    <permissions/>
   </behaviorContent>
  </contents>

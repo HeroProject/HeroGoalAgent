@@ -128,7 +128,7 @@ text(story, s21, "deejay %story_s9% had net op tijd zijn slamix weggedraaid, en 
 next(story, s21, "true", s21a).
 
 state(story, s21a, say).
-audio(story, s21a, recorded, s20b).
+audio(story, s21a, recorded, [story, s20b]).
 next(story, s21a, "true", s22).
 
 state(story, s22, say).
@@ -238,7 +238,7 @@ text(story, s42, "Hij zette %story_s13% op de plank en deed de deur dicht."). % 
 next(story, s42, "true", s42a).
 
 state(story, s42a, say).
-audio(story, s42a, recorded, s41b).
+audio(story, s42a, recorded, [story, s41b]).
 next(story, s42a, "true", s43).
 
 state(story, s43, say).

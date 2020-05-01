@@ -1,29 +1,43 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use repair as module.
 
 module retrieveInput(T, S, Intent, Params) {
-	if bel(keyValue(T, S, type, Type))
+	if bel(keyValue(T, S, type, Type), currentAttempt(CurrentAttempt))
 		then {
 			if bel(currentInputModality(speech))
 				then {
-					if true then delete(waitingForAnswer) + stopListening + canceltimer(S).
+					if true then delete(waitingForAnswer) + stopListening + canceltimer(S) + canceltimer(dialogflow).
+									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
 					if bel(Type=yesno, length(Params, 0))
-						then insert(answer(T, S, Intent, [])).
+						then {
+							if bel(speechText(T, S, CurrentAttempt, Text)) then insert(answer(T, S, Intent, [text=Text])).
+							if bel(not(speechText(_, _, _, _))) then insert(answer(T, S, Intent, [text=""])).
+						}
+						
 					% input questions -> expects an entity to be returned.
-					if bel(Type=input, length(Params, 1), nth0(0, Params, Ans))
-						then insert(answer(T, S, Ans, [])).
+					if bel(Type=input, length(Params, 1), nth0(0, Params, Ans), speechText(T, S, CurrentAttempt, Text))
+						then insert(answer(T, S, Ans, [text=Text])).
 					% branch questions -> matches the intent to a specific branch
-					if bel(Type=branch, length(Params, 0), keyValue(T, S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
-						then insert(answer(T, S, Branch, [])).
+					if bel(Type=branch, length(Params, 0), keyValue(T, S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents), speechText(T, S, CurrentAttempt, Text))
+						then insert(answer(T, S, Branch, [text=Text])).
 					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(T, S, correctAnswer, CorrectAnswer))
+					if bel(Type=quiz, length(Params, 1), nth0(0, Params, Ans), keyValue(T, S, correctAnswer, CorrectAnswer), speechText(T, S, CurrentAttempt, Text))
 						then {
 							if bel(member(Ans, CorrectAnswer))
-								then insert(answer(T, S, correct, [Ans])).
+								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
 							if bel(not(member(Ans, CorrectAnswer)))
-								then insert(answer(T, S, incorrect, [Ans])).
+								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
+						}
+					
+					if bel(Type=openend, length(Params, 0))
+						then {
+							if bel(speechText(T, S, 1, Text)) then insert(answer(T, S, any, [text=Text])).
+							
+							if bel(not(speechText(T, S, _, _))) then insert(answer(T, S, empty, [text=""])).
 						}
 						
 					if bel(not(answer(T,S, _, _)))
@@ -36,27 +50,27 @@ module retrieveInput(T, S, Intent, Params) {
 					if true then delete(waitingForAnswer) + canceltimer(S).
 					
 					if bel(Type=yesno)
-						then insert(answer(T, S, Intent, [])).
+						then insert(answer(T, S, Intent, [text=Intent])).
 					
 					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(T, S, options, Options), mcCounter(Count), nth0(Count, Options, Ans))
 						then {
 							if bel(Type=input)
-								then insert(answer(T, S, Ans, [])).
+								then insert(answer(T, S, Ans, [text=Ans])).
 							
 							if bel(Type=branch)
-								then insert(answer(T, S, Ans, [])).
+								then insert(answer(T, S, Ans, [text=Ans])).
 							
 							if bel(Type=quiz, keyValue(T, S, correctAnswer, CorrectAnswer))
 								then {
 									if bel(member(Ans, CorrectAnswer))
-										then insert(answer(T, S, correct, [Ans])).
+										then insert(answer(T, S, correct, [entity=Ans, text=Ans])).
 									if bel(not(member(Ans, CorrectAnswer)))
-										then insert(answer(T, S, incorrect, [Ans])).
+										then insert(answer(T, S, incorrect, [entity=Ans, text=Ans])).
 								}
 						}
 					
-					if bel(Type \= yesno, Intent = 'answer_no', mcCounter(Count), CountNew is Count + 1)
-						then delete(mcCounter(Count)) + insert(mcCounter(CountNew)).
+					if bel(Type \= yesno, Intent = 'answer_no')
+						then repair(T,S).
 				}
 		}
 }

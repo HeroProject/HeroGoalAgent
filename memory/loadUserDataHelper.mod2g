@@ -1,0 +1,14 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+module loadUserDataHelper(Keys) {
+
+	if bel(nth0(0, Keys, Key, RestOfKeys), userId(UserId)) 
+		then {
+			if true then getUserData(UserId, Key).
+			
+			if not(bel(length(RestOfKeys,0))) then loadUserDataHelper(RestOfKeys).
+		}
+}

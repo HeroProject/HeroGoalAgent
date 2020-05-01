@@ -1,8 +1,10 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use '../util/logging' as module.
 
-module processAnswer(T, S, Ans) {
+module processAnswer(T, S, Ans, Data) {
 
 	if bel(keyValue(T, S, type, Type), nextCondition(Condition))
 		then {
@@ -13,11 +15,12 @@ module processAnswer(T, S, Ans) {
 			if bel(Ans=failure)
 				then {
 					%The next condition is given the 'fail'  flag.
-					if true then insert(nextCondition('fail')).
+					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
+						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
-					%If a default answer is provided for an input question, that is stored userInput key-value list
-					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, DefaultAns, UpdatedInput))
-						then delete(userInput(Input)) + insert(userInput(UpdatedInput)).
+					%If a default answer is provided for an input question, that is stored userModel key-value list
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userModel(UserModel), generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setUserData(UserId, Key, DefaultAns).
 					
 					%There are two ways a branching decision can deal with a fail.
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
@@ -37,15 +40,22 @@ module processAnswer(T, S, Ans) {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
 					if bel(Type=yesno)
 						then insert(nextCondition(Ans)).
-					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userInput key-value list.
-					if bel(Type=input, userInput(Input), atomics_to_string([T, S], '_', Key), updateUserInput(Input, Key, Ans, UpdatedInput))
-						then delete(userInput(Input)) + insert(nextCondition('success'), userInput(UpdatedInput)).
+					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
+					if bel(Type=input, userModel(UserModel),  generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, Ans, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs))
 						then delete(branchingPointDecisions(BPDs)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs)).
 					%for quiz questions
-					if bel(Type=quiz)
-						then insert(nextCondition(Ans)).
+					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data),  generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, Entity, UserModel, UpdatedUserModel), userId(UserId))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity).
+					%for open questions
+					if bel(Type=openend)
+						then insert(nextCondition('success')).
+					
+					%Logging
+					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
+						then logging([topic=T, state=S, action=recognitionResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 				}
 			
 			% Flag that the answer has been processed.

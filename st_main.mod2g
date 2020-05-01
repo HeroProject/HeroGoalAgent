@@ -1,9 +1,0 @@
-use dialogflow as knowledge.
-use script as knowledge.
-use dialogflow as actionspec.
-use performAction as module.
-
-module st_main {
-	% Doing things
-	if bel(currentTopic(T), currentState(S), start) then performAction(T, S).
-}

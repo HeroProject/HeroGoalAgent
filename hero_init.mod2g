@@ -1,0 +1,18 @@
+use 'util/*.pl' as knowledge.
+use 'topics/*.pl' as knowledge.
+use sessions as knowledge.
+use hero_actions as actionspec.
+
+module hero_init {
+	% Initialize state parameters.
+	if true then
+		insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
+
+	% Initialize robot memory / database.
+	if bel(userId(UserId)) then
+		insert(userModel([]), waitingForUserModelInit) + getUserSession(UserId).
+			
+	% If first state is a question state, initialize required properties
+	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 
+		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
+}

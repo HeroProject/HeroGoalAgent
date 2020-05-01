@@ -1,0 +1,10 @@
+use '*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+module logging(Data) {
+	
+	if bel(userId(UID), createMemoryEntry(Data,Entry)) 
+		then addMemoryEntry(UID, 'interaction_history', Entry) + log(UID, 'interaction_history', Entry).
+}

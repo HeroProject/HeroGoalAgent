@@ -1,0 +1,33 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+order=linearall.
+
+module performStateTransition(T, S, C) {
+	% ... clean up (and reset nextCondition to default value 'true') ...
+	% reset answers processing flag
+	if bel(answerProcessed) then delete(answerProcessed).
+	
+	% Cleanup: remove state specific parameters (if any).	
+	if bel(state(T, S, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
+		then delete(modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count)). 
+	
+	% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
+	if bel(currentState(S), started)
+		then delete(currentState(S), started, nextCondition(C))
+			+ insert(start, nextCondition('true')).
+
+	% ... and transition to next state (if there is one) ...
+	if bel(next(T, S, C, Snext))
+		then insert(currentState(Snext)). % Progress: move to next state
+		
+	% ... or go to next topic if a topic has been completed (no next state has been specified for the topic).
+	if goal(topics([])), not(bel(next(T, S, C, _))), bel(topics(AllTopics), pop(AllTopics, NewTopic, RemainingTopics))
+		then delete(currentTopic(T), topics(AllTopics)) + insert(currentTopic(NewTopic), topics(RemainingTopics), currentState(s1)).
+			
+	% And, finally, initialize state specific parameters for new state (if any).
+	if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 
+		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
+}

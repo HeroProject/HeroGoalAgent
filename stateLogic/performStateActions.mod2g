@@ -1,0 +1,30 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+order=linearall.
+
+% Performs all action (modalities) at the start of a state S for topic T.
+module performStateActions(T, S) {
+	% Set eye colors.
+	if bel(leds(T, S, C)) then setEyeColour(C).
+	% Say what needs to be said.
+	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcssed)) then sayAnimated(TextProcssed).
+	% Perform gesture.
+	if bel(anim(T, S, G)) then gesture(G).
+	% Play audio from server.
+	if bel(audio(T, S, server, A)) then playAudio(A).
+	% Play recorded audio.
+	if bel(audio(T, S, recorded, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
+	% Wake up.
+	if bel(wakeup(T, S)) then wakeUp.
+	% Rest
+	if bel(rest(T, S)) then rest + clearLoadedAudio.
+	% Set breathing
+	if bel(enableBreathing(T, S)) then enableBreathing.
+	if bel(disableBreathing(T, S)) then disableBreathing.
+	
+	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
+	if true then delete(start) + insert(started).
+}

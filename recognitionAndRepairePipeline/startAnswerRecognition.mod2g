@@ -1,36 +1,32 @@
-use '../dialogflow' as knowledge.
-use '../script' as knowledge.
-use '../dialogflow' as actionspec.
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use '../util/logging' as module.
 
 module startAnswerRecognition(T, S) {
 
 	if bel(currentAttempt(CurrentAttempt))
 		then {
-			if bel(currentInputModality(speech))
-				then {
-					% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
-					% when events have been completed (and we're not already waiting for an answer).
-					% the first attempt has a different default waiting time than the subsequent attempts.
-					if bel(CurrentAttempt == 1, keyListValues(T, S, [context, maxAnswerTimeFirst], [Context, MAX_AT]))
-						then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
-					
-					% answer time for second (and more; depends on maxAnswerAttempt) speech attempts.
-					if bel(CurrentAttempt > 1, keyListValues(T, S, [context, maxAnswerTimeSecond], [Context, MAX_AT]))
-						then startListening(Context) + starttimer(S, MAX_AT, MAX_AT) + insert(waitingForAnswer).
-				}
+			%if bel(currentInputModality(CurrentModality)) then logging([topic=T, state=S, action=startRecognition, currentModality=CurrentModality, currentAttempt=CurrentAttempt]).
+			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
+			% when events have been completed (and we're not already waiting for an answer).
+			% the first attempt has a different default waiting time than the noninitial attempts.
+			if bel(currentInputModality(speech), keyListValues(T, S, [type, context], [Type, Context]), getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime))
+				then startListening(Context) + insert(waitingForAnswer) + starttimer(S, MaxAnswerTime, MaxAnswerTime).
 			
-			if bel(currentInputModality(touch))
+			if bel(currentInputModality(touch), getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime))
 				then {
 					% Start timer for question state with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).
-					if bel(keyListValues(T, S, [type, maxAnswerTimeTouch], [yesno, MAX_AT]))
-						then starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
+					if bel(keyValue(T, S, type, yesno))
+						then starttimer(S,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer).
 					
 					% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).	
-					if bel(keyListValues(T, S, [type, maxAnswerTimeTouch, options], [Type, MAX_AT, Values]), Type \= yesno,
+					if bel(keyListValues(T, S, [type, options], [Type, Values]), Type \= yesno,
 							mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
-						then say(String) + starttimer(S,MAX_AT,MAX_AT) + insert(waitingForAnswer).
+						then say(String) + starttimer(S, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer).
 				}
 		}
 }

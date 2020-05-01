@@ -1,0 +1,143 @@
+use 'util/*.pl' as knowledge.
+use 'topics/*.pl' as knowledge.
+use sessions as knowledge.
+use hero_actions as actionspec.
+use 'recognitionAndRepairePipeline/startAnswerRecognition' as module.
+use 'recognitionAndRepairePipeline/retrieveInput' as module.
+use 'recognitionAndRepairePipeline/repair' as module.
+use 'recognitionAndRepairePipeline/processAnswer' as module.
+use 'stateLogic/performStateTransition' as module.
+use 'memory/handleMemoryData' as module.
+
+module hero_events {
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Percept and event processing      %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% NAO event percepts
+	forall percept(event(E)), not(bel(event(E)))
+		do insert(event(E)).
+	forall bel(event(E)), not(percept(event(E)))
+		do delete(event(E)).
+		
+	% Memory event percepts
+	forall percept(memoryEvent(E)), not(bel(memoryEvent(E)))
+		do insert(memoryEvent(E)).
+	forall bel(memoryEvent(E)), not(percept(memoryEvent(E)))
+		do delete(memoryEvent(E)).
+	
+	% Memory data percepts
+	forall percept(memoryData(Key, Value))
+		do handleMemoryData(Key, Value).
+
+	% Handling of event waiting logic...
+	% ... for NAO events
+	forall bel(event(E), waitingForEvent(E))
+		do delete(waitingForEvent(E)).
+	% ... for memory events
+	forall bel(memoryEvent(E), waitingForMemoryEvent(E))
+		do delete(waitingForMemoryEvent(E)).
+	
+	% Handling timeouts
+	if percept(timer(S, _)), not(bel(timeout(S)))
+		then insert(timeout(S)).
+	if bel(timeout(S)), not(percept(timer(S, _)))
+		then delete(timeout(S)).
+		
+	%Audio recording percepts
+	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
+		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
+	
+	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
+		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
+	
+	%Emotion detection percepts
+	if percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
+		then insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
+	
+	%% Dialogflow tweaks %%
+	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
+	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(speech))
+		then stopListening + starttimer(dialogflow, 1000, 1000).
+		
+	% Cut of listening if user already answered something that did not match anything.
+	if percept(speechText(Text)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
+		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(T, S, CurrentAttempt, Text)).
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Recognition and Repair            %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	%%% SPEECH %%%
+	% Dialogflow produces an input. Retrieve answer.
+	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), state(T, S, question), currentInputModality(speech), waitingForAnswer)
+		then retrieveInput(T, S, Intent, Params).
+			
+	% Dialogflow does not produce an input. Try a repair action.
+	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow), currentInputModality(speech))
+		then {
+			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, []).
+			if bel(not(keyValue(T, S, type, openend))) then repair(T, S).
+		}
+	
+	%%% TOUCH %%%
+	% An answer has been selected. Retrieve answer.
+	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
+		then retrieveInput(T, S, Intent, []).
+	
+	% No answer has been selected. Try a repair action.
+	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
+		then repair(T, S).
+		
+	%%% AUDIO RECORDING %%%
+	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), timeout(S), waitingForAudio)
+		then stopListening + disableRecording + delete(waitingForAudio) + insert(waitingForAudioFile(T, S)).
+
+	%%% EMOTION RECOGNITION %%%	
+	% When timeout occurs while waiting for emotion, emotion detection is stopped.
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), timeout(S), waitingForEmotion, not(emotion(T, S,_)))
+		then stopWatching + insert(emotion(T, S, 'fail')) + delete(waitingForEmotion).
+		
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Answer processing			      %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
+	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
+		then processAnswer(T, S, Ans, Data).
+		
+	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+		
+	% If an emotion is expected and present, set that as the next condition.
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), not(Con=Emotion))
+		then delete(nextCondition(Con)) + insert(nextCondition(Emotion)).
+		
+		
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Start recognition for answers, audio, and emotions  %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% Question
+	if bel(currentTopic(T), currentState(S), state(T, S, question), eventsCompleted, not(waitingForAnswer), not(answer(T, S, _, _)))
+		then startAnswerRecognition(T, S).
+		
+	% Audiorecording
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT))
+		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
+	
+	% Emotion
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
+		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% State transition handling            %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	% If state has been completed,  
+	if bel(currentTopic(T), completed(S), nextCondition(C)) then performStateTransition(T, S, C).
+	
+}
