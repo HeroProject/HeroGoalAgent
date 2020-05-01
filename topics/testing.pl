@@ -140,7 +140,7 @@ text(test_sound, s4, "Het was het gebrul van de leeuw").
 next(test_sound, s4, "true", s5).
 
 state(test_sound, s5, say).
-audio(test_sound, s5, recorded, [sound, s2]).
+audio(test_sound, s5, recorded, [test_sound, s2]).
 next(test_sound, s5, "true", s6).
 
 state(test_sound, s6, say).

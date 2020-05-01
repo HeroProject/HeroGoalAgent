@@ -23,7 +23,7 @@ define playLoadedAudio(AudioID) with
 	pre { true }
 	post { waitingForEvent('PlayAudioDone') }
 
-define playRawAudio(Url) with
+define playAudio(Url) with
 	pre { true }
 	post { waitingForEvent('PlayAudioDone') }
 
@@ -31,9 +31,9 @@ define loadAudio(Url) with
 	pre { true }
 	post { true }
 
-define clearAudio with
+define clearLoadedAudio with
 	pre { true }
-	post { waitingForEvent('ClearAudioDone') }
+	post { waitingForEvent('ClearLoadedAudioDone') }
 	
 % Robot start/stop actions (input modalities)
 define startListening with
@@ -76,7 +76,7 @@ define disableRecording with
 	pre { true }
 	post { true }
 
-define wakeup with
+define wakeUp with
 	pre { true }
 	post { waitingForEvent('WakeUpDone') }
 
@@ -101,9 +101,9 @@ define disableBreathing with
 	%post { waitingForEvent('BreathingDisabled') }
 
 % Agent external memory / database control
-define memoryInit(ID) with
+define getUserSession(ID) with
 	pre { true }
-	post { waitingForMemoryEvent('MemoryInitDone'), waitingForMemoryData('session_number') }
+	post { waitingForMemoryData('session_number') }
 	
 define addMemoryEntry(ID, Key, Data) with
 	pre { true }
@@ -115,7 +115,7 @@ define setUserData(ID, Key, Value) with
 
 define getUserData(ID, Key) with
 	pre { true }
-	post { waitingForMemoryEvent('UserDataRetrieved'), waitingForMemoryData(Key) }
+	post { waitingForMemoryData(Key) }
 	
 % DialogFlow Control
 %define setAgent(Agent) with

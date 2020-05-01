@@ -10,7 +10,7 @@ module hero_init {
 
 	% Initialize robot memory / database.
 	if bel(userId(UserId)) then
-		insert(userModel([]), waitingForUserModelInit) + memoryInit(UserId).
+		insert(userModel([]), waitingForUserModelInit) + getUserSession(UserId).
 			
 	% If first state is a question state, initialize required properties
 	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 

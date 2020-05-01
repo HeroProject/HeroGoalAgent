@@ -10,7 +10,7 @@
 
 % Predicates for memory processing
 :-dynamic memoryEvent/1, waitingForMemoryEvent/1,
-	memoryData/2, waitingForMemoryData/1,
+	waitingForMemoryData/1,
 	userModel/1, waitingForUserModelInit/0, waitingForLoadedUserModel/0.
 
 % Predicates related to state execution and transition handling.
@@ -91,8 +91,8 @@ getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySw
 createMemoryEntry(Pairs, Entry) :- createMemoryEntryPacket(Pairs, "", Packet), string_concat("{", Packet, FirstHalf), string_concat(FirstHalf, "}", Entry).
 createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_concat(In, StringPair, Out).
 createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
-pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), term_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
-
+pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), atom_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
+%pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), Key = text, string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, Value, ThirdPart), string_concat(ThirdPart, "'", Result).
 % Pop first element out of list.
 pop([H | T], H, T).
 
