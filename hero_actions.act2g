@@ -100,6 +100,14 @@ define disableBreathing with
 	%pre { true }
 	%post { waitingForEvent('BreathingDisabled') }
 
+define goToPosture(Posture) with
+	pre { true }
+	post { waitingForEvent('GoToPostureDone'), waitingForPosture(Posture) }
+
+define goToPosture(Posture, Speed) with
+	pre { true }
+	post { waitingForEvent('GoToPostureDone'), waitingForPosture(Posture) }
+
 % Agent external memory / database control
 define getUserSession(ID) with
 	pre { true }

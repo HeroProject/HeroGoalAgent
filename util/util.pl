@@ -5,6 +5,7 @@
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	posture/1,
 	audioRecording/3,
 	emotion/3.
 
@@ -17,7 +18,7 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
-	waitingForEmotion/0, answerProcessed/0,
+	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	speechText/4. %used to signal that a user did not say anything detectable.  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,16 +121,19 @@ audioReceived :- not(waitingForAudio).
 % Emotion has been received, no longer waiting for emotion.
 emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
 
+% Robot is in required posture
+correctPosture :- not(waitingForPosture(_)).
+
 % A say state is completed if after starting it, all events that were started have been completed.
 % That is, a say state transitions from (1) start to (2) waiting for event completion ('TextDone', 'GestureDone', etc.) to (3) completion.
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted, correctPosture.
 % A question state is completed if after starting it, all events that were started have been completed,
 % and an answer has been received, or a timeout occurred.
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived(Topic, State).
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived(Topic, State), correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived, correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived, correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted, correctPosture.

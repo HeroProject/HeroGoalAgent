@@ -24,6 +24,9 @@ module performStateActions(T, S) {
 	% Set breathing
 	if bel(enableBreathing(T, S)) then enableBreathing.
 	if bel(disableBreathing(T, S)) then disableBreathing.
+	% Go to posture
+	if bel(goToPosture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
+	if bel(goToPosture(T, S, Posture)) then goToPosture(Posture).
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

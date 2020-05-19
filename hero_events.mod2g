@@ -15,7 +15,7 @@ module hero_events {
 	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	% NAO event percepts
+	% Robot event percepts
 	forall percept(event(E)), not(bel(event(E)))
 		do insert(event(E)).
 	forall bel(event(E)), not(percept(event(E)))
@@ -30,6 +30,10 @@ module hero_events {
 	% Memory data percepts
 	forall percept(memoryData(Key, Value))
 		do handleMemoryData(Key, Value).
+	
+	% Posture percepts
+	forall percept(posture(Posture)), bel(posture(OldPosture), OldPosture \= Posture)
+		do delete(posture(OldPosture)) + insert(posture(Posture)).
 
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -38,6 +42,9 @@ module hero_events {
 	% ... for memory events
 	forall bel(memoryEvent(E), waitingForMemoryEvent(E))
 		do delete(waitingForMemoryEvent(E)).
+	% ... for posture changes
+	if bel(posture(Posture), waitingForPosture(Posture))
+		then delete(waitingForPosture(Posture)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))

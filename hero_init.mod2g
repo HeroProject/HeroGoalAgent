@@ -7,6 +7,9 @@ module hero_init {
 	% Initialize state parameters.
 	if true then
 		insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
+	
+	% Initialize robot model
+	if true then insert(posture('Unknown')).
 
 	% Initialize robot memory / database.
 	if bel(userId(UserId)) then

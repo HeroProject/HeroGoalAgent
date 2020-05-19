@@ -215,6 +215,18 @@ text(test_leds, s3, "Kijk mijn ogen zijn nu blauw").
 leds(test_leds, s3, "blue").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Posture - Testing goToPosture option	           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_posture, s1, say).
+text(test_posture, s1, "Ik ga nu zitten.").
+goToPosture(test_posture, s1, "Sit").
+next(test_posture, s1, "true", s2).
+
+state(test_posture, s2, say).
+text(test_posture, s2, "Ik ga nu langzaam staan.").
+goToPosture(test_posture, s2, "Stand", 0.3).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test sound 2 - Testing playing sound from server	   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'ga_sports' topic		           		   %%%
