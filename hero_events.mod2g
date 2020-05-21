@@ -31,9 +31,25 @@ module hero_events {
 	forall percept(memoryData(Key, Value))
 		do handleMemoryData(Key, Value).
 	
-	% Posture percepts
+	% Robot status percepts
 	forall percept(posture(Posture)), bel(posture(OldPosture), OldPosture \= Posture)
 		do delete(posture(OldPosture)) + insert(posture(Posture)).
+	forall percept(isAwake(IsAwake))
+		do {
+			if bel(isAwake, IsAwake = false) then delete(isAwake).
+			if bel(not(isAwake), IsAwake = true) then insert(isAwake).
+		}
+	
+	if percept(stiffness(Stiffness)), bel(stiffness(OldStiffness), OldStiffness \= Stiffness)
+		then delete(stiffness(OldStiffness)) + insert(stiffness(Stiffness)).
+	
+	forall percept(batteryCharge(Charge)), bel(batteryCharge(OldCharge), OldCharge \= Charge)
+		do delete(batteryCharge(OldCharge)) + insert (batteryCharge(Charge)).
+	forall percept(isCharging(IsCharging))
+		do {
+			if bel(isCharging, IsCharging = false) then delete(isCharging).
+			if bel(not(isCharging), IsCharging = true) then insert(isCharging).
+		}
 
 	% Handling of event waiting logic...
 	% ... for NAO events

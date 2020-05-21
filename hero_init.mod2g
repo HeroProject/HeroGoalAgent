@@ -9,7 +9,7 @@ module hero_init {
 		insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
 	
 	% Initialize robot model
-	if true then insert(posture('Unknown')).
+	if true then insert(posture('Unknown'), stiffness(0), batteryCharge(100)).
 
 	% Initialize robot memory / database.
 	if bel(userId(UserId)) then

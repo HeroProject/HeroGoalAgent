@@ -5,9 +5,16 @@
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
-	posture/1,
 	audioRecording/3,
 	emotion/3.
+
+% Predicates that indicate the robot status.
+:- dynamic posture/1,
+	isAwake/0,
+	stiffness/1,
+	batteryCharge/1,
+	isCharging/0.
+	
 
 % Predicates for memory processing
 :-dynamic memoryEvent/1, waitingForMemoryEvent/1,
