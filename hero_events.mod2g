@@ -97,13 +97,13 @@ module hero_events {
 	%%% SPEECH %%%
 	
 	% User responds. 
-	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), currentAttempt(CurrentAttempt), waitingForDetection)
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
 		then {
 				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.
-				if true then stopListening + delete(waitingForDetection) + insert(speechText(T, S, CurrentAttempt, Text)).
-				
+				if true then stopListening + delete(waitingForDetection).
+								
 				%Dialogflow recognizes intent. Retrieve answer.
-				if bel(not(Intent='')) then retrieveInput(T, S, Intent, Params).
+				if bel(not(Intent='')) then retrieveInput(T, S, Intent, Text, Params).
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
 				if bel(Intent='') then repair(T,S).				
@@ -115,15 +115,17 @@ module hero_events {
 			% If a user does not respond, listening is already finished. Delete its waiting flag.
 			if true then delete(waitingForDetection).
 			
+			if bel(keyValue(T, S, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(T, S)).
+			
 			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
 			if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
-			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, []).
+			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, '', []).
 		}
 	
 	%%% TOUCH %%%
 	% An answer has been selected. Retrieve answer.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
-		then retrieveInput(T, S, Intent, []).
+		then retrieveInput(T, S, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))

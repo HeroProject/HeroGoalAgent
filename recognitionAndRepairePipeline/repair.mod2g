@@ -14,41 +14,16 @@ module repair(T, S) {
 					if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 						then {
 							%If there are no repair modalities left and the user is not entitled to an additional attempt: return a failure.
-							if bel(NModalities=NewModCount, keyValue(T, S, additionalAttempt, false))
+							if bel(NModalities=NewModCount, not(additionalAttempt(T, S)))
 								then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
-							
-							%If there are no repair modalities left and the user is entiteled to an addtional attempt: 
-							% check if the user qualitifies for an addtional attempt.
-							if bel(NModalities=NewModCount, keyValue(T, S, additionalAttempt, true))
-								then {
-									% The user does not qualify (= an answer is given the first attempt): return a failure.
-									if bel(speechText(T, S, 1, _))
-										then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
-									
-									% The user qualifies (= no answer given the first attempt): give bonus attempt.
-									if bel(not(speechText(T, S, 1, _)), NextAttempt is CurrentAttempt + 1)
-										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
-											+ insert(start, currentAttempt(NextAttempt), speechText(T, S, 1, 'fail')).
-								}
 								
 							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
-							if bel(not(NModalities=NewModCount), keyValue(T, S, additionalAttempt, false), nth0(NewModCount, Order, NewModality))	
+							if bel(not(NModalities=NewModCount), not(additionalAttempt(T, S)), nth0(NewModCount, Order, NewModality))	
 								then modalitySwitch(T, S, speech, NewModality).
 							
-							%If there are other input modalities lef and the user is entiteled to an addtional attempt: 
-							% check if the user qualitifies for an addtional attempt.
-							if bel(not(NModalities=NewModCount), keyValue(T, S, additionalAttempt, true))
-								then {								
-									% The user does not qualify (= an answer is given the first attempt): switch modalities
-									if bel(speechText(T, S, 1, _), nth0(NewModCount, Order, NewModality))
-										then modalitySwitch(T, S, speech, NewModality).
-									
-									% The user qualifies (= no answer given the first attempt): give bonus attempt.
-									if bel(not(speechText(T, S, 1, _)), NextAttempt is CurrentAttempt + 1)
-										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) 
-											+ insert(start, currentAttempt(NextAttempt), speechText(T, S, 1, 'fail')).
-								}	
-								
+							%If the user is entiteled to an addtional attempt: give extra attempt 
+							if bel(additionalAttempt(T, S), NextAttempt is CurrentAttempt + 1)
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 						}				
 										
 					%If the number of attempts are not reached, the user will get a next speech recognition attempt.

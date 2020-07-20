@@ -28,7 +28,7 @@
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
-	speechText/4. %used to signal that a user did not say anything detectable.  
+	additionalAttempt/2. %used to signal if a user gets an additional attempt. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
