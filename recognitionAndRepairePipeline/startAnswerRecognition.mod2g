@@ -12,8 +12,8 @@ module startAnswerRecognition(T, S) {
 			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.
-			if bel(currentInputModality(speech), keyListValues(T, S, [type, context], [Type, Context]), getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime))
-				then startListening(Context) + insert(waitingForAnswer) + starttimer(S, MaxAnswerTime, MaxAnswerTime).
+			if bel(currentInputModality(speech), keyListValues(T, S, [type, context], [Type, Context]), getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime), Time is MaxAnswerTime/1000)
+				then startListening(Time, Context) + insert(waitingForAnswer).
 			
 			if bel(currentInputModality(touch), getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime))
 				then {

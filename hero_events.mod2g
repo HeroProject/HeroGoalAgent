@@ -50,6 +50,10 @@ module hero_events {
 			if bel(isCharging, IsCharging = false) then delete(isCharging).
 			if bel(not(isCharging), IsCharging = true) then insert(isCharging).
 		}
+		
+	% Motion recording percept
+	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
+		do insert(motionRecording(ID, Recording)).
 
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -61,12 +65,18 @@ module hero_events {
 	% ... for posture changes
 	if bel(posture(Posture), waitingForPosture(Posture))
 		then delete(waitingForPosture(Posture)).
+	% ... for motion recordings
+	if bel(motionRecording(ID, _), waitingForMotionRecording(ID))
+		then delete(waitingForMotionRecording(ID)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))
 		then insert(timeout(S)).
 	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
+		
+	% Motion recording timeout
+	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
 		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
@@ -79,29 +89,35 @@ module hero_events {
 	if percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
 		then insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 	
-	%% Dialogflow tweaks %%
-	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(speech))
-		then stopListening + starttimer(dialogflow, 1000, 1000).
-		
-	% Cut of listening if user already answered something that did not match anything.
-	if percept(speechText(Text)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(T, S, CurrentAttempt, Text)).
-
+	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%%% SPEECH %%%
-	% Dialogflow produces an input. Retrieve answer.
-	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), state(T, S, question), currentInputModality(speech), waitingForAnswer)
-		then retrieveInput(T, S, Intent, Params).
-			
-	% Dialogflow does not produce an input. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow), currentInputModality(speech))
+	
+	% User responds. 
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), currentAttempt(CurrentAttempt), waitingForDetection)
 		then {
+				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.
+				if true then stopListening + delete(waitingForDetection) + insert(speechText(T, S, CurrentAttempt, Text)).
+				
+				%Dialogflow recognizes intent. Retrieve answer.
+				if bel(not(Intent='')) then retrieveInput(T, S, Intent, Params).
+				
+				%Dialogflow does not recognize intent. Engage repair attempt.
+				if bel(Intent='') then repair(T,S).				
+		}
+							
+	% User does not respond.	
+	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
+		then {
+			% If a user does not respond, listening is already finished. Delete its waiting flag.
+			if true then delete(waitingForDetection).
+			
+			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
+			if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
 			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, []).
-			if bel(not(keyValue(T, S, type, openend))) then repair(T, S).
 		}
 	
 	%%% TOUCH %%%
@@ -115,12 +131,13 @@ module hero_events {
 		
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), timeout(S), waitingForAudio)
+	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput), waitingForAudio)
 		then stopListening + disableRecording + delete(waitingForAudio) + insert(waitingForAudioFile(T, S)).
 
 	%%% EMOTION RECOGNITION %%%	
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), timeout(S), waitingForEmotion, not(emotion(T, S,_)))
+	%TODO add appropriate event here
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), waitingForEmotion, not(emotion(T, S,_)))
 		then stopWatching + insert(emotion(T, S, 'fail')) + delete(waitingForEmotion).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,13 +166,13 @@ module hero_events {
 		then startAnswerRecognition(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT))
-		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudio).
 	
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
-		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
-
+		then startWatching(6) + insert(waitingForEmotion).
+		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% State transition handling            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

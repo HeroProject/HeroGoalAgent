@@ -27,6 +27,12 @@ module performStateActions(T, S) {
 	% Go to posture
 	if bel(goToPosture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
 	if bel(goToPosture(T, S, Posture)) then goToPosture(Posture).
+	% Record motion
+	if bel(record_motion(T, S, Joints, Duration), generateKeyFromTopicAndState(T, S, ID)) 
+		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0.0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
+	% Play motion
+	if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
+		then playMotion(Recording).
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

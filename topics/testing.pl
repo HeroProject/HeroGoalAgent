@@ -11,6 +11,7 @@ stateConfig(test_chocolate, s1, [type=yesno, context='answer_yesno']).
 text(test_chocolate, s1, "Hou je van chocola?").
 next(test_chocolate, s1, 'answer_yes', s2y).
 next(test_chocolate, s1, 'answer_no', s2n).
+next(test_chocolate, s1, 'answer_dontknow', s2d).
 next(test_chocolate, s1, 'fail', s2f).
 
 state(test_chocolate, s2y, say).
@@ -19,8 +20,11 @@ text(test_chocolate, s2y, "Ik houd ook van chocola!").
 state(test_chocolate, s2n, say).
 text(test_chocolate, s2n, "Ik vind chocola ook vies!").
 
+state(test_chocolate, s2d, say).
+text(test_chocolate, s2d, "Ik vind het ook een lastige keuze").
+
 state(test_chocolate, s2f, say).
-text(test_chocolate, s2f, "Ik vind het ook een lastige keuze").
+text(test_chocolate, s2f, "Oke.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Color - Testing input question	                   %%%
@@ -43,7 +47,7 @@ text(test_color, s2f, "Mijn levelingskleur is %test_color_s1%.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_party, s1, question).
 stateConfig(test_party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
-branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[party, s3], [party2, s2]]]).
+branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[test_party, s3], [test_party2, s2]]]).
 text(test_party, s1, "Dansen, zingen, of muziek maken?").
 next(test_party, s1, "success", s2).
 next(test_party, s1, "fail", s2f).
@@ -224,10 +228,32 @@ next(test_posture, s1, "true", s2).
 
 state(test_posture, s2, say).
 text(test_posture, s2, "Ik ga nu langzaam staan.").
-goToPosture(test_posture, s2, "Stand", 0.3).
+goToPosture(test_posture, s2, "Stand", 30).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Test sound 2 - Testing playing sound from server	   %%%
+%%% Record and Play Motion 			  	   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_motion, s1, say).
+text(test_motion, s1, "Je kunt nu een beweging maken met mijn rechter arm").
+next(test_motion, s1, "true", s2).
+
+state(test_motion, s2, say).
+record_motion(test_motion, s2, "['RArm']", 5000).
+next(test_motion, s2, "true", s3).
+
+state(test_motion, s3, say).
+text(test_motion, s3, "Dan ga ik de beweging na doen.").
+next(test_motion, s3, "true", s4).
+
+state(test_motion, s4, say).
+play_motion(test_motion, s4, [test_motion, s2]).
+next(test_motion, s4, "true", s5).
+
+state(test_motion, s5, say).
+text(test_motion, s5, "Gaaf he").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test session 2					   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'ga_sports' topic		           		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -36,21 +36,17 @@ define clearLoadedAudio with
 	post { waitingForEvent('ClearLoadedAudioDone') }
 	
 % Robot start/stop actions (input modalities)
-define startListening with
+define startListening(Seconds, Context) with
 	pre { true }
-	post { true }
-	
-define startListening(Context) with
+	post { waitingForDetection }
+
+define startListening(Seconds) with
 	pre { true }
 	post { true }
 	
 define stopListening with
 	pre { true }
 	post { true }
-
-%define setSpeechParam(Param,Value) with
-	%pre { true }
-	%post { true }
 
 %define setIdle with
 	%pre { true }
@@ -60,7 +56,7 @@ define stopListening with
 	%pre { true }
 	%post { true }
 	
-define startWatching with
+define startWatching(Seconds) with
 	pre { true }
 	post { true }
 	
@@ -108,6 +104,22 @@ define goToPosture(Posture, Speed) with
 	pre { true }
 	post { waitingForEvent('GoToPostureDone'), waitingForPosture(Posture) }
 
+define setStiffness(Joints, Stiffness) with
+	pre { true }
+	post { waitingForEvent('SetStiffnessDone') }
+
+define playMotion(Motion) with
+	pre { true }
+	post { waitingForEvent('PlayMotionDone') }
+
+define startMotionRecording(Joints) with
+	pre { true }
+	post { true } 
+
+define stopMotionRecording with
+	pre { true }
+	post { true }
+	
 % Agent external memory / database control
 define getUserSession(ID) with
 	pre { true }
@@ -126,10 +138,6 @@ define getUserData(ID, Key) with
 	post { waitingForMemoryData(Key) }
 	
 % DialogFlow Control
-%define setAgent(Agent) with
-	%pre { true }
-	%post { true }
-	
 %define setLanguage(Lang) with
 	%pre { true }
 	%post { true }

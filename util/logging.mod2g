@@ -3,8 +3,8 @@ use '../topics/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
-module logging(Data) {
+module logging(Entry) {
 	
-	if bel(userId(UID), createMemoryEntry(Data,Entry)) 
+	if bel(userId(UID)) 
 		then addMemoryEntry(UID, 'interaction_history', Entry) + log(UID, 'interaction_history', Entry).
 }

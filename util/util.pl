@@ -6,6 +6,7 @@
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
+	motionRecording/2, waitingForMotionRecording/1,
 	emotion/3.
 
 % Predicates that indicate the robot status.
@@ -24,7 +25,8 @@
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, topics/1, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
+	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	speechText/4. %used to signal that a user did not say anything detectable.  
 
@@ -96,11 +98,12 @@ getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S,
 getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
 % Parse list of key-value pairs to a string representation.
-createMemoryEntry(Pairs, Entry) :- createMemoryEntryPacket(Pairs, "", Packet), string_concat("{", Packet, FirstHalf), string_concat(FirstHalf, "}", Entry).
-createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_concat(In, StringPair, Out).
-createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
-pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), atom_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
+% createMemoryEntry(Pairs, Entry) :- createMemoryEntryPacket(Pairs, "", Packet), string_concat("{", Packet, FirstHalf), string_concat(FirstHalf, "}", Entry).
+% createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_concat(In, StringPair, Out).
+% createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
+% pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), atom_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
 %pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), Key = text, string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, Value, ThirdPart), string_concat(ThirdPart, "'", Result).
+
 % Pop first element out of list.
 pop([H | T], H, T).
 
@@ -131,9 +134,12 @@ emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
 % Robot is in required posture
 correctPosture :- not(waitingForPosture(_)).
 
+% Motion recording completed
+motionRecordingCompleted :- not(waitingForMotionRecording(_)).
+
 % A say state is completed if after starting it, all events that were started have been completed.
 % That is, a say state transitions from (1) start to (2) waiting for event completion ('TextDone', 'GestureDone', etc.) to (3) completion.
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted, correctPosture.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, say), eventsCompleted, correctPosture, motionRecordingCompleted.
 % A question state is completed if after starting it, all events that were started have been completed,
 % and an answer has been received, or a timeout occurred.
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
