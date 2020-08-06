@@ -78,7 +78,7 @@ define wakeUp with
 
 define rest with
 	pre { true }
-	post { waitingForEvent('RestDone') }
+	post { waitingForEvent('RestDone')}
 
 define enableBreathing with
 	pre { true }
@@ -127,11 +127,11 @@ define getUserSession(ID) with
 	
 define addMemoryEntry(ID, Key, Data) with
 	pre { true }
-	post { waitingForMemoryEvent('MemoryEntryStored') }
+	post { waitingForEvent('MemoryEntryStored') }
 
 define setUserData(ID, Key, Value) with
 	pre { true }
-	post { waitingForMemoryEvent('UserDataSet') }
+	post { waitingForEvent('UserDataSet') }
 
 define getUserData(ID, Key) with
 	pre { true }

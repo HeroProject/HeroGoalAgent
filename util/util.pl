@@ -16,11 +16,11 @@
 	batteryCharge/1,
 	isCharging/0.
 	
-
 % Predicates for memory processing
-:-dynamic memoryEvent/1, waitingForMemoryEvent/1,
-	waitingForMemoryData/1,
-	userModel/1, waitingForUserModelInit/0, waitingForLoadedUserModel/0.
+:-dynamic waitingForMemoryData/1,
+	userModel/1, 
+	waitingForUserModelInit/0, 
+	waitingForLoadedUserModel/0.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
@@ -47,11 +47,11 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
-%Local instance of the user model.
-updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), not(member((Key=_), OldUserModel)), append(OldUserModel, [Key=Value], NewUserModel).
-updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel).
-updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(Value = 'None'), member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel.
-updateUserModel(_, Value, OldUserModel, NewUserModel) :- Value = 'None', NewUserModel = OldUserModel.
+%Update the local instance of the user model.
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(member((Key=_), OldUserModel)), append(OldUserModel, [Key=Value], NewUserModel), !.
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel), !.
+updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel, !.
+%updateUserModel(_, Value, OldUserModel, NewUserModel) :- Value = 'None', NewUserModel = OldUserModel.
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
 %isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
@@ -97,13 +97,6 @@ getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S,
 								  
 getModalitySwitchResponse(T, S, From, To, Response) :- keyValue(T, S, modalitySwitchResponse, Responses), atom_concat(From, To, Key), member((Key=Response), Responses), !.
 
-% Parse list of key-value pairs to a string representation.
-% createMemoryEntry(Pairs, Entry) :- createMemoryEntryPacket(Pairs, "", Packet), string_concat("{", Packet, FirstHalf), string_concat(FirstHalf, "}", Entry).
-% createMemoryEntryPacket([H|[]], In, Out) :- pairToString(H, StringPair), string_concat(In, StringPair, Out).
-% createMemoryEntryPacket([H|T], In, Out) :- pairToString(H, StringPair), string_concat(StringPair, ", ", Packet), string_concat(In, Packet, TempOut), createMemoryEntryPacket(T, TempOut, Out).
-% pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), atom_string(Value, ValueString), string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, ValueString, ThirdPart), string_concat(ThirdPart, "'", Result).
-%pairToString(Pair, Result) :- Pair = (Key=Value), atom_string(Key, KeyString), Key = text, string_concat("'", KeyString, FirstPart), string_concat(FirstPart, "':'", SecondPart), string_concat(SecondPart, Value, ThirdPart), string_concat(ThirdPart, "'", Result).
-
 % Pop first element out of list.
 pop([H | T], H, T).
 
@@ -120,7 +113,7 @@ odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 eventsCompleted :- started, not(waitingForEvent(_)).
 
 % All memory tasks have been completed when all expected memory events and data have been received.
-memoryTasksCompleted :- not(waitingForMemoryEvent(_)).
+memoryTasksCompleted :- not(waitingForEvent('UserDataSet')), not(waitingForEvent('MemoryEntryStored')).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.

@@ -4,7 +4,7 @@ use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use repair as module.
 
-module retrieveInput(T, S, Intent, Text, Params) {
+module processUserResponse(T, S, Intent, Text, Params) {
 	if bel(keyValue(T, S, type, Type))
 		then {
 			if bel(currentInputModality(speech))
@@ -16,7 +16,10 @@ module retrieveInput(T, S, Intent, Text, Params) {
 						
 					% input questions -> expects an entity to be returned.
 					if bel(Type=input, length(Params, 1), member((_=Ans), Params))
-						then insert(answer(T, S, Ans, [text=Text])).
+						then {
+							if bel(not(Ans = '')) then insert(answer(T, S, Ans, [text=Text])).
+							if bel(Ans = '') then repair(T,S).
+						}
 						
 					% branch questions -> matches the intent to a specific branch
 					if bel(Type=branch, length(Params, 0), keyValue(T, S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
@@ -25,10 +28,11 @@ module retrieveInput(T, S, Intent, Text, Params) {
 					% quiz questions -> checks whether the answer is correct or not.
 					if bel(Type=quiz, length(Params, 1), member((_=Ans), Params), keyValue(T, S, correctAnswer, CorrectAnswer))
 						then {
-							if bel(member(Ans, CorrectAnswer))
+							if bel(not(Ans = ''), member(Ans, CorrectAnswer))
 								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
-							if bel(not(member(Ans, CorrectAnswer)))
+							if bel(not(Ans = ''), not(member(Ans, CorrectAnswer)))
 								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
+							if bel(Ans = '') then repair(T,S).
 						}
 					
 					if bel(Type=openend, length(Params, 0))

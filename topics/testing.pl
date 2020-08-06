@@ -192,7 +192,7 @@ leds(test_emotion, s4, "white").
 %%% Note: web server needs to be on.		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_sound2, s1, say).
-audio(test_sound2, s1, server, "short_test_song.wav").
+audio(test_sound2, s1, server, "resources/sounds/truck.wav").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Animation - Testing anim option		           %%%

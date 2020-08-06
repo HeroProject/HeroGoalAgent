@@ -2,10 +2,10 @@ use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'recognitionAndRepairePipeline/startAnswerRecognition' as module.
-use 'recognitionAndRepairePipeline/retrieveInput' as module.
+use 'recognitionAndRepairePipeline/askQuestion' as module.
+use 'recognitionAndRepairePipeline/processUserResponse' as module.
 use 'recognitionAndRepairePipeline/repair' as module.
-use 'recognitionAndRepairePipeline/processAnswer' as module.
+use 'recognitionAndRepairePipeline/selectRobotResponse' as module.
 use 'stateLogic/performStateTransition' as module.
 use 'memory/handleMemoryData' as module.
 
@@ -21,12 +21,6 @@ module hero_events {
 	forall bel(event(E)), not(percept(event(E)))
 		do delete(event(E)).
 		
-	% Memory event percepts
-	forall percept(memoryEvent(E)), not(bel(memoryEvent(E)))
-		do insert(memoryEvent(E)).
-	forall bel(memoryEvent(E)), not(percept(memoryEvent(E)))
-		do delete(memoryEvent(E)).
-	
 	% Memory data percepts
 	forall percept(memoryData(Key, Value))
 		do handleMemoryData(Key, Value).
@@ -59,9 +53,6 @@ module hero_events {
 	% ... for NAO events
 	forall bel(event(E), waitingForEvent(E))
 		do delete(waitingForEvent(E)).
-	% ... for memory events
-	forall bel(memoryEvent(E), waitingForMemoryEvent(E))
-		do delete(waitingForMemoryEvent(E)).
 	% ... for posture changes
 	if bel(posture(Posture), waitingForPosture(Posture))
 		then delete(waitingForPosture(Posture)).
@@ -80,8 +71,7 @@ module hero_events {
 		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
-		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
-	
+		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
 	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
 		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
 	
@@ -103,7 +93,7 @@ module hero_events {
 				if true then stopListening + delete(waitingForDetection).
 								
 				%Dialogflow recognizes intent. Retrieve answer.
-				if bel(not(Intent='')) then retrieveInput(T, S, Intent, Text, Params).
+				if bel(not(Intent='')) then processUserResponse(T, S, Intent, Text, Params).
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
 				if bel(Intent='') then repair(T,S).				
@@ -119,13 +109,13 @@ module hero_events {
 			
 			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
 			if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
-			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, '', []).
+			if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, '', []).
 		}
 	
 	%%% TOUCH %%%
 	% An answer has been selected. Retrieve answer.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
-		then retrieveInput(T, S, Intent, '', []).
+		then processUserResponse(T, S, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
@@ -134,7 +124,7 @@ module hero_events {
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
 	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput), waitingForAudio)
-		then stopListening + disableRecording + delete(waitingForAudio) + insert(waitingForAudioFile(T, S)).
+		then stopListening + disableRecording + delete(waitingForAudio).
 
 	%%% EMOTION RECOGNITION %%%	
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
@@ -148,7 +138,7 @@ module hero_events {
 	
 	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
 	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
-		then processAnswer(T, S, Ans, Data).
+		then selectRobotResponse(T, S, Ans, Data).
 		
 	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
 	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
@@ -165,11 +155,11 @@ module hero_events {
 	
 	% Question
 	if bel(currentTopic(T), currentState(S), state(T, S, question), eventsCompleted, not(waitingForAnswer), not(answer(T, S, _, _)))
-		then startAnswerRecognition(T, S).
+		then askQuestion(T, S).
 		
 	% Audiorecording
 	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT), Time is RT/1000)
-		then enableRecording + startListening(Time) + insert(waitingForAudio).
+		then enableRecording + startListening(Time) + insert(waitingForAudio, waitingForAudioFile(T, S)).
 	
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
