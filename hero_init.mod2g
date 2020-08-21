@@ -15,7 +15,13 @@ module hero_init {
 	if bel(userId(UserId), multiSession(IsMultiSession)) then 
 		{
 		 	if bel(IsMultiSession = true) then insert(userModel([]), waitingForUserModelInit) + getUserSession(UserId).
-			if bel(IsMultiSession = false) then insert(userModel([session_number=1, test_color_s1=geel]), waitingForUserModelInit).
+			if bel(IsMultiSession = false) then insert(userModel([session_number=1]), waitingForUserModelInit).
+		}
+	
+	% Load local user model variables into user model
+	forall bel(localVariable(Key, Value))
+		do {
+			if bel(userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel)) then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 		}
 			
 	% If first state is a question state, initialize required properties

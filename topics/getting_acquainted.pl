@@ -87,7 +87,7 @@ text(ga_prac_touch,  s5, "Bij sommige vragen zal ik je wat opties geven. Je kunt
 next(ga_prac_touch,  s5, "true",  s6).
 
 state(ga_prac_touch, s6, say).
-text(ga_prac_touch,  s6, "Zullen we dat even oefenen? \pau=400\ ").
+text(ga_prac_touch,  s6, "Laten we dat oefenen. \pau=400\ ").
 next(ga_prac_touch,  s6, "true",  s7).
 
 state(ga_prac_touch, s7, question).

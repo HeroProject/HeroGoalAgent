@@ -5,6 +5,6 @@ use '../hero_actions' as actionspec.
 
 module handleMemoryData(Key, Value) {
 	
-	if bel(waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
+	if bel(not(Value = 'None'), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
 }

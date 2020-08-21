@@ -68,6 +68,9 @@ module hero_events {
 		
 	% Motion recording timeout
 	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
+	
+	% waitingForTimer
+	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
@@ -164,7 +167,26 @@ module hero_events {
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
 		then startWatching(6) + insert(waitingForEmotion).
-		
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Wait for event (e.g. button press) in a say state   %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this state.	
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), not(waitingForSayClear), eventsCompleted)
+		then insert(waitingForEvent(Next), waitingForEvent(Repeat), waitingForSayClear).
+	
+	% If the next event is available, clear this state.
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), waitingForSayClear, not(waitingForEvent(Next)))
+		then delete(waitingForEvent(Repeat), waitingForSayClear).
+	
+	% if the repeat event is available, reset this state.
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), waitingForSayClear, not(waitingForEvent(Repeat)))
+		then delete(waitingForEvent(Next), waitingForSayClear, started) + insert(start).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
+		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% State transition handling            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

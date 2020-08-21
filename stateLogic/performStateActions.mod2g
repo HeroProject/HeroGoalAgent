@@ -10,7 +10,11 @@ module performStateActions(T, S) {
 	% Set eye colors.
 	if bel(leds(T, S, C)) then setEyeColour(C).
 	% Say what needs to be said.
-	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcssed)) then sayAnimated(TextProcssed).
+	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
+	{
+		if bel(keyValue(T, S, noAnimation, "true")) then say(TextProcessed).
+		if not(bel(keyValue(T, S, noAnimation, "true"))) then sayAnimated(TextProcessed).
+	}
 	% Perform gesture.
 	if bel(anim(T, S, G)) then gesture(G).
 	% Play audio from server.
@@ -26,12 +30,18 @@ module performStateActions(T, S) {
 	if bel(disableBreathing(T, S)) then disableBreathing.
 	% Go to posture
 	if bel(goToPosture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
+	% Set stiffness
 	if bel(goToPosture(T, S, Posture)) then goToPosture(Posture).
+		if bel(set_stiffness(T, S, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
 	% Record motion
-	if bel(record_motion(T, S, Joints, Duration), generateKeyFromTopicAndState(T, S, ID)) 
-		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0.0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
+	if bel(record_motion_timer(T, S, Joints, Duration), generateKeyFromTopicAndState(T, S, ID)) 
+		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
+	if bel(start_motion_recording(T, S, Joints))
+		then setStiffness(Joints, 0) + startMotionRecording(Joints).
+	if bel(stop_motion_recording(T, S, Joints), generateKeyFromTopicAndState(T, S, ID)) then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
 	% Play motion
-	if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
+	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
+	if bel(play_motion(T, S, ID), motionRecording(ID, Recording))
 		then playMotion(Recording).
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.

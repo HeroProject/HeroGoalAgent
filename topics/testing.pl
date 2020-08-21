@@ -200,6 +200,8 @@ audio(test_sound2, s1, server, "resources/sounds/truck.wav").
 state(test_animation, s1, say).
 text(test_animation, s1, "Ik doe nu een standaard animatie").
 anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
+%animations/Stand/Question/NAO/Left_Neutral_QUE_01
+%animations/Stand/Gestures/Enthusiastic_4
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% leds - Testing led option			           %%%
@@ -217,6 +219,10 @@ next(test_leds, s2, "true", s3).
 state(test_leds, s3, say).
 text(test_leds, s3, "Kijk mijn ogen zijn nu blauw").
 leds(test_leds, s3, "blue").
+next(test_leds, s3, "true", s4).
+
+state(test_leds, s4, say).
+leds(test_leds, s4, "white").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Posture - Testing goToPosture option	           %%%
@@ -238,7 +244,7 @@ text(test_motion, s1, "Je kunt nu een beweging maken met mijn rechter arm").
 next(test_motion, s1, "true", s2).
 
 state(test_motion, s2, say).
-record_motion(test_motion, s2, "['RArm']", 5000).
+record_motion_timer(test_motion, s2, ['RArm'], 5000).
 next(test_motion, s2, "true", s3).
 
 state(test_motion, s3, say).
@@ -246,7 +252,7 @@ text(test_motion, s3, "Dan ga ik de beweging na doen.").
 next(test_motion, s3, "true", s4).
 
 state(test_motion, s4, say).
-play_motion(test_motion, s4, [test_motion, s2]).
+play_motion(test_motion, s4, test_motion_s2).
 next(test_motion, s4, "true", s5).
 
 state(test_motion, s5, say).

@@ -98,11 +98,11 @@ define disableBreathing with
 
 define goToPosture(Posture) with
 	pre { true }
-	post { waitingForEvent('GoToPostureDone'), waitingForPosture(Posture) }
+	post { waitingForPosture(Posture) }
 
 define goToPosture(Posture, Speed) with
 	pre { true }
-	post { waitingForEvent('GoToPostureDone'), waitingForPosture(Posture) }
+	post { waitingForPosture(Posture) }
 
 define setStiffness(Joints, Stiffness) with
 	pre { true }
