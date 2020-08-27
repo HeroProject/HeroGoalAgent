@@ -155,7 +155,7 @@ text(co_tutorial_sound,  s3, "Laten we even oefenen.").
 next(co_tutorial_sound,  s3, "true",  s4).
 
 state(co_tutorial_sound, s4, say).
-text(co_tutorial_sound,  s4, "Brul als een leeuw in 3, 2, 1.").
+text(co_tutorial_sound,  s4, "Piep als een muis in 3, 2, 1.").
 next(co_tutorial_sound,  s4, "true",  s5).
 
 state(co_tutorial_sound, s5, audioInput).
@@ -163,7 +163,7 @@ stateConfig(co_tutorial_sound, s5, [recordTime=3000]).
 next(co_tutorial_sound, s5, "true", s6).
 
 state(co_tutorial_sound, s6, say).
-text(co_tutorial_sound,  s6, "Gaaf zeg.").
+text(co_tutorial_sound,  s6, "Top.").
 next(co_tutorial_sound,  s6, "true",  s7).
 
 state(co_tutorial_sound, s7, say).
@@ -195,6 +195,7 @@ next(co_tutorial_gesture,  s3, "true",  s4).
 
 state(co_tutorial_gesture, s4, say).
 set_stiffness(co_tutorial_gesture, s4, ['RArm', 'LArm'], 100).
+stateConfig(co_tutorial_gesture, s4, [noAnimation="true"]).
 text(co_tutorial_gesture,  s4, "Goed bezig.").
 next(co_tutorial_gesture,  s4, "true",  s5).
 
@@ -211,7 +212,7 @@ audio(co_tutorial_gesture, s7, server, "resources/sounds/ready_to_record_gesture
 next(co_tutorial_gesture,  s7, "true",  s8).
 
 state(co_tutorial_gesture, s8, say).
-text(co_tutorial_gesture,  s8, "En vlak voordat ik ga stoppen, tel ik af van drie naar nul.").
+text(co_tutorial_gesture,  s8, "En vlak voordat ik ga stoppen, tel ik af van drie naar 1.").
 next(co_tutorial_gesture,  s8, "true",  s9).
 
 state(co_tutorial_gesture, s9, say).
@@ -221,11 +222,11 @@ next(co_tutorial_gesture,  s9, "true",  s10).
 state(co_tutorial_gesture, s10, say).
 text(co_tutorial_gesture,  s10, "Pak mijn armen maar vast.").
 stateConfig(co_tutorial_gesture, s10, [noAnimation="true"]).
+set_stiffness(co_tutorial_gesture, s10, ['RArm', 'LArm'], 0).
 next(co_tutorial_gesture,  s10, "true",  s11).
 
 state(co_tutorial_gesture, s11, say).
 audio(co_tutorial_gesture, s11, server, "resources/sounds/ready_to_record_gesture.wav").
-set_stiffness(co_tutorial_gesture, s11, ['RArm', 'LArm'], 0).
 next(co_tutorial_gesture,  s11, "true",  s12).
 
 state(co_tutorial_gesture, s12, say).
@@ -234,13 +235,13 @@ stateConfig(co_tutorial_gesture, s12, [waitTimer=5]).
 next(co_tutorial_gesture,  s12, "true",  s13).
 
 state(co_tutorial_gesture, s13, say).
-text(co_tutorial_gesture,  s13, "3. 2. 1.").
+text(co_tutorial_gesture,  s13, "3. 2. 1. Klaar.").
 stateConfig(co_tutorial_gesture, s13, [noAnimation="true"]).
 next(co_tutorial_gesture,  s13, "true",  s14).
 
 state(co_tutorial_gesture, s14, say).
-text(co_tutorial_gesture,  s14, "Klaar").
 stop_motion_recording(co_tutorial_gesture, s14, ['RArm', 'LArm']).
+stateConfig(co_tutorial_gesture, s14, [noAnimation="true"]).
 next(co_tutorial_gesture,  s14, "true",  s15).
 
 state(co_tutorial_gesture, s15, say).
@@ -252,4 +253,4 @@ play_motion(co_tutorial_gesture, s16, co_tutorial_gesture_s14).
 next(co_tutorial_gesture, s16, "true", s17).
 
 state(co_tutorial_gesture, s17, say).
-text(co_tutorial_gesture,  s17, "Cool cool cool!").
+text(co_tutorial_gesture,  s17, "Cool cool cool cool!").

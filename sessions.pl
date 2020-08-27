@@ -14,11 +14,12 @@
 %multiSession(false).
 
 % Session management
-session(co_creation, [general_wakeup, co_intro, co_tutorial_speech, co_tutorial_touch, co_tutorial_sound, co_tutorial_gesture, general_rest]).
+%session(co_creation, [general_wakeup, co_intro, co_tutorial_speech, co_tutorial_touch, co_tutorial_sound, co_tutorial_gesture, general_rest]).
+session(co_creation, [general_wakeup, co_tutorial_gesture, general_rest]).
 session(co_creation_baseline, [general_wakeup, co_intro, co_tutorial_speech, co_tutorial_touch, general_rest]).
 sessionOrder([co_creation]).
 multiSession(false).
 
 % Experimental settings
 userId('1').
-localVariable(first_name, "Elvira").
+localVariable(first_name, "Bobbie").
