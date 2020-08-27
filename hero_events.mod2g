@@ -144,7 +144,10 @@ module hero_events {
 		then selectRobotResponse(T, S, Ans, Data).
 		
 	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
 	% If an emotion is expected and present, set that as the next condition.

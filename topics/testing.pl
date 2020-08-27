@@ -118,7 +118,7 @@ state(test_color2, s2cor, say).
 text(test_color2, s2cor, "Ja klopt! Ik ben grijs met wit.").
 
 state(test_color2, s2incor, say).
-text(test_color2, s2incor, "Helaas. Ik wou dat ik die kleur had, maar ik ben grijs met wit.").
+text(test_color2, s2incor, "Helaas. Ik wou dat ik %test_color2_s1% was, maar ik ben grijs met wit.").
 
 state(test_color2, s2f, say).
 text(test_color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").

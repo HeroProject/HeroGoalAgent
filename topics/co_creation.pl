@@ -51,10 +51,8 @@ state(co_intro, s11, say).
 text(co_intro,  s11, "Daar kun jij mij bij helpen als je wilt.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Tutorial - speech, touch	                           %%%
+%%% Tutorial - speech       %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%% speech %%%
 
 state(co_tutorial_speech, s1, say).
 text(co_tutorial_speech,  s1, "Mike en ik zullen je eerst uitleggen hoe je dat kunt doen").
@@ -96,7 +94,9 @@ next(co_tutorial_speech,  s5f, "true",  s6).
 state(co_tutorial_speech, s6, say).
 leds(co_tutorial_speech, s6, "white").
 
-%%% touch %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - touch					   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(co_tutorial_touch, s1, say).
 text(co_tutorial_touch,  s1, "Soms heb ik een beetje moeite om mensen te verstaan.").
@@ -139,7 +139,9 @@ text(co_tutorial_touch, s8incor, "Helaas. Ik wou dat ik die kleur had, maar mijn
 state(co_tutorial_touch, s8f, say).
 text(co_tutorial_touch, s8f, "Mijn schouders zijn donker grijs. Vergeet niet de knopjes goed in te drukken de volgende keer.").
 
-%%% sound effect %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - sound					   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(co_tutorial_sound, s1, say).
 text(co_tutorial_sound,  s1, "Laten we verder gaan met geluidseffecten.").
@@ -177,7 +179,9 @@ next(co_tutorial_sound,  s8, "true",  s9).
 state(co_tutorial_sound, s9, say).
 text(co_tutorial_sound,  s9, "Mooi. Dit komt later goed van pas.").
 
-%%% gesture %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - gesture					   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(co_tutorial_gesture, s1, say).
 text(co_tutorial_gesture,  s1, "Zoals je wel gezien hebt vind ik het leuk om mijn armen te bewegen.").
@@ -254,3 +258,117 @@ next(co_tutorial_gesture, s16, "true", s17).
 
 state(co_tutorial_gesture, s17, say).
 text(co_tutorial_gesture,  s17, "Cool cool cool cool!").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - lights       				   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+state(co_tutorial_light, s1, question).
+stateConfig(co_tutorial_light, s1, [type=input, context='answer_light_location', options=['ogen', 'buik', 'voeten', 'allemaal'], defaultAnswer='ogen']).
+text(co_tutorial_light, s1, "Welke lichtjes wil jij in kleuren? De ogen, buik, voeten, of ze allemaal?").
+next(co_tutorial_light, s1, 'success', s2).
+next(co_tutorial_light, s1, 'fail', s2f).
+
+state(co_tutorial_light, s2, say).
+text(co_tutorial_light, s2, "%co_tutorial_light_s1%, helemaal prima!").
+next(co_tutorial_light, s2, "true", s3).
+
+state(co_tutorial_light, s2f, say).
+text(co_tutorial_light, s2f, "Sorry, ik heb je niet helemaal begrepen. Laten we de %co_tutorial_light_s1% in kleuren.").
+next(co_tutorial_light, s2f, "true", s3).
+
+state(co_tutorial_light, s3, question).
+stateConfig(co_tutorial_light, s3, [type=yesno, context='answer_yesno']).
+text(co_tutorial_light, s3, "Wil je er ook een animatie, zoals knipperen, bij?").
+next(co_tutorial_light, s3, 'answer_yes', s3anim).
+next(co_tutorial_light, s3, 'answer_no', s3no).
+next(co_tutorial_light, s3, 'answer_dontknow', s3d).
+next(co_tutorial_light, s3, 'fail', s3d).
+
+%%%%%%%%%%%%%% No animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+state(co_tutorial_light, s3no, say).
+text(co_tutorial_light, s3no, "Prima. Dan hoeven we nu alleen nog een kleur te kiezen.").
+next(co_tutorial_light, s3no, "true", s4no).
+
+state(co_tutorial_light, s3d, say).
+text(co_tutorial_light, s3d, "Laten we dit keer een kleur kiezen.").
+next(co_tutorial_light, s3d, "true", s4no).
+
+state(co_tutorial_light, s4no, branchingPoint).
+stateConfig(co_tutorial_light, s4no, [branchDecider=entity, branchSource=co_tutorial_light_s1]).
+next(co_tutorial_light, s4no, "ogen", s5no).
+next(co_tutorial_light, s4no, "buik", s5no). % buik kan alleen maar knipperen.
+next(co_tutorial_light, s4no, "voeten", s5no).
+next(co_tutorial_light, s4no, "allemaal", s5noall).
+next(co_tutorial_light, s4no, "fail", s5no). % omdat default = ogen
+
+state(co_tutorial_light, s5no, question).
+stateConfig(co_tutorial_light, s5no, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='groen']).
+text(co_tutorial_light, s5no, "Welke kleur moeten de lichtjes hebben?").
+next(co_tutorial_light, s5no, 'success', s6).
+next(co_tutorial_light, s5no, 'fail', s5nof).
+
+% s5noall
+
+state(co_tutorial_light, s5nof, say).
+text(co_tutorial_light, s5nof, "Ik kon je even niet verstaan. Ik vind zelf %co_tutorial_light_s5no% een geschikte kleur.").
+next(co_tutorial_light, s5nof, "true", s6).
+
+state(co_tutorial_light, s6, say).
+text(co_tutorial_light, s6, "Dit is het resultaat").
+leds(co_tutorial_light, s6, "green").
+next(co_tutorial_light, s6, "true", s7).
+
+state(co_tutorial_light, s7, say).
+text(co_tutorial_light, s7, "klaar").
+leds(co_tutorial_light, s7, "white").
+
+%%%%%%%%%%%%%% With animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+state(co_tutorial_light, s3anim, branchingPoint).
+stateConfig(co_tutorial_light, s3anim, [branchDecider=entity, branchSource=co_tutorial_light_s1]).
+next(co_tutorial_light, s3anim, "ogen", s4animeye).
+next(co_tutorial_light, s3anim, "buik", s5animknip). % buik kan alleen maar knipperen.
+next(co_tutorial_light, s3anim, "voeten", s4animfeet).
+next(co_tutorial_light, s3anim, "allemaal", s4animeye).
+next(co_tutorial_light, s3anim, "fail", s4animeye). % omdat default = ogen
+
+state(co_tutorial_light, s4animeye, question). % ogen of allemaal
+stateConfig(co_tutorial_light, s4animeye, [type=input, context='answer_light_animation', options=['knipperen', 'heen en weer', 'draaien'], defaultAnswer='knipperen']).
+text(co_tutorial_light, s4animeye, "Welke animatie wil je? De lichtjes laten knipperen, heen en weer willen laten gaan, of de ogen laten draaien?").
+next(co_tutorial_light, s4animeye, 'success', s5anim).
+next(co_tutorial_light, s4animeye, 'fail', s4animf).
+
+state(co_tutorial_light, s4animfeet, question). % voeten
+stateConfig(co_tutorial_light, s4animfeet, [type=quiz, context='answer_light_animation', options=['knipperen', 'heen en weer'], correctAnswer=['knipperen', 'heen en weer']]).
+text(co_tutorial_light, s4animfeet, "Welke animatie wil je? De lichtjes laten knipperen of heen en weer willen laten gaan?").
+next(co_tutorial_light, s4animfeet, 'correct', s5animfeet).
+next(co_tutorial_light, s4animfeet, 'incorrect', s4animfeetf).
+next(co_tutorial_light, s4animfeet, 'fail', s4animf).
+
+state(co_tutorial_light, s4animfeetf, say).
+text(co_tutorial_light, s4animfeetf, "Alleen de ogen kunnen draaien helaas. Ik laat ze wel knipperen.").
+next(co_tutorial_light, s4animfeetf, "true", s5animknip).
+
+state(co_tutorial_light, s4animf, say).
+text(co_tutorial_light, s4animf, "Sorry, ik heb je niet helemaal begrepen. Ik de lichtjes ze wel knipperen.").
+next(co_tutorial_light, s4animf, "true", s5animknip).
+
+state(co_tutorial_light, s5anim, branchingPoint).
+stateConfig(co_tutorial_light, s5anim, [branchDecider=entity, branchSource=co_tutorial_light_s4animeye]).
+next(co_tutorial_light, s5anim, "knipperen", s5animknip).
+next(co_tutorial_light, s5anim, "heen en weer", s5animheen).
+next(co_tutorial_light, s5anim, "draaien", s5animdraai).
+next(co_tutorial_light, s5anim, "fail", s5animf).
+
+state(co_tutorial_light, s5animfeet, branchingPoint).
+stateConfig(co_tutorial_light, s5animfeet, [branchDecider=entity, branchSource=co_tutorial_light_s4animfeet]).
+next(co_tutorial_light, s5animfeet, "knipperen", s5animknip).
+next(co_tutorial_light, s5animfeet, "heen en weer", s5animheen).
+next(co_tutorial_light, s5animfeet, "fail", s5animf).
+
+% s5animknip
+% s5animheen
+% s5animdraai
+% s5animf
