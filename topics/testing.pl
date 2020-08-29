@@ -165,27 +165,27 @@ next(test_emotion, s2, neutral, s3n).
 next(test_emotion, s2, "fail", s3f).
 
 state(test_emotion, s3h, say).
-leds(test_emotion, s3h, "green").
+leds(test_emotion, s3h, ["FaceLeds"], ["green"]).
 text(test_emotion, s3h, "Wauw, wat een blij gezicht!").
 next(test_emotion, s3h, "true", s4).
 
 state(test_emotion, s3s, say).
-leds(test_emotion, s3s, "red").
+leds(test_emotion, s3s, ["FaceLeds"], ["red"]).
 text(test_emotion, s3s, "Wauw, wat een zielig gezicht!").
 next(test_emotion, s3s, "true", s4).
 
 state(test_emotion, s3n, say).
-leds(test_emotion, s3n, "cyan").
+leds(test_emotion, s3n, ["FaceLeds"], ["cyan"]).
 text(test_emotion, s3n, "Wauw, wat kijk jij nietszeggend.").
 next(test_emotion, s3n, "true", s4).
 
 state(test_emotion, s3f, say).
-leds(test_emotion, s3f, "white").
+leds(test_emotion, s3f, ["FaceLeds"], ["white"]).
 text(test_emotion, s3f, "Ik kon helaas niks zien.").
 next(test_emotion, s3f, "true", s4).
 
 state(test_emotion, s4, say).
-leds(test_emotion, s4, "white").
+leds(test_emotion, s4, ["FaceLeds"], ["white"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test sound 2 - Testing playing sound from server	   %%%
@@ -204,25 +204,41 @@ anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
 %animations/Stand/Gestures/Enthusiastic_4
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% leds - Testing led option			           %%%
+%%% leds - Testing led colors			           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds, s1, say).
-text(test_leds, s1, "Kijk mijn ogen zijn nu paars").
-leds(test_leds, s1, "magenta").
+text(test_leds, s1, "Kijk, mijn ogen zijn nu grijs").
+leds(test_leds, s1, ["FaceLeds"], ["grijs"]).
 next(test_leds, s1, "true", s2).
 
 state(test_leds, s2, say).
-text(test_leds, s2, "Kijk mijn ogen zijn nu groen").
-leds(test_leds, s2, "green").
+text(test_leds, s2, "Kijk, mijn buik is nu azuur").
+leds(test_leds, s2, ["ChestLeds"], ["azuur"]).
 next(test_leds, s2, "true", s3).
 
 state(test_leds, s3, say).
-text(test_leds, s3, "Kijk mijn ogen zijn nu blauw").
-leds(test_leds, s3, "blue").
+text(test_leds, s3, "Kijk, mijn voeten zijn nu kaki").
+leds(test_leds, s3, ["FeetLeds"], ["kaki"]).
 next(test_leds, s3, "true", s4).
 
 state(test_leds, s4, say).
-leds(test_leds, s4, "white").
+leds(test_leds, s4, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% leds - Testing led animations		           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_leds_anim, s1, say).
+text(test_leds_anim, s1, "Kijk, ik heb mijn zwaailicht aangezet").
+start_led_anim(test_leds_anim, s1, "all", "alternate", ["blue", "red"], 500).
+stateConfig(test_leds_anim, s1, [waitTimer=5000]).
+next(test_leds_anim, s1, "true", s2).
+
+state(test_leds_anim, s2, say).
+stop_led_anim(test_leds_anim, s2).
+next(test_leds_anim, s2, "true", s3).
+
+state(test_leds_anim, s3, say).
+text(test_leds_anim, s3, "Dat was leuk").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Posture - Testing goToPosture option	           %%%

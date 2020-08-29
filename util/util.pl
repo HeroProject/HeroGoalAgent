@@ -19,8 +19,7 @@
 % Predicates for memory processing
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
-	waitingForUserModelInit/0, 
-	waitingForLoadedUserModel/0.
+	waitingForUserModelInit/0.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   

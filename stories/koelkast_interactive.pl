@@ -2,7 +2,7 @@ topicOrder([story, theend]).
 
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
-leds(story, s1, "white").
+leds(story, s1, ["FaceLeds"], ["wit"]).
 next(story, s1, "true", s2).
 
 state(story, s2, say).
@@ -57,12 +57,12 @@ next(story, s11a, "true", s11b).
 
 state(story, s11b, say).
 anim(story, s11b, "disco/behavior_1").
-leds(story, s11b, "magenta").
+leds(story, s11b, ["FaceLeds"], ["magenta"]).
 next(story, s11b, "true", s12).
 
 state(story, s12, say).
 text(story, s12, "Leuk! Pak Melk en Sinaasappelsap waren de hele tijd aan het breek dansen - het was altijd feest.").
-leds(story, s12, "white").
+leds(story, s12, ["FaceLeds"], ["wit"]).
 next(story, s12, "true", s13).
 
 state(story, s13, question).

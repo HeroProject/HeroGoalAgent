@@ -9,7 +9,7 @@ module hero_main {
 	% Adapt topic goal if all the necessary information is loaded from the database. 
 	if not(goal(topics([]))), bel(waitingForUserModelInit, memoryTasksCompleted, getUserModelValue('session_number', SessionNumber), sessionOrder(SessionOrder), 
 		nth1(SessionNumber, SessionOrder, SessionID), session(SessionID, Topics), nth0(0, Topics, FirstTopic, RestOfTopics))
-			then delete(waitingForUserModelInit) + insert(currentTopic(FirstTopic), topics(RestOfTopics), waitingForLoadedUserModel) 
+			then delete(waitingForUserModelInit) + insert(currentTopic(FirstTopic), topics(RestOfTopics)) 
 				+ loadUserData(Topics) + adopt(topics([])).
 	
 	% Execute the state actions

@@ -73,7 +73,7 @@ next(co_tutorial_speech,  s4, "true",  s5).
 
 state(co_tutorial_speech, s5, question).
 stateConfig(co_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw"], inputModality=[speech=3], additionalAttempt=true]).
-leds(co_tutorial_speech, s5, "blue").
+leds(co_tutorial_speech, s5, ["FaceLeds"], ["blauw"]).
 text(co_tutorial_speech, s5, "Welke kleur hebben mijn ogen nu?").
 next(co_tutorial_speech, s5, 'correct', s5cor).
 next(co_tutorial_speech, s5, 'incorrect', s5incor).
@@ -92,7 +92,7 @@ text(co_tutorial_speech,  s5f, "Dankjewel! Denk er aan om luid, en duidelijk, an
 next(co_tutorial_speech,  s5f, "true",  s6).
 
 state(co_tutorial_speech, s6, say).
-leds(co_tutorial_speech, s6, "white").
+leds(co_tutorial_speech, s6, ["FaceLeds"], ["wit"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - touch					   %%%
@@ -317,12 +317,12 @@ next(co_tutorial_light, s5nof, "true", s6).
 
 state(co_tutorial_light, s6, say).
 text(co_tutorial_light, s6, "Dit is het resultaat").
-leds(co_tutorial_light, s6, "green").
+leds(co_tutorial_light, s6, ["FaceLeds"], ["groen"]).
 next(co_tutorial_light, s6, "true", s7).
 
 state(co_tutorial_light, s7, say).
 text(co_tutorial_light, s7, "klaar").
-leds(co_tutorial_light, s7, "white").
+leds(co_tutorial_light, s7, ["FaceLeds"], ["wit"]).
 
 %%%%%%%%%%%%%% With animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

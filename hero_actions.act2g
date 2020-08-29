@@ -114,11 +114,27 @@ define playMotion(Motion) with
 
 define startMotionRecording(Joints) with
 	pre { true }
-	post { true } 
+	post { waitingForEvent('RecordMotionStarted') } 
 
 define stopMotionRecording with
 	pre { true }
 	post { true }
+
+define setLedColor(Leds, Colors) with
+	pre { true }
+	post { waitingForEvent('LedColorDone') }
+	
+define setLedColor(Leds, Colors, Duration) with
+	pre { true }
+	post { waitingForEvent('LedColorDone') }
+
+define startLedAnimation(Group, AnimType, Colors, Speed) with
+	pre { true }
+	post { waitingForEvent('LedAnimationStarted') }
+
+define stopLedAnimation with
+	pre { true }
+	post { waitingForEvent('LedAnimationDone') }
 	
 % Agent external memory / database control
 define getUserSession(ID) with
