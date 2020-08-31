@@ -7,6 +7,7 @@
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
 	motionRecording/2, waitingForMotionRecording/1,
+	waitingForLedAnim/1,
 	emotion/3.
 
 % Predicates that indicate the robot status.
@@ -106,6 +107,19 @@ odd_elements([_ | []], []):-  !.
 odd_elements([_, X], [X]) :- !.
 odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 
+% Create list of values from a list of keys of user model entries
+valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Ori), getTranslation(Ori, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getTranslation(Hkey, _)), not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
+valueListFromKeyList([], []).
+
+%select(b, [a,b,c,b], 2, X).
+%X = [a, 2, c, b] ;
+%X = [a, b, c, 2] ;
+%false.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -169,3 +183,15 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 % Default responses of robot to an input modality switch.
 keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
+					
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TRANSLATIONS		    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+translations([	"ogen"="eyes",
+		"buik"="chest",
+		"voeten"="feet",
+		"allemaal"="all",
+		"draaien"="rotate",
+		"knipperen"="blink",
+		"heen en weer"="alternate"]).
+getTranslation(Original, Translation) :- translations(Translations), member((Original=Translation), Translations), !.

@@ -229,7 +229,7 @@ leds(test_leds, s4, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds_anim, s1, say).
 text(test_leds_anim, s1, "Kijk, ik heb mijn zwaailicht aangezet").
-start_led_anim(test_leds_anim, s1, "all", "alternate", ["blue", "red"], 500).
+start_led_anim(test_leds_anim, s1, "all", "alternate", ["red", "blue"], 500).
 stateConfig(test_leds_anim, s1, [waitTimer=5000]).
 next(test_leds_anim, s1, "true", s2).
 
