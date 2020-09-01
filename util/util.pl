@@ -157,6 +157,18 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived, correctPosture.
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted, correctPosture.
+					
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TRANSLATIONS		    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+translations([	"ogen"="eyes",
+		"buik"="chest",
+		"voeten"="feet",
+		"allemaal"="all",
+		"draaien"="rotate",
+		"knipperen"="blink",
+		"heen en weer"="alternate"]).
+getTranslation(Original, Translation) :- translations(Translations), member((Original=Translation), Translations), !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT CONVERSATIONAL SETTINGS %%%
@@ -183,15 +195,3 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 % Default responses of robot to an input modality switch.
 keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
 					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
-					
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% TRANSLATIONS		    %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-translations([	"ogen"="eyes",
-		"buik"="chest",
-		"voeten"="feet",
-		"allemaal"="all",
-		"draaien"="rotate",
-		"knipperen"="blink",
-		"heen en weer"="alternate"]).
-getTranslation(Original, Translation) :- translations(Translations), member((Original=Translation), Translations), !.

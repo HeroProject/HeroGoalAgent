@@ -25,7 +25,7 @@ module askQuestion(T, S) {
 					% when events have been completed (and we're not already waiting for an answer).	
 					if bel(keyListValues(T, S, [type, options], [Type, Values]), Type \= yesno,
 							mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
-						then say(String) + starttimer(S, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer).
+						then say(String) + starttimer(S, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 				}
 		}
 }

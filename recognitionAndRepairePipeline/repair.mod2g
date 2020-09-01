@@ -23,7 +23,7 @@ module repair(T, S) {
 							
 							%If the user is entiteled to an addtional attempt: give extra attempt 
 							if bel(additionalAttempt(T, S), NextAttempt is CurrentAttempt + 1)
-								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S)) + insert(start, currentAttempt(NextAttempt)).
 						}				
 										
 					%If the number of attempts are not reached, the user will get a next speech recognition attempt.
@@ -33,6 +33,8 @@ module repair(T, S) {
 
 			if bel(currentInputModality(touch), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, touch, MaxAnswerAttempts), started)
 				then {
+					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['green', 'red']).
+					
 					if bel(Type = yesno)
 						then {
 							if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)

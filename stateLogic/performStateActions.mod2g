@@ -47,6 +47,9 @@ module performStateActions(T, S) {
 	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
 	if bel(play_motion(T, S, ID), motionRecording(ID, Recording))
 		then playMotion(Recording).
+		
+	if bel(play_motion_file(T, S, Path)) then playMotionFile(Path).
+	
 	% Led animation
 	% Set a flag that the next led animation will be linked to this id.
 	if bel(prepare_led_anim(T, S), generateKeyFromTopicAndState(T, S, ID)) then insert(waitingForLedAnim(ID)).

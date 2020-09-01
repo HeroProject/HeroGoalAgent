@@ -49,7 +49,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 			if bel(currentInputModality(touch))
 				then {
 			
-					if true then delete(waitingForAnswer) + canceltimer(S).
+					if true then delete(waitingForAnswer) + canceltimer(S) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
 					if bel(Type=yesno)
 						then insert(answer(T, S, Intent, [text=Intent])).

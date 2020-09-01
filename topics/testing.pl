@@ -275,6 +275,20 @@ state(test_motion, s5, say).
 text(test_motion, s5, "Gaaf he").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Play Motion File			  		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_motion_file, s1, say).
+text(test_motion_file, s1, "Kijk, ik speel nu een bewegingsbestand af.").
+next(test_motion_file, s1, "true", s2).
+
+state(test_motion_file, s2, say).
+play_motion_file(test_motion_file, s2, "resources/gestures/test.xml").
+next(test_motion_file, s2, "true", s3).
+
+state(test_motion_file, s3, say).
+text(test_motion_file, s3, "Heel leuk.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 2					   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'ga_sports' topic		           		   %%%
