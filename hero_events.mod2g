@@ -92,14 +92,17 @@ module hero_events {
 	% User responds. 
 	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
 		then {
-				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.
+				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.				
 				if true then stopListening + delete(waitingForDetection).
 								
 				%Dialogflow recognizes intent. Retrieve answer.
 				if bel(not(Intent='')) then processUserResponse(T, S, Intent, Text, Params).
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
-				if bel(Intent='') then repair(T,S).				
+				if bel(Intent='') then {
+				 if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
+				 if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
+				} 				
 		}
 							
 	% User does not respond.	

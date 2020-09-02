@@ -124,6 +124,21 @@ state(test_color2, s2f, say).
 text(test_color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Color 2 - Testing open question	                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_open, s1, question).
+stateConfig(test_open, s1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(test_open, s1, "Waarom is een zeeluiaard je lievelingsdier?").
+next(test_open, s1, 'success', s2).
+next(test_open, s1, 'fail', s2f).
+
+state(test_open, s2, say).
+text(test_open, s2, "Daar ben ik het helemaal mee eens.").
+
+state(test_open, s2f, say).
+text(test_open, s2f, "Leuk hoor.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test sound - Testing sound recording and playing	   %%%
 %%% Note: web server needs to be on.		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -238,7 +253,7 @@ stop_led_anim(test_leds_anim, s2).
 next(test_leds_anim, s2, "true", s3).
 
 state(test_leds_anim, s3, say).
-text(test_leds_anim, s3, "Dat was leuk").
+text(test_leds_anim, s3, "Leuk hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Posture - Testing goToPosture option	           %%%

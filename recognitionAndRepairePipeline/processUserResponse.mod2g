@@ -39,7 +39,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 						then {
 							if bel(not(Text='')) then insert(answer(T, S, any, [text=Text])).
 							
-							if bel(Text='') then insert(answer(T, S, empty, [text=''])).
+							if bel(Text='') then insert(answer(T, S, failure, [text=''])).
 						}
 						
 					if bel(not(answer(T,S, _, _)))

@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 		CO-REGULATION TROUGH CO-CREATION           %%%
 %%%           Topics for a co-creation conversation	   %%%
+%%%			  TUTORIAL			   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,7 +43,7 @@ start_led_anim(co_intro, s8, "all", "alternate", ["oranje", "paars"], 500).
 next(co_intro,  s8, "true",  s9).
 
 state(co_intro, s9, say).
-text(co_intro,  s9, "Gaaf he?").
+text(co_intro,  s9, "Gaaf hè?").
 stop_led_anim(co_intro, s9).
 next(co_intro,  s9, "true",  s10).
 
@@ -281,7 +282,7 @@ leds(co_tutorial_lights,  s3, ["ChestLeds", "FeetLeds"], ["paars", "oranje"]).
 next(co_tutorial_lights,  s3, "true",  s4).
 
 state(co_tutorial_lights, s4, say).
-text(co_tutorial_lights,  s4, "Leuk he.").
+text(co_tutorial_lights,  s4, "Leuk hè.").
 next(co_tutorial_lights,  s4, "true",  s5).
 
 state(co_tutorial_lights, s5, say).
