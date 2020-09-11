@@ -57,8 +57,8 @@ module performStateActions(T, S) {
 	
 	% Save the led animation configurations. First is only a color select. Second are blinking, alternate, and spinning animations.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
-	getUserModelValue(Group, GroupR), getTranslation(GroupR, GroupTR), getUserModelValue(AnimType, AnimTypeR), getTranslation(AnimTypeR, AnimTypeTR), valueListFromKeyList(Colors, ColorsR), 
-	userModel(UserModel), updateUserModel(ID, [GroupTR, AnimTypeTR, ColorsR, Speed], UserModel, NewUserModel)) 
+	getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
+	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)).
 	
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
@@ -75,8 +75,8 @@ module performStateActions(T, S) {
 	% Start led animation with given configurations.
 	if bel(start_led_anim(T, S, Group, AnimType, Colors, Speed)) then
 	{
-		if bel(keyValue(T, S, ledRemoteSource, "true"), getUserModelValue(Group, GroupR), getTranslation(GroupR, GroupTR), getUserModelValue(AnimType, AnimTypeR), getTranslation(AnimTypeR, AnimTypeTR), valueListFromKeyList(Colors, ColorsR)) 
-			then startLedAnimation(GroupTR, AnimTypeTR, ColorsR, Speed).
+		if bel(keyValue(T, S, ledRemoteSource, "true"), getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR)) 
+			then startLedAnimation(GroupR, AnimTypeR, ColorsR, Speed).
 		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then startLedAnimation(Group, AnimType, Colors, Speed).
 	}
 	% Stop currently running led animation.

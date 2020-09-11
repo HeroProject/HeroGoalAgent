@@ -109,10 +109,10 @@ odd_elements([_, X], [X]) :- !.
 odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 
 % Create list of values from a list of keys of user model entries
-valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Ori), getTranslation(Ori, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Ori), getTranslation(Ori, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
-valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
-valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getTranslation(Hkey, _)), not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
+%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
 valueListFromKeyList([], []).
 
@@ -159,18 +159,6 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted, correctPosture.
 					
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% TRANSLATIONS		    %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-translations([	"ogen"="eyes",
-		"buik"="chest",
-		"voeten"="feet",
-		"allemaal"="all",
-		"draaien"="rotate",
-		"knipperen"="blink",
-		"heen en weer"="alternate"]).
-getTranslation(Original, Translation) :- translations(Translations), member((Original=Translation), Translations), !.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT CONVERSATIONAL SETTINGS %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

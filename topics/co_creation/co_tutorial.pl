@@ -13,7 +13,7 @@ text(co_intro,  s1, "Hallo %first_name%, ik ben Hero en ik ben een sociale robot
 next(co_intro,  s1, "true",  s2).
 
 state(co_intro, s2, say).
-text(co_intro,  s2, "Ik ben aan het oefenen om kinderen in het ziekenhuis te helpen.").
+text(co_intro,  s2, "Ik ben aan het oefenen om een vriendje te zijn voor kinderen in het ziekenhuis.").
 next(co_intro,  s2, "true",  s3).
 
 state(co_intro, s3, say).
@@ -33,7 +33,7 @@ text(co_intro,  s6, "Ik kan er ook speciale bewegingen en licht animaties bij ma
 next(co_intro,  s6, "true",  s7).
 
 state(co_intro, s7, say).
-text(co_intro,  s7, "Kijk maar eens naar hoe ik doe als ik in een race auto zit.").
+text(co_intro,  s7, "Kijk maar eens, nu zit ik in een race auto.").
 next(co_intro,  s7, "true",  s8).
 
 state(co_intro, s8, say).
@@ -87,17 +87,16 @@ state(co_invol, s7, say).
 text(co_invol,  s7, "Daarna mag jij zeggen of je zelf de beste optie wil kiezen of dat ik dat moet doen.").
 
 % Baseline condition
-state(co_invol_base, s1, say).
-text(co_invol_base,  s1, "Ik zal steeds een paar geluidseffecten, gebaaren, of licht animaties downloaden.").
-next(co_invol_base,  s1, "true",  s2).
+state(co_invol_baseline, s1, say).
+text(co_invol_baseline,  s1, "Elke keer als ik een geluidseffect, beweging, of licht animatie nodig heb zal ik er een paar downloaden.").
+next(co_invol_baseline,  s1, "true",  s2).
 
-state(co_invol_base, s2, say).
-text(co_invol_base,  s2, "Die zal ik voorleggen aan jou.").
-next(co_invol_base,  s2, "true",  s3).
+state(co_invol_baseline, s2, say).
+text(co_invol_baseline,  s2, "Die zal ik voorleggen aan jou.").
+next(co_invol_baseline,  s2, "true",  s3).
 
-state(co_invol_base, s3, say).
-text(co_invol_base,  s3, "Dan kun jij kiezen welke jij het beste vind passen bij de situatie.").
-next(co_invol_base,  s3, "true",  s4).
+state(co_invol_baseline, s3, say).
+text(co_invol_baseline,  s3, "Dan kun jij kiezen welke jij het beste vind passen bij de situatie.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - speech       				   %%%
@@ -329,13 +328,9 @@ text(co_tutorial_lights,  s1, "Tot slot heb ik ook allemaal lichtjes die we kunn
 next(co_tutorial_lights,  s1, "true",  s2).
 
 state(co_tutorial_lights, s2, say).
-text(co_tutorial_lights,  s2, "Je hebt mijn ogen al van kleur zien veranderen.").
-next(co_tutorial_lights,  s2, "true",  s3).
-
-state(co_tutorial_lights, s3, say).
-text(co_tutorial_lights,  s3, "Maar ik kan ook mijn buik en voeten een andere kleur geven.").
-leds(co_tutorial_lights,  s3, ["ChestLeds", "FeetLeds"], ["paars", "oranje"]).
-next(co_tutorial_lights,  s3, "true",  s4).
+text(co_tutorial_lights,  s2, "Ik kan mijn ogen, buik, en voeten van kleur veranderen.").
+leds(co_tutorial_lights,  s2, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "oranje", "rood"]).
+next(co_tutorial_lights,  s2, "true",  s4).
 
 state(co_tutorial_lights, s4, say).
 text(co_tutorial_lights,  s4, "Leuk hè.").
@@ -375,11 +370,11 @@ next(co_tutorial_lights,  s10, "true",  s11).
 
 % Prepare LED co-creation
 state(co_tutorial_lights, s11, say).
-text(co_tutorial_lights,  s11, "Laten we eens oefenen met het maken van een licht animatie.").
+text(co_tutorial_lights,  s11, "Laten we eens oefenen.").
 next(co_tutorial_lights,  s11, "true",  s12).
 
 state(co_tutorial_lights, s12, say).
-text(co_tutorial_lights,  s12, "Laten we een licht animatie maken die past bij een verjaardagsfeestje.").
+text(co_tutorial_lights,  s12, "Ik wil wel licht animatie die past bij een verjaardagsfeestje.").
 prepare_led_anim(co_tutorial_lights, s12).
 
 % Show result of LED co-creation
@@ -396,7 +391,6 @@ next(co_tutorial_lights2,  s2, "true",  s3).
 state(co_tutorial_lights2, s3, say).
 text(co_tutorial_lights2,  s3, "Goed gedaan zeg!").
 stop_led_anim(co_tutorial_lights2,  s3).
-leds(co_tutorial_lights2, s3, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", "white", "white"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - final questions				   %%%

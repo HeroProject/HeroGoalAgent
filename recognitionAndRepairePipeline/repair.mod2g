@@ -34,7 +34,7 @@ module repair(T, S) {
 
 			if bel(currentInputModality(touch), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, touch, MaxAnswerAttempts), started)
 				then {
-					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['green', 'red']).
+					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
 					if bel(Type = yesno)
 						then {
