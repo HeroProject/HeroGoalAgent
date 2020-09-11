@@ -52,14 +52,59 @@ text(co_intro,  s10, "Alleen heb ik nog niet overal de juiste geluidseffecten, b
 next(co_intro,  s10, "true",  s11).
 
 state(co_intro, s11, say).
-text(co_intro,  s11, "Daar kun jij mij bij helpen als je wilt.").
+text(co_intro,  s11, "Daar kun jij mij bij helpen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Tutorial - speech       %%%
+%%% Involvement    		                           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Co-creation condition
+state(co_invol, s1, say).
+text(co_invol,  s1, "Je hebt nu geleerd hoe je een geluidseffect, gebaar, of licht animatie kan maken.").
+next(co_invol,  s1, "true",  s2).
+
+state(co_invol, s2, say).
+text(co_invol,  s2, "Mocht je nou denken, daar heb ik even geen zin in.").
+next(co_invol,  s2, "true",  s3).
+
+state(co_invol, s3, say).
+text(co_invol,  s3, "Dat is helemaal prima.").
+next(co_invol,  s3, "true",  s4).
+
+state(co_invol, s4, say).
+text(co_invol,  s4, "Ik kan namelijk ook proberen om een geluidseffect enzo te downloaden.").
+next(co_invol,  s4, "true",  s5).
+
+state(co_invol, s5, say).
+text(co_invol,  s5, "Jij kan dan kiezen of je het geluidseffect, gebaar, of licht zelf wilt maken, of dat ik wat moet downloaden.").
+next(co_invol,  s5, "true",  s6).
+
+state(co_invol, s6, say).
+text(co_invol,  s6, "Ik download steeds twee verschillende opties.").
+next(co_invol,  s6, "true",  s7).
+
+state(co_invol, s7, say).
+text(co_invol,  s7, "Daarna mag jij zeggen of je zelf de beste optie wil kiezen of dat ik dat moet doen.").
+
+% Baseline condition
+state(co_invol_base, s1, say).
+text(co_invol_base,  s1, "Ik zal steeds een paar geluidseffecten, gebaaren, of licht animaties downloaden.").
+next(co_invol_base,  s1, "true",  s2).
+
+state(co_invol_base, s2, say).
+text(co_invol_base,  s2, "Die zal ik voorleggen aan jou.").
+next(co_invol_base,  s2, "true",  s3).
+
+state(co_invol_base, s3, say).
+text(co_invol_base,  s3, "Dan kun jij kiezen welke jij het beste vind passen bij de situatie.").
+next(co_invol_base,  s3, "true",  s4).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - speech       				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(co_tutorial_speech, s1, say).
-text(co_tutorial_speech,  s1, "Mike en ik, zullen je eerst uitleggen hoe je dat kunt doen").
+text(co_tutorial_speech,  s1, "Mike en ik, zullen je eerst uitleggen hoe dit allemaal werkt.").
 next(co_tutorial_speech, s1, "true", s2).
 
 state(co_tutorial_speech, s2, say).
@@ -129,7 +174,7 @@ text(co_tutorial_touch,  s6, "Laten we dat oefenen. \pau=400\ ").
 next(co_tutorial_touch,  s6, "true",  s7).
 
 state(co_tutorial_touch, s7, question).
-stateConfig(co_tutorial_touch, s7, [type=quiz, options=['rood', 'licht blauw', 'donker grijs', 'groen'], 
+stateConfig(co_tutorial_touch, s7, [type=quiz, options=['paars', 'licht blauw', 'donker grijs', 'groen'], 
 	correctAnswer=['donker grijs'], inputModality=[touch=3]]).
 text(co_tutorial_touch, s7, "Welke kleur hebben mijn schouders? Druk op de ja knop als je het antwoord hoort.").
 next(co_tutorial_touch, s7, 'correct', s8cor).
@@ -150,7 +195,7 @@ text(co_tutorial_touch, s8f, "Mijn schouders zijn donker grijs. Vergeet niet de 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(co_tutorial_sound, s1, say).
-text(co_tutorial_sound,  s1, "Laten we verder gaan met geluidseffecten.").
+text(co_tutorial_sound,  s1, "Laten we verder gaan met het maken van geluidseffecten.").
 next(co_tutorial_sound,  s1, "true",  s2).
 
 state(co_tutorial_sound, s2, say).
@@ -210,7 +255,7 @@ text(co_tutorial_gesture,  s4, "Goed bezig.").
 next(co_tutorial_gesture,  s4, "true",  s5).
 
 state(co_tutorial_gesture, s5, say).
-text(co_tutorial_gesture,  s5, "Ik ga zo een gebaar die je maakt opnemen. Zodat ik hem later weer kan gebruiken.").
+text(co_tutorial_gesture,  s5, "Laat ik nog wat meer uitleggen.").
 next(co_tutorial_gesture,  s5, "true",  s6).
 
 state(co_tutorial_gesture, s6, say).
@@ -226,44 +271,55 @@ text(co_tutorial_gesture,  s8, "En vlak voordat ik ga stoppen, tel ik af van dri
 next(co_tutorial_gesture,  s8, "true",  s9).
 
 state(co_tutorial_gesture, s9, say).
-text(co_tutorial_gesture,  s9, "Laten we dat een keer oefenen.").
+text(co_tutorial_gesture,  s9, "Laten we het gewoon een keer oefenen.").
 next(co_tutorial_gesture,  s9, "true",  s10).
 
 state(co_tutorial_gesture, s10, say).
-text(co_tutorial_gesture,  s10, "Pak mijn armen maar vast.").
-stateConfig(co_tutorial_gesture, s10, [noAnimation="true"]).
-set_stiffness(co_tutorial_gesture, s10, ['RArm', 'LArm'], 0).
+text(co_tutorial_gesture,  s10, "Ik wil wel een gebaar hebben voor het toveren met een toverstaf.").
 next(co_tutorial_gesture,  s10, "true",  s11).
 
 state(co_tutorial_gesture, s11, say).
-audio(co_tutorial_gesture, s11, server, "resources/sounds/ready_to_record_gesture.wav").
+text(co_tutorial_gesture,  s11, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
+leds(co_tutorial_gesture,  s11, ["RightFootLeds"], ["groen"]).
+stateConfig(co_tutorial_gesture, s11, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_tutorial_gesture,  s11, "true",  s12).
 
 state(co_tutorial_gesture, s12, say).
-start_motion_recording(co_tutorial_gesture, s12, ['RArm', 'LArm']).
-stateConfig(co_tutorial_gesture, s12, [waitTimer=5]).
+text(co_tutorial_gesture,  s12, "Pak mijn armen maar vast.").
+leds(co_tutorial_gesture,  s12, ["RightFootLeds"], ["wit"]).
+stateConfig(co_tutorial_gesture, s12, [noAnimation="true"]).
+set_stiffness(co_tutorial_gesture, s12, ['RArm', 'LArm'], 0).
 next(co_tutorial_gesture,  s12, "true",  s13).
 
 state(co_tutorial_gesture, s13, say).
-text(co_tutorial_gesture,  s13, "3. 2. 1. Klaar.").
-stateConfig(co_tutorial_gesture, s13, [noAnimation="true"]).
+audio(co_tutorial_gesture, s13, server, "resources/sounds/ready_to_record_gesture.wav").
 next(co_tutorial_gesture,  s13, "true",  s14).
 
 state(co_tutorial_gesture, s14, say).
-stop_motion_recording(co_tutorial_gesture, s14, ['RArm', 'LArm']).
-stateConfig(co_tutorial_gesture, s14, [noAnimation="true"]).
+start_motion_recording(co_tutorial_gesture, s14, ['RArm', 'LArm']).
+stateConfig(co_tutorial_gesture, s14, [waitTimer=5]).
 next(co_tutorial_gesture,  s14, "true",  s15).
 
 state(co_tutorial_gesture, s15, say).
-text(co_tutorial_gesture,  s15, "Laten we eens kijken naar de beweging die ik van je heb geleerd.").
+text(co_tutorial_gesture,  s15, "3. 2. 1. Klaar.").
+stateConfig(co_tutorial_gesture, s15, [noAnimation="true"]).
 next(co_tutorial_gesture,  s15, "true",  s16).
 
 state(co_tutorial_gesture, s16, say).
-play_motion(co_tutorial_gesture, s16, co_tutorial_gesture_s14).
-next(co_tutorial_gesture, s16, "true", s17).
+stop_motion_recording(co_tutorial_gesture, s16, ['RArm', 'LArm']).
+stateConfig(co_tutorial_gesture, s16, [noAnimation="true"]).
+next(co_tutorial_gesture,  s16, "true",  s17).
 
 state(co_tutorial_gesture, s17, say).
-text(co_tutorial_gesture,  s17, "Cool cool cool cool!").
+text(co_tutorial_gesture,  s17, "Laten we eens kijken naar de beweging die ik van je heb geleerd.").
+next(co_tutorial_gesture,  s17, "true",  s18).
+
+state(co_tutorial_gesture, s18, say).
+play_motion(co_tutorial_gesture, s18, co_tutorial_gesture_s16).
+next(co_tutorial_gesture, s18, "true", s19).
+
+state(co_tutorial_gesture, s19, say).
+text(co_tutorial_gesture,  s19, "Cool cool cool cool!").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - lights       				   %%%
@@ -288,7 +344,7 @@ next(co_tutorial_lights,  s4, "true",  s5).
 state(co_tutorial_lights, s5, say).
 text(co_tutorial_lights,  s5, "Verder kan ik ook de lichtjes laten knipperen.").
 start_led_anim(co_tutorial_lights, s5, "all", "blink", ["paars", "oranje", "groen"], 500).
-stateConfig(co_tutorial_lights, s5, [waitTimer=2500]).
+stateConfig(co_tutorial_lights, s5, [waitTimer=1500]).
 next(co_tutorial_lights,  s5, "true",  s6).
 
 state(co_tutorial_lights, s6, say).
@@ -298,7 +354,7 @@ next(co_tutorial_lights,  s6, "true",  s7).
 state(co_tutorial_lights, s7, say).
 text(co_tutorial_lights,  s7, "of de lichtjes heen en weer laten gaan.").
 start_led_anim(co_tutorial_lights, s7, "all", "alternate", ["red", "blue"], 500).
-stateConfig(co_tutorial_lights, s7, [waitTimer=2500]).
+stateConfig(co_tutorial_lights, s7, [waitTimer=1500]).
 next(co_tutorial_lights,  s7, "true",  s8).
 
 state(co_tutorial_lights, s8, say).
@@ -308,7 +364,7 @@ next(co_tutorial_lights,  s8, "true",  s9).
 state(co_tutorial_lights, s9, say).
 text(co_tutorial_lights,  s9, "of mijn ogen laten draaien.").
 start_led_anim(co_tutorial_lights, s9, "eyes", "rotate", ["chocolade"], 500).
-stateConfig(co_tutorial_lights, s9, [waitTimer=2500]).
+stateConfig(co_tutorial_lights, s9, [waitTimer=1500]).
 next(co_tutorial_lights,  s9, "true",  s10).
 
 state(co_tutorial_lights, s10, say).
@@ -334,7 +390,7 @@ next(co_tutorial_lights2,  s1, "true",  s2).
 state(co_tutorial_lights2, s2, say).
 text(co_tutorial_lights2,  s2, "Laat het feestje met de lichtjes maar beginnen.").
 play_led_anim(co_tutorial_lights2,  s2, co_tutorial_lights_s12).
-stateConfig(co_tutorial_lights2, s2, [waitTimer=3000]).
+stateConfig(co_tutorial_lights2, s2, [waitTimer=2500]).
 next(co_tutorial_lights2,  s2, "true",  s3).
 
 state(co_tutorial_lights2, s3, say).
@@ -342,3 +398,30 @@ text(co_tutorial_lights2,  s3, "Goed gedaan zeg!").
 stop_led_anim(co_tutorial_lights2,  s3).
 leds(co_tutorial_lights2, s3, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", "white", "white"]).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Tutorial - final questions				   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+state(co_tutorial_question, s1, say).
+text(co_tutorial_question,  s1, "Zo nu heb ik alles wel uitgelegd.").
+next(co_tutorial_question,  s1, "true",  s2).
+
+state(co_tutorial_question, s2, question).
+stateConfig(co_tutorial_question, s2, [type=yesno, context='answer_yesno']).
+text(co_tutorial_question, s2, "Heb je nog vragen?").
+next(co_tutorial_question, s2, 'answer_yes', s2y).
+next(co_tutorial_question, s2, 'answer_no', s2n).
+next(co_tutorial_question, s2, 'answer_dontknow', s2y).
+next(co_tutorial_question, s2, 'fail', s2y).
+
+state(co_tutorial_question, s2y, say).
+text(co_tutorial_question, s2y, "Mike, kun jij %first_name% even helpen.").
+stateConfig(co_tutorial_question, s2y, [next='FrontTactilTouched', repeat='MiddleTactilTouched']).
+next(co_tutorial_question,  s2y, "true",  s3).
+
+state(co_tutorial_question, s2n, say).
+text(co_tutorial_question,  s2n, "Top!").
+next(co_tutorial_question,  s2n, "true",  s3).
+
+state(co_tutorial_question, s3, say).
+text(co_tutorial_question, s3, "Laten we beginnen met het echte gesprek!").

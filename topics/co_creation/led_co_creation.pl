@@ -144,7 +144,7 @@ save_led_anim(co_led_selection, s6noalldiff, ["FaceLeds", "ChestLeds", "FeetLeds
 state(co_led_selection, s3anim, branchingPoint).
 stateConfig(co_led_selection, s3anim, [branchDecider=entity, branchSource=co_led_selection_s1]).
 next(co_led_selection, s3anim, "ogen", s4animeye).
-next(co_led_selection, s3anim, "buik", s5animknip). % buik kan alleen maar knipperen.
+next(co_led_selection, s3anim, "buik", s4animchest). % buik kan alleen maar knipperen.
 next(co_led_selection, s3anim, "voeten", s4animfeet).
 next(co_led_selection, s3anim, "allemaal", s4animeye).
 next(co_led_selection, s3anim, "fail", s4animeye). % omdat default = ogen
@@ -154,6 +154,10 @@ stateConfig(co_led_selection, s4animeye, [type=input, context='answer_light_anim
 text(co_led_selection, s4animeye, "De animaties waar je uit kunt kiezen zijn, het knipperen van de lichtjes, het heen en weer gaan van de lichtjes, en het draaien van de ogen. Welke animatie kies jij?").
 next(co_led_selection, s4animeye, 'success', s5anim).
 next(co_led_selection, s4animeye, 'fail', s4animf).
+
+state(co_led_selection, s4animchest, say).
+text(co_led_selection, s4animchest, "Prima. De buik kan alleen knipperen.").
+next(co_led_selection, s4animchest, "true", s5animknip).
 
 state(co_led_selection, s4animfeet, question). % voeten
 stateConfig(co_led_selection, s4animfeet, [type=quiz, context='answer_light_animation', options=['knipperen', 'heen en weer'], correctAnswer=['knipperen', 'heen en weer']]).
@@ -196,7 +200,7 @@ next(co_led_selection, s5animknipf, "true", s6animknip).
 
 %% Save result %%
 state(co_led_selection, s6animknip, say).
-save_led_anim(co_led_selection, s6animknip, "co_led_selection_s1", "co_led_selection_s4animeye", "co_led_selection_s5animknip", 500).
+save_led_anim(co_led_selection, s6animknip, "co_led_selection_s1", "knipperen", "co_led_selection_s5animknip", 500).
 stateConfig(co_led_selection, s6animknip, [ledColorIsList="true"]).
 
 %%%%%%%%%%%%%% Alternate animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

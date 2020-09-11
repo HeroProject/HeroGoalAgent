@@ -55,6 +55,7 @@ updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue)
 %updateUserModel(_, Value, OldUserModel, NewUserModel) :- Value = 'None', NewUserModel = OldUserModel.
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
+getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 %isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
 
 
@@ -183,7 +184,7 @@ keyValue(_, _, additionalAttempt, true).
 keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	touch=3000, 
-				speechopenend=10000,
+				speechopenend=15000,
 				speechyesnofirst=2500, 
 				speechyesnononinitial=2000, 
 				speechinputfirst=5000, 

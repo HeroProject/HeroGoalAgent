@@ -1,5 +1,6 @@
 use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -52,7 +53,7 @@ module performStateActions(T, S) {
 	
 	% Led animation
 	% Set a flag that the next led animation will be linked to this id.
-	if bel(prepare_led_anim(T, S), generateKeyFromTopicAndState(T, S, ID)) then insert(waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(T, S), generateKeyFromTopicAndState(T, S, ID), topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID)).
 	
 	% Save the led animation configurations. First is only a color select. Second are blinking, alternate, and spinning animations.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),

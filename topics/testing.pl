@@ -287,7 +287,7 @@ play_motion(test_motion, s4, test_motion_s2).
 next(test_motion, s4, "true", s5).
 
 state(test_motion, s5, say).
-text(test_motion, s5, "Gaaf he").
+text(test_motion, s5, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Play Motion File			  		   %%%
@@ -297,7 +297,8 @@ text(test_motion_file, s1, "Kijk, ik speel nu een bewegingsbestand af.").
 next(test_motion_file, s1, "true", s2).
 
 state(test_motion_file, s2, say).
-play_motion_file(test_motion_file, s2, "resources/gestures/test.xml").
+play_motion_file(test_motion_file, s2, "resources/gestures/elephant2.xml").
+audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
 next(test_motion_file, s2, "true", s3).
 
 state(test_motion_file, s3, say).

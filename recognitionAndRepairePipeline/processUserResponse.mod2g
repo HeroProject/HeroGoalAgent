@@ -1,5 +1,6 @@
 use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use repair as module.
