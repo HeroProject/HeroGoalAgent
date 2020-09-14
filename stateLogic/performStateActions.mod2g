@@ -82,6 +82,26 @@ module performStateActions(T, S) {
 	% Stop currently running led animation.
 	if bel(stop_led_anim(T, S)) then stopLedAnimation.
 	
+	% Save behaviors (combination of gesture, sound, led)
+	if bel(save_behavior(T, S, ID, Data)) then {
+	
+		if bel(behavior(ID, ExistingData), append(ExistingData, Data, CombinedData)) then delete(behavior(ID, ExistingData)) + insert(behavior(ID, CombinedData)).
+		if not(bel(behavior(ID, _))) then insert(behavior(ID, Data)).
+	}
+	
+	% Play a behavior with a given ID.
+	if bel(play_behavior(T, S, ID), behavior(ID, Data)) then {
+		if bel(member((motion=recording), Data), member((source=MotionRecording), Data)) then playMotion(MotionRecording).
+		if bel(member((motion=file), Data), member((source=MotionFilePath), Data)) then playMotionFile(MotionFilePath).
+		if bel(member((sound=recording), Data), member((source=SoundRecording), Data), nth0(0, SoundRecording, Tsource), nth0(1, SoundRecording, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
+		if bel(member((sound=file), Data), member((source=SoundFilePath), Data)) then playAudio(SoundFilePath).
+		if bel(member((led=recording), Data), member((source=LedRecording), Data), getUserModelValue(LedRecording, [Group, AnimType, Colors, Speed])) then {
+			if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
+			if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+		}
+		if bel(member((led=file), Data), member((source=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
+	}
+	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).
 }

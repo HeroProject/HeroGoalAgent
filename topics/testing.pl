@@ -297,8 +297,8 @@ text(test_motion_file, s1, "Kijk, ik speel nu een bewegingsbestand af.").
 next(test_motion_file, s1, "true", s2).
 
 state(test_motion_file, s2, say).
-play_motion_file(test_motion_file, s2, "resources/gestures/elephant2.xml").
-audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
+play_motion_file(test_motion_file, s2, "resources/gestures/goodbye2.xml").
+%audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
 next(test_motion_file, s2, "true", s3).
 
 state(test_motion_file, s3, say).

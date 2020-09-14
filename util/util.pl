@@ -8,7 +8,8 @@
 	audioRecording/3,
 	motionRecording/2, waitingForMotionRecording/1,
 	waitingForLedAnim/1,
-	emotion/3.
+	emotion/3,
+	behavior/2.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
