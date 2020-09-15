@@ -11,12 +11,12 @@
 session(testing, [general_wakeup, test_stop_led, general_rest]).
 
 % Session management
-%session(co_creation, [general_wakeup, 
-%co_intro, co_tutorial_speech, co_tutorial_touch, co_tutorial_gesture, co_tutorial_sound, co_tutorial_lights, co_tutorial_lights2, co_invol, co_tutorial_question,
-%co_zoo_intro, co_zoo_elephant, co_zoo_lion, co_zoo_dolphin, co_zoo_dolphin_showtime, 
-%co_handshake, co_handshake_gesture, co_handshake_sound, co_handshake_led, co_handshake_ceremonie,
-%general_rest]).
-session(co_creation, [general_wakeup, co_tutorial_lights, co_tutorial_lights2, co_zoo_dolphin, co_zoo_dolphin_showtime, general_rest]).
+session(co_creation, [general_wakeup, 
+co_intro, co_tutorial_speech, co_tutorial_touch, co_tutorial_gesture, co_tutorial_sound, co_tutorial_lights, co_tutorial_lights2, co_invol, co_tutorial_question,
+co_zoo_intro, co_zoo_elephant, co_zoo_lion, co_zoo_dolphin, co_zoo_dolphin_showtime, 
+co_handshake, co_handshake_gesture, co_handshake_sound, co_handshake_led, co_handshake_ceremonie,
+general_rest]).
+%session(co_creation, [general_wakeup, co_zoo_intro, general_rest]).
 
 session(co_creation_baseline, [general_wakeup, 
 co_intro, co_invol_baseline, co_tutorial_speech, co_tutorial_touch,

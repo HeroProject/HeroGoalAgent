@@ -34,7 +34,7 @@ text(co_zoo_intro,  s6, "We zijn langs de apen en de zebra's gelopen. \pau=300\ 
 next(co_zoo_intro,  s6, "true",  s7).
 
 state(co_zoo_intro, s7, question).
-stateConfig(co_zoo_intro, s7, [type=input, context='answer_favorite_animal', options=['hond', 'kat', 'olifant', 'tijger', 'paard', 'alpaca']]).
+stateConfig(co_zoo_intro, s7, [type=input, context='answer_favorite_animal', inputModality=[speech=2]]).
 text(co_zoo_intro, s7, "Wat is eigenlijk jouw lievelingsdier?").
 next(co_zoo_intro, s7, 'success', s8).
 next(co_zoo_intro, s7, 'fail', s8f).
@@ -770,7 +770,7 @@ text(co_zoo_dolphin,  s2, "We gingen door naar het aquarium.").
 next(co_zoo_dolphin,  s2, "true",  s3).
 
 state(co_zoo_dolphin, s3, question).
-stateConfig(co_zoo_dolphin, s3, [type=input, context='answer_favorite_animal', options=['haai', 'walvis', 'dolfijn', 'vis', 'zeehond'], defaultAnswer="haai"]).
+stateConfig(co_zoo_dolphin, s3, [type=input, context='answer_favorite_animal', inputModality=[speech=2]]).
 text(co_zoo_dolphin, s3, "Welk waterdier vind jij het leukst?").
 next(co_zoo_dolphin, s3, 'success', s4).
 next(co_zoo_dolphin, s3, 'fail', s4f).
@@ -819,7 +819,7 @@ next(co_zoo_dolphin, s11, "success", s12).
 next(co_zoo_dolphin, s11, "fail", s11f).
 
 state(co_zoo_dolphin, s12, say).
-text(co_zoo_dolphin,  s12, "Oke we gaan het %co_zoo_dolphin_s11%.").
+text(co_zoo_dolphin,  s12, "Oke we gaan een licht show %co_zoo_dolphin_s11%.").
 next(co_zoo_dolphin,  s12, "true",  s13).
 
 state(co_zoo_dolphin, s11f, say).

@@ -373,7 +373,7 @@ next(co_tutorial_lights,  s11, "true",  s12).
 
 state(co_tutorial_lights, s12, say).
 text(co_tutorial_lights,  s12, "Als je dan ja zegt kun je de lichtjes laten knipperen of heen en weer laten gaan. Met de kleuren die jij wilt.").
-next(co_tutorial_lights,  s12, "true",  s13).
+%next(co_tutorial_lights,  s12, "true",  s13).
 
 % Prepare LED co-creation
 state(co_tutorial_lights, s13, say).
