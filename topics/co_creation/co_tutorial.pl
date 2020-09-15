@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 		CO-REGULATION TROUGH CO-CREATION           %%%
 %%%           Topics for a co-creation conversation	   %%%
 %%%			  TUTORIAL			   %%%
@@ -25,7 +25,7 @@ text(co_intro,  s4, "Ik hou echt van kletsen en heb vele verhalen om te vertelle
 next(co_intro,  s4, "true",  s5).
 
 state(co_intro, s5, say).
-text(co_intro,  s5, "Ik vind het altijd extra leuk om daar geluidseffecten aan toe te voegen.").
+text(co_intro,  s5, "Ik vind het extra leuk om daar geluidseffecten aan toe te voegen.").
 next(co_intro,  s5, "true",  s6).
 
 state(co_intro, s6, say).
@@ -33,7 +33,7 @@ text(co_intro,  s6, "Ik kan er ook speciale bewegingen en licht animaties bij ma
 next(co_intro,  s6, "true",  s7).
 
 state(co_intro, s7, say).
-text(co_intro,  s7, "Kijk maar eens, nu zit ik in een race auto.").
+text(co_intro,  s7, "Kijk maar eens. Nu zit ik in een race auto.").
 next(co_intro,  s7, "true",  s8).
 
 state(co_intro, s8, say).
@@ -72,19 +72,19 @@ text(co_invol,  s3, "Dat is helemaal prima.").
 next(co_invol,  s3, "true",  s4).
 
 state(co_invol, s4, say).
-text(co_invol,  s4, "Ik kan namelijk ook proberen om een geluidseffect enzo te downloaden.").
+text(co_invol,  s4, "Ik kan namelijk geluidseffecten, gebaren, en licht animaties van het internet downloaden.").
 next(co_invol,  s4, "true",  s5).
 
 state(co_invol, s5, say).
-text(co_invol,  s5, "Jij kan dan kiezen of je het geluidseffect, gebaar, of licht zelf wilt maken, of dat ik wat moet downloaden.").
-next(co_invol,  s5, "true",  s6).
+text(co_invol,  s5, "Jij mag altijd kiezen of je het zelf wilt maken of ik iets moet downloaden.").
+%next(co_invol,  s5, "true",  s6).
 
-state(co_invol, s6, say).
-text(co_invol,  s6, "Ik download steeds twee verschillende opties.").
-next(co_invol,  s6, "true",  s7).
+%state(co_invol, s6, say).
+%text(co_invol,  s6, "Als je kiest voor downloaden, dan download ik steeds twee verschillende opties.").
+%next(co_invol,  s6, "true",  s7).
 
-state(co_invol, s7, say).
-text(co_invol,  s7, "Daarna mag jij zeggen of je zelf de beste optie wil kiezen of dat ik dat moet doen.").
+%state(co_invol, s7, say).
+%text(co_invol,  s7, "Daarna mag jij zeggen of je zelf de beste optie wil kiezen of dat ik dat moet doen.").
 
 % Baseline condition
 state(co_invol_baseline, s1, say).
@@ -107,7 +107,7 @@ text(co_tutorial_speech,  s1, "Mike en ik, zullen je eerst uitleggen hoe dit all
 next(co_tutorial_speech, s1, "true", s2).
 
 state(co_tutorial_speech, s2, say).
-text(co_tutorial_speech,  s2, "Laten we beginnen bij het beantwoorden van vragen.").
+text(co_tutorial_speech,  s2, "Laten we beginnen bij hoe je met mij kan praten.").
 next(co_tutorial_speech, s2, "true", s3).
 
 state(co_tutorial_speech, s3, say).
@@ -198,36 +198,39 @@ text(co_tutorial_sound,  s1, "Laten we verder gaan met het maken van geluidseffe
 next(co_tutorial_sound,  s1, "true",  s2).
 
 state(co_tutorial_sound, s2, say).
-text(co_tutorial_sound, s2, "Kun jij dit uitleggen Mike?").
-stateConfig(co_tutorial_sound, s2, [next='FrontTactilTouched', repeat='MiddleTactilTouched']).
-next(co_tutorial_sound, s2, "true", s3).
+text(co_tutorial_sound,  s2, "Ik zal vragen om een bepaald geluid. Bijvoorbeeld het piep geluid dat een muis maakt.").
+next(co_tutorial_sound,  s2, "true",  s3).
 
 state(co_tutorial_sound, s3, say).
-text(co_tutorial_sound,  s3, "Laten we even oefenen.").
+text(co_tutorial_sound,  s3, "Daarna tel ik af en kun jij het geluidseffect inspreken. Dan kun je bijvoorbeeld piep piep piep zeggen.").
 next(co_tutorial_sound,  s3, "true",  s4).
 
 state(co_tutorial_sound, s4, say).
-text(co_tutorial_sound,  s4, "Piep als een muis in 3, 2, 1.").
+text(co_tutorial_sound,  s4, "Laten we even oefenen.").
 next(co_tutorial_sound,  s4, "true",  s5).
 
-state(co_tutorial_sound, s5, audioInput).
-stateConfig(co_tutorial_sound, s5, [recordTime=3000]).
-next(co_tutorial_sound, s5, "true", s6).
+state(co_tutorial_sound, s5, say).
+text(co_tutorial_sound,  s5, "Piep als een muis in 3, 2, 1.").
+next(co_tutorial_sound,  s5, "true",  s6).
 
-state(co_tutorial_sound, s6, say).
-text(co_tutorial_sound,  s6, "Top.").
-next(co_tutorial_sound,  s6, "true",  s7).
+state(co_tutorial_sound, s6, audioInput).
+stateConfig(co_tutorial_sound, s6, [recordTime=3000]).
+next(co_tutorial_sound, s6, "true", s7).
 
 state(co_tutorial_sound, s7, say).
-text(co_tutorial_sound,  s7, "Zo klinkt het geluidseffect nu.").
+text(co_tutorial_sound,  s7, "Top gedaan.").
 next(co_tutorial_sound,  s7, "true",  s8).
 
 state(co_tutorial_sound, s8, say).
-audio(co_tutorial_sound, s8, recorded, [co_tutorial_sound, s5]).
+text(co_tutorial_sound,  s8, "Zo klinkt het geluidseffect nu.").
 next(co_tutorial_sound,  s8, "true",  s9).
 
 state(co_tutorial_sound, s9, say).
-text(co_tutorial_sound,  s9, "Mooi. Dit komt later goed van pas.").
+audio(co_tutorial_sound, s9, recorded, [co_tutorial_sound, s6]).
+next(co_tutorial_sound,  s9, "true",  s10).
+
+state(co_tutorial_sound, s10, say).
+text(co_tutorial_sound,  s10, "Mooi. Dit komt later goed van pas.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - gesture					   %%%
@@ -324,7 +327,7 @@ text(co_tutorial_gesture,  s19, "Cool cool cool cool!").
 %%% Tutorial - lights       				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_tutorial_lights, s1, say).
-text(co_tutorial_lights,  s1, "Tot slot heb ik ook allemaal lichtjes die we kunnen inkleuren.").
+text(co_tutorial_lights,  s1, "Tot slot heb ik ook allemaal lichtjes waarmee we een licht show kunnen maken.").
 next(co_tutorial_lights,  s1, "true",  s2).
 
 state(co_tutorial_lights, s2, say).
@@ -333,11 +336,11 @@ leds(co_tutorial_lights,  s2, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "
 next(co_tutorial_lights,  s2, "true",  s4).
 
 state(co_tutorial_lights, s4, say).
-text(co_tutorial_lights,  s4, "Leuk hè.").
+text(co_tutorial_lights,  s4, "Leuk hè. Verder kan ik er ook een animatie aan toe voegen.").
 next(co_tutorial_lights,  s4, "true",  s5).
 
 state(co_tutorial_lights, s5, say).
-text(co_tutorial_lights,  s5, "Verder kan ik ook de lichtjes laten knipperen.").
+text(co_tutorial_lights,  s5, "Ik kan de lichtjes laten knipperen.").
 start_led_anim(co_tutorial_lights, s5, "all", "blink", ["paars", "oranje", "groen"], 500).
 stateConfig(co_tutorial_lights, s5, [waitTimer=1500]).
 next(co_tutorial_lights,  s5, "true",  s6).
@@ -357,25 +360,29 @@ stop_led_anim(co_tutorial_lights, s8).
 next(co_tutorial_lights,  s8, "true",  s9).
 
 state(co_tutorial_lights, s9, say).
-text(co_tutorial_lights,  s9, "of mijn ogen laten draaien.").
-start_led_anim(co_tutorial_lights, s9, "eyes", "rotate", ["chocolade"], 500).
-stateConfig(co_tutorial_lights, s9, [waitTimer=1500]).
+text(co_tutorial_lights,  s9, "Door het beantwoorden van vragen kunnen we samen een licht show maken.").
 next(co_tutorial_lights,  s9, "true",  s10).
 
 state(co_tutorial_lights, s10, say).
-text(co_tutorial_lights, s10, "Mike, wil jij uitleggen hoe je deze licht animaties kan maken?").
-stateConfig(co_tutorial_lights, s10, [next='FrontTactilTouched', repeat='MiddleTactilTouched']).
-stop_led_anim(co_tutorial_lights, s10).
+text(co_tutorial_lights,  s10, "Ik zal je eerst vragen of je een animatie wilt.").
 next(co_tutorial_lights,  s10, "true",  s11).
 
-% Prepare LED co-creation
 state(co_tutorial_lights, s11, say).
-text(co_tutorial_lights,  s11, "Laten we eens oefenen.").
+text(co_tutorial_lights,  s11, "Als je dan nee zegt hoef je alleen de lichtjes in te kleuren.").
 next(co_tutorial_lights,  s11, "true",  s12).
 
 state(co_tutorial_lights, s12, say).
-text(co_tutorial_lights,  s12, "Ik wil wel licht animatie die past bij een verjaardagsfeestje.").
-prepare_led_anim(co_tutorial_lights, s12).
+text(co_tutorial_lights,  s12, "Als je dan ja zegt kun je de lichtjes laten knipperen of heen en weer laten gaan. Met de kleuren die jij wilt.").
+next(co_tutorial_lights,  s12, "true",  s13).
+
+% Prepare LED co-creation
+state(co_tutorial_lights, s13, say).
+text(co_tutorial_lights,  s13, "Laten we eens oefenen.").
+next(co_tutorial_lights,  s13, "true",  s14).
+
+state(co_tutorial_lights, s14, say).
+text(co_tutorial_lights,  s14, "Ik wil wel licht show die past bij een verjaardagsfeestje.").
+prepare_led_anim(co_tutorial_lights, s14).
 
 % Show result of LED co-creation
 state(co_tutorial_lights2, s1, say).
@@ -384,7 +391,7 @@ next(co_tutorial_lights2,  s1, "true",  s2).
 
 state(co_tutorial_lights2, s2, say).
 text(co_tutorial_lights2,  s2, "Laat het feestje met de lichtjes maar beginnen.").
-play_led_anim(co_tutorial_lights2,  s2, co_tutorial_lights_s12).
+play_led_anim(co_tutorial_lights2,  s2, co_tutorial_lights_s14).
 stateConfig(co_tutorial_lights2, s2, [waitTimer=2500]).
 next(co_tutorial_lights2,  s2, "true",  s3).
 
@@ -419,3 +426,4 @@ next(co_tutorial_question,  s2n, "true",  s3).
 
 state(co_tutorial_question, s3, say).
 text(co_tutorial_question, s3, "Laten we beginnen met het echte gesprek!").
+ 

@@ -21,12 +21,12 @@ next(co_zoo_intro,  s3, "true",  s4).
 
 state(co_zoo_intro, s4, say).
 text(co_zoo_intro,  s4, "Het was een fijne zonnige dag.").
-leds(co_zoo_intro, s4, ['FaceLeds', 'ChestLeds'], ['Yellow', 'Yellow']).
+leds(co_zoo_intro,  s4, ['FaceLeds', 'ChestLeds'], ['Yellow', 'Yellow']).
 next(co_zoo_intro,  s4, "true",  s5).
 
 state(co_zoo_intro, s5, say).
 text(co_zoo_intro,  s5, "We kregen een rondleiding van de dierenverzorger.").
-leds(co_zoo_intro, s5, ['FaceLeds', 'ChestLeds'], ['White', 'White']).
+leds(co_zoo_intro,  s5, ['FaceLeds', 'ChestLeds'], ['White', 'White']).
 next(co_zoo_intro,  s5, "true",  s6).
 
 state(co_zoo_intro, s6, say).
@@ -429,7 +429,7 @@ text(co_zoo_lion,  s8maken, "Brul als een %co_zoo_lion_s2% in 3, 2, 1.").
 next(co_zoo_lion,  s8maken, "true",  s9maken).
 
 state(co_zoo_lion, s9maken, audioInput).
-stateConfig(co_zoo_lion, s9maken, [recordTime=3000]).
+stateConfig(co_zoo_lion, s9maken, [recordTime=4000]).
 next(co_zoo_lion, s9maken, "true", s10maken).
 
 state(co_zoo_lion, s10maken, say).

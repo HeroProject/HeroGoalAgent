@@ -46,8 +46,8 @@ module hero_events {
 		}
 		
 	% Motion recording percept
-	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
-		do insert(motionRecording(ID, Recording)).
+	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), userId(UserId), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
+		do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording).
 
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -71,10 +71,15 @@ module hero_events {
 	
 	% waitingForTimer
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
+	
+	% Event fail safe
+	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
+		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
+	}
 		
 	%Audio recording percepts
-	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
-		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
+	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource), userId(UserId), generateKeyFromTopicAndState(Tsource, Ssource, ID))
+		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName).
 	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
 		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
 	
@@ -100,7 +105,7 @@ module hero_events {
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
 				if bel(Intent='') then {
-				 if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
+				 if bel(not(keyValue(T, S, type, openend))) then repair(T,S). %Log answer
 				 if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
 				} 				
 		}

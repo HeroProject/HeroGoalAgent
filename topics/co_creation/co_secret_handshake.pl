@@ -23,21 +23,29 @@ next(co_handshake, s3, 'fail', s5).
 state(co_handshake, s4y, question).
 stateConfig(co_handshake, s4y, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(co_handshake, s4y, "Wat vond je het leukste?").
-next(co_handshake, s4y, 'success', s5).
-next(co_handshake, s4y, 'fail', s5).
+next(co_handshake, s4y, 'success', s5y).
+next(co_handshake, s4y, 'fail', s5y).
 
 state(co_handshake, s4n, question).
 stateConfig(co_handshake, s4n, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(co_handshake, s4n, "Wat vond je niet zo leuk?").
-next(co_handshake, s4n, 'success', s5).
-next(co_handshake, s4n, 'fail', s5).
+next(co_handshake, s4n, 'success', s5n).
+next(co_handshake, s4n, 'fail', s5n).
 
-state(co_handshake, s5, say).
-text(co_handshake,  s5, "Voor we gaan zou ik graag nog een leuke af scheids show willen maken.").
-next(co_handshake,  s5, "true",  s6).
+state(co_handshake, s5y, say).
+text(co_handshake,  s5y, "Dat was ook leuk!").
+next(co_handshake,  s5y, "true",  s6).
+
+state(co_handshake, s5n, say).
+text(co_handshake,  s5n, "Wat vervelend.").
+next(co_handshake,  s5n, "true",  s6).
 
 state(co_handshake, s6, say).
-text(co_handshake,  s6, "Als je het leuk vind kun je hier een beweging, geluid, en een licht animatie aan toevoegen. Ik zal dit 1 voor 1 vragen.").
+text(co_handshake,  s6, "Voor we gaan zou ik graag nog een afscheids show willen maken.").
+next(co_handshake,  s6, "true",  s7).
+
+state(co_handshake, s7, say).
+text(co_handshake,  s7, "Als je het leuk vind kun je hier een beweging, geluid, en een licht animatie aan toevoegen. Ik zal dit 1 voor 1 vragen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Gesture				                   %%%
@@ -100,7 +108,7 @@ next(co_handshake_gesture,  s8maken, "true",  s9maken).
 
 state(co_handshake_gesture, s9maken, say).
 start_motion_recording(co_handshake_gesture, s9maken, ['RArm', 'LArm']).
-stateConfig(co_handshake_gesture, s9maken, [waitTimer=7]).
+stateConfig(co_handshake_gesture, s9maken, [waitTimer=12]).
 next(co_handshake_gesture,  s9maken, "true",  s10maken).
 
 state(co_handshake_gesture, s10maken, say).
@@ -115,7 +123,7 @@ next(co_handshake_gesture,  s11maken, "true",  s12maken).
 
 state(co_handshake_gesture, s12maken, say).
 text(co_handshake_gesture,  s12maken, "Het is heel mooi geworden.").
-save_behavior(co_handshake_gesture, s12maken, "GoodbyeCeremonie", [motion=recording, source=co_handshake_gesture_s11maken]).
+save_behavior(co_handshake_gesture, s12maken, "GoodbyeCeremonie", [motion=recording, motionSource=co_handshake_gesture_s11maken]).
 
 %%%%%%%%%%%%%% Download gesture %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_handshake_gesture, s6downloaden, say).
@@ -182,10 +190,10 @@ next(co_handshake_gesture, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_gesture, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_gesture, s15eerste, say).
-save_behavior(co_handshake_gesture, s15eerste, "GoodbyeCeremonie", [motion=file, source="resources/gestures/goodbye1.xml"]).
+save_behavior(co_handshake_gesture, s15eerste, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye1.xml"]).
 
 state(co_handshake_gesture, s15tweede, say).
-save_behavior(co_handshake_gesture, s15tweede, "GoodbyeCeremonie", [motion=file, source="resources/gestures/goodbye2.xml"]).
+save_behavior(co_handshake_gesture, s15tweede, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye2.xml"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Gesture Baseline			                   %%%
@@ -233,7 +241,7 @@ next(co_handshake_gesture_baseline, s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_gesture_baseline, s13kindkiest, question).
 stateConfig(co_handshake_gesture_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_gesture, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_gesture_baseline, s15kindkiest]]]).
 text(co_handshake_gesture_baseline, s13kindkiest, "Wil je de eerste of de tweede beweging?").
 next(co_handshake_gesture_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_gesture_baseline, s13kindkiest, "fail", s13kindkiestf).
@@ -252,10 +260,10 @@ next(co_handshake_gesture_baseline, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_gesture_baseline, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_gesture_baseline, s15eerste, say).
-save_behavior(co_handshake_gesture_baseline, s15eerste, "GoodbyeCeremonie", [motion=file, source="resources/gestures/goodbye1.xml"]).
+save_behavior(co_handshake_gesture_baseline, s15eerste, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye1.xml"]).
 
 state(co_handshake_gesture_baseline, s15tweede, say).
-save_behavior(co_handshake_gesture_baseline, s15tweede, "GoodbyeCeremonie", [motion=file, source="resources/gestures/goodbye2.xml"]).
+save_behavior(co_handshake_gesture_baseline, s15tweede, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye2.xml"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Sound				                   %%%
@@ -308,16 +316,17 @@ stateConfig(co_handshake_sound, s6maken, [next='RightBumperPressed', repeat='Mid
 next(co_handshake_sound,  s6maken, "true",  s7maken).
 
 state(co_handshake_sound, s7maken, say).
+leds(co_handshake_sound, s7maken, ["RightFootLeds"], ["wit"]).
 text(co_handshake_sound,  s7maken, "Maak je geluid in 3, 2, 1.").
 next(co_handshake_sound,  s7maken, "true",  s8maken).
 
 state(co_handshake_sound, s8maken, audioInput).
-stateConfig(co_handshake_sound, s8maken, [recordTime=3000]).
+stateConfig(co_handshake_sound, s8maken, [recordTime=6000]).
 next(co_handshake_sound, s8maken, "true", s9maken).
 
 state(co_handshake_sound, s9maken, say).
 text(co_handshake_sound,  s9maken, "Wow, leuk joh!").
-save_behavior(co_handshake_sound, s9maken, "GoodbyeCeremonie", [sound=recording, source=[co_handshake_sound, s8maken]]).
+save_behavior(co_handshake_sound, s9maken, "GoodbyeCeremonie", [sound=recording, soundSource=[co_handshake_sound, s8maken]]).
 
 %%%%%%%%%%%%%% Download sound %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -385,10 +394,10 @@ next(co_handshake_sound, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_sound, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_sound, s15eerste, say).
-save_behavior(co_handshake_sound, s15eerste, "GoodbyeCeremonie", [sound=file, source="resources/sounds/applaus.wav"]).
+save_behavior(co_handshake_sound, s15eerste, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/applaus.wav"]).
 
 state(co_handshake_sound, s15tweede, say).
-save_behavior(co_handshake_sound, s15tweede, "GoodbyeCeremonie", [sound=file, source="resources/sounds/outro.wav"]).
+save_behavior(co_handshake_sound, s15tweede, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/outro.wav"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Sound Baseline			                   %%%
@@ -403,7 +412,7 @@ next(co_handshake_sound_baseline, s1, 'answer_dontknow', s2d).
 next(co_handshake_sound_baseline, s1, 'fail', s2d).
 
 state(co_handshake_sound_baseline, s2y, say).
-text(co_handshake_sound_baseline, s2y, "Leuk! Als je een leuk idee hebt kun je het geluid zelf maken of ik kan wat downloaden.").
+text(co_handshake_sound_baseline, s2y, "Leuk!").
 next(co_handshake_sound_baseline,  s2y, "true",  s6downloaden).
 
 state(co_handshake_sound_baseline, s2n, say).
@@ -437,7 +446,7 @@ next(co_handshake_sound_baseline,  s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_sound_baseline, s13kindkiest, question).
 stateConfig(co_handshake_sound_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_sound, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_sound_baseline, s15kindkiest]]]).
 text(co_handshake_sound_baseline, s13kindkiest, "Welke vind je leuker, het eerste of het tweede geluid?").
 next(co_handshake_sound_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_sound_baseline, s13kindkiest, "fail", s13kindkiestf).
@@ -456,10 +465,10 @@ next(co_handshake_sound_baseline, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_sound_baseline, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_sound_baseline, s15eerste, say).
-save_behavior(co_handshake_sound_baseline, s15eerste, "GoodbyeCeremonie", [sound=file, source="resources/sounds/applaus.wav"]).
+save_behavior(co_handshake_sound_baseline, s15eerste, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/applaus.wav"]).
 
 state(co_handshake_sound_baseline, s15tweede, say).
-save_behavior(co_handshake_sound_baseline, s15tweede, "GoodbyeCeremonie", [sound=file, source="resources/sounds/outro.wav"]).
+save_behavior(co_handshake_sound_baseline, s15tweede, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/outro.wav"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Light Animation			                   %%%
@@ -506,7 +515,7 @@ next(co_handshake_led, s5, "fail", s6downloaden).
 
 state(co_handshake_led, s6maken, say).
 prepare_led_anim(co_handshake_led, s6maken).
-save_behavior(co_handshake_led, s6maken, "GoodbyeCeremonie", [led=recording, source=co_handshake_led_s6maken]).
+save_behavior(co_handshake_led, s6maken, "GoodbyeCeremonie", [led=recording, ledSource=co_handshake_led_s6maken]).
 
 %%%%%%%%%%%%%% Download light animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_handshake_led, s6downloaden, say).
@@ -577,10 +586,10 @@ next(co_handshake_led, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_led, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_led, s15eerste, say).
-save_behavior(co_handshake_led, s15eerste, "GoodbyeCeremonie", [led=file, source=["all", "blink", ["rood", "wit", "blauw"], 500]]).
+save_behavior(co_handshake_led, s15eerste, "GoodbyeCeremonie", [led=file, ledSource=["all", "blink", ["rood", "wit", "blauw"], 500]]).
 
 state(co_handshake_led, s15tweede, say).
-save_behavior(co_handshake_led, s15tweede, "GoodbyeCeremonie", [led=file, source=["all", "alternate", ["geel", "paars"], 500]]).
+save_behavior(co_handshake_led, s15tweede, "GoodbyeCeremonie", [led=file, ledSource=["all", "alternate", ["geel", "paars"], 500]]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Light Animation Baseline		                   %%%
@@ -631,8 +640,9 @@ next(co_handshake_led_baseline, s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_led_baseline, s13kindkiest, question).
 stateConfig(co_handshake_led_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_led, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_led_baseline, s15kindkiest]]]).
 text(co_handshake_led_baseline, s13kindkiest, "Wil je de eerste of de tweede licht show?").
+stop_led_anim(co_handshake_led_baseline, s13kindkiest).
 next(co_handshake_led_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_led_baseline, s13kindkiest, "fail", s13kindkiestf).
 
@@ -650,10 +660,10 @@ next(co_handshake_led_baseline, s15kindkiest, "tweede", s15tweede).
 next(co_handshake_led_baseline, s15kindkiest, "fail", s15eerste).
 
 state(co_handshake_led_baseline, s15eerste, say).
-save_behavior(co_handshake_led_baseline, s15eerste, "GoodbyeCeremonie", [led=file, source=["all", "blink", ["rood", "wit", "blauw"], 500]]).
+save_behavior(co_handshake_led_baseline, s15eerste, "GoodbyeCeremonie", [led=file, ledSource=["all", "blink", ["rood", "wit", "blauw"], 500]]).
 
 state(co_handshake_led_baseline, s15tweede, say).
-save_behavior(co_handshake_led_baseline, s15tweede, "GoodbyeCeremonie", [led=file, source=["all", "alternate", ["geel", "paars"], 500]]).
+save_behavior(co_handshake_led_baseline, s15tweede, "GoodbyeCeremonie", [led=file, ledSource=["all", "alternate", ["geel", "paars"], 500]]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Ceremonie				                   %%%
@@ -676,7 +686,7 @@ text(co_handshake_ceremonie,  s4, "En dan nu de af scheids show.").
 next(co_handshake_ceremonie,  s4, "true",  s5).
 
 state(co_handshake_ceremonie, s5, say).
-text(co_handshake_ceremonie,  s5, "Doei %first_name%").
+text(co_handshake_ceremonie,  s5, "Doei %first_name%, bedankt!").
 next(co_handshake_ceremonie,  s5, "true",  s6).
 
 state(co_handshake_ceremonie, s6, say).
@@ -684,4 +694,4 @@ play_behavior(co_handshake_ceremonie, s6, "GoodbyeCeremonie").
 next(co_handshake_ceremonie,  s6, "true",  s7).
 
 state(co_handshake_ceremonie, s7, say).
-stop_led_anim(co_handshake_ceremonie, s7).
+stop_led_anim(co_handshake_ceremonie, s7). 

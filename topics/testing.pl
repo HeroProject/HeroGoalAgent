@@ -305,6 +305,12 @@ state(test_motion_file, s3, say).
 text(test_motion_file, s3, "Heel leuk.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stop led					           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_stop_led, s1, say).
+stop_led_anim(test_stop_led, s1).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 2					   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'ga_sports' topic		           		   %%%

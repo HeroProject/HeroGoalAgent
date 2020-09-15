@@ -3,14 +3,15 @@ use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
+use '../util/logging' as module.
 use repair as module.
 
 module processUserResponse(T, S, Intent, Text, Params) {
-	if bel(keyValue(T, S, type, Type))
+	if bel(keyValue(T, S, type, Type), currentAttempt(CurrentAttempt))
 		then {
 			if bel(currentInputModality(speech))
 				then {
-					if true then delete(waitingForAnswer).
+					if true then delete(waitingForAnswer) + logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=speech, currentAttempt=CurrentAttempt]).
 									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
 					if bel(Type=yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
@@ -19,7 +20,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					if bel(Type=input, length(Params, 1), member((_=Ans), Params))
 						then {
 							if bel(not(Ans = '')) then insert(answer(T, S, Ans, [text=Text])).
-							if bel(Ans = '') then repair(T,S).
+							if bel(Ans = '') then repair(T,S). %Log
 						}
 						
 					% branch questions -> matches the intent to a specific branch
@@ -33,7 +34,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
 							if bel(not(Ans = ''), not(member(Ans, CorrectAnswer)))
 								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
-							if bel(Ans = '') then repair(T,S).
+							if bel(Ans = '') then repair(T,S). %Log
 						}
 					
 					if bel(Type=openend, length(Params, 0))
@@ -50,7 +51,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 			if bel(currentInputModality(touch))
 				then {
 			
-					if true then delete(waitingForAnswer) + canceltimer(S) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+					if true then delete(waitingForAnswer) + canceltimer(S) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=touch, currentAttempt=CurrentAttempt]).
 					
 					if bel(Type=yesno)
 						then insert(answer(T, S, Intent, [text=Intent])).

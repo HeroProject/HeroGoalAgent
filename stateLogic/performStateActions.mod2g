@@ -91,17 +91,21 @@ module performStateActions(T, S) {
 	
 	% Play a behavior with a given ID.
 	if bel(play_behavior(T, S, ID), behavior(ID, Data)) then {
-		if bel(member((motion=recording), Data), member((source=MotionRecording), Data)) then playMotion(MotionRecording).
-		if bel(member((motion=file), Data), member((source=MotionFilePath), Data)) then playMotionFile(MotionFilePath).
-		if bel(member((sound=recording), Data), member((source=SoundRecording), Data), nth0(0, SoundRecording, Tsource), nth0(1, SoundRecording, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
-		if bel(member((sound=file), Data), member((source=SoundFilePath), Data)) then playAudio(SoundFilePath).
-		if bel(member((led=recording), Data), member((source=LedRecording), Data), getUserModelValue(LedRecording, [Group, AnimType, Colors, Speed])) then {
+		if bel(member((motion=recording), Data), member((motionSource=MotionRecordingID), Data), motionRecording(MotionRecordingID, MotionRecording)) then playMotion(MotionRecording).
+		if bel(member((motion=file), Data), member((motionSource=MotionFilePath), Data)) then playMotionFile(MotionFilePath).
+		if bel(member((sound=recording), Data), member((soundSource=SoundRecording), Data), nth0(0, SoundRecording, Tsource), nth0(1, SoundRecording, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
+		if bel(member((sound=file), Data), member((soundSource=SoundFilePath), Data)) then playAudio(SoundFilePath).
+		if bel(member((led=recording), Data), member((ledSource=LedRecording), Data), getUserModelValue(LedRecording, [Group, AnimType, Colors, Speed])) then {
 			if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
 			if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
 		}
-		if bel(member((led=file), Data), member((source=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
+		if bel(member((led=file), Data), member((ledSource=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
+	}
+	
+	if bel(scrup_answers(T, S)) then {
+		forall bel(answer(T, States, Ans, Data)) do delete(answer(T, States, Ans, Data)).
 	}
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
-	if true then delete(start) + insert(started).
+	if true then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).
 }

@@ -7,6 +7,7 @@ use '../hero_actions' as actionspec.
 order=linearall.
 
 module performStateTransition(T, S, C) {
+	if true then canceltimer(eventFailSafe).
 	% ... clean up (and reset nextCondition to default value 'true') ...
 	% reset answers processing flag
 	if bel(answerProcessed) then delete(answerProcessed).

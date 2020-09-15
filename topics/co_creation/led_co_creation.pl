@@ -7,7 +7,7 @@
 %%% LED Animation Check					   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_selection, s1, say).
-text(co_led_selection, s1, "Laten we de lichtjes gaan inkleuren.").
+scrup_answers(co_led_selection, s1).
 next(co_led_selection, s1, "true", s2).
 
 state(co_led_selection, s2, question).
@@ -133,4 +133,4 @@ next(co_led_selection, s6animheen, "true", s7animheen).
 
 %% Save result %%
 state(co_led_selection, s7animheen, say).
-save_led_anim(co_led_selection, s7animheen, "all", "alternate", ["co_led_selection_s5animweer", "co_led_selection_s5animheen"], 500).
+save_led_anim(co_led_selection, s7animheen, "all", "alternate", ["co_led_selection_s5animweer", "co_led_selection_s5animheen"], 500).  
