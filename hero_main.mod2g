@@ -24,8 +24,10 @@ module hero_main {
 	{
 		if bel(not(audio(T, S, recorded, _))) then performStateActions(T, S).
 		
-		if bel(audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, _))
-			then performStateActions(T, S).
+		if bel(audio(T, S, recorded, [Tsource, Ssource])) then {
+			if bel(audioRecording(Tsource, Ssource, _)) then canceltimer(audioFailSafe) + performStateActions(T, S).
+			if bel(not(audioRecording(Tsource, Ssource, _))) then starttimer(audioFailSafe, 5000, 5000).
+		} 
 	}
 }
 	

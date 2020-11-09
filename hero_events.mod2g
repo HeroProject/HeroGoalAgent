@@ -7,6 +7,7 @@ use 'recognitionAndRepairePipeline/processUserResponse' as module.
 use 'recognitionAndRepairePipeline/repair' as module.
 use 'recognitionAndRepairePipeline/selectRobotResponse' as module.
 use 'stateLogic/performStateTransition' as module.
+use 'stateLogic/performStateActions' as module.
 use 'memory/handleMemoryData' as module.
 
 module hero_events {
@@ -47,7 +48,7 @@ module hero_events {
 		
 	% Motion recording percept
 	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), userId(UserId), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
-		do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording).
+		do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording) + log(motionRecording(UserId, T, S, Recording)).
 
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -72,14 +73,19 @@ module hero_events {
 	% waitingForTimer
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
-	% Event fail safe
-	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
+	% Event fail safe TODO: fix this
+	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
+		if bel(waitingForAudio) then delete(waitingForAudio).
+		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
 	}
+	
+	% audioFailSafe TODO: fix this
+	if bel(timeout(audioFailSafe), currentState(T), currentState(S)) then performStateActions(T, S).
 		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource), userId(UserId), generateKeyFromTopicAndState(Tsource, Ssource, ID))
-		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName).
+		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName) + log(audio(UserId, Tsource, Ssource, FileName)).
 	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
 		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
 	

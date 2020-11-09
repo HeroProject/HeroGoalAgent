@@ -409,7 +409,7 @@ next(co_tutorial_question,  s1, "true",  s2).
 
 state(co_tutorial_question, s2, question).
 stateConfig(co_tutorial_question, s2, [type=yesno, context='answer_yesno']).
-text(co_tutorial_question, s2, "Heb je nog vragen?").
+text(co_tutorial_question, s2, "Heb je hier nog vragen over?").
 next(co_tutorial_question, s2, 'answer_yes', s2y).
 next(co_tutorial_question, s2, 'answer_no', s2n).
 next(co_tutorial_question, s2, 'answer_dontknow', s2y).

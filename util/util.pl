@@ -174,8 +174,8 @@ keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	touch=3000, 
 				speechopenend=12000,
-				speechyesnofirst=2500, 
-				speechyesnononinitial=2000, 
+				speechyesnofirst=3500, 
+				speechyesnononinitial=3500, 
 				speechinputfirst=5000, 
 				speechinputnoninitial=3500,
 				speechbranchfirst=6000,

@@ -86,7 +86,7 @@ next(co_zoo_elephant,  s5, "true",  s6).
 state(co_zoo_elephant, s6, question).
 stateConfig(co_zoo_elephant, s6, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'], defaultAnswer='downloaden',
 branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_zoo_elephant, s8], [co_zoo_elephant, s20]]]).
-text(co_zoo_elephant, s6, "Wil jij die zelf maken of zal ik wat bewegingen downloaden?").
+text(co_zoo_elephant, s6, "Wil jij die zelf maken, of zal ik wat bewegingen downloaden?").
 next(co_zoo_elephant, s6, "success", s7).
 next(co_zoo_elephant, s6, "fail", s6f).
 
@@ -165,39 +165,33 @@ play_motion_file(co_zoo_elephant, s10downloadeno2, "resources/gestures/elephant2
 next(co_zoo_elephant, s10downloadeno2, "true", s11downloaden).
 
 state(co_zoo_elephant, s11downloaden, question).
-stateConfig(co_zoo_elephant, s11downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_elephant, s12downloaden], [co_zoo_elephant, s20downloaden]]]).
-text(co_zoo_elephant, s11downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
+stateConfig(co_zoo_elephant, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_elephant, s12downloaden], [co_zoo_elephant, s20downloaden]]]).
+text(co_zoo_elephant, s11downloaden, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
 next(co_zoo_elephant, s11downloaden, "success", s12downloaden).
 next(co_zoo_elephant, s11downloaden, "fail", s11downloadenf).
 
 state(co_zoo_elephant, s11downloadenf, say).
-text(co_zoo_elephant,  s11downloadenf, "Het lijkt me beter als jij kiest.").
+text(co_zoo_elephant,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_zoo_elephant,  s11downloadenf, "true",  s12downloaden).
 
 state(co_zoo_elephant, s12downloaden, branchingPoint).
-next(co_zoo_elephant, s12downloaden, "uitzoeken", s13kindkiest).
-next(co_zoo_elephant, s12downloaden, "ik maak keuze", s13robotkiest).
-next(co_zoo_elephant, s12downloaden, "fail", s13kindkiest).
+next(co_zoo_elephant, s12downloaden, "eerste", s13eerste).
+next(co_zoo_elephant, s12downloaden, "tweede", s13tweede).
+next(co_zoo_elephant, s12downloaden, "robot kiest", s13robot).
+next(co_zoo_elephant, s12downloaden, "fail", s14).
 
-state(co_zoo_elephant, s13kindkiest, question).
-stateConfig(co_zoo_elephant, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_elephant, s20kindkiest]]]).
-text(co_zoo_elephant, s13kindkiest, "Wil je de eerste of de tweede beweging?").
-next(co_zoo_elephant, s13kindkiest, "success", s14kindkiest).
-next(co_zoo_elephant, s13kindkiest, "fail", s13kindkiestf).
+state(co_zoo_elephant, s13eerste, say).
+text(co_zoo_elephant,  s13eerste, "De eerste, goede keuze.").
+next(co_zoo_elephant,  s13eerste, "true",  s14).
 
-state(co_zoo_elephant, s13kindkiestf, say).
-text(co_zoo_elephant,  s13kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
-next(co_zoo_elephant,  s13kindkiestf, "true",  s14).
+state(co_zoo_elephant, s13tweede, say).
+text(co_zoo_elephant,  s13tweede, "De tweede, goede keuze.").
+next(co_zoo_elephant,  s13tweede, "true",  s14).
 
-state(co_zoo_elephant, s14kindkiest, say).
-text(co_zoo_elephant,  s14kindkiest, "Goede keuze.").
-next(co_zoo_elephant,  s14kindkiest, "true",  s14).
-
-state(co_zoo_elephant, s13robotkiest, say).
-text(co_zoo_elephant,  s13robotkiest, "De eerste vond ik het leukst. Dus die heb ik gekozen.").
-next(co_zoo_elephant,  s13robotkiest, "true",  s14).
+state(co_zoo_elephant, s13robot, say).
+text(co_zoo_elephant,  s13robot, "De eerste vond ik het leukst. Dus die heb ik gekozen.").
+next(co_zoo_elephant,  s13robot, "true",  s14).
 
 %%%%%%%%%%%%%% Afspelen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_elephant, s14, say).
@@ -235,14 +229,10 @@ audio(co_zoo_elephant, s20maken, server, "resources/sounds/elephant.wav").
 next(co_zoo_elephant, s20maken, "true", s21).
 
 state(co_zoo_elephant, s20downloaden, branchingPoint).
-next(co_zoo_elephant, s20downloaden, "uitzoeken", s20kindkiest).
-next(co_zoo_elephant, s20downloaden, "ik maak keuze", s20eerste).
-next(co_zoo_elephant, s20downloaden, "fail", s20kindkiest).
-
-state(co_zoo_elephant, s20kindkiest, branchingPoint).
-next(co_zoo_elephant, s20kindkiest, "eerste", s20eerste).
-next(co_zoo_elephant, s20kindkiest, "tweede", s20tweede).
-next(co_zoo_elephant, s20kindkiest, "fail", s20eerste).
+next(co_zoo_elephant, s20downloaden, "eerste", s20eerste).
+next(co_zoo_elephant, s20downloaden, "tweede", s20tweede).
+next(co_zoo_elephant, s20downloaden, "robot kiest", s20eerste).
+next(co_zoo_elephant, s20downloaden, "fail", s20eerste).
 
 state(co_zoo_elephant, s20eerste, say).
 play_motion_file(co_zoo_elephant, s20eerste, "resources/gestures/elephant1.xml").
@@ -310,7 +300,7 @@ next(co_zoo_elephant_baseline, s10, "true", s11).
 
 state(co_zoo_elephant_baseline, s11, question).
 stateConfig(co_zoo_elephant_baseline, s11, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_elephant_baseline, s20]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_zoo_elephant_baseline, s20]]]).
 text(co_zoo_elephant_baseline, s11, "Wil je de eerste of de tweede beweging?").
 next(co_zoo_elephant_baseline, s11, "success", s12).
 next(co_zoo_elephant_baseline, s11, "fail", s11f).
@@ -405,7 +395,7 @@ next(co_zoo_lion,  s5, "true",  s6).
 state(co_zoo_lion, s6, question).
 stateConfig(co_zoo_lion, s6, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'], defaultAnswer='downloaden',
 branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_zoo_lion, s8], [co_zoo_lion, s20]]]).
-text(co_zoo_lion, s6, "Wil jij die zelf maken of zal ik wat geluiden downloaden?").
+text(co_zoo_lion, s6, "Wil jij die zelf maken, of zal ik wat geluiden downloaden?").
 next(co_zoo_lion, s6, "success", s7).
 next(co_zoo_lion, s6, "fail", s6f).
 
@@ -433,7 +423,7 @@ stateConfig(co_zoo_lion, s9maken, [recordTime=4000]).
 next(co_zoo_lion, s9maken, "true", s10maken).
 
 state(co_zoo_lion, s10maken, say).
-text(co_zoo_lion,  s10maken, "Gaaf zeg! Dat kan ik zo goed bruiken.").
+text(co_zoo_lion,  s10maken, "Gaaf zeg! Dat kan ik zo goed gebruiken.").
 next(co_zoo_lion,  s10maken, "true",  s16).
 
 %%%%%%%%%%%%%% Download sound %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -483,39 +473,33 @@ audio(co_zoo_lion, s11tijgero2, server, "resources/sounds/tiger2.wav").
 next(co_zoo_lion,  s11tijgero2, "true", s12downloaden).
 
 state(co_zoo_lion, s12downloaden, question).
-stateConfig(co_zoo_lion, s12downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_lion, s13downloaden], [co_zoo_lion, s20downloaden]]]).
-text(co_zoo_lion, s12downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
+stateConfig(co_zoo_lion, s12downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_lion, s13downloaden], [co_zoo_lion, s20downloaden]]]).
+text(co_zoo_lion, s12downloaden, "Wil jij het eerste of tweede geluid, of zal ik kiezen?").
 next(co_zoo_lion, s12downloaden, "success", s13downloaden).
 next(co_zoo_lion, s12downloaden, "fail", s12downloadenf).
 
 state(co_zoo_lion, s12downloadenf, say).
-text(co_zoo_lion,  s12downloadenf, "Het lijkt me beter als jij kiest.").
+text(co_zoo_lion,  s12downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_zoo_lion,  s12downloadenf, "true",  s13downloaden).
 
 state(co_zoo_lion, s13downloaden, branchingPoint).
-next(co_zoo_lion, s13downloaden, "uitzoeken", s14kindkiest).
-next(co_zoo_lion, s13downloaden, "ik maak keuze", s14robotkiest).
-next(co_zoo_lion, s13downloaden, "fail", s14kindkiest).
+next(co_zoo_lion, s13downloaden, "eerste", s13eerste).
+next(co_zoo_lion, s13downloaden, "tweede", s13tweede).
+next(co_zoo_lion, s13downloaden, "robot kiest", s13robot).
+next(co_zoo_lion, s13downloaden, "fail", s16).
 
-state(co_zoo_lion, s14kindkiest, question).
-stateConfig(co_zoo_lion, s14kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_lion, s20leeuw], [co_zoo_lion, s20tijger]]]).
-text(co_zoo_lion, s14kindkiest, "Welke vind je leuker, het eerste of het tweede geluid?").
-next(co_zoo_lion, s14kindkiest, "success", s15kindkiest).
-next(co_zoo_lion, s14kindkiest, "fail", s14kindkiestf).
+state(co_zoo_lion, s13eerste, say).
+text(co_zoo_lion,  s13eerste, "De eerste, goede keuze.").
+next(co_zoo_lion,  s13eerste, "true",  s16).
 
-state(co_zoo_lion, s14kindkiestf, say).
-text(co_zoo_lion,  s14kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
-next(co_zoo_lion,  s14kindkiestf, "true", s16).
+state(co_zoo_lion, s13tweede, say).
+text(co_zoo_lion,  s13tweede, "De tweede, goede keuze.").
+next(co_zoo_lion,  s13tweede, "true",  s16).
 
-state(co_zoo_lion, s15kindkiest, say).
-text(co_zoo_lion,  s15kindkiest, "Goede keuze.").
-next(co_zoo_lion,  s15kindkiest, "true",  s16).
-
-state(co_zoo_lion, s14robotkiest, say).
-text(co_zoo_lion,  s14robotkiest, "Prima! Ik vind de eerste het leukste, dus dan kies ik die.").
-next(co_zoo_lion,  s14robotkiest, "true",  s16).
+state(co_zoo_lion, s13robot, say).
+text(co_zoo_lion,  s13robot, "Prima! De eerste vond ik het leukst. Dus die heb ik gekozen.").
+next(co_zoo_lion,  s13robot, "true",  s16).
 
 %%%%%%%%%%%%%% Afspelen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_lion, s16, say).
@@ -544,26 +528,22 @@ audio(co_zoo_lion, s20maken, recorded, [co_zoo_lion, s9maken]).
 next(co_zoo_lion, s20maken, "true", s21).
 
 state(co_zoo_lion, s20downloaden, branchingPoint).
-next(co_zoo_lion, s20downloaden, "uitzoeken", s20kindkiest).
-next(co_zoo_lion, s20downloaden, "ik maak keuze", s20robotkiest).
-next(co_zoo_lion, s20downloaden, "fail", s20kindkiest).
+next(co_zoo_lion, s20downloaden, "eerste", s20eerste).
+next(co_zoo_lion, s20downloaden, "tweede", s20tweede).
+next(co_zoo_lion, s20downloaden, "robot kiest", s20eerste).
+next(co_zoo_lion, s20downloaden, "fail", s20eerste).
 
-state(co_zoo_lion, s20kindkiest, branchingPoint).
-stateConfig(co_zoo_lion, s20kindkiest, [branchDecider=entity, branchSource=co_zoo_lion_s2]).
-next(co_zoo_lion, s20kindkiest, "leeuw", s20leeuw).
-next(co_zoo_lion, s20kindkiest, "tijger", s20tijger).
-next(co_zoo_lion, s20kindkiest, "fail", s20leeuw).
+state(co_zoo_lion, s20eerste, branchingPoint).
+stateConfig(co_zoo_lion, s20eerste, [branchDecider=entity, branchSource=co_zoo_lion_s2]).
+next(co_zoo_lion, s20eerste, "leeuw", s20leeuweerste).
+next(co_zoo_lion, s20eerste, "tijger", s20tijgereerste).
+next(co_zoo_lion, s20eerste, "fail", s20leeuweerste).
 
-state(co_zoo_lion, s20robotkiest, branchingPoint).
-stateConfig(co_zoo_lion, s20robotkiest, [branchDecider=entity, branchSource=co_zoo_lion_s2]).
-next(co_zoo_lion, s20robotkiest, "leeuw", s20leeuweerste).
-next(co_zoo_lion, s20robotkiest, "tijger", s20tijgereerste).
-next(co_zoo_lion, s20robotkiest, "fail", s20leeuweerste).
-
-state(co_zoo_lion, s20leeuw, branchingPoint).
-next(co_zoo_lion, s20leeuw, "eerste", s20leeuweerste).
-next(co_zoo_lion, s20leeuw, "tweede", s20leeuwtweede).
-next(co_zoo_lion, s20leeuw, "fail", s20leeuweerste).
+state(co_zoo_lion, s20tweede, branchingPoint).
+stateConfig(co_zoo_lion, s20tweede, [branchDecider=entity, branchSource=co_zoo_lion_s2]).
+next(co_zoo_lion, s20tweede, "leeuw", s20leeuwtweede).
+next(co_zoo_lion, s20tweede, "tijger", s20tijgertweede).
+next(co_zoo_lion, s20tweede, "fail", s20leeuwtweede).
 
 state(co_zoo_lion, s20leeuweerste, say).
 audio(co_zoo_lion, s20leeuweerste, server, "resources/sounds/lion1.wav").
@@ -572,11 +552,6 @@ next(co_zoo_lion, s20leeuweerste, "true", s21).
 state(co_zoo_lion, s20leeuwtweede, say).
 audio(co_zoo_lion, s20leeuwtweede, server, "resources/sounds/lion2.wav").
 next(co_zoo_lion, s20leeuwtweede, "true", s21).
-
-state(co_zoo_lion, s20tijger, branchingPoint).
-next(co_zoo_lion, s20tijger, "eerste", s20tijgereerste).
-next(co_zoo_lion, s20tijger, "tweede", s20tijgertweede).
-next(co_zoo_lion, s20tijger, "fail", s20tijgereerste).
 
 state(co_zoo_lion, s20tijgereerste, say).
 audio(co_zoo_lion, s20tijgereerste, server, "resources/sounds/tiger1.wav").
@@ -681,7 +656,7 @@ next(co_zoo_lion_baseline,  s11tijgero2, "true", s12).
 
 state(co_zoo_lion_baseline, s12, question).
 stateConfig(co_zoo_lion_baseline, s12, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_lion_baseline, s20leeuw], [co_zoo_lion_baseline, s20tijger]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_zoo_lion_baseline, s20leeuw], [co_zoo_lion_baseline, s20tijger]]]).
 text(co_zoo_lion_baseline, s12, "Welke vind je leuker, het eerste of het tweede geluid?").
 next(co_zoo_lion_baseline, s12, "success", s13).
 next(co_zoo_lion_baseline, s12, "fail", s12f).
@@ -814,7 +789,7 @@ next(co_zoo_dolphin,  s10, "true",  s11).
 state(co_zoo_dolphin, s11, question).
 stateConfig(co_zoo_dolphin, s11, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'], defaultAnswer='downloaden',
 branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_zoo_dolphin, s13], [co_zoo_dolphin_showtime, s6]]]).
-text(co_zoo_dolphin, s11, "Wil jij die voor mij maken of zal ik wat licht animaties downloaden?").
+text(co_zoo_dolphin, s11, "Wil jij die voor mij maken, of zal ik wat licht animaties downloaden?").
 next(co_zoo_dolphin, s11, "success", s12).
 next(co_zoo_dolphin, s11, "fail", s11f).
 
@@ -864,37 +839,30 @@ stateConfig(co_zoo_dolphin, s16downloadeno2, [waitTimer=3000]).
 next(co_zoo_dolphin, s16downloadeno2, "true", s17downloaden).
 
 state(co_zoo_dolphin, s17downloaden, question).
-stateConfig(co_zoo_dolphin, s17downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_dolphin, s18downloaden], [co_zoo_dolphin_showtime, s7downloaden]]]).
-text(co_zoo_dolphin, s17downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
+stateConfig(co_zoo_dolphin, s17downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_dolphin, s18downloaden], [co_zoo_dolphin_showtime, s7downloaden]]]).
+text(co_zoo_dolphin, s17downloaden, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
 stop_led_anim(co_zoo_dolphin, s17downloaden).
 next(co_zoo_dolphin, s17downloaden, "success", s18downloaden).
 next(co_zoo_dolphin, s17downloaden, "fail", s17downloadenf).
 
 state(co_zoo_dolphin, s17downloadenf, say).
-text(co_zoo_dolphin,  s17downloadenf, "Het lijkt me beter als jij kiest.").
+text(co_zoo_dolphin,  s17downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
 next(co_zoo_dolphin,  s17downloadenf, "true",  s18downloaden).
 
 state(co_zoo_dolphin, s18downloaden, branchingPoint).
-next(co_zoo_dolphin, s18downloaden, "uitzoeken", s19kindkiest).
-next(co_zoo_dolphin, s18downloaden, "ik maak keuze", s19robotkiest).
-next(co_zoo_dolphin, s18downloaden, "fail", s19kindkiest).
+next(co_zoo_dolphin, s18downloaden, "eerste", s19eerste).
+next(co_zoo_dolphin, s18downloaden, "tweede", s19tweede).
+next(co_zoo_dolphin, s18downloaden, "robot kiest", s19robot).
 
-state(co_zoo_dolphin, s19kindkiest, question).
-stateConfig(co_zoo_dolphin, s19kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_dolphin_showtime, s7kindkiest]]]).
-text(co_zoo_dolphin, s19kindkiest, "Wil je de eerste of de tweede licht show?").
-next(co_zoo_dolphin, s19kindkiest, "success", s20kindkiest).
-next(co_zoo_dolphin, s19kindkiest, "fail", s19kindkiestf).
+state(co_zoo_dolphin, s19eerste, say).
+text(co_zoo_dolphin,  s19eerste, "De eerste, goede keuze.").
 
-state(co_zoo_dolphin, s19kindkiestf, say).
-text(co_zoo_dolphin,  s19kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
+state(co_zoo_dolphin, s19tweede, say).
+text(co_zoo_dolphin,  s19tweede, "De tweede, goede keuze.").
 
-state(co_zoo_dolphin, s20kindkiest, say).
-text(co_zoo_dolphin,  s20kindkiest, "Goede keuze.").
-
-state(co_zoo_dolphin, s19robotkiest, say).
-text(co_zoo_dolphin,  s19robotkiest, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
+state(co_zoo_dolphin, s19robot, say).
+text(co_zoo_dolphin,  s19robot, "Prima! De tweede vond ik het leukst. Dus die heb ik gekozen.").
 
 %%%%%%%%%%%%%% Play light animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_dolphin_showtime, s1, say).
@@ -928,14 +896,10 @@ play_led_anim(co_zoo_dolphin_showtime,  s7maken, co_zoo_dolphin_s14maken).
 next(co_zoo_dolphin_showtime,  s7maken, "true",  s8).
 
 state(co_zoo_dolphin_showtime, s7downloaden, branchingPoint).
-next(co_zoo_dolphin_showtime, s7downloaden, "uitzoeken", s7kindkiest).
-next(co_zoo_dolphin_showtime, s7downloaden, "ik maak keuze", s7tweede).
-next(co_zoo_dolphin_showtime, s7downloaden, "fail", s7kindkiest).
-
-state(co_zoo_dolphin_showtime, s7kindkiest, branchingPoint).
-next(co_zoo_dolphin_showtime, s7kindkiest, "eerste", s7eerste).
-next(co_zoo_dolphin_showtime, s7kindkiest, "tweede", s7tweede).
-next(co_zoo_dolphin_showtime, s7kindkiest, "fail", s7tweede).
+next(co_zoo_dolphin_showtime, s7downloaden, "eerste", s7eerste).
+next(co_zoo_dolphin_showtime, s7downloaden, "tweede", s7tweede).
+next(co_zoo_dolphin_showtime, s7downloaden, "robot kiest", s7tweede).
+next(co_zoo_dolphin_showtime, s7downloaden, "fail", s7tweede).
 
 state(co_zoo_dolphin_showtime, s7eerste, say).
 audio(co_zoo_dolphin_showtime, s7eerste, server, "resources/sounds/dolphin_show.wav").
@@ -1045,7 +1009,7 @@ next(co_zoo_dolphin_baseline, s15, "true", s16).
 
 state(co_zoo_dolphin_baseline, s16, question).
 stateConfig(co_zoo_dolphin_baseline, s16, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_zoo_dolphin_baseline, s23]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_zoo_dolphin_baseline, s23]]]).
 stop_led_anim(co_zoo_dolphin_baseline, s16).
 text(co_zoo_dolphin_baseline, s16, "Wil je de eerste of de tweede licht show?").
 next(co_zoo_dolphin_baseline, s16, "success", s17).

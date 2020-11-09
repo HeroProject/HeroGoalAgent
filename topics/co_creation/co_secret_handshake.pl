@@ -150,50 +150,39 @@ play_motion_file(co_handshake_gesture, s10downloaden, "resources/gestures/goodby
 next(co_handshake_gesture, s10downloaden, "true", s11downloaden).
 
 state(co_handshake_gesture, s11downloaden, question).
-stateConfig(co_handshake_gesture, s11downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_gesture, s12downloaden]]]).
-text(co_handshake_gesture, s11downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
+stateConfig(co_handshake_gesture, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_gesture, s12downloaden]]]).
+text(co_handshake_gesture, s11downloaden, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
 next(co_handshake_gesture, s11downloaden, "success", s12downloaden).
 next(co_handshake_gesture, s11downloaden, "fail", s11downloadenf).
 
 state(co_handshake_gesture, s11downloadenf, say).
-text(co_handshake_gesture,  s11downloadenf, "Het lijkt me beter als jij kiest.").
+text(co_handshake_gesture,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_handshake_gesture,  s11downloadenf, "true",  s12downloaden).
 
 state(co_handshake_gesture, s12downloaden, branchingPoint).
-next(co_handshake_gesture, s12downloaden, "uitzoeken", s13kindkiest).
-next(co_handshake_gesture, s12downloaden, "ik maak keuze", s13robotkiest).
-next(co_handshake_gesture, s12downloaden, "fail", s13kindkiest).
+next(co_handshake_gesture, s12downloaden, "eerste", s13eerste).
+next(co_handshake_gesture, s12downloaden, "tweede", s13tweede).
+next(co_handshake_gesture, s12downloaden, "robot kiest", s13robot).
+next(co_handshake_gesture, s12downloaden, "fail", s14eerste).
 
-state(co_handshake_gesture, s13kindkiest, question).
-stateConfig(co_handshake_gesture, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_gesture, s15kindkiest]]]).
-text(co_handshake_gesture, s13kindkiest, "Wil je de eerste of de tweede beweging?").
-next(co_handshake_gesture, s13kindkiest, "success", s14kindkiest).
-next(co_handshake_gesture, s13kindkiest, "fail", s13kindkiestf).
+state(co_handshake_gesture, s13eerste, say).
+text(co_handshake_gesture,  s13eerste, "De eerste, goede keuze.").
+next(co_handshake_gesture,  s13eerste, "true",  s14eerste).
 
-state(co_handshake_gesture, s13kindkiestf, say).
-text(co_handshake_gesture,  s13kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
-next(co_handshake_gesture, s13kindkiestf, "true", s15eerste).
+state(co_handshake_gesture, s13tweede, say).
+text(co_handshake_gesture,  s13tweede, "De tweede, goede keuze.").
+next(co_handshake_gesture,  s13tweede, "true",  s14tweede).
 
-state(co_handshake_gesture, s14kindkiest, say).
-text(co_handshake_gesture,  s14kindkiest, "Goede keuze.").
-next(co_handshake_gesture,  s14kindkiest, "true", s15kindkiest).
+state(co_handshake_gesture, s13robot, say).
+text(co_handshake_gesture,  s13robot, "De eerste vond ik het leukst. Dus die heb ik gekozen.").
+next(co_handshake_gesture,  s13robot, "true",  s14eerste).
 
-state(co_handshake_gesture, s13robotkiest, say).
-text(co_handshake_gesture,  s13robotkiest, "De eerste vond ik het leukst. Dus die heb ik gekozen.").
-next(co_handshake_gesture,  s13robotkiest, "true", s15eerste).
+state(co_handshake_gesture, s14eerste, say).
+save_behavior(co_handshake_gesture, s14eerste, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye1.xml"]).
 
-state(co_handshake_gesture, s15kindkiest, branchingPoint).
-next(co_handshake_gesture, s15kindkiest, "eerste", s15eerste).
-next(co_handshake_gesture, s15kindkiest, "tweede", s15tweede).
-next(co_handshake_gesture, s15kindkiest, "fail", s15eerste).
-
-state(co_handshake_gesture, s15eerste, say).
-save_behavior(co_handshake_gesture, s15eerste, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye1.xml"]).
-
-state(co_handshake_gesture, s15tweede, say).
-save_behavior(co_handshake_gesture, s15tweede, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye2.xml"]).
+state(co_handshake_gesture, s14tweede, say).
+save_behavior(co_handshake_gesture, s14tweede, "GoodbyeCeremonie", [motion=file, motionSource="resources/gestures/goodbye2.xml"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Gesture Baseline			                   %%%
@@ -241,7 +230,7 @@ next(co_handshake_gesture_baseline, s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_gesture_baseline, s13kindkiest, question).
 stateConfig(co_handshake_gesture_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_gesture_baseline, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_handshake_gesture_baseline, s15kindkiest]]]).
 text(co_handshake_gesture_baseline, s13kindkiest, "Wil je de eerste of de tweede beweging?").
 next(co_handshake_gesture_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_gesture_baseline, s13kindkiest, "fail", s13kindkiestf).
@@ -289,7 +278,7 @@ text(co_handshake_sound, s2d, "Lastig, misschien een volgende keer.").
 
 state(co_handshake_sound, s3, question).
 stateConfig(co_handshake_sound, s3, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'], defaultAnswer='downloaden',
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_handshake_sound, s5], [co_handshake_ceremonie, s20]]]).
+branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_handshake_sound, s5]]]).
 text(co_handshake_sound, s3, "Dus, zelf maken of downloaden?").
 next(co_handshake_sound, s3, "success", s4).
 next(co_handshake_sound, s3, "fail", s3f).
@@ -354,50 +343,39 @@ audio(co_handshake_sound, s10downloaden, server, "resources/sounds/outro.wav").
 next(co_handshake_sound,  s10downloaden, "true", s11downloaden).
 
 state(co_handshake_sound, s11downloaden, question).
-stateConfig(co_handshake_sound, s11downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_sound, s12downloaden]]]).
-text(co_handshake_sound, s11downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
+stateConfig(co_handshake_sound, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_sound, s12downloaden]]]).
+text(co_handshake_sound, s11downloaden, "Wil jij het eerste of tweede geluid, of zal ik kiezen?").
 next(co_handshake_sound, s11downloaden, "success", s12downloaden).
 next(co_handshake_sound, s11downloaden, "fail", s11downloadenf).
 
 state(co_handshake_sound, s11downloadenf, say).
-text(co_handshake_sound,  s11downloadenf, "Het lijkt me beter als jij kiest.").
+text(co_handshake_sound,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_handshake_sound,  s11downloadenf, "true",  s12downloaden).
 
 state(co_handshake_sound, s12downloaden, branchingPoint).
-next(co_handshake_sound, s12downloaden, "uitzoeken", s13kindkiest).
-next(co_handshake_sound, s12downloaden, "ik maak keuze", s13robotkiest).
-next(co_handshake_sound, s12downloaden, "fail", s13kindkiest).
+next(co_handshake_sound, s12downloaden, "eerste", s13eerste).
+next(co_handshake_sound, s12downloaden, "tweede", s13tweede).
+next(co_handshake_sound, s12downloaden, "robot kiest", s13robot).
+next(co_handshake_sound, s12downloaden, "fail", s14tweede).
 
-state(co_handshake_sound, s13kindkiest, question).
-stateConfig(co_handshake_sound, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_sound, s15kindkiest]]]).
-text(co_handshake_sound, s13kindkiest, "Welke vind je leuker, het eerste of het tweede geluid?").
-next(co_handshake_sound, s13kindkiest, "success", s14kindkiest).
-next(co_handshake_sound, s13kindkiest, "fail", s13kindkiestf).
+state(co_handshake_sound, s13eerste, say).
+text(co_handshake_sound,  s13eerste, "De eerste, goede keuze.").
+next(co_handshake_sound,  s13eerste, "true",  s14eerste).
 
-state(co_handshake_sound, s13kindkiestf, say).
-text(co_handshake_sound,  s13kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
-next(co_handshake_sound,  s13kindkiestf, "true",  s15tweede).
+state(co_handshake_sound, s13tweede, say).
+text(co_handshake_sound,  s13tweede, "De tweede, goede keuze.").
+next(co_handshake_sound,  s13tweede, "true",  s14tweede).
 
-state(co_handshake_sound, s14kindkiest, say).
-text(co_handshake_sound,  s14kindkiest, "Goede keuze.").
-next(co_handshake_sound,  s14kindkiest, "true",  s15kindkiest).
+state(co_handshake_sound, s13robot, say).
+text(co_handshake_sound,  s13robot, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
+next(co_handshake_sound,  s13robot, "true",  s14tweede).
 
-state(co_handshake_sound, s13robotkiest, say).
-text(co_handshake_sound,  s13robotkiest, "Prima! Ik vind de tweede het leukste, dus dan kies ik die.").
-next(co_handshake_sound,  s13robotkiest, "true",  s15tweede).
+state(co_handshake_sound, s14eerste, say).
+save_behavior(co_handshake_sound, s14eerste, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/applaus.wav"]).
 
-state(co_handshake_sound, s15kindkiest, branchingPoint).
-next(co_handshake_sound, s15kindkiest, "eerste", s15eerste).
-next(co_handshake_sound, s15kindkiest, "tweede", s15tweede).
-next(co_handshake_sound, s15kindkiest, "fail", s15eerste).
-
-state(co_handshake_sound, s15eerste, say).
-save_behavior(co_handshake_sound, s15eerste, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/applaus.wav"]).
-
-state(co_handshake_sound, s15tweede, say).
-save_behavior(co_handshake_sound, s15tweede, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/outro.wav"]).
+state(co_handshake_sound, s14tweede, say).
+save_behavior(co_handshake_sound, s14tweede, "GoodbyeCeremonie", [sound=file, soundSource="resources/sounds/outro.wav"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Sound Baseline			                   %%%
@@ -446,7 +424,7 @@ next(co_handshake_sound_baseline,  s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_sound_baseline, s13kindkiest, question).
 stateConfig(co_handshake_sound_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_sound_baseline, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_handshake_sound_baseline, s15kindkiest]]]).
 text(co_handshake_sound_baseline, s13kindkiest, "Welke vind je leuker, het eerste of het tweede geluid?").
 next(co_handshake_sound_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_sound_baseline, s13kindkiest, "fail", s13kindkiestf).
@@ -544,52 +522,40 @@ start_led_anim(co_handshake_led, s10downloaden, "all", "alternate", ["geel", "pa
 stateConfig(co_handshake_led, s10downloaden, [waitTimer=3000]).
 next(co_handshake_led, s10downloaden, "true", s11downloaden).
 
-state(co_handshake_led, s11downloaden, question).
-stateConfig(co_handshake_led, s11downloaden, [type = branch, context = "involvement_who_picks_option", options = ['uitzoeken', 'ik maak keuze'], defaultAnswer='uitzoeken',
-branchIntents=['uitzoeken' = 'involvement_child_picks', 'ik maak keuze' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_led, s12downloaden]]]).
-text(co_handshake_led, s11downloaden, "Wil jij de beste optie uitzoeken of zal ik gewoon kiezen?").
-stop_led_anim(co_handshake_led, s11downloaden).
-next(co_handshake_led, s11downloaden, "success", s12downloaden).
-next(co_handshake_led, s11downloaden, "fail", s11downloadenf).
+state(co_handshake_sound, s11downloaden, question).
+stateConfig(co_handshake_sound, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_sound, s12downloaden]]]).
+text(co_handshake_sound, s11downloaden, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
+next(co_handshake_sound, s11downloaden, "success", s12downloaden).
+next(co_handshake_sound, s11downloaden, "fail", s11downloadenf).
 
-state(co_handshake_led, s11downloadenf, say).
-text(co_handshake_led,  s11downloadenf, "Het lijkt me beter als jij kiest.").
-next(co_handshake_led,  s11downloadenf, "true",  s12downloaden).
+state(co_handshake_sound, s11downloadenf, say).
+text(co_handshake_sound,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
+next(co_handshake_sound,  s11downloadenf, "true",  s12downloaden).
 
-state(co_handshake_led, s12downloaden, branchingPoint).
-next(co_handshake_led, s12downloaden, "uitzoeken", s13kindkiest).
-next(co_handshake_led, s12downloaden, "ik maak keuze", s13robotkiest).
-next(co_handshake_led, s12downloaden, "fail", s13kindkiest).
+state(co_handshake_sound, s12downloaden, branchingPoint).
+next(co_handshake_sound, s12downloaden, "eerste", s13eerste).
+next(co_handshake_sound, s12downloaden, "tweede", s13tweede).
+next(co_handshake_sound, s12downloaden, "robot kiest", s13robot).
+next(co_handshake_sound, s12downloaden, "fail", s14tweede).
 
-state(co_handshake_led, s13kindkiest, question).
-stateConfig(co_handshake_led, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_led, s15kindkiest]]]).
-text(co_handshake_led, s13kindkiest, "Wil je de eerste of de tweede licht show?").
-next(co_handshake_led, s13kindkiest, "success", s14kindkiest).
-next(co_handshake_led, s13kindkiest, "fail", s13kindkiestf).
+state(co_handshake_sound, s13eerste, say).
+text(co_handshake_sound,  s13eerste, "De eerste, goede keuze.").
+next(co_handshake_sound,  s13eerste, "true",  s14eerste).
 
-state(co_handshake_led, s13kindkiestf, say).
-text(co_handshake_led,  s13kindkiestf, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
-next(co_handshake_led,  s13kindkiestf, "true",  s15tweede).
+state(co_handshake_sound, s13tweede, say).
+text(co_handshake_sound,  s13tweede, "De tweede, goede keuze.").
+next(co_handshake_sound,  s13tweede, "true",  s14tweede).
 
-state(co_handshake_led, s14kindkiest, say).
-text(co_handshake_led,  s14kindkiest, "Goede keuze.").
-next(co_handshake_led,  s14kindkiest, "true",  s15kindkiest).
+state(co_handshake_sound, s13robot, say).
+text(co_handshake_sound,  s13robot, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
+next(co_handshake_sound,  s13robot, "true",  s14tweede).
 
-state(co_handshake_led, s13robotkiest, say).
-text(co_handshake_led,  s13robotkiest, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
-next(co_handshake_led,  s13robotkiest, "true",  s15tweede).
+state(co_handshake_led, s14eerste, say).
+save_behavior(co_handshake_led, s14eerste, "GoodbyeCeremonie", [led=file, ledSource=["all", "blink", ["rood", "wit", "blauw"], 500]]).
 
-state(co_handshake_led, s15kindkiest, branchingPoint).
-next(co_handshake_led, s15kindkiest, "eerste", s15eerste).
-next(co_handshake_led, s15kindkiest, "tweede", s15tweede).
-next(co_handshake_led, s15kindkiest, "fail", s15eerste).
-
-state(co_handshake_led, s15eerste, say).
-save_behavior(co_handshake_led, s15eerste, "GoodbyeCeremonie", [led=file, ledSource=["all", "blink", ["rood", "wit", "blauw"], 500]]).
-
-state(co_handshake_led, s15tweede, say).
-save_behavior(co_handshake_led, s15tweede, "GoodbyeCeremonie", [led=file, ledSource=["all", "alternate", ["geel", "paars"], 500]]).
+state(co_handshake_led, s14tweede, say).
+save_behavior(co_handshake_led, s14tweede, "GoodbyeCeremonie", [led=file, ledSource=["all", "alternate", ["geel", "paars"], 500]]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Light Animation Baseline		                   %%%
@@ -640,7 +606,7 @@ next(co_handshake_led_baseline, s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_led_baseline, s13kindkiest, question).
 stateConfig(co_handshake_led_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two'], branchingPoints=[[co_handshake_led_baseline, s15kindkiest]]]).
+branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_handshake_led_baseline, s15kindkiest]]]).
 text(co_handshake_led_baseline, s13kindkiest, "Wil je de eerste of de tweede licht show?").
 stop_led_anim(co_handshake_led_baseline, s13kindkiest).
 next(co_handshake_led_baseline, s13kindkiest, "success", s14kindkiest).
