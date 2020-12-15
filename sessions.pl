@@ -19,11 +19,10 @@ session(getting_acquainted, [general_wakeup, ga_intro, ga_prac_speech, ga_prac_t
 session(test_session_2, [general_wakeup, test_second_session, general_rest]).
 
 % Co-creation
-session(co_creation_test, [general_wakeup,  co_zoo_lion, co_zoo_dolphin, co_zoo_dolphin_showtime, 
-co_handshake, co_handshake_gesture, co_handshake_sound, co_handshake_led, co_handshake_ceremonie,
-general_rest]).
+session(co_creation_short, [general_wakeup, 
+co_zoo_intro, co_zoo_elephant, co_zoo_lion, co_zoo_dolphin, co_zoo_dolphin_showtime, general_rest]).
 
-session(co_creation_baseline_test, [general_wakeup, co_tutorial_speech, co_tutorial_touch, co_invol_baseline,
+session(co_creation_baseline_reset, [general_wakeup, 
 co_zoo_intro, co_zoo_elephant_baseline, co_zoo_lion_baseline, co_zoo_dolphin_baseline, 
 co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_handshake_led_baseline, co_handshake_ceremonie,
 general_rest]).
@@ -47,7 +46,7 @@ general_rest]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-userId('30').
-localVariable(first_name, "Noud"). 
+userId('999').
+localVariable(first_name, "Bobbie"). 
 sessionOrder([co_creation]).
 multiSession(false).

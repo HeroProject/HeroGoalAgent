@@ -522,34 +522,35 @@ start_led_anim(co_handshake_led, s10downloaden, "all", "alternate", ["geel", "pa
 stateConfig(co_handshake_led, s10downloaden, [waitTimer=3000]).
 next(co_handshake_led, s10downloaden, "true", s11downloaden).
 
-state(co_handshake_sound, s11downloaden, question).
-stateConfig(co_handshake_sound, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_sound, s12downloaden]]]).
-text(co_handshake_sound, s11downloaden, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
-next(co_handshake_sound, s11downloaden, "success", s12downloaden).
-next(co_handshake_sound, s11downloaden, "fail", s11downloadenf).
+state(co_handshake_led, s11downloaden, question).
+stateConfig(co_handshake_led, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
+branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_led, s12downloaden]]]).
+text(co_handshake_led, s11downloaden, "Wil jij de eerste of tweede licht animatie, of zal ik kiezen?").
+stop_led_anim(co_handshake_led, s11downloaden).
+next(co_handshake_led, s11downloaden, "success", s12downloaden).
+next(co_handshake_led, s11downloaden, "fail", s11downloadenf).
 
-state(co_handshake_sound, s11downloadenf, say).
-text(co_handshake_sound,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
-next(co_handshake_sound,  s11downloadenf, "true",  s12downloaden).
+state(co_handshake_led, s11downloadenf, say).
+text(co_handshake_led,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
+next(co_handshake_led,  s11downloadenf, "true",  s12downloaden).
 
-state(co_handshake_sound, s12downloaden, branchingPoint).
-next(co_handshake_sound, s12downloaden, "eerste", s13eerste).
-next(co_handshake_sound, s12downloaden, "tweede", s13tweede).
-next(co_handshake_sound, s12downloaden, "robot kiest", s13robot).
-next(co_handshake_sound, s12downloaden, "fail", s14tweede).
+state(co_handshake_led, s12downloaden, branchingPoint).
+next(co_handshake_led, s12downloaden, "eerste", s13eerste).
+next(co_handshake_led, s12downloaden, "tweede", s13tweede).
+next(co_handshake_led, s12downloaden, "robot kiest", s13robot).
+next(co_handshake_led, s12downloaden, "fail", s14tweede).
 
-state(co_handshake_sound, s13eerste, say).
-text(co_handshake_sound,  s13eerste, "De eerste, goede keuze.").
-next(co_handshake_sound,  s13eerste, "true",  s14eerste).
+state(co_handshake_led, s13eerste, say).
+text(co_handshake_led,  s13eerste, "De eerste, goede keuze.").
+next(co_handshake_led,  s13eerste, "true",  s14eerste).
 
-state(co_handshake_sound, s13tweede, say).
-text(co_handshake_sound,  s13tweede, "De tweede, goede keuze.").
-next(co_handshake_sound,  s13tweede, "true",  s14tweede).
+state(co_handshake_led, s13tweede, say).
+text(co_handshake_led,  s13tweede, "De tweede, goede keuze.").
+next(co_handshake_led,  s13tweede, "true",  s14tweede).
 
-state(co_handshake_sound, s13robot, say).
-text(co_handshake_sound,  s13robot, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
-next(co_handshake_sound,  s13robot, "true",  s14tweede).
+state(co_handshake_led, s13robot, say).
+text(co_handshake_led,  s13robot, "De tweede vond ik het leukst. Dus die heb ik gekozen.").
+next(co_handshake_led,  s13robot, "true",  s14tweede).
 
 state(co_handshake_led, s14eerste, say).
 save_behavior(co_handshake_led, s14eerste, "GoodbyeCeremonie", [led=file, ledSource=["all", "blink", ["rood", "wit", "blauw"], 500]]).
