@@ -107,5 +107,6 @@ module performStateActions(T, S) {
 	}
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
+	%if true then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).
 	if true then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).
 }

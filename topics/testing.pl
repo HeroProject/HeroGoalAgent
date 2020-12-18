@@ -222,19 +222,19 @@ anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
 %%% leds - Testing led colors			           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds, s1, say).
-text(test_leds, s1, "Kijk, mijn ogen zijn nu grijs").
-leds(test_leds, s1, ["FaceLeds"], ["grijs"]).
-next(test_leds, s1, "true", s2).
+text(test_leds, s1, "Kijk, mijn ogen zijn nu groen").
+leds(test_leds, s1, ["FaceLeds"], ["groen"]).
+next(test_leds, s1, "true", s4).
 
-state(test_leds, s2, say).
-text(test_leds, s2, "Kijk, mijn buik is nu azuur").
-leds(test_leds, s2, ["ChestLeds"], ["azuur"]).
-next(test_leds, s2, "true", s3).
+%state(test_leds, s2, say).
+%text(test_leds, s2, "Kijk, mijn buik is nu azuur").
+%leds(test_leds, s2, ["ChestLeds"], ["azuur"]).
+%next(test_leds, s2, "true", s3).
 
-state(test_leds, s3, say).
-text(test_leds, s3, "Kijk, mijn voeten zijn nu kaki").
-leds(test_leds, s3, ["FeetLeds"], ["kaki"]).
-next(test_leds, s3, "true", s4).
+%state(test_leds, s3, say).
+%text(test_leds, s3, "Kijk, mijn voeten zijn nu kaki").
+%leds(test_leds, s3, ["FeetLeds"], ["kaki"]).
+%next(test_leds, s3, "true", s4).
 
 state(test_leds, s4, say).
 leds(test_leds, s4, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).

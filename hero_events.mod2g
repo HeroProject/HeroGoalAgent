@@ -74,14 +74,14 @@ module hero_events {
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
 	% Event fail safe TODO: fix this
-	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
-		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
-		if bel(waitingForAudio) then delete(waitingForAudio).
-		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
-	}
+	%if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
+		%forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
+		%if bel(waitingForAudio) then delete(waitingForAudio).
+		%if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
+	%}
 	
 	% audioFailSafe TODO: fix this
-	if bel(timeout(audioFailSafe), currentState(T), currentState(S)) then performStateActions(T, S).
+	% if bel(timeout(audioFailSafe), currentState(T), currentState(S)) then performStateActions(T, S).
 		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource), userId(UserId), generateKeyFromTopicAndState(Tsource, Ssource, ID))
