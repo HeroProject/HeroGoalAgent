@@ -1,4 +1,4 @@
-use '../clients/cbsr-eis-connector.jar' as environment with
+use '..\..\clients\cbsr-eis-connector.jar' as environment with
 		server='localhost',
 		flowkey='dialogflowagent.json',
 		flowagent='mikeagent-dsvpjs',

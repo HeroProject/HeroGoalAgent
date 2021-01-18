@@ -21,6 +21,9 @@ module hero_events {
 		do insert(event(E)).
 	forall bel(event(E)), not(percept(event(E)))
 		do delete(event(E)).
+	
+	if bel(event(pause)) then insert(paused, pause_act).
+	if bel(event(unpause)) then insert(unpause_act).
 		
 	% Memory data percepts
 	forall percept(memoryData(Key, Value))
@@ -77,12 +80,9 @@ module hero_events {
 		%if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
 	%}
 	
-	% audioFailSafe TODO: fix this
-	% if bel(timeout(audioFailSafe), currentState(T), currentState(S)) then performStateActions(T, S).
-		
 	%Audio recording percepts
 	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource), userId(UserId), generateKeyFromTopicAndState(Tsource, Ssource, ID))
-		then loadAudio(FileName) + delete(waitingForAudio, waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName) + log(audio(UserId, Tsource, Ssource, FileName)).
+		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName).
 	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
 		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
 	
@@ -137,8 +137,8 @@ module hero_events {
 		
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
-	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput), waitingForAudio)
-		then stopListening + disableRecording + delete(waitingForAudio).
+	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput))
+		then stopListening + disableRecording.
 
 	%%% EMOTION RECOGNITION %%%	
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
@@ -175,8 +175,8 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT), Time is RT/1000)
-		then enableRecording + startListening(Time) + insert(waitingForAudio, waitingForAudioFile(T, S)).
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudioFile(_, _)), not(waitingForLoadedAudioID(T, S)), keyValue(T, S, recordTime, RT), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudioFile(T, S)).
 	
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))

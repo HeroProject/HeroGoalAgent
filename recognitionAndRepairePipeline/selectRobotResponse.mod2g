@@ -31,7 +31,7 @@ module selectRobotResponse(T, S, Ans, Data) {
 								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)).		
 							%If a default answer is not provided, add a fail flag to the decision of the branching point.
 							if bel(not(keyValue(T, S, defaultAnswer, _)), addDecisionToBranchingPoints(BranchingPoints, 'fail', BPDs, UpdatedBPDs))
-								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)). 
+								then delete(branchingPointDecisions(BPDs)) + insert(branchingPointDecisions(UpdatedBPDs)).
 						}		
 				}
 			

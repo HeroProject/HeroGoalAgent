@@ -20,8 +20,7 @@ module askQuestion(T, S) {
 					% Start timer for question state with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).
 					if bel(keyValue(T, S, type, yesno))
-						then starttimer(S,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer).
-					
+						then starttimer(S,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 					% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).	
 					if bel(keyListValues(T, S, [type, options], [Type, Values]), Type \= yesno,

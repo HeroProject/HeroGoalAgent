@@ -9,7 +9,8 @@
 	motionRecording/2, waitingForMotionRecording/1,
 	waitingForLedAnim/1,
 	emotion/3,
-	behavior/2.
+	behavior/2,
+	paused/0, pause_act/0, unpause_act/0.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
@@ -27,7 +28,7 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
-	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudio/0, waitingForAudioFile/2, waitingForLoadedAudioID/2,
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/2, waitingForLoadedAudioID/2,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForSayClear/0, waitingForTimer/0.
@@ -120,6 +121,10 @@ valueListFromKeyList([], []).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Ready for action
+readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, recorded, _)).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, AudioID).
+
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).
 
@@ -130,7 +135,7 @@ memoryTasksCompleted :- not(waitingForEvent('UserDataSet')), not(waitingForEvent
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
 
 % Audio has been received, not longer waiting for audio.
-audioReceived :- not(waitingForAudio).
+audioReceived(T, S) :- not(waitingForAudioFile(T, S)).
 
 % Emotion has been received, no longer waiting for emotion.
 emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
@@ -149,7 +154,7 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived(Topic, State), correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived, correctPosture.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived(Topic, State), correctPosture.
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived, correctPosture.
 
