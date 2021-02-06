@@ -146,9 +146,9 @@ define stopLedAnimation with
 	post { waitingForEvent('LedAnimationDone') }
 	
 % Agent external memory / database control
-define getUserSession(ID) with
+define setSession(UserId, SessionId) with
 	pre { true }
-	post { waitingForMemoryData('session_number') }
+	post { waitingForEvent('SessionSet') }
 	
 define addMemoryEntry(ID, Key, Data) with
 	pre { true }
@@ -161,6 +161,14 @@ define setUserData(ID, Key, Value) with
 define getUserData(ID, Key) with
 	pre { true }
 	post { waitingForMemoryData(Key) }
+
+define deleteUser(UserId) with
+	pre { true }
+	post { waitingForEvent('UserDeleted') }
+
+define deleteAllUsers with
+	pre { true }
+	post { waitingForEvent('AllUsersDeleted') }
 	
 % DialogFlow Control
 %define setLanguage(Lang) with

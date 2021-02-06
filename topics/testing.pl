@@ -316,4 +316,41 @@ stop_led_anim(test_stop_led, s1).
 %%% 'ga_sports' topic		           		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_second_session, s1, say).
-text(test_second_session, s1, "Ik weet nog dat jij van %ga_sports_s2% houdt."). 
+text(test_second_session, s1, "Ik weet nog dat jij van %ga_sports_s2% houdt.").
+next(test_second_session, s1, "true", s2).
+
+state(test_second_session, s2, branchingPoint).
+stateConfig(test_second_session, s2, [branchDecider=entity, branchSource=ga_sports_s2]).
+stop_led_anim(test_second_session, s2).
+next(test_second_session, s2, "floorball", s3floorball).
+next(test_second_session, s2, "voetbal", s3voetbal).
+next(test_second_session, s2, "hockey", s3hockey).
+next(test_second_session, s2, "fail", s3fail).
+
+state(test_second_session, s3floorball, say).
+text(test_second_session, s3floorball, "Lekker door de zaal rennen.").
+
+state(test_second_session, s3voetbal, say).
+text(test_second_session, s3voetbal, "Lekker tegen een bal aan schoppen.").
+
+state(test_second_session, s3hockey, say).
+text(test_second_session, s3hockey, "Lekker tegen de bal aan slaan.").
+
+state(test_second_session, s3fail, say).
+text(test_second_session, s3fail, "Dat ging een beetje mis geloof ik.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test session 4					   %%%
+%%% Note: a previous session should contain the 	   %%%
+%%% 'ga_sports' topic		           		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_motion_2, s1, say).
+text(test_motion_2, s1, "Ik weet nog die beweging").
+next(test_motion_2, s1, "true", s2).
+
+state(test_motion_2, s2, say).
+play_motion(test_motion_2, s2, test_motion_s2).
+next(test_motion_2, s2, "true", s3).
+
+state(test_motion_2, s3, say).
+text(test_motion_2, s3, "Gaaf hè").

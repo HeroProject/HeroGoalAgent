@@ -1,6 +1,7 @@
 use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/robotstories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -29,7 +30,7 @@ module performStateActions(T, S) {
 	% Wake up.
 	if bel(wakeup(T, S)) then wakeUp.
 	% Rest
-	if bel(rest(T, S)) then rest + clearLoadedAudio.
+	if bel(rest(T, S)) then rest + stopLedAnimation + clearLoadedAudio.
 	% Set breathing
 	if bel(enableBreathing(T, S)) then enableBreathing.
 	if bel(disableBreathing(T, S)) then disableBreathing.
@@ -41,12 +42,13 @@ module performStateActions(T, S) {
 	% Record motion
 	if bel(record_motion_timer(T, S, Joints, Duration), generateKeyFromTopicAndState(T, S, ID)) 
 		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
+	
 	if bel(start_motion_recording(T, S, Joints))
 		then setStiffness(Joints, 0) + startMotionRecording(Joints).
 	if bel(stop_motion_recording(T, S, Joints), generateKeyFromTopicAndState(T, S, ID)) then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
 	% Play motion
 	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
-	if bel(play_motion(T, S, ID), motionRecording(ID, Recording))
+	if bel(play_motion(T, S, ID), getUserModelValue(ID, Recording))
 		then playMotion(Recording).
 		
 	if bel(play_motion_file(T, S, Path)) then playMotionFile(Path).

@@ -2,13 +2,9 @@ use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'recognitionAndRepairePipeline/askQuestion' as module.
-use 'recognitionAndRepairePipeline/processUserResponse' as module.
-use 'recognitionAndRepairePipeline/repair' as module.
-use 'recognitionAndRepairePipeline/selectRobotResponse' as module.
-use 'stateLogic/performStateTransition' as module.
-use 'stateLogic/performStateActions' as module.
-use 'memory/handleMemoryData' as module.
+use 'recognitionAndRepairePipeline/*.mod2g' as module.
+use 'stateLogic/*.mod2g' as module.
+use 'user_model/*.mod2g' as module.
 
 module hero_events {
 	
@@ -24,7 +20,12 @@ module hero_events {
 	
 	if bel(event(pause)) then insert(paused, pause_act).
 	if bel(event(unpause)) then insert(unpause_act).
+	if bel(event(stop)) then insert(stop_act).
 		
+	% Memory data percepts
+	forall percept(guiData(Key, Value))
+		do handleGuiData(Key, Value).
+	
 	% Memory data percepts
 	forall percept(memoryData(Key, Value))
 		do handleMemoryData(Key, Value).
@@ -47,8 +48,12 @@ module hero_events {
 		}
 		
 	% Motion recording percept
-	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), userId(UserId), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
-		do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording) + log(motionRecording(UserId, T, S, Recording)).
+	%forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), userId(UserId), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
+		%do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording) + log(motionRecording(UserId, T, S, Recording)).
+	
+	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), generateKeyFromTopicAndState(T, S, ID), userModel(UserModel), updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
+		do delete(userModel(UserModel), waitingForMotionRecording(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Recording).
+			
 
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -57,9 +62,6 @@ module hero_events {
 	% ... for posture changes
 	if bel(posture(Posture), waitingForPosture(Posture))
 		then delete(waitingForPosture(Posture)).
-	% ... for motion recordings
-	if bel(motionRecording(ID, _), waitingForMotionRecording(ID))
-		then delete(waitingForMotionRecording(ID)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))

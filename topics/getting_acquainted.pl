@@ -123,7 +123,7 @@ next(ga_sports, s1, "true", s2).
 state(ga_sports, s2, question).
 stateConfig(ga_sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], 
 defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Zou je willen kiezen uit de volgende antwoorden.']]).
-text(ga_sports, s2, "Wat is jouw lievelings sport?").
+text(ga_sports, s2, "Wat is jouw lievelings sport, %first_name%?").
 next(ga_sports, s2, 'success', s3).
 next(ga_sports, s2, 'fail', s5f).
 

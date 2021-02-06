@@ -5,12 +5,19 @@ use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use loadUserDataHelper as module.
 
+order=linearall.
+
 module loadUserData(Topics) {
-		if bel(nth0(0, Topics, Topic, RestOfTopics))
+		if bel(nth0(0, Topics, Topic, RestOfTopics), userId(UserId))
 			then {
+				% Load text variables
 				forall bel(text(Topic, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
 					do loadUserDataHelper(Keys).
 				
+				% Load motions
+				forall bel(play_motion(Topic, _, Key)) do getUserData(UserId, Key).
+				
+				% Recursive continue with the next topic.
 				if not(bel(length(RestOfTopics,0))) then loadUserData(RestOfTopics).
 		}
 }

@@ -8,4 +8,6 @@ module handleMemoryData(Key, Value) {
 	
 	if bel(not(Value = 'None'), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
+	
+	if bel(waitingForMemoryData(Key), Value = 'None') then delete(waitingForMemoryData(Key)).
 }

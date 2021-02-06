@@ -10,7 +10,7 @@
 	waitingForLedAnim/1,
 	emotion/3,
 	behavior/2,
-	paused/0, pause_act/0, unpause_act/0.
+	paused/0, pause_act/0, unpause_act/0, stop_act/0.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
@@ -22,7 +22,10 @@
 % Predicates for memory processing
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
-	waitingForUserModelInit/0.
+	waitingForSession/0,
+	waitingForGuiData/1,
+	userId/1, sessionId/1,
+	localVariable/2.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
@@ -31,7 +34,8 @@
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/2, waitingForLoadedAudioID/2,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
-	waitingForSayClear/0, waitingForTimer/0.
+	waitingForSayClear/0, waitingForTimer/0,
+	waitingForInit/0.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State parameter handling.                              %%%
@@ -73,7 +77,7 @@ concatenate([H1, H2 | T], R) :- string_concat(H1, H2, C), concatenate([C | T], R
 concatenate([H], H).
 
 %Generate a key in the form of Topic_State for referencing a particular topic-state pair.
-generateKeyFromTopicAndState(T, S, Key) :- atomics_to_string([T, S], '_', Key).
+generateKeyFromTopicAndState(T, S, Key) :- atomics_to_string([T, S], '_', KeyS), atom_string(Key, KeyS).
 
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
 updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
@@ -123,13 +127,13 @@ valueListFromKeyList([], []).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ready for action
 readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, recorded, _)).
-readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, AudioID).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, _).
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).
 
 % All memory tasks have been completed when all expected memory events and data have been received.
-memoryTasksCompleted :- not(waitingForEvent('UserDataSet')), not(waitingForEvent('MemoryEntryStored')).
+memoryTasksCompleted :- not(waitingForEvent('UserDataSet')),  not(waitingForEvent('MemoryEntryStored')).
 
 % An answer has been received when there is an answer and we're no longer waiting for an answer.
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.

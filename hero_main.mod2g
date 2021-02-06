@@ -3,28 +3,25 @@ use 'topics/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'stateLogic/performStateActions' as module.
-use 'memory/loadUserData' as module.
+use 'user_model/*.mod2g' as module.
 
 module hero_main {
-	% Adapt topic goal if all the necessary information is loaded from the database. 
-	if not(goal(topics([]))), bel(waitingForUserModelInit, memoryTasksCompleted, multiSession(MultiSession)) then {
-		
-		if bel(MultiSession = true, getUserModelValue('session_number', SessionNumber), sessionOrder(SessionOrder), 
-		nth1(SessionNumber, SessionOrder, SessionID), session(SessionID, Topics), nth0(0, Topics, FirstTopic, RestOfTopics))
-			then delete(waitingForUserModelInit) + insert(currentTopic(FirstTopic), topics(RestOfTopics)) 
-				+ loadUserData(Topics) + adopt(topics([])).
-		
-		if bel(MultiSession = false, sessionOrder(SessionOrder), nth1(1, SessionOrder, SessionID), session(SessionID, Topics), nth0(0, Topics, FirstTopic, RestOfTopics))
-			then delete(waitingForUserModelInit) + insert(currentTopic(FirstTopic), topics(RestOfTopics)) 
-				+ loadUserData(Topics) + adopt(topics([])).  
+	% Adapt topic goal if all the necessary information is loaded from the database.
+	if not(goal(topics([]))) then {
+		if bel(useGui(true), not(waitingForGuiData(_)), waitingForInit) then initializeUserModel.
+	
+		if bel(not(waitingForInit), waitingForSession, memoryTasksCompleted, sessionId(SessionId), sessionOrder(SessionOrder),
+		nth1(SessionId, SessionOrder, SessionLabel), session(SessionLabel, Topics), nth0(0, Topics, FirstTopic, RestOfTopics)) 
+			then insert(currentTopic(FirstTopic), topics(RestOfTopics)) + delete(waitingForSession) + loadUserData(Topics) + adopt(topics([])).
 	}
 	
 	% Execute the state actions
 	if bel(currentTopic(T), currentState(S), readyForAction(T, S), not(paused)) then performStateActions(T, S).
 	
-	if bel(pause_act) then rest + say("Ik ben even gepauzeerd") + delete(pause_act).
-	
+	%TODO: make pretty
+	if bel(pause_act) then say("Ik ben even gepauzeerd") + rest + stopLedAnimation + delete(pause_act). 
 	if bel(unpause_act) then wakeUp + say("Ik ga weer verder") + delete(unpause_act, paused).
+	if bel(stop_act) then say("Ik ga nu weer rusten.") + rest + stopLedAnimation + clearLoadedAudio + delete(stop_act).
 }
 	
 	

@@ -52,14 +52,13 @@ text(rs_thread_1_seq_1,  s1, "Sorry dat ik zo veel praat! Het is gewoon.").
 next(rs_thread_1_seq_1,  s1, "true",  s1b).
 
 state(rs_thread_1_seq_1, s1b, say).
-text(rs_thread_1_seq_1,  s1b, "Ik ben een beetje zee, zee, zenuwachtig.").
+text(rs_thread_1_seq_1,  s1b, "Ik ben een beetje zze zze ze ze zenuwachtig.").
 anim(rs_thread_1_seq_1, s1b, "nervous/behavior_1").
 next(rs_thread_1_seq_1,  s1b, "true",  s2).
 
 state(rs_thread_1_seq_1, s2, question).
 stateConfig(rs_thread_1_seq_1, s2, [type=openend, context='answer_open', inputModality=[speech=1], maxAnswerTime=[speechopenend=3000]]).
-text(rs_thread_1_seq_1, s2, "Je weet hoe er Olympische Spelen zijn voor mensen, toch, De grote wedstrijd met de verschillende sporten?
-").
+text(rs_thread_1_seq_1, s2, "Je weet hoe er Olympische Spelen zijn voor mensen, toch, De grote wedstrijd met de verschillende sporten?").
 next(rs_thread_1_seq_1, s2, 'success', s3).
 next(rs_thread_1_seq_1, s2, 'fail', s3).
 
@@ -86,18 +85,10 @@ text(rs_thread_1_seq_1,  s5, "en wie het best origami kan vouwen").
 anim(rs_thread_1_seq_1, s5, "wiggle_fingers/behavior_1").
 next(rs_thread_1_seq_1,  s5, "true",  s7).
 
-state(rs_thread_1_seq_1, s6, say).
-anim(rs_thread_1_seq_1, s6, "wiggle_fingers/behavior_1").
-next(rs_thread_1_seq_1,  s6, "true",  s7).
-
 state(rs_thread_1_seq_1, s7, say).
-text(rs_thread_1_seq_1,  s7, "wie er het beleefdst is en wie de meeste mensen kan helpen oversteken, en wie er kan voetballen, zo, goaaal").
-%anim(rs_thread_1_seq_1, s7, "throw_ball_excited/behavior_1").
-next(rs_thread_1_seq_1,  s7, "true",  s8).
-
-state(rs_thread_1_seq_1, s8, say).
-anim(rs_thread_1_seq_1, s8, "throw_ball_excited/behavior_1").
-next(rs_thread_1_seq_1,  s8, "true",  s9).
+text(rs_thread_1_seq_1,  s7, "wie er het beleefdst is en wie de meeste mensen kan helpen oversteken, en wie er de bal het verste gooien, zo, dat was ver!").
+anim(rs_thread_1_seq_1, s7, "throw_ball_excited/behavior_1").
+next(rs_thread_1_seq_1,  s7, "true",  s9).
 
 state(rs_thread_1_seq_1, s9, say).
 text(rs_thread_1_seq_1,  s9, "Ik kan helemaal niet zo goed schoppen.").
@@ -109,7 +100,7 @@ next(rs_thread_1_seq_1,  s10, "true",  s11).
 
 state(rs_thread_1_seq_1, s11, say).
 text(rs_thread_1_seq_1,  s11, "dat al mijn lichtjes eruit sprongen").
-start_led_anim(rs_thread_1_seq_1, s11, "eyes", "blink", ["turquoise", "donkerblauw"], 1500).
+start_led_anim(rs_thread_1_seq_1, s11, "eyes", "blink", ["turquoise", "blauw"], 1500).
 next(rs_thread_1_seq_1,  s11, "true",  s12).
 
 state(rs_thread_1_seq_1, s12, say).
@@ -135,12 +126,74 @@ next(rs_thread_1_seq_1, s15, 'answer_dontknow', s16n).
 next(rs_thread_1_seq_1, s15, 'fail', s16n).
 
 state(rs_thread_1_seq_1, s16y, say).
-text(rs_thread_1_seq_1,  s16y, "Cool! Waarin dan?").
-%next(rs_intro,  s16y, "true",  s7).
+text(rs_thread_1_seq_1,  s16y, "Cool!").
+next(rs_thread_1_seq_1,  s16y, "true",  s17y).
 
-state(rs_thread_1_seq_1, s16n, say).
-text(rs_thread_1_seq_1,  s16n, "Een toets dan? Heb je weleens een toets gemaakt? Voor school of voor iets anders?").
-%next(rs_intro,  s6n, "true",  s7).
+state(rs_thread_1_seq_1, s17y, question).
+stateConfig(rs_thread_1_seq_1, s17y, [type=openend, context='answer_open', inputModality=[speech=1], maxAnswerTime=[speechopenend=5000]]).
+text(rs_thread_1_seq_1, s17y, " Waarin dan?").
+next(rs_thread_1_seq_1, s17y, 'success', s18).
+next(rs_thread_1_seq_1, s17y, 'fail', s18n).
+
+state(rs_thread_1_seq_1, s16n, question).
+stateConfig(rs_thread_1_seq_1, s16n, [type=yesno, context='answer_yesno']).
+text(rs_thread_1_seq_1, s16n, "Heb jij weleens aan een wedstrijd mee gedaan?").
+next(rs_thread_1_seq_1, s16n, 'answer_yes', s18).
+next(rs_thread_1_seq_1, s16n, 'answer_no', s18n).
+next(rs_thread_1_seq_1, s16n, 'answer_dontknow', s18n).
+next(rs_thread_1_seq_1, s16n, 'fail', s18n).
+
+state(rs_thread_1_seq_1, s18, say).
+text(rs_thread_1_seq_1,  s18, "Echt?! Lijkt me super, moeilijk. Dan kun je me vast helpen met de robo spelen.").
+next(rs_thread_1_seq_1,  s18, "true",  s19).
+
+state(rs_thread_1_seq_1, s18n, say).
+text(rs_thread_1_seq_1,  s18n, "Geef niet. Je kunt me vast goed helpen met de robo spelen.").
+next(rs_thread_1_seq_1,  s18n, "true",  s19).
+
+state(rs_thread_1_seq_1, s19, say).
+text(rs_thread_1_seq_1,  s19, "Ik krijg straks allerlei verschillende opdrachten.").
+next(rs_thread_1_seq_1,  s19, "true",  s20).
+
+state(rs_thread_1_seq_1, s20, say).
+text(rs_thread_1_seq_1,  s20, "Een zin vertalen, het grappigste dansje doen.").
+next(rs_thread_1_seq_1,  s20, "true",  s21).
+
+state(rs_thread_1_seq_1, s21, say).
+text(rs_thread_1_seq_1,  s21, "En jij moet me helpen oefenen!").
+next(rs_thread_1_seq_1,  s21, "true",  s22).
+
+state(rs_thread_1_seq_1, s22, say).
+text(rs_thread_1_seq_1,  s22, "Want oefenen baart kunst.").
+next(rs_thread_1_seq_1,  s22, "true",  s23).
+
+state(rs_thread_1_seq_1, s23, say).
+text(rs_thread_1_seq_1,  s23, "Dat zeggen volwassenen toch?").
+next(rs_thread_1_seq_1,  s23, "true",  s24).
+
+state(rs_thread_1_seq_1, s24, say).
+text(rs_thread_1_seq_1,  s24, "Oefenen baart kunst.").
+next(rs_thread_1_seq_1,  s24, "true",  s25).
+
+state(rs_thread_1_seq_1, s25, say).
+text(rs_thread_1_seq_1,  s25, "Ik weet niet wat dat betekent: baart.").
+next(rs_thread_1_seq_1,  s25, "true",  s26).
+
+state(rs_thread_1_seq_1, s26, say).
+text(rs_thread_1_seq_1,  s26, "Een baard zit toch op je gezicht?").
+next(rs_thread_1_seq_1,  s26, "true",  s27).
+
+state(rs_thread_1_seq_1, s27, say).
+text(rs_thread_1_seq_1,  s27, "Het is jammer dat je niet mee kan kijken als ik straks aan de echt Robospelen mee ga doen.").
+next(rs_thread_1_seq_1,  s27, "true",  s28).
+
+state(rs_thread_1_seq_1, s28, say).
+text(rs_thread_1_seq_1,  s28, "Die is namelijk digitaal, en jij hebt geen internetaansluiting aan je lichaam, toch?").
+next(rs_thread_1_seq_1,  s28, "true",  s29).
+
+state(rs_thread_1_seq_1, s29, say).
+text(rs_thread_1_seq_1,  s29, "Die van mij zit hier, achterop mijn hoofd!").
+anim(rs_thread_1_seq_1, s29, "point_to_ethernet_port/behavior_1").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Thread 2, sequence 1	                           %%%
@@ -159,15 +212,15 @@ text(rs_thread_2_seq_1,  s3, "Geen stroom kreeg en geen licht gaf").
 next(rs_thread_2_seq_1,  s3, "true",  s4).
 
 state(rs_thread_2_seq_1, s4, say).
-text(rs_thread_2_seq_1,  s4, "Leek het alsof ik ergens was").
+text(rs_thread_2_seq_1,  s4, "Leek het alsof ik ergens was.").
 next(rs_thread_2_seq_1,  s4, "true",  s5).
 
 state(rs_thread_2_seq_1, s5, say).
-text(rs_thread_2_seq_1,  s5, "Waar ik nog nooit eerder was").
+text(rs_thread_2_seq_1,  s5, "Waar ik nog nooit eerder was.").
 next(rs_thread_2_seq_1,  s5, "true",  s6).
 
 state(rs_thread_2_seq_1, s6, say).
-text(rs_thread_2_seq_1,  s6, "Maar ik was er niet echt").
+text(rs_thread_2_seq_1,  s6, "Maar ik was er niet echt.").
 next(rs_thread_2_seq_1,  s6, "true",  s7).
 
 state(rs_thread_2_seq_1, s7, say).
@@ -191,7 +244,7 @@ text(rs_thread_2_seq_1,  s11, "Ik zou graag willen dat er iets zou gebeuren").
 next(rs_thread_2_seq_1,  s11, "true",  s12).
 
 state(rs_thread_2_seq_1, s12, say).
-%Add gesture
+anim(rs_thread_2_seq_1, s12, "shoulder_shrug/behavior_1").
 next(rs_thread_2_seq_1,  s12, "true",  s13).
 
 state(rs_thread_2_seq_1, s13, say).
@@ -214,11 +267,11 @@ next(rs_thread_2_seq_1, s16, 'answer_no', s17n).
 next(rs_thread_2_seq_1, s16, 'answer_dontknow', s17n).
 next(rs_thread_2_seq_1, s16, 'fail', s17n).
 
-state(rs_thread_1_seq_1, s17y, question).
-stateConfig(rs_thread_1_seq_1, s17y, [type=openend, context='answer_open', inputModality=[speech=1], maxAnswerTime=[speechopenend=3000]]).
-text(rs_thread_1_seq_1, s17y, "Leuk! Ik luister.").
-next(rs_thread_1_seq_1, s17y, 'success', s18).
-next(rs_thread_1_seq_1, s17y, 'fail', s18).
+state(rs_thread_2_seq_1, s17y, question).
+stateConfig(rs_thread_2_seq_1, s17y, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_thread_2_seq_1, s17y, "Leuk! Ik luister.").
+next(rs_thread_2_seq_1, s17y, 'success', s18).
+next(rs_thread_2_seq_1, s17y, 'fail', s18).
 
 state(rs_thread_2_seq_1, s17n, say).
 text(rs_thread_2_seq_1,  s17n, "Geeft niets. Dan maken we samen een droom").
@@ -233,22 +286,159 @@ text(rs_thread_2_seq_1,  s19, "Ik zou wel").
 next(rs_thread_2_seq_1,  s19, "true",  s20).
 
 state(rs_thread_2_seq_1, s20, say).
-text(rs_thread_2_seq_1,  s20, "Snel willen vliegen").
-leds(rs_thread_2_seq_1,  s20, ['FaceLeds', 'ChestLeds'], ['Green', 'Green']).
+text(rs_thread_2_seq_1,  s20, "hoog willen vliegen").
+leds(rs_thread_2_seq_1,  s20, ['FaceLeds', 'ChestLeds'], ['green', 'green']).
 next(rs_thread_2_seq_1,  s20, "true",  s21).
 
 state(rs_thread_2_seq_1, s21, say).
 text(rs_thread_2_seq_1,  s21, "Of waterdicht kunnen zwemmen").
-leds(rs_thread_2_seq_1,  s21, ['FaceLeds', 'ChestLeds'], ['Blue', 'Blue']).
+leds(rs_thread_2_seq_1,  s21, ['FaceLeds', 'ChestLeds'], ['blue', 'blue']).
 next(rs_thread_2_seq_1,  s21, "true",  s22).
 
 state(rs_thread_2_seq_1, s22, say).
-text(rs_thread_2_seq_1,  s22, "Of randendsnel racen").
-leds(rs_thread_2_seq_1,  s22, ['FaceLeds', 'ChestLeds'], ['Yellow', 'Yellow']).
+text(rs_thread_2_seq_1,  s22, "Of razendsnel racen. Kies maar.").
+leds(rs_thread_2_seq_1,  s22, ['FaceLeds', 'ChestLeds'], ['yellow', 'yellow']).
 next(rs_thread_2_seq_1,  s22, "true",  s23).
 
-state(co_zoo_intro, s7, question).
-stateConfig(co_zoo_intro, s7, [type=input, context='answer_favorite_animal', inputModality=[speech=2]]).
-text(co_zoo_intro, s7, "Wat is eigenlijk jouw lievelingsdier?").
-next(co_zoo_intro, s7, 'success', s8).
-next(co_zoo_intro, s7, 'fail', s8f).
+state(rs_thread_2_seq_1, s23, question).
+stateConfig(rs_thread_2_seq_1, s23, [type=input, context='answer_rs_thread_2_vzr', options=['vliegen', 'zwemmen', 'racen'], defaultAnswer="vliegen"]).
+text(rs_thread_2_seq_1, s23, "Waar zou ik over moeten dromen? Vliegen, zwemmen, of racen?").
+start_led_anim(rs_thread_2_seq_1, s23, "all", "blink", ["green", "blue", "yellow"], 500).
+next(rs_thread_2_seq_1, s23, 'success', s24).
+next(rs_thread_2_seq_1, s23, 'fail', s24f).
+
+state(rs_thread_2_seq_1, s24, branchingPoint).
+stateConfig(rs_thread_2_seq_1, s24, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s23]).
+stop_led_anim(rs_thread_2_seq_1, s24).
+next(rs_thread_2_seq_1, s24, "vliegen", s25vliegen).
+next(rs_thread_2_seq_1, s24, "zwemmen", s25zwemmen).
+next(rs_thread_2_seq_1, s24, "racen", s25racen).
+next(rs_thread_2_seq_1, s24, "fail", s24f).
+
+state(rs_thread_2_seq_1, s24f, say).
+text(rs_thread_2_seq_1,  s24f, "Zullen we voor vliegen gaan. Altijd al willen doen.").
+stop_led_anim(rs_thread_2_seq_1, s24f).
+next(rs_thread_2_seq_1,  s24f, "true",  s25vliegen).
+
+state(rs_thread_2_seq_1, s25vliegen, say).
+text(rs_thread_2_seq_1,  s25vliegen, "Vliegen! Te gek").
+leds(rs_thread_2_seq_1,  s25vliegen, ['FaceLeds', 'ChestLeds'], ['green', 'green']).
+next(rs_thread_2_seq_1,  s25vliegen, "true",  s26vliegen).
+
+state(rs_thread_2_seq_1, s26vliegen, question).
+stateConfig(rs_thread_2_seq_1, s26vliegen, [type=input, context='answer_rs_thread_2_snel_of_langzaam', options=['snel', 'langzaam'], defaultAnswer="snel"]).
+text(rs_thread_2_seq_1, s26vliegen, "Zal ik snel of langzaam vliegen?").
+next(rs_thread_2_seq_1, s26vliegen, 'success', s27vliegen).
+next(rs_thread_2_seq_1, s26vliegen, 'fail', s27vliegenf).
+
+state(rs_thread_2_seq_1, s27vliegen, branchingPoint).
+stateConfig(rs_thread_2_seq_1, s27vliegen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26vliegen]).
+next(rs_thread_2_seq_1, s27vliegen, "snel", s28vliegensnel).
+next(rs_thread_2_seq_1, s27vliegen, "langzaam", s28vliegenlangzaam).
+next(rs_thread_2_seq_1, s27vliegen, "fail", s27vliegenf).
+
+state(rs_thread_2_seq_1, s27vliegenf, say).
+text(rs_thread_2_seq_1,  s27vliegenf, "Ik heb zin in snel.").
+next(rs_thread_2_seq_1,  s27vliegenf, "true",  s28vliegensnel).
+
+state(rs_thread_2_seq_1, s28vliegensnel, say).
+text(rs_thread_2_seq_1,  s28vliegensnel, "Ja! Snel! Snel! Snel!").
+next(rs_thread_2_seq_1,  s28vliegensnel, "true",  s29vliegen).
+
+state(rs_thread_2_seq_1, s28vliegenlangzaam, say).
+text(rs_thread_2_seq_1,  s28vliegenlangzaam, "Rustig aan, tijd zat. Genieten van het uitzicht.").
+next(rs_thread_2_seq_1,  s28vliegenlangzaam, "true",  s29vliegen).
+
+state(rs_thread_2_seq_1, s29vliegen, question).
+stateConfig(rs_thread_2_seq_1, s29vliegen, [type=input, context='answer_land', inputModality=[speech=2]]).
+text(rs_thread_2_seq_1, s29vliegen, "En naar welk land zal ik %rs_thread_2_seq_1_s26vliegen% vliegen?").
+next(rs_thread_2_seq_1, s29vliegen, 'success', s30).
+next(rs_thread_2_seq_1, s29vliegen, 'fail', s30).
+
+state(rs_thread_2_seq_1, s25zwemmen, say).
+text(rs_thread_2_seq_1,  s25zwemmen, "Zwemmen! Bizar. Kletsnat.").
+leds(rs_thread_2_seq_1,  s25zwemmen, ['FaceLeds', 'ChestLeds'], ['blue', 'blue']).
+next(rs_thread_2_seq_1,  s25zwemmen, "true",  s26zwemmen).
+
+state(rs_thread_2_seq_1, s26zwemmen, question).
+stateConfig(rs_thread_2_seq_1, s26zwemmen, [type=input, context='answer_rs_thread_2_snel_of_langzaam', options=['snel', 'langzaam'], defaultAnswer="snel"]).
+text(rs_thread_2_seq_1, s26zwemmen, "Zal ik snel of langzaam zwemmen?").
+next(rs_thread_2_seq_1, s26zwemmen, 'success', s27zwemmen).
+next(rs_thread_2_seq_1, s26zwemmen, 'fail', s27zwemmenf).
+
+state(rs_thread_2_seq_1, s27zwemmen, branchingPoint).
+stateConfig(rs_thread_2_seq_1, s27zwemmen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26zwemmen]).
+next(rs_thread_2_seq_1, s27zwemmen, "snel", s28zwemmensnel).
+next(rs_thread_2_seq_1, s27zwemmen, "langzaam", s28zwemmenlangzaam).
+next(rs_thread_2_seq_1, s27zwemmen, "fail", s27zwemmenf).
+
+state(rs_thread_2_seq_1, s27zwemmenf, say).
+text(rs_thread_2_seq_1,  s27zwemmenf, "Ik heb zin in snel.").
+next(rs_thread_2_seq_1,  s27zwemmenf, "true",  s28zwemmensnel).
+
+state(rs_thread_2_seq_1, s28zwemmensnel, say).
+text(rs_thread_2_seq_1,  s28zwemmensnel, "Ja! Speedboot Hero!").
+next(rs_thread_2_seq_1,  s28zwemmensnel, "true",  s29zwemmen).
+
+state(rs_thread_2_seq_1, s28zwemmenlangzaam, say).
+text(rs_thread_2_seq_1,  s28zwemmenlangzaam, "Rustig aan, tijd zat. Beetje snorkelen, je weet zelf.").
+next(rs_thread_2_seq_1,  s28zwemmenlangzaam, "true",  s29zwemmen).
+
+state(rs_thread_2_seq_1, s29zwemmen, question).
+stateConfig(rs_thread_2_seq_1, s29zwemmen, [type=input, context='answer_land', inputModality=[speech=2]]).
+text(rs_thread_2_seq_1, s29zwemmen, "En naar welk land zal ik %rs_thread_2_seq_1_s26zwemmen% zwemmen?").
+next(rs_thread_2_seq_1, s29zwemmen, 'success', s30).
+next(rs_thread_2_seq_1, s29zwemmen, 'fail', s30).
+
+state(rs_thread_2_seq_1, s25racen, say).
+text(rs_thread_2_seq_1,  s25racen, "Racen als een race-auto. Wielen aan mijn enkels en knieën.").
+leds(rs_thread_2_seq_1,  s25racen, ['FaceLeds', 'ChestLeds'], ['yellow', 'yellow']).
+next(rs_thread_2_seq_1,  s25racen, "true",  s26racen).
+
+state(rs_thread_2_seq_1, s26racen, question).
+stateConfig(rs_thread_2_seq_1, s26racen, [type=input, context='answer_rs_thread_2_snel_of_langzaam', options=['snel', 'langzaam'], defaultAnswer="snel"]).
+text(rs_thread_2_seq_1, s26racen, "Zal ik snel of langzaam racen?").
+next(rs_thread_2_seq_1, s26racen, 'success', s27racen).
+next(rs_thread_2_seq_1, s26racen, 'fail', s27racenf).
+
+state(rs_thread_2_seq_1, s27racen, branchingPoint).
+stateConfig(rs_thread_2_seq_1, s27racen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26racen]).
+next(rs_thread_2_seq_1, s27racen, "snel", s28racensnel).
+next(rs_thread_2_seq_1, s27racen, "langzaam", s28racenlangzaam).
+next(rs_thread_2_seq_1, s27racen, "fail", s27racenf).
+
+state(rs_thread_2_seq_1, s27racenf, say).
+text(rs_thread_2_seq_1,  s27racenf, "Ik heb zin in snel.").
+next(rs_thread_2_seq_1,  s27racenf, "true",  s28racensnel).
+
+state(rs_thread_2_seq_1, s28racensnel, say).
+text(rs_thread_2_seq_1,  s28racensnel, "Ja! Vol door de bocht. Bizar").
+next(rs_thread_2_seq_1,  s28racensnel, "true",  s29racen).
+
+state(rs_thread_2_seq_1, s28racenlangzaam, say).
+text(rs_thread_2_seq_1,  s28racenlangzaam, "Ja precies. Kalm aan. Ik heb ook helemaal geen rijbewijs").
+next(rs_thread_2_seq_1,  s28racenlangzaam, "true",  s29racen).
+
+state(rs_thread_2_seq_1, s29racen, question).
+stateConfig(rs_thread_2_seq_1, s29racen, [type=input, context='answer_land', inputModality=[speech=2]]).
+text(rs_thread_2_seq_1, s29racen, "En naar welk land zal ik %rs_thread_2_seq_1_s26racen% racen?").
+next(rs_thread_2_seq_1, s29racen, 'success', s30).
+next(rs_thread_2_seq_1, s29racen, 'fail', s30).
+
+state(rs_thread_2_seq_1, s30, question).
+stateConfig(rs_thread_2_seq_1, s30, [type=openend, context='answer_open', inputModality=[speech=1]]).
+leds(rs_thread_2_seq_1,  s30, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
+text(rs_thread_2_seq_1, s30, "Wat zou ik daar allemaal kunnen doen? Wat zou jij gaan doen?").
+next(rs_thread_2_seq_1, s30, 'success', s31).
+next(rs_thread_2_seq_1, s30, 'fail', s31f).
+
+state(rs_thread_2_seq_1, s31, say).
+text(rs_thread_2_seq_1,  s31, "Wat een goed idee. Ik sla het gelijk op. seeving. seeving. Nog steeds seeving.").
+next(rs_thread_2_seq_1,  s31, "true",  s32).
+
+state(rs_thread_2_seq_1, s31f, say).
+text(rs_thread_2_seq_1,  s31f, "Ik bedenk wel wat als ik aankom!").
+next(rs_thread_2_seq_1,  s31f, "true",  s32).
+
+state(rs_thread_2_seq_1, s32, say).
+text(rs_thread_2_seq_1,  s32, "Ik hoop dat ik deze droom de volgende keer dromen kan en dat ik wakker wordt met een spannend avontuur in mijn hero hoofd").
