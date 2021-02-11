@@ -7,10 +7,12 @@
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
 	motionRecording/2, waitingForMotionRecording/1,
-	waitingForLedAnim/1,
+	waitingForLedAnim/1, waitingForMotionAnim/1,
 	emotion/3,
 	behavior/2,
-	paused/0, pause_act/0, unpause_act/0, stop_act/0.
+	paused/0, pause_act/0, unpause_act/0, stop_act/0,
+	animOption/3,
+	basePosture/1.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
@@ -31,7 +33,7 @@
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
-	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/2, waitingForLoadedAudioID/2,
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForLoadedAudioID/1, waitingForMemoryAudio/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForSayClear/0, waitingForTimer/0,
@@ -122,12 +124,66 @@ valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hk
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
 valueListFromKeyList([], []).
 
+%Parse led animation (a nested list) to a string to store in memory
+%nested_list_to_string(L1, L4) :-
+  	%to_atoms(L1, L2),
+    	%nested_list_to_nested_string(L2, L3),
+  	%atomics_to_string(L3, ',', L4).
+
+nested_list_to_string(L1, L4) :-
+  	maplist(term_to_atom, L1, L2),
+    	nested_list_to_nested_string(L2, L3),
+  	atomics_to_string(L3, ',', L4).
+ 
+string_to_nested_list(Input, Output) :- 
+    atomics_to_string(A, ',', Input),
+    maplist(nested_list_to_atom, A, AFixed),
+    maplist(term_to_atom, Output, AFixed).
+
+nested_list_to_nested_string([H | T], [HProcessed | TProcessed]) :- is_nested_list(H),
+    replace_chars(H, ',', '@', HProcessed), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([H | T], [H | TProcessed]):- not(is_nested_list(H)), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([], []).
+
+replace_char([H | T], CharI, CharO, [CharO | Tout]) :- H = CharI, replace_char(T, CharI, CharO, Tout), !.
+replace_char([H | T], CharI, CharO, [H | Tout]) :- not(H = CharI), replace_char(T, CharI, CharO, Tout), !.
+replace_char([], _, _, []).
+
+replace_chars(I, CharI, CharO, O) :-
+    	atom_chars(I, IChars),
+   	replace_char(IChars, CharI, CharO, OChars),
+    	atom_chars(O, OChars).
+
+%string_to_nested_list(Input, Output) :- 
+    	%atomics_to_string(A, ',', Input),
+   	%nested_list_to_atom(A, AFixed),
+   	%to_terms(AFixed, Output).
+ 
+%nested_list_to_atom([H | T], [Hout | Tout]) :- replace_chars(H, '@', ',', Hout), nested_list_to_atom(T, Tout), !.
+%nested_list_to_atom([], []).
+
+nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
+
+%to_terms([H | T], [Hout | Tout]) :- term_to_atom(Hout, H), to_terms(T, Tout), !.
+%to_terms([], []).
+
+%to_atoms([H | T], [Hout | Tout]) :- term_to_atom(H, Hout), to_atoms(T, Tout), !.
+%to_atoms([], []).
+
+is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
+
+%string_to_nested_list2(Input, Output) :- 
+%    atomics_to_string(A, ',', Input),
+%    maplist('nested_list_to_atom2', A, AFixed),
+%    maplist('term_to_atom', Output, AFixed).
+ 
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ready for action
 readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, recorded, _)).
-readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, [Tsource, Ssource]), audioRecording(Tsource, Ssource, _).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, ID), getUserModelValue(ID, _).
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).
@@ -139,7 +195,7 @@ memoryTasksCompleted :- not(waitingForEvent('UserDataSet')),  not(waitingForEven
 answerReceived(T, S) :- answer(T, S, _, _), not(waitingForAnswer), answerProcessed.
 
 % Audio has been received, not longer waiting for audio.
-audioReceived(T, S) :- not(waitingForAudioFile(T, S)).
+audioReceived :- not(waitingForAudioFile(_)).
 
 % Emotion has been received, no longer waiting for emotion.
 emotionReceived :- emotion(_, _,_), not(waitingForEmotion).
@@ -158,7 +214,7 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 % That is, a question state transitions from (1) start to (2) posing the question (waitingForEvent) to (3) waiting for answer to (4) complete.
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, question), eventsCompleted, answerReceived(Topic, State), correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived(Topic, State), correctPosture.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, audioInput), eventsCompleted, audioReceived, correctPosture.
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived, correctPosture.
 

@@ -17,6 +17,12 @@ module loadUserData(Topics) {
 				% Load motions
 				forall bel(play_motion(Topic, _, Key)) do getUserData(UserId, Key).
 				
+				% Load audio
+				forall bel(audio(Topic, _, recorded, Key), not(waitingForMemoryAudio(Key))) do getUserData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
+				
+				% Load led animations
+				forall bel(play_led_anim(Topic, _, Key)) do getUserData(UserId, Key) + insert(waitingForMemoryLed(Key)).
+				
 				% Recursive continue with the next topic.
 				if not(bel(length(RestOfTopics,0))) then loadUserData(RestOfTopics).
 		}

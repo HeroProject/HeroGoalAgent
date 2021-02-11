@@ -46,15 +46,10 @@ module hero_events {
 			if bel(isCharging, IsCharging = false) then delete(isCharging).
 			if bel(not(isCharging), IsCharging = true) then insert(isCharging).
 		}
-		
-	% Motion recording percept
-	%forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), userId(UserId), generateKeyFromTopicAndState(T, S, ID)), not(bel(motionRecording(ID, Recording)))
-		%do insert(motionRecording(ID, Recording)) + setUserData(UserId, ID, Recording) + log(motionRecording(UserId, T, S, Recording)).
-	
-	forall percept(motionRecording(Recording)), bel(currentTopic(T), currentState(S), generateKeyFromTopicAndState(T, S, ID), userModel(UserModel), updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
+			
+	forall percept(motionRecording(Recording)), bel(waitingForMotionRecording(ID), userModel(UserModel), updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
 		do delete(userModel(UserModel), waitingForMotionRecording(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Recording).
 			
-
 	% Handling of event waiting logic...
 	% ... for NAO events
 	forall bel(event(E), waitingForEvent(E))
@@ -76,22 +71,22 @@ module hero_events {
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
 	% Event fail safe TODO: fix this
-	%if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
-		%forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
+	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
+		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
-		%if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
-	%}
+		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
+	}
 	
 	%Audio recording percepts
-	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource), userId(UserId), generateKeyFromTopicAndState(Tsource, Ssource, ID))
-		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)) + setUserData(UserId, ID, FileName).
-	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
-		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
+	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId))
+		do loadAudio(FileName) + delete(waitingForAudioFile(ID)) + insert(waitingForLoadedAudioID(ID)) + setUserData(UserId, ID, FileName).
+		
+	forall percept(loadedAudioID(RemoteID)), bel(waitingForLoadedAudioID(ID), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
+		do delete(waitingForLoadedAudioID(ID), userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
 	%Emotion detection percepts
-	if percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
-		then insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
-	
+	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
+		do insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
@@ -177,8 +172,8 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudioFile(_, _)), not(waitingForLoadedAudioID(T, S)), keyValue(T, S, recordTime, RT), Time is RT/1000)
-		then enableRecording + startListening(Time) + insert(waitingForAudioFile(T, S)).
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID)), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))

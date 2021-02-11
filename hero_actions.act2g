@@ -89,21 +89,21 @@ define disableBreathing with
 	pre { true }
 	post { waitingForEvent('BreathingDisabled') }
 
-%define enableBreathing(Bodypart) with
-	%pre { true }
-	%post { waitingForEvent('BreathingEnabled') }
+define enableBreathing(Bodypart) with
+	pre { true }
+	post { waitingForEvent('BreathingEnabled') }
 	
-%define disableBreathing(Bodypart) with
-	%pre { true }
-	%post { waitingForEvent('BreathingDisabled') }
+define disableBreathing(Bodypart) with
+	pre { true }
+	post { waitingForEvent('BreathingDisabled') }
 
 define goToPosture(Posture) with
 	pre { true }
-	post { waitingForPosture(Posture) }
+	post { waitingForEvent('GoToPostureDone') }
 
 define goToPosture(Posture, Speed) with
 	pre { true }
-	post { waitingForPosture(Posture) }
+	post { waitingForEvent('GoToPostureDone') }
 
 define setStiffness(Joints, Stiffness) with
 	pre { true }

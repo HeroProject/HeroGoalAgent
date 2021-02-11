@@ -18,8 +18,12 @@ session(lenin, [lenin]).
 session(getting_acquainted, [general_wakeup, ga_intro, ga_prac_speech, ga_prac_touch, ga_bridge, ga_sports, general_rest]).
 session(test_session_1, [general_wakeup, ga_sports, general_rest]).
 session(test_session_2, [general_wakeup, test_second_session, general_rest]).
-session(test_session_3, [general_wakeup, test_motion, general_rest]).
+session(test_session_3, [general_wakeup, test_motion_co_a, test_motion_co_b, general_rest]).
 session(test_session_4, [general_wakeup, test_motion_2, general_rest]).
+session(test_session_5, [general_wakeup, test_sound, general_rest]).
+session(test_session_6, [general_wakeup, test_session_sound, general_rest]).
+session(test_session_7, [general_wakeup, test_session_led_1a, test_session_led_1b, general_rest]).
+session(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
 % Co-creation
 session(co_creation_short, [general_wakeup, co_intro, general_rest]).
@@ -53,10 +57,12 @@ general_rest]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Use of GUI.
 % When GUI is used this userId and these localVariables are ignored.
-useGui(true).
+useGui(false).
 setUserId('999').
-setSessionId(3).
-addLocalVariable(first_name, "Mike"). 
+setSessionId(5).
+setBasePosture('Sit').
+addLocalVariable(first_name, "Mike").
+
 
 % Session details.
-sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4]).
+sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).

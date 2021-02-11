@@ -12,7 +12,11 @@ leds(general_wakeup, s1, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", "white
 next(general_wakeup, s1, "true", s2).
 
 state(general_wakeup, s2, say).
-enableBreathing(general_wakeup, s2).
+go_to_base_posture(general_wakeup, s2).
+next(general_wakeup, s2, "true", s3).
+
+state(general_wakeup, s3, say).
+enableBreathing(general_wakeup, s3).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Rest	    		                           %%%

@@ -23,7 +23,7 @@ module initializeUserModel {
 	
 
 	% Set userId and sessionId if not provided by gui.
-	if bel(useGui(false), setUserId(UserId), setSessionId(SessionId)) then insert(userId(UserId), sessionId(SessionId)).
+	if bel(useGui(false), setUserId(UserId), setSessionId(SessionId), setBasePosture(BasePosture)) then insert(userId(UserId), sessionId(SessionId), basePosture(BasePosture)).
 	
 	% Initialize remote user model.
 	if bel(userId(UserId), sessionId(SessionId)) then delete(waitingForInit) + setSession(UserId, SessionId) + insert(waitingForSession).

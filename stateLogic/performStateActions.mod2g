@@ -26,26 +26,54 @@ module performStateActions(T, S) {
 	% Play audio from server.
 	if bel(audio(T, S, server, A)) then playAudio(A).
 	% Play recorded audio.
-	if bel(audio(T, S, recorded, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
+	if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
 	% Wake up.
 	if bel(wakeup(T, S)) then wakeUp.
 	% Rest
 	if bel(rest(T, S)) then rest + stopLedAnimation + clearLoadedAudio.
 	% Set breathing
-	if bel(enableBreathing(T, S)) then enableBreathing.
+	if bel(enableBreathing(T, S), basePosture(Posture)) then {
+	
+		if bel(Posture = 'Stand') then enableBreathing.
+		if bel(Posture = 'Sit') then enableBreathing('Head').
+	}
+	
 	if bel(disableBreathing(T, S)) then disableBreathing.
 	% Go to posture
-	if bel(goToPosture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
+	if bel(go_to_posture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
+	if bel(go_to_posture(T, S, Posture)) then goToPosture(Posture).
+	if bel(go_to_base_posture(T, S), basePosture(Posture)) then goToPosture(Posture).
 	% Set stiffness
-	if bel(goToPosture(T, S, Posture)) then goToPosture(Posture).
-		if bel(set_stiffness(T, S, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
+	if bel(set_stiffness(T, S, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
 	% Record motion
-	if bel(record_motion_timer(T, S, Joints, Duration), generateKeyFromTopicAndState(T, S, ID)) 
+	if bel(prepare_motion_anim(T, S), keyListValues(T, S, [umVariable, option1, option2], [ID, Option1, Option2]), topics(AllTopics))
+		then delete(topics(AllTopics)) + insert(topics([co_motion | AllTopics]), waitingForMotionAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+		
+	if bel(record_motion_timer(T, S, Joints, Duration), not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID)) 
+		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
+		
+	if bel(record_motion_timer(T, S, Joints, Duration), keyValue(T, S, umVariable, ID)) 
 		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
 	
 	if bel(start_motion_recording(T, S, Joints))
 		then setStiffness(Joints, 0) + startMotionRecording(Joints).
-	if bel(stop_motion_recording(T, S, Joints), generateKeyFromTopicAndState(T, S, ID)) then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
+		
+	if bel(stop_motion_recording(T, S, Joints), not(waitingForMotionAnim(_)), not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID)) then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
+	
+	if bel(stop_motion_recording(T, S, Joints), not(waitingForMotionAnim(_)), keyValue(T, S, umVariable, ID)) then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
+	
+	if bel(stop_motion_recording(T, S, Joints), waitingForMotionAnim(ID))
+		then {
+			if true then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)) + delete(waitingForMotionAnim(ID)).
+			forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+		}
+	
+	if bel(save_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then {
+		if bel(userModel(UserModel), updateUserModel(ID, Motion, UserModel, NewUserModel), userId(UserId)) then
+			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Motion).
+		
+		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+	}
 	% Play motion
 	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
 	if bel(play_motion(T, S, ID), getUserModelValue(ID, Recording))
@@ -53,19 +81,44 @@ module performStateActions(T, S) {
 		
 	if bel(play_motion_file(T, S, Path)) then playMotionFile(Path).
 	
+	if bel(play_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
+	
 	% Led animation
 	% Set a flag that the next led animation will be linked to this id.
-	if bel(prepare_led_anim(T, S), generateKeyFromTopicAndState(T, S, ID), topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(T, S), not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID), topics(AllTopics))
+		then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID)).
 	
-	% Save the led animation configurations. First is only a color select. Second are blinking, alternate, and spinning animations.
+	if bel(prepare_led_anim(T, S), keyListValues(T, S, [umVariable, option1, option2], [ID, Option1, Option2]), topics(AllTopics))
+		then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+
+	% Save the led animation configurations.
+	% Remove all the downloaded options
+	forall bel(save_led_anim(T, S, _, _, _, _), waitingForLedAnim(ID), animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+		
+	%Save a blinking, alternate, and spinning animations.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
 	getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
-	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel)) 
-		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)).
+	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
+	nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
+		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
 	
+	%Save a color select animation.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
-	userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel)) 
-		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)).
+	userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
+	nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
+		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
+	
+	% Save a led animation option as selected option and remove the remaining options.
+	if bel(save_led_anim_option(T, S, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then 
+	{
+		%Store the selected uptions with the right ID in the local and remote user model.
+		if bel(userModel(UserModel), updateUserModel(ID, [Group, AnimType, Colors, Speed], UserModel, NewUserModel),
+				nested_list_to_string([Group, AnimType, Colors, Speed], AnimString), userId(UserId)) 
+			then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
+		
+		%Remove all the stored led animation options.
+		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+	} 
 	
 	% Start led animation from configurations stored in user model.
 	if bel(play_led_anim(T, S, ID), getUserModelValue(ID, [Group, AnimType, Colors, Speed])) then 
@@ -74,13 +127,27 @@ module performStateActions(T, S) {
 		if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
 	}
 	
+	% Start led animation from configurations stored in option predicate.
+	if bel(play_led_anim_option(T, S, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then {
+		if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
+		if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+	}
+	
 	% Start led animation with given configurations.
 	if bel(start_led_anim(T, S, Group, AnimType, Colors, Speed)) then
 	{
 		if bel(keyValue(T, S, ledRemoteSource, "true"), getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR)) 
-			then startLedAnimation(GroupR, AnimTypeR, ColorsR, Speed).
-		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then startLedAnimation(Group, AnimType, Colors, Speed).
+			then {
+				if not(bel(AnimTypeR = colorSelect)) then startLedAnimation(GroupR, AnimTypeR, ColorsR, Speed). 
+				if bel(AnimTypeR = colorSelect) then setLedColor(GroupR, ColorsR).
+			}
+			
+		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then {
+			if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+			if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
+		}
 	}
+	
 	% Stop currently running led animation.
 	if bel(stop_led_anim(T, S)) then stopLedAnimation.
 	

@@ -37,7 +37,31 @@ module selectRobotResponse(T, S, Ans, Data) {
 				}
 			
 			% If an answer was given
-			if bel(Ans \= failure, generateKeyFromTopicAndState(T, S, Key), userId(UserId))
+			if bel(Ans \= failure, not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, Key), userId(UserId))
+				then {
+					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
+					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + log(userModel(UpdatedUserModel)).
+					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
+					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+					%for branch questions
+					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
+					userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+					%for quiz questions
+					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity) + log(userModel(UpdatedUserModel)).
+					%for open questions
+					if bel(Type=openend)
+						then insert(nextCondition('success')).
+					
+					%Logging
+					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
+						then logging([topic=T, state=S, action=questionFinalResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+				}
+			
+			if bel(Ans \= failure, keyValue(T, S, umVariable, Key), userId(UserId)) %TODO: combine with previous statement.
 				then {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
 					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))

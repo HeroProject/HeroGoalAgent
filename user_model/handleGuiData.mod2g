@@ -12,7 +12,9 @@ module handleGuiData(Key, Value) {
 	
 	if bel(Key = 'sessionId', term_string(SessionId, Value)) then insert(sessionId(SessionId)).
 	
-	if not(bel(Key = 'userId')), not(bel(Key = 'sessionId')) then insert(localVariable(Key, Value)).
+	if bel(Key = 'basePosture') then insert(basePosture(Value)).
+	
+	if not(bel(Key = 'userId')), not(bel(Key = 'sessionId')), not(bel(Key = 'basePosture')) then insert(localVariable(Key, Value)).
 	
 	if bel(waitingForGuiData(Key)) then delete (waitingForGuiData(Key)).
 }
