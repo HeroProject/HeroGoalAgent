@@ -20,9 +20,9 @@ module hero_main {
 	if bel(currentTopic(T), currentState(S), readyForAction(T, S), not(paused)) then performStateActions(T, S).
 	
 	%TODO: make pretty
-	if bel(pause_act) then say("Ik ga even pauze houden.") + rest + stopLedAnimation + delete(pause_act). 
-	if bel(unpause_act) then wakeUp + say("Laten we weer verder gaan.") + delete(unpause_act, paused).
-	if bel(stop_act) then say("Weltrusten") + rest + stopLedAnimation + clearLoadedAudio + delete(stop_act).
+	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
+	if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
+	if bel(stop_act) then delete(stop_act) + say("Weltrusten") + rest + stopLedAnimation + clearLoadedAudio.
 }
 	
 	
