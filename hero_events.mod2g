@@ -1,5 +1,6 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'recognitionAndRepairePipeline/*.mod2g' as module.
@@ -19,7 +20,11 @@ module hero_events {
 		do delete(event(E)).
 	
 	if bel(event(pause)) then insert(paused, pause_act).
+	if bel(waitForPause(PB), event(PB)) then insert(paused, pause_act, waitForUnPause(PB)) + delete(waitForPause(PB)).
+	
 	if bel(event(unpause)) then insert(unpause_act).
+	if bel(waitForUnPause(PB), event(PB), not(pause_act)) then insert(unpause_act, waitForPause(PB)) + delete(waitForUnPause(PB)).
+	
 	if bel(event(stop)) then insert(stop_act).
 		
 	% Memory data percepts
@@ -78,11 +83,22 @@ module hero_events {
 	}
 	
 	%Audio recording percepts
-	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId))
-		do loadAudio(FileName) + delete(waitingForAudioFile(ID)) + insert(waitingForLoadedAudioID(ID)) + setUserData(UserId, ID, FileName).
-		
-	forall percept(loadedAudioID(RemoteID)), bel(waitingForLoadedAudioID(ID), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
-		do delete(waitingForLoadedAudioID(ID), userModel(UserModel)) + insert(userModel(NewUserModel)).
+	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), audioOrder(Order), NewOrder is Order + 1)
+		do loadAudio(FileName) + delete(waitingForAudioFile(ID), audioOrder(Order)) + insert(waitingForLoadedAudioID(ID, Order), audioOrder(NewOrder)) + setUserData(UserId, ID, FileName).
+	
+	%forall percept(loadedAudioID(ID, RemoteID)) do log(loadedAudioID(RemoteID, ID)).
+	
+	forall percept(loadedAudioID(RemoteID)), bel(loadedAudioOrder(Order), NewOrder is Order + 1) 
+		do delete(loadedAudioOrder(Order)) + insert(loadedAudioID(Order, RemoteID), loadedAudioOrder(NewOrder)).
+	
+	forall bel(loadedAudioID(Order, RemoteID), waitingForLoadedAudioID(ID, Order), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
+		do delete(loadedAudioID(Order, RemoteID), waitingForLoadedAudioID(ID, Order),  userModel(UserModel)) + insert(userModel(NewUserModel)).
+	
+	if bel(not(waitingForLoadedAudioID(_, _)), audioOrder(AudioOrder), not(AudioOrder = 0), loadedAudioOrder(LoadedAudioOrder), not(LoadedAudioOrder = 0)) 
+		then delete(audioOrder(AudioOrder), loadedAudioOrder(LoadedAudioOrder)) + insert(audioOrder(0), loadedAudioOrder(0)).
+	
+	%waitingForLoadedAudioID(ID, Order), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
+		%do delete(waitingForLoadedAudioID(ID, Order), userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
 	%Emotion detection percepts
 	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
@@ -172,7 +188,10 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID)), Time is RT/1000)
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID, _)), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID, _)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion
@@ -184,16 +203,12 @@ module hero_events {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this state.	
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), not(waitingForSayClear), eventsCompleted)
-		then insert(waitingForEvent(Next), waitingForEvent(Repeat), waitingForSayClear).
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), not(waitingForSayClear), eventsCompleted)
+		then insert(waitingForEvent(Next), waitingForSayClear).
 	
 	% If the next event is available, clear this state.
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), waitingForSayClear, not(waitingForEvent(Next)))
-		then delete(waitingForEvent(Repeat), waitingForSayClear).
-	
-	% if the repeat event is available, reset this state.
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyListValues(T, S, [next, repeat], [Next, Repeat]), waitingForSayClear, not(waitingForEvent(Repeat)))
-		then delete(waitingForEvent(Next), waitingForSayClear, started) + insert(start).
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
+		then delete(waitingForSayClear).
 	
 	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
 		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).

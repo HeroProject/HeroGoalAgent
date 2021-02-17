@@ -60,6 +60,7 @@ state(co_motion, sdownload6, question).
 stateConfig(co_motion, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
 branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_motion, sdownload7]]]).
 text(co_motion, sdownload6, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
+go_to_base_posture(co_motion, sdownload6).
 next(co_motion, sdownload6, "success", sdownload7).
 next(co_motion, sdownload6, "fail", sdownload7f).
 
@@ -101,12 +102,13 @@ set_stiffness(co_motion, smaken2, ['RArm', 'LArm'], 0).
 next(co_motion,  smaken2, "true",  smaken3).
 
 state(co_motion, smaken3, say).
-audio(co_motion, smaken3, server, "resources/sounds/ready_to_record_gesture.wav").
+%audio(co_motion, smaken3, server, "resources/sounds/ready_to_record_gesture.wav").
+text(co_motion, smaken3, "3. 2. 1").
 next(co_motion,  smaken3, "true",  smaken4).
 
 state(co_motion, smaken4, say).
 start_motion_recording(co_motion, smaken4, ['RArm', 'LArm']).
-stateConfig(co_motion, smaken4, [waitTimer=12]).
+stateConfig(co_motion, smaken4, [waitTimer=5000]).
 next(co_motion,  smaken4, "true",  smaken5).
 
 state(co_motion, smaken5, say).

@@ -7,10 +7,10 @@
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	audioRecording/3,
 	motionRecording/2, waitingForMotionRecording/1,
-	waitingForLedAnim/1, waitingForMotionAnim/1,
+	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
 	behavior/2,
-	paused/0, pause_act/0, unpause_act/0, stop_act/0,
+	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
 	basePosture/1.
 
@@ -27,13 +27,15 @@
 	waitingForSession/0,
 	waitingForGuiData/1,
 	userId/1, sessionId/1,
-	localVariable/2.
+	localVariable/2,
+	additionalTopics/1,
+	audioOrder/1, loadedAudioOrder/1, loadedAudioID/2.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
-	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForLoadedAudioID/1, waitingForMemoryAudio/1, waitingForMemoryLed/1,
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForLoadedAudioID/2, waitingForMemoryAudio/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForSayClear/0, waitingForTimer/0,
@@ -81,8 +83,9 @@ concatenate([H], H).
 %Generate a key in the form of Topic_State for referencing a particular topic-state pair.
 generateKeyFromTopicAndState(T, S, Key) :- atomics_to_string([T, S], '_', KeyS), atom_string(Key, KeyS).
 
-updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=Decision), BPDs)), append(BPDs, [Key=Decision], NewBPDs).
-updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=Value), BPDs), delete(BPDs, (Key=Value), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs).
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=_), BPDs)), append(BPDs, [Key=Decision], NewBPDs), !.
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=OldValue), BPDs), not(OldValue = Decision), delete(BPDs, (Key=OldValue), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs), !.
+updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=OldValue), BPDs), OldValue = Decision, NewBPDs=BPDs, !.
 getBranchingPointDecision(BP, Decision) :- branchingPointDecisions(BPDs), member((BP=Decision), BPDs).
 
 addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, TempBPDs),  addDecisionToBranchingPoints(T, Decision, TempBPDs, NewBPDs).
@@ -121,6 +124,7 @@ odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 %valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
+
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
 valueListFromKeyList([], []).
 
@@ -177,7 +181,9 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 %    maplist('nested_list_to_atom2', A, AFixed),
 %    maplist('term_to_atom', Output, AFixed).
  
-    
+delete_topics(TopicsList, [H | T], NewTopicsList) :- delete(TopicsList, H, IntermidiateList), delete_topics(IntermidiateList, T, NewTopicsList), !.
+delete_topics(TopicsList, [H | []], NewTopicsList):- delete(TopicsList, H, NewTopicsList), !.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

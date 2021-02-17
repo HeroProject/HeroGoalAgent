@@ -1,6 +1,7 @@
 use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -9,8 +10,11 @@ module handleMemoryData(Key, Value) {
 	if bel(not(Value = 'None'), not(waitingForMemoryAudio(Key)), not(waitingForMemoryLed(Key)), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
 	
-	if bel(not(Value = 'None'), waitingForMemoryAudio(Key), waitingForMemoryData(Key))
-		then loadAudio(Value) + delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key)) + insert(waitingForLoadedAudioID(Key)).
+	%if bel(not(Value = 'None'), waitingForMemoryAudio(Key), waitingForMemoryData(Key), audioOrder(Order), NewOrder is Order + 1)
+		%then loadAudio(Value) + delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), audioOrder(Order)) + insert(waitingForLoadedAudioID(Key, Order), audioOrder(NewOrder)).
+		
+	if bel(not(Value = 'None'), waitingForMemoryAudio(Key), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
+		then delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
 	if bel(not(Value = 'None'), waitingForMemoryLed(Key), waitingForMemoryData(Key), string_to_nested_list(Value, LedAnim), userModel(UserModel), updateUserModel(Key, LedAnim, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key), waitingForMemoryLed(Key)) + insert(userModel(NewUserModel)).

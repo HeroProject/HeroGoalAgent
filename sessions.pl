@@ -3,14 +3,10 @@
 %%% 							   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Introduction    		                           %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 session(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, general_rest]).
-session(testing_short, [general_wakeup, test_color, general_rest]).
+session(testing_short, [general_wakeup, test_sound2, general_rest]).
 session(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 session(lenin, [lenin]).
 
@@ -20,8 +16,8 @@ session(test_session_1, [general_wakeup, ga_sports, general_rest]).
 session(test_session_2, [general_wakeup, test_second_session, general_rest]).
 session(test_session_3, [general_wakeup, test_motion_co_a, test_motion_co_b, general_rest]).
 session(test_session_4, [general_wakeup, test_motion_2, general_rest]).
-session(test_session_5, [general_wakeup, test_sound, general_rest]).
-session(test_session_6, [general_wakeup, test_session_sound, general_rest]).
+session(test_session_5, [general_wakeup, test_session_sound_1a, test_session_sound_1b, general_rest]).
+session(test_session_6, [general_wakeup, test_session_sound_2, general_rest]).
 session(test_session_7, [general_wakeup, test_session_led_1a, test_session_led_1b, general_rest]).
 session(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
@@ -52,17 +48,29 @@ co_zoo_intro, co_zoo_elephant_baseline, co_zoo_lion_baseline, co_zoo_dolphin_bas
 co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_handshake_led_baseline, co_handshake_ceremonie,
 general_rest]).
 
+%%%%%%%%%%%%%% Hospital user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+session(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho1_tutorial_touch, ho1_tutorial_question, ho1_animals, ho1_animals, ho1_food, ho1_colors, ho1_family, ho1_sports, ho1_continue, ho1_goodbye, general_rest]).
+%session(hospital_1, [general_wakeup, ho1_food, general_rest]).
+session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_creation_1, ho2_creation_2, ho2_creation_3, ho2_creation_4, ho2_creation_5, ho2_creation_6, ho2_creation_7, ho2_creation_8, ho2_goodbye, general_rest]).
+session(hospital_3, [general_wakeup, ho3_greeting, ho3_story_selection, ho3_goodbye, general_rest]).
+%session(hospital_3, [general_wakeup, ho3_koelkast, general_rest]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Use of GUI.
 % When GUI is used this userId and these localVariables are ignored.
-useGui(false).
+useGui(true).
 setUserId('999').
-setSessionId(5).
+setSessionId(1).
 setBasePosture('Sit').
 addLocalVariable(first_name, "Mike").
 
 
 % Session details.
-sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
+setPauseButton('MiddleTactilTouched').
+sessionOrder([hospital_1, hospital_2, hospital_3]).
+
+%test
+%sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
+%sessionOrder([testing_short]).

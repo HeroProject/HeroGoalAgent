@@ -1,5 +1,6 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'stateLogic/performStateActions' as module.
@@ -19,9 +20,9 @@ module hero_main {
 	if bel(currentTopic(T), currentState(S), readyForAction(T, S), not(paused)) then performStateActions(T, S).
 	
 	%TODO: make pretty
-	if bel(pause_act) then say("Ik ben even gepauzeerd") + rest + stopLedAnimation + delete(pause_act). 
-	if bel(unpause_act) then wakeUp + say("Ik ga weer verder") + delete(unpause_act, paused).
-	if bel(stop_act) then say("Ik ga nu weer rusten.") + rest + stopLedAnimation + clearLoadedAudio + delete(stop_act).
+	if bel(pause_act) then say("Ik ga even pauze houden.") + rest + stopLedAnimation + delete(pause_act). 
+	if bel(unpause_act) then wakeUp + say("Laten we weer verder gaan.") + delete(unpause_act, paused).
+	if bel(stop_act) then say("Weltrusten") + rest + stopLedAnimation + clearLoadedAudio + delete(stop_act).
 }
 	
 	

@@ -2,6 +2,7 @@ use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
 use '../topics/robotstories/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -9,7 +10,7 @@ order=linearall.
 
 % Performs all action (modalities) at the start of a state S for topic T.
 module performStateActions(T, S) {
-	% Set led colors.
+	% Set led colors. (can be simplified by always running it trhough valueListFromKeyList)
 	if bel(leds(T, S, Leds, Colors)) then
 	{
 		if bel(keyValue(T, S, ledRemoteSource, "true"), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
@@ -27,6 +28,25 @@ module performStateActions(T, S) {
 	if bel(audio(T, S, server, A)) then playAudio(A).
 	% Play recorded audio.
 	if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
+	
+	if bel(audio(T, S, source, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
+	
+	% Audio management
+	if bel(prepare_sound_anim(T, S), keyListValues(T, S, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), topics(AllTopics))
+		then delete(topics(AllTopics)) + insert(topics([co_sound | AllTopics]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
+	
+	if bel(save_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT), audioOrder(Order), NewOrder is Order + 1) then {
+		if bel(userId(UserId)) then
+			loadAudio(Sound) + delete(soundConfig(ID, RT), waitingForSoundAnim(ID), audioOrder(Order)) + insert(waitingForLoadedAudioID(ID, Order), audioOrder(NewOrder)) + setUserData(UserId, ID, Sound).
+		
+		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+	}
+	
+	if bel(play_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
+	
+	if bel(save_sound(T, S, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
+			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Sound).
+	
 	% Wake up.
 	if bel(wakeup(T, S)) then wakeUp.
 	% Rest
@@ -70,7 +90,7 @@ module performStateActions(T, S) {
 	
 	if bel(save_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Motion, UserModel, NewUserModel), userId(UserId)) then
-			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Motion).
+			delete(userModel(UserModel), waitingForMotionAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Motion).
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
@@ -90,6 +110,9 @@ module performStateActions(T, S) {
 	
 	if bel(prepare_led_anim(T, S), keyListValues(T, S, [umVariable, option1, option2], [ID, Option1, Option2]), topics(AllTopics))
 		then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+	
+	if bel(prepare_led_anim(T, S), keyValue(T, S, umVariable, ID), not(keyListValues(T, S, [option1, option2], [_, _])), topics(AllTopics))
+		then delete(topics(AllTopics)) + insert(topics([co_led_creation | AllTopics]), waitingForLedAnim(ID)).
 
 	% Save the led animation configurations.
 	% Remove all the downloaded options
@@ -173,7 +196,13 @@ module performStateActions(T, S) {
 	
 	if bel(scrup_answers(T, S)) then {
 		forall bel(answer(T, States, Ans, Data)) do delete(answer(T, States, Ans, Data)).
+		
+		%if bel(branchingPointDecisions(BPDs)
 	}
+	
+	if bel(insert_topic(T, S, Topic), topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([Topic | AllTopics])).
+	
+	if bel(remove_topic(T, S, TopicsToDelete), topics(AllTopics), delete_topics(AllTopics, TopicsToDelete, NewAllTopics)) then delete(topics(AllTopics)) + insert(topics(NewAllTopics)).
 	
 	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	%if true then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).

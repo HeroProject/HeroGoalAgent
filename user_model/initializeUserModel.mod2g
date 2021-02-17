@@ -2,6 +2,7 @@ use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
 use '../topics/robotstories/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -9,7 +10,7 @@ order=linearall.
 
 module initializeUserModel {
 	% Initialize user model
-	if true then insert(userModel([])).
+	if true then insert(userModel([]), audioOrder(0), loadedAudioOrder(0)).
 
 	% Load local variables into user model
 	if bel(useGui(false)) then {

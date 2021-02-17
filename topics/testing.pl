@@ -207,7 +207,7 @@ leds(test_emotion, s4, ["FaceLeds"], ["white"]).
 %%% Note: web server needs to be on.		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_sound2, s1, say).
-audio(test_sound2, s1, server, "resources/sounds/truck.wav").
+audio(test_sound2, s1, server, "resources/sounds/zooming.wav").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Animation - Testing anim option		           %%%
@@ -353,7 +353,7 @@ next(test_motion_co_a, s1, "true", s2).
 
 state(test_motion_co_a, s2, say).
 prepare_motion_anim(test_motion_co_a, s2).
-stateConfig(test_motion_co_a, s2, [umVariable=magic_wand_motion,
+stateConfig(test_motion_co_a, s2, [umVariable=motion_magic_wand,
 				 option1='resources/gestures/magicwand1.json',
 				 option2='resources/gestures/magicwand2.json']).
 
@@ -362,7 +362,7 @@ text(test_motion_co_b, s1, "Laten we eens kijken wat je hebt gemaakt").
 next(test_motion_co_b, s1, "true", s2).
 
 state(test_motion_co_b, s2, say).
-play_motion(test_motion_co_b, s2, magic_wand_motion).
+play_motion(test_motion_co_b, s2, motion_magic_wand).
 next(test_motion_co_b, s2, "true", s3).
 
 state(test_motion_co_b, s3, say).
@@ -378,7 +378,7 @@ text(test_motion_2, s1, "Ik weet nog die beweging").
 next(test_motion_2, s1, "true", s2).
 
 state(test_motion_2, s2, say).
-play_motion(test_motion_2, s2, magic_wand_motion).
+play_motion(test_motion_2, s2, motion_magic_wand).
 next(test_motion_2, s2, "true", s3).
 
 state(test_motion_2, s3, say).
@@ -386,20 +386,51 @@ go_to_base_posture(test_motion_2, s3).
 text(test_motion_2, s3, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test session 5					   %%%
+%%% Co-create a sound effecr			 	   %%%
+%%% 				           		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_session_sound_1a, s1, say).
+text(test_session_sound_1a, s1, "Ik kan wel een geluidseffect van een brullende leeuw gebruiken.").
+next(test_session_sound_1a, s1, "true", s2).
+
+state(test_session_sound_1a, s2, say).
+prepare_sound_anim(test_session_sound_1a, s2).
+stateConfig(test_session_sound_1a, s2, [umVariable=sound_lion,
+				 option1='resources/sounds/lion1.wav',
+				 option2='resources/sounds/lion2.wav',
+				 recordTime=4000]).
+
+state(test_session_sound_1b, s1, say).
+text(test_session_sound_1b, s1, "We reden met onze jeep over de savannen en toen ineens hoorden we het.").
+next(test_session_sound_1b, s1, "true", s2).
+
+state(test_session_sound_1b, s2, say).
+text(test_session_sound_1b, s2, "Het was het gebrul van de leeuw").
+next(test_session_sound_1b, s2, "true", s3).
+
+state(test_session_sound_1b, s3, say).
+audio(test_session_sound_1b, s3, recorded, sound_lion).
+next(test_session_sound_1b, s3, "true", s4).
+
+state(test_session_sound_1b, s4, say).
+text(test_session_sound_1b, s4, "Gaaf zeg.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 6					   %%%
 %%% Note: a previous session should contain the 	   %%%
 %%% 'test_motion' topic		           		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(test_session_sound, s1, say).
-text(test_session_sound, s1, "Als machtige krijgers brullen wij als een leeuw.").
-next(test_session_sound, s1, "true", s2).
+state(test_session_sound_2, s1, say).
+text(test_session_sound_2, s1, "Als machtige krijgers brullen wij als een leeuw.").
+next(test_session_sound_2, s1, "true", s2).
 
-state(test_session_sound, s2, say).
-audio(test_session_sound, s2, recorded, sound_lion).
-next(test_session_sound, s2, "true", s3).
+state(test_session_sound_2, s2, say).
+audio(test_session_sound_2, s2, recorded, sound_lion).
+next(test_session_sound_2, s2, "true", s3).
 
-state(test_session_sound, s3, say).
-text(test_session_sound, s3, "Gaaf hè").
+state(test_session_sound_2, s3, say).
+text(test_session_sound_2, s3, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 7					   %%%

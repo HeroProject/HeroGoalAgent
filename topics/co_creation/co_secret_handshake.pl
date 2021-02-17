@@ -350,7 +350,7 @@ next(co_handshake_sound, s11downloaden, "success", s12downloaden).
 next(co_handshake_sound, s11downloaden, "fail", s11downloadenf).
 
 state(co_handshake_sound, s11downloadenf, say).
-text(co_handshake_sound,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
+text(co_handshake_sound,  s11downloadenf, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
 next(co_handshake_sound,  s11downloadenf, "true",  s12downloaden).
 
 state(co_handshake_sound, s12downloaden, branchingPoint).

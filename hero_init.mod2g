@@ -1,5 +1,6 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'user_model/initializeUserModel.mod2g' as module.
@@ -13,6 +14,9 @@ module hero_init {
 	
 	% Initialize robot model
 	if true then insert(posture('Unknown'), stiffness(0), batteryCharge(100)).
+	
+	% Initalize pause button
+	if bel(setPauseButton(PB)) then insert(waitForPause(PB)).
 
 	% Initialize user model.
 	if bel(useGui(true)) then insert(waitingForGuiData('userId'), waitingForGuiData('sessionId'), waitingForGuiData('basePosture'), waitingForGuiData('first_name')).
