@@ -7,8 +7,6 @@ use '../hero_actions' as actionspec.
 
 module handleGuiData(Key, Value) {
 
-	if true then log(guiData(Key, Value)).
-
 	if bel(Key = 'userId') then insert(userId(Value)).
 	
 	if bel(Key = 'sessionId', term_string(SessionId, Value)) then insert(sessionId(SessionId)).

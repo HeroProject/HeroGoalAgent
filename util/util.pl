@@ -5,10 +5,10 @@
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
 	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
-	audioRecording/3,
-	motionRecording/2, waitingForMotionRecording/1,
+	waitingForMotionRecording/1,
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
+	audioRecording/1,
 	behavior/2,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
@@ -28,14 +28,13 @@
 	waitingForGuiData/1,
 	userId/1, sessionId/1,
 	localVariable/2,
-	additionalTopics/1,
-	audioOrder/1, loadedAudioOrder/1, loadedAudioID/2.
+	additionalTopics/1.
 
 % Predicates related to state execution and transition handling.
 :-dynamic currentTopic/1, currentState/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, topics/1, 
-	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForLoadedAudioID/2, waitingForMemoryAudio/1, waitingForMemoryLed/1,
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryAudio/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForSayClear/0, waitingForTimer/0,
@@ -67,8 +66,8 @@ updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue)
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
 getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 %isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
-
-
+getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
+getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=FirstName), UserModel)).
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).

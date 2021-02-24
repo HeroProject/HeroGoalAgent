@@ -6,23 +6,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% LED Animation Check					   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(co_led_selection, s1, say).
-scrup_answers(co_led_selection, s1).
-next(co_led_selection, s1, "true", s2).
-
-state(co_led_selection, s2, question).
-stateConfig(co_led_selection, s2, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
+state(co_led_selection, s1, question).
+stateConfig(co_led_selection, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
 branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_led_selection, s4]]]).
-text(co_led_selection, s2, "Wil jij de lichtshow maken of zal ik wat opties downloaden?").
-next(co_led_selection, s2, "success", s3).
-next(co_led_selection, s2, "fail", s3f).
+text(co_led_selection, s1, "Wil jij de lichtshow maken of zal ik wat opties downloaden?").
+next(co_led_selection, s1, "success", s3).
+next(co_led_selection, s1, "fail", s3f).
 
 state(co_led_selection, s3f, say).
 text(co_led_selection, s3f, "Weet je wat? Ik download gewoon wat licht animaties.").
 next(co_led_selection, s3f, 'true', sdownload1).
 
 state(co_led_selection, s3, say).
-text(co_led_selection,  s3, "Oke we gaan het %co_led_selection_s2%.").
+text(co_led_selection,  s3, "Oke we gaan het %co_led_selection_s1%.").
 next(co_led_selection,  s3, "true",  s4).
 
 state(co_led_selection, s4, branchingPoint).

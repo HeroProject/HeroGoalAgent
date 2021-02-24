@@ -5,6 +5,7 @@ use '../topics/robotstories/*.pl' as knowledge.
 use '../topics/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
+use '../util/logging' as module.
 
 order=linearall.
 
@@ -18,6 +19,10 @@ module performStateTransition(T, S, C) {
 	if bel(state(T, S, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
 		then delete(modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count)). 
 	
+	% Cleanup: answers have been stored and processed. Temporary placeholder can be removed.
+	if bel(answer(T, S, Ans, Data)) then delete(answer(T, S, Ans, Data)).
+	forall bel(audioRecording(ID)) do delete(audioRecording(ID)).
+	
 	% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
 	if bel(currentState(S), started)
 		then delete(currentState(S), started, nextCondition(C))
@@ -28,8 +33,8 @@ module performStateTransition(T, S, C) {
 		then insert(currentState(Snext)). % Progress: move to next state
 		
 	% ... or go to next topic if a topic has been completed (no next state has been specified for the topic).
-	if goal(topics([])), not(bel(next(T, S, C, _))), bel(topics(AllTopics), pop(AllTopics, NewTopic, RemainingTopics))
-		then delete(currentTopic(T), topics(AllTopics)) + insert(currentTopic(NewTopic), topics(RemainingTopics), currentState(s1)).
+	if goal(topics([])), not(bel(next(T, S, C, _))), bel(topics(AllTopics), pop(AllTopics, NewTopic, RemainingTopics), getUserModelWithoutLocal(UserModel))
+		then delete(currentTopic(T), topics(AllTopics)) + insert(currentTopic(NewTopic), topics(RemainingTopics), currentState(s1)) + logging([userModel=UserModel]).
 			
 	% And, finally, initialize state specific parameters for new state (if any).
 	if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 

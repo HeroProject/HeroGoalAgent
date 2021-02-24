@@ -23,7 +23,7 @@ module selectRobotResponse(T, S, Ans, Data) {
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
 					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userModel(UserModel), generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel), userId(UserId))
-						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setUserData(UserId, Key, DefaultAns) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setUserData(UserId, Key, DefaultAns).
 					
 					%There are two ways a branching decision can deal with a fail.
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
@@ -42,17 +42,17 @@ module selectRobotResponse(T, S, Ans, Data) {
 				then {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
 					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
 					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
 					userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for quiz questions
 					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity).
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).
@@ -66,17 +66,17 @@ module selectRobotResponse(T, S, Ans, Data) {
 				then {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
 					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
 					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for branch questions
 					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
 					userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans) + log(userModel(UpdatedUserModel)).
+						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Ans).
 					%for quiz questions
 					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity) + log(userModel(UpdatedUserModel)).
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setUserData(UserId, Key, Entity).
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).

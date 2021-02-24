@@ -15,7 +15,7 @@ text(ho3_greeting,  s2, "Alweer de derde keer zeg.").
 next(ho3_greeting,  s2, "true",  s3).
 
 state(ho3_greeting, s3, say).
-text(ho3_greeting,  s3, "Ik heb vele verhalen om te vertellen, en vandaag mag ik dat eindelijk gaan doen. \pau=300\ ").
+text(ho3_greeting,  s3, "Vandaag mag ik eindelijk het verhaal van mij als %ho2_story_choice% vertellen. \pau=300\ ").
 next(ho3_greeting,  s3, "true",  s4).
 
 state(ho3_greeting, s4, say).
@@ -28,65 +28,21 @@ next(ho3_greeting,  s5, "true",  s6).
 
 state(ho3_greeting, s6, say).
 text(ho3_greeting,  s6, "En dat kan ik nu goed gebruiken.").
+next(ho3_greeting,  s6, "true",  s7).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Story selection			                   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(ho3_story_selection, s1, say).
-text(ho3_story_selection,  s1, "Voordat ik ging leren om een robot vriendje te worden, heb ik nog vele andere dingen geprobeerd.").
-next(ho3_story_selection,  s1, "true",  s2).
+state(ho3_greeting, s7, branchingPoint).
+stateConfig(ho3_greeting, s7, [branchDecider=entity, branchSource=ho2_story_choice]).
+next(ho3_greeting, s7, "koelkast", s8koelkast).
+next(ho3_greeting, s7, "graafmachine", s8graafmachine).
+next(ho3_greeting, s7, "fail", s8koelkast).
 
-state(ho3_story_selection, s2, say).
-text(ho3_story_selection,  s2, "Zo heb ik gestudeerd om een slimme koelkast te worden.").
-next(ho3_story_selection,  s2, "true",  s3).
+state(ho3_greeting, s8koelkast, say).
+insert_topic(ho3_greeting, s8koelkast, ho3_koelkast).
+stateConfig(ho3_greeting, s8koelkast, [loadUserModel="true"]).
 
-state(ho3_story_selection, s3, say).
-text(ho3_story_selection,  s3, "Ook heb ik een tijdje gewerkt als graafmachine, en telescoop. \pau=300\ ").
-next(ho3_story_selection,  s3, "true",  s5).
-
-state(ho3_story_selection, s5, say).
-text(ho3_story_selection,  s5, "Robot vriendje is toch wel het leukste. \pau=300\ ").
-next(ho3_story_selection,  s5, "true",  s6).
-
-state(ho3_story_selection, s6, say).
-text(ho3_story_selection,  s6, "Maar ik vertel graag over al mijn avontuuuren.").
-next(ho3_story_selection,  s6, "true",  s7).
-
-state(ho3_story_selection, s7, say).
-text(ho3_story_selection,  s7, "Over mijn tijd als koelkast, graafmachine, en telescoop.").
-next(ho3_story_selection,  s7, "true",  s8).
-
-state(ho3_story_selection, s8, question).
-stateConfig(ho3_story_selection, s8, [type=input, context='choose_story', options= ["koelkast", "graafmachine", "telescoop"], umVariable=ho3_story_choice]).
-text(ho3_story_selection, s8, "Waar hoor jij het liefste een verhaaltje over?").
-next(ho3_story_selection, s8, 'success', s9).
-next(ho3_story_selection, s8, 'fail', s8f).
-
-state(ho3_story_selection, s8f, say).
-text(ho3_story_selection,  s8f, "Dat ging niet helemaal goed, maar dat is niet erg. Laat ik gewoon over mijn tijd als koelkast vertellen.").
-next(ho3_story_selection,  s8f, "true",  s9).
-
-state(ho3_story_selection, s9, branchingPoint).
-stateConfig(ho3_story_selection, s9, [branchDecider=entity, branchSource=ho3_story_choice]).
-next(ho3_story_selection, s9, "koelkast", s10koelkast).
-next(ho3_story_selection, s9, "graafmachine", s10graafmachine).
-next(ho3_story_selection, s9, "telescoop", s10telescoop).
-next(ho3_story_selection, s9, "fail", s10koelkast).
-
-state(ho3_story_selection, s10koelkast, say).
-text(ho3_story_selection,  s10koelkast, "Koelkast, leuk!").
-insert_topic(ho3_story_selection, s10koelkast, ho3_koelkast).
-stateConfig(ho3_story_selection, s10koelkast, [loadUserModel="true"]).
-
-state(ho3_story_selection, s10graafmachine, say).
-text(ho3_story_selection,  s10graafmachine, "Graafmachine, leuk!").
-insert_topic(ho3_story_selection, s10graafmachine, ho3_graafmachine).
-stateConfig(ho3_story_selection, s10graafmachine, [loadUserModel="true"]).
-
-state(ho3_story_selection, s10telescoop, say).
-text(ho3_story_selection,  s10telescoop, "telescoop, leuk!").
-insert_topic(ho3_story_selection, s10telescoop, ho3_telescoop).
-stateConfig(ho3_story_selection, s10telescoop, [loadUserModel="true"]).
+state(ho3_greeting, s8graafmachine, say).
+insert_topic(ho3_greeting, s8graafmachine, ho3_graafmachine).
+stateConfig(ho3_greeting, s8graafmachine, [loadUserModel="true"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Koelkast		 	                           %%%
@@ -107,27 +63,34 @@ text(ho3_koelkast, s3, "Ik had toen zoveel vriendjes.").
 next(ho3_koelkast, s3, "true", s4).
 
 state(ho3_koelkast, s4, say).
-text(ho3_koelkast, s4, "Pak Melk is een goede vriend van me, en met mevrouw Kaas heb ik vroeger nog veel tennis gespeeld.").
+text(ho3_koelkast, s4, "Pak Melk is een goede vriend van me.").
 next(ho3_koelkast, s4, "true", s5).
 
 state(ho3_koelkast, s5, say).
-text(ho3_koelkast, s5, "Oh, mevrouw Kaas \pau=500\ ").
+text(ho3_koelkast, s5, "en met mevrouw Kaas heb ik vroeger nog veel tennis gespeeld.").
+play_motion(ho3_koelkast, s5, motion_tennis).
+audio(ho3_koelkast, s5, server, "resources/sounds/tennis.wav").
 next(ho3_koelkast, s5, "true", s6).
 
 state(ho3_koelkast, s6, say).
-text(ho3_koelkast, s6, "Maar goed.").
+text(ho3_koelkast, s6, "Oh, mevrouw Kaas \pau=500\ ").
+go_to_base_posture(ho3_koelkast, s6).
 next(ho3_koelkast, s6, "true", s7).
 
 state(ho3_koelkast, s7, say).
-text(ho3_koelkast, s7, "Bij mij in de koelkast was het altijd donker, en was het altijd feest.").
+text(ho3_koelkast, s7, "Maar goed.").
 next(ho3_koelkast, s7, "true", s8).
 
 state(ho3_koelkast, s8, say).
-text(ho3_koelkast, s8, "Iedereen kwam graag op het feest. De groentes, alle sausjes en het fruit.").
-next(ho3_koelkast, s8, "true", s10).
+text(ho3_koelkast, s8, "Bij mij in de koelkast was het altijd donker, en was het altijd feest.").
+next(ho3_koelkast, s8, "true", s9).
+
+state(ho3_koelkast, s9, say).
+text(ho3_koelkast, s9, "Iedereen kwam graag op het feest. De groentes, alle sausjes en het fruit.").
+next(ho3_koelkast, s9, "true", s10).
 
 state(ho3_koelkast, s10, say).
-text(ho3_koelkast, s10, "Weetje wat grappig is, %fruit% is bij mij beter bekend als deejay.").
+text(ho3_koelkast, s10, "Weetje wat grappig is, jouw favorite fruit, %fruit%, is bij mij beter bekend als deejay.").
 next(ho3_koelkast, s10, "true", s11).
 
 state(ho3_koelkast, s11, say).
@@ -143,11 +106,16 @@ next(ho3_koelkast, s12, "true", s13).
 state(ho3_koelkast, s13, say).
 text(ho3_koelkast, s13, " Pak Melk en Sinaasappelsap waren de hele tijd aan het breek dansen, het was altijd feest.").
 stop_led_anim(ho3_koelkast, s13).
+go_to_base_posture(ho3_koelkast, s13).
 next(ho3_koelkast, s13, "true", s14).
 
 state(ho3_koelkast, s14, say).
 text(ho3_koelkast, s14, "Wist je dat %saus% er ook altijd bij was?").
-next(ho3_koelkast, s14, "true", s17).
+next(ho3_koelkast, s14, "true", s15).
+
+state(ho3_koelkast, s15, say).
+text(ho3_koelkast, s15, "%saus% vond jij lekker op je frietjes toch?").
+next(ho3_koelkast, s15, "true", s17).
 
 state(ho3_koelkast, s17, say).
 text(ho3_koelkast, s17, "voor iedereen was er een plekje.").
@@ -223,7 +191,8 @@ text(ho3_koelkast, s41, "Iedereen wilde roepen en schreeuwen, maar de hand was e
 next(ho3_koelkast, s41, "true", s42).
 
 state(ho3_koelkast, s42, say).
-text(ho3_koelkast, s42, "Hij zette %saus% op de plank en deed de deur dicht."). % licht aan.
+text(ho3_koelkast, s42, "Hij zette %saus% op de plank en deed de deur dicht.").
+audio(ho3_koelkast, s42, source, sound_knal).
 next(ho3_koelkast, s42, "true", s44).
 
 state(ho3_koelkast, s44, say).
@@ -232,6 +201,7 @@ next(ho3_koelkast, s44, "true", s45).
 
 state(ho3_koelkast, s45, say).
 text(ho3_koelkast, s45, "Was het eng?").
+play_led_anim(ho3_koelkast,  s45, led_show_duizeligheid).
 next(ho3_koelkast, s45, "true", s46).
 
 state(ho3_koelkast, s46, say).
@@ -244,6 +214,7 @@ next(ho3_koelkast, s49, "true", s50).
 
 state(ho3_koelkast, s50, say).
 text(ho3_koelkast, s50, "Hij liep naar het midden van de koelkast.").
+stop_led_anim(ho3_koelkast, s50).
 next(ho3_koelkast, s50, "true", s51).
 
 state(ho3_koelkast, s51, say).
@@ -270,17 +241,19 @@ next(ho3_koelkast, s55, "true", s56).
 
 state(ho3_koelkast, s56, say).
 text(ho3_koelkast, s56, "Einde \pau=300\ ").
+audio(ho3_koelkast, s56, source, sound_applaus).
+go_to_base_posture(ho3_koelkast, s56).
 stop_led_anim(ho3_koelkast, s56).
-next(ho3_koelkast, s56, "true", s57).
+%next(ho3_koelkast, s56, "true", s57).
 
-state(ho3_koelkast, s57, say).
-text(ho3_koelkast,  s57, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
-leds(ho3_koelkast,  s57, ["RightFootLeds"], ["groen"]).
-stateConfig(ho3_koelkast, s57, [next='RightBumperPressed']).
-next(ho3_koelkast,  s57, "true",  s58).
+%state(ho3_koelkast, s57, say).
+%text(ho3_koelkast,  s57, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
+%leds(ho3_koelkast,  s57, ["RightFootLeds"], ["groen"]).
+%stateConfig(ho3_koelkast, s57, [next='RightBumperPressed']).
+%next(ho3_koelkast,  s57, "true",  s58).
 
-state(ho3_koelkast, s58, say).
-insert_topic(ho3_koelkast, s58, ho3_next_story).
+%state(ho3_koelkast, s58, say).
+%insert_topic(ho3_koelkast, s58, ho3_next_story).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Graafmachine	 	                           %%%
@@ -310,10 +283,12 @@ next(ho3_graafmachine, s7, "true", s8).
 
 state(ho3_graafmachine, s8, say).
 play_motion(ho3_graafmachine, s8, motion_elephant).
+audio(ho3_graafmachine, s8, server, "resources/sounds/elephant.wav").
 next(ho3_graafmachine, s8, "true", s9).
 
 state(ho3_graafmachine, s9, say).
 text(ho3_graafmachine, s9, "Ik reed met mijn familie in een optocht naar de graaf plek. Ik was blij want mijn lievelings graafmachine reed achter mij,").
+go_to_base_posture(ho3_graafmachine, s9).
 next(ho3_graafmachine, s9, "true", s11).
 
 state(ho3_graafmachine, s11, say).
@@ -369,8 +344,16 @@ text(ho3_graafmachine, s31, "Ik sloeg als een gek aan het graven.").
 next(ho3_graafmachine, s31, "true", s32).
 
 state(ho3_graafmachine, s32, say).
-text(ho3_graafmachine, s32, "Ik wist eigenlijk helemaal niet wat de bedoeling was, maar ik had gewoon heel veel zin om te graven.").
-next(ho3_graafmachine, s32, "true", s35).
+text(ho3_graafmachine, s32, "Ik voelde me heel sportief bezig.").
+next(ho3_graafmachine, s32, "true", s33).
+
+state(ho3_graafmachine, s33, say).
+text(ho3_graafmachine, s33, "Als of ik net zoals jij deed aan %favo_sport%").
+next(ho3_graafmachine, s33, "true", s34).
+
+state(ho3_graafmachine, s34, say).
+text(ho3_graafmachine, s34, "Ik wist eigenlijk helemaal niet wat de bedoeling was, maar ik had gewoon heel veel zin om te graven.").
+next(ho3_graafmachine, s34, "true", s35).
 
 state(ho3_graafmachine, s35, say).
 text(ho3_graafmachine, s35, "Ik groef verder de modder weg.").
@@ -393,8 +376,8 @@ text(ho3_graafmachine, s40, "Ik was eigenlijk al bijna vergeten waarom ik aan he
 next(ho3_graafmachine, s40, "true", s41).
 
 state(ho3_graafmachine, s41, say).
-audio(ho3_graafmachine, s41, source, sound_knal).
 text(ho3_graafmachine, s41, "En toen zat ik opeens vast.").
+audio(ho3_graafmachine, s41, server, "resources/sounds/door_slam1.wav").
 next(ho3_graafmachine, s41, "true", s45).
 
 state(ho3_graafmachine, s45, say).
@@ -427,7 +410,7 @@ text(ho3_graafmachine, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzi
 next(ho3_graafmachine, s51, "true", s52).
 
 state(ho3_graafmachine, s52, say).
-audio(ho3_graafmachine, s52, source, sound_stoom).
+audio(ho3_graafmachine, s52, server, "resources/sounds/steam_hiss2.wav").
 next(ho3_graafmachine, s52, "true", s53).
 
 state(ho3_graafmachine, s53, say).
@@ -467,7 +450,7 @@ text(ho3_graafmachine, s75d, "En toen heeft ze het katrol heel precies schoongeb
 next(ho3_graafmachine, s75d, "true", s76).
 
 state(ho3_graafmachine, s76, say).
-audio(ho3_graafmachine, s76, source, sound_stoom).
+audio(ho3_graafmachine, s76, server, "resources/sounds/steam_hiss1.wav").
 next(ho3_graafmachine, s76, "true", s77).
 
 state(ho3_graafmachine, s77, say).
@@ -505,212 +488,30 @@ text(ho3_graafmachine, s89, "Leuk voor haar, he? \pau=200\ ").
 next(ho3_graafmachine, s89, "true", s90).
 
 state(ho3_graafmachine, s90, say).
-text(ho3_graafmachine, s90, "Einde \pau=300\ ").
+text(ho3_graafmachine, s90, "Het was tijd voor een feestje.").
 next(ho3_graafmachine, s90, "true", s91).
 
 state(ho3_graafmachine, s91, say).
-text(ho3_graafmachine,  s91, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
-leds(ho3_graafmachine,  s91, ["RightFootLeds"], ["groen"]).
-stateConfig(ho3_graafmachine, s91, [next='RightBumperPressed']).
-next(ho3_graafmachine,  s91, "true",  s92).
+play_motion(ho3_graafmachine, s91, motion_feest).
+audio(ho3_graafmachine, s91, source, sound_koelkast_song).
+play_led_anim(ho3_graafmachine, s91, led_show_feest).
+next(ho3_graafmachine, s91, "true", s92).
 
 state(ho3_graafmachine, s92, say).
-insert_topic(ho3_graafmachine, s92, ho3_next_story).
+text(ho3_graafmachine, s92, "Einde \pau=300\ ").
+audio(ho3_graafmachine, s92, source, sound_applaus).
+go_to_base_posture(ho3_graafmachine, s92).
+stop_led_anim(ho3_graafmachine, s92).
+%next(ho3_graafmachine, s90, "true", s91).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Telescoop		 	                           %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(ho3_telescoop, s1, say).
-text(ho3_telescoop,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
-leds(ho3_telescoop,  s1, ["RightFootLeds"], ["groen"]).
-stateConfig(ho3_telescoop, s1, [next='RightBumperPressed']).
-next(ho3_telescoop,  s1, "true",  s2).
+%state(ho3_graafmachine, s91, say).
+%text(ho3_graafmachine,  s91, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
+%leds(ho3_graafmachine,  s91, ["RightFootLeds"], ["groen"]).
+%stateConfig(ho3_graafmachine, s91, [next='RightBumperPressed']).
+%next(ho3_graafmachine,  s91, "true",  s92).
 
-state(ho3_telescoop, s2, say).
-leds(ho3_telescoop,  s2, ["RightFootLeds"], ["wit"]).
-text(ho3_telescoop, s2, "Heb jij wel eens gehoord van het mannetje op de maan?").
-next(ho3_telescoop, s2, "true", s7).
-
-state(ho3_telescoop, s7, say).
-text(ho3_telescoop, s7, "Dat verhaal werd vaak aan mij verteld voordat ik in de slaapmodus ging.").
-next(ho3_telescoop, s7, "true", s8).
-
-state(ho3_telescoop, s8, say).
-text(ho3_telescoop, s8, "Alleen was het geen mannetje op de maan, maar een robotje!").
-next(ho3_telescoop, s8, "true", s9).
-
-state(ho3_telescoop, s9, say).
-text(ho3_telescoop, s9, "Er was ooit een robotje dat heel heel erg nieuwsgierig was: hij wilde alles weten.").
-next(ho3_telescoop, s9, "true", s10).
-
-state(ho3_telescoop, s10, say).
-text(ho3_telescoop, s10, "Hij reisde de hele wereld op en neer om alle informatie te weten komen:").
-next(ho3_telescoop, s10, "true", s11).
-
-state(ho3_telescoop, s11, say).
-text(ho3_telescoop, s11, "hij wilde leren voetballen en paardrijden maar ook zwaardvechten.").
-next(ho3_telescoop, s11, "true", s12).
-
-state(ho3_telescoop, s12, say).
-text(ho3_telescoop, s12, "En hij wilde leren tekenen.").
-next(ho3_telescoop, s12, "true", s13).
-
-state(ho3_telescoop, s13, say).
-text(ho3_telescoop, s13, "Hij wilde alle boeken die er bestonden lezen en alle films en televisieseries kijken en alle mensen en dieren op de wereld leren kennen.").
-next(ho3_telescoop, s13, "true", s14).
-
-state(ho3_telescoop, s14, say).
-text(ho3_telescoop, s14, "Het was een heel druk, nieuwsgierig robotje.").
-next(ho3_telescoop, s14, "true", s15).
-
-state(ho3_telescoop, s15, say).
-text(ho3_telescoop, s15, "Maar op een gegeven moment kwam hij erachter dat hij alles wist!").
-next(ho3_telescoop, s15, "true", s16).
-
-state(ho3_telescoop, s16, say).
-text(ho3_telescoop, s16, "Hij had met iedereen een praatje gemaakt, had alle boeken gelezen en alle muziek geluisterd").
-next(ho3_telescoop, s16, "true", s17).
-
-state(ho3_telescoop, s17, say).
-text(ho3_telescoop, s17, "kortom, hij had alles gedaan en alles gezien.").
-next(ho3_telescoop, s17, "true", s18).
-
-state(ho3_telescoop, s18, say).
-text(ho3_telescoop, s18, "Maar een ding had hij nog niet gezien.").
-next(ho3_telescoop, s18, "true", s19).
-
-state(ho3_telescoop, s19, say).
-text(ho3_telescoop, s19, "Op een avond zat hij voor het raam - hij kon niet zo goed slapen, sinds hij alles had gedaan en alles had gezien.").
-next(ho3_telescoop, s19, "true", s20).
-
-state(ho3_telescoop, s20, say).
-text(ho3_telescoop, s20, "Hij zat voor het raam en keek naar de maan, toen hij opeens dacht: ik heb de wereld nog nooit gezien!").
-next(ho3_telescoop, s20, "true", s21).
-
-state(ho3_telescoop, s21, say).
-text(ho3_telescoop, s21, "Ik ben overal geweest en heb iedereen gesproken, maar heb nog nooit onze aardbol in het echt kunnen aanschouwen - alleen maar plaatjes gezien, maar dat telt niet.").
-next(ho3_telescoop, s21, "true", s22).
-
-state(ho3_telescoop, s22, say).
-text(ho3_telescoop, s22, "Hij wist wat hij wilde doen. Hij moest naar het heelal vliegen.").
-next(ho3_telescoop, s22, "true", s23).
-
-state(ho3_telescoop, s23, say).
-text(ho3_telescoop, s23, "Hij vloog in een rechte lijn direct naar de maan, om vanaf daar iedereen en alles op aarde in de gaten te kunnen houden - om alles te kunnen blijven zien.").
-next(ho3_telescoop, s23, "true", s24).
-
-state(ho3_telescoop, s24, say).
-text(ho3_telescoop, s24, "Ik besloot om een telescoopje te worden, om het met eigen ogen te zien.").
-next(ho3_telescoop, s24, "true", s25).
-
-state(ho3_telescoop, s25, say).
-text(ho3_telescoop, s25, "Ik wilde dus een telescoop worden, dit oog was mijn lens: ik kon heel ver kijken.").
-next(ho3_telescoop, s25, "true", s26).
-
-state(ho3_telescoop, s26, say).
-text(ho3_telescoop, s26, "Eerst werd ik de camera van een telefoon, zodat ik kon oefenen met inzoomen en uitzoomen.").
-next(ho3_telescoop, s26, "true", s27).
-
-state(ho3_telescoop, s27, say).
-text(ho3_telescoop, s27, "Toen ik dat onder de knie had, mocht ik de verrekijker zijn: ik werd steeds beter in verre dingen dichtbij halen, en ik stelde steeds sneller scherp.").
-next(ho3_telescoop, s27, "true", s28).
-
-state(ho3_telescoop, s28, say).
-text(ho3_telescoop, s28, "Ik ging vaak mee op wandelingetjes door het bos en zag altijd als eerste wilde dieren: herten, eekhoorns, zwijntjes - ik spotte ze allemaal.").
-next(ho3_telescoop, s28, "true", s29).
-
-state(ho3_telescoop, s29, say).
-text(ho3_telescoop, s29, "En ik dacht: deze dieren ken ik allemaal, ik weet dat ze hier wonen.").
-next(ho3_telescoop, s29, "true", s30).
-
-state(ho3_telescoop, s30, say).
-text(ho3_telescoop, s30, "Tot ik op een dag mijn telescoopdiploma ontving: ik, Robot, mocht als telescoop het heelal gaan ontdekken.").
-next(ho3_telescoop, s30, "true", s31).
-
-state(ho3_telescoop, s31, say).
-text(ho3_telescoop, s31, "Dus ik ging natuurlijk gelijk voor het raam staan om naar de maan te kijken.").
-next(ho3_telescoop, s31, "true", s32).
-
-state(ho3_telescoop, s32, say).
-text(ho3_telescoop, s32, "Het duurde even voordat het donker was en ik de maan goed kon zien, maar ik verloor de maan geen seconde uit het oog.").
-next(ho3_telescoop, s32, "true", s33).
-
-state(ho3_telescoop, s33, say).
-text(ho3_telescoop, s33, "Straks was hij opeens weg en had ik hem gemist!").
-next(ho3_telescoop, s33, "true", s34).
-
-state(ho3_telescoop, s34, say).
-text(ho3_telescoop, s34, "Of kwam-ie helemaal niet tevoorschijn!").
-next(ho3_telescoop, s34, "true", s35).
-
-state(ho3_telescoop, s35, say).
-text(ho3_telescoop, s35, "Dat zou stom zijn.").
-next(ho3_telescoop, s35, "true", s36).
-
-state(ho3_telescoop, s36, say).
-text(ho3_telescoop, s36, "Zodra hij er was, ging ik kijken - al vond ik het wel spannend.").
-next(ho3_telescoop, s36, "true", s37).
-
-state(ho3_telescoop, s37, say).
-text(ho3_telescoop, s37, "Ik speurde elke krater af en elke heuvel, maar ik kon de robot die zo nieuwsgierig was niet vinden."). %licht aan.
-next(ho3_telescoop, s37, "true", s38).
-
-state(ho3_telescoop, s38, say).
-text(ho3_telescoop, s38, "De maan werd voller en ging harder schijnen, waardoor ik alles nog beter kon zien, en ik kon nog beter zien dat er niemand was.").
-next(ho3_telescoop, s38, "true", s39).
-
-state(ho3_telescoop, s39, say).
-text(ho3_telescoop, s39, "Het was maar een verhaaltje dus. ik vond het stiekem toch wel een beetje jammer.").
-next(ho3_telescoop, s39, "true", s40).
-
-state(ho3_telescoop, s40, say).
-text(ho3_telescoop, s40, "Toen, opeens, kwam er iets kleins aangelopen, over de bovenste rand van de maan heen.").
-next(ho3_telescoop, s40, "true", s41).
-
-state(ho3_telescoop, s41, say).
-text(ho3_telescoop, s41, "Ik zoemde heel snel in en zag het toen haarscherp: het was de ruimtereizende robot!").
-next(ho3_telescoop, s41, "true", s42).
-
-state(ho3_telescoop, s42, say).
-text(ho3_telescoop, s42, "Hij bestond!").
-next(ho3_telescoop, s42, "true", s43).
-
-state(ho3_telescoop, s43, say).
-text(ho3_telescoop, s43, "Hij stak heel langzaam zijn handje op en zwaaide.").
-next(ho3_telescoop, s43, "true", s44).
-
-state(ho3_telescoop, s44, say).
-text(ho3_telescoop, s44, "Hij zag mij ook!").
-next(ho3_telescoop, s44, "true", s47).
-
-state(ho3_telescoop, s47, say).
-text(ho3_telescoop, s47, "Ik had de robot, zo nieuwsgierig, gezien die alles wist en alles had gezien.").
-next(ho3_telescoop, s47, "true", s48).
-
-state(ho3_telescoop, s48, say).
-text(ho3_telescoop, s48, "Het voelde alsof ik een geheim had geleerd dat niemand anders kende.").
-next(ho3_telescoop, s48, "true", s49).
-
-state(ho3_telescoop, s49, say).
-text(ho3_telescoop, s49, "Ik hing mijn telescoopdiploma aan de muur en besloot dat ik iets anders wilde worden: ik had alles al gezien.").
-next(ho3_telescoop, s49, "true", s50).
-
-state(ho3_telescoop, s50, say).
-text(ho3_telescoop, s50, "Het blijft een goed verhaal, al zeg ik het zelf. \pau=200\ ").
-next(ho3_telescoop, s50, "true", s51).
-
-state(ho3_telescoop, s51, say).
-text(ho3_telescoop, s51, "Einde \pau=300\ ").
-next(ho3_telescoop, s51, "true", s52).
-
-state(ho3_telescoop, s52, say).
-text(ho3_telescoop,  s52, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
-leds(ho3_telescoop,  s52, ["RightFootLeds"], ["groen"]).
-stateConfig(ho3_telescoop, s52, [next='RightBumperPressed']).
-next(ho3_telescoop,  s52, "true",  s53).
-
-state(ho3_telescoop, s53, say).
-insert_topic(ho3_telescoop, s53, ho3_next_story).
+%state(ho3_graafmachine, s92, say).
+%insert_topic(ho3_graafmachine, s92, ho3_next_story).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Next story?		 	                           %%%
@@ -724,15 +525,15 @@ next(ho3_next_story, s1, 'answer_dontknow', s2d).
 next(ho3_next_story, s1, 'fail', s2d).
 
 state(ho3_next_story, s2y, say).
-text(ho3_next_story,  s2y, "Ik kan dus vertellen over mijn tijd als koelkast, graafmachine en telescoop.").
+text(ho3_next_story,  s2y, "Ik kan dus vertellen over mijn tijd als koelkast en graafmachine").
 next(ho3_next_story,  s2y, "true",  s3y).
 
 state(ho3_next_story, s3y, say).
-text(ho3_next_story,  s3y, "Al heb ik net natuurlijk over mijn tijd als %ho3_story_choice% verteld.").
+text(ho3_next_story,  s3y, "Al heb ik net natuurlijk over mijn tijd als %ho2_story_choice% verteld.").
 next(ho3_next_story,  s3y, "true",  s4y).
 
 state(ho3_next_story, s4y, question).
-stateConfig(ho3_next_story, s4y, [type=input, context='choose_story', options= ["koelkast", "graafmachine", "telescoop"], umVariable=ho3_next_story]).
+stateConfig(ho3_next_story, s4y, [type=input, context='choose_story', options= ["koelkast", "graafmachine"], umVariable=ho3_next_story]).
 text(ho3_next_story, s4y, "Welk verhaaltje wil je nu horen?").
 next(ho3_next_story, s4y, 'success', s5y).
 next(ho3_next_story, s4y, 'fail', s4yf).
@@ -744,14 +545,12 @@ next(ho3_next_story,  s4yf, "true",  s5y).
 state(ho3_next_story, s5y, branchingPoint).
 stateConfig(ho3_next_story, s5y, [branchDecider=entity, branchSource=ho3_next_story]).
 next(ho3_next_story, s5y, "koelkast", s6koelkast).
-next(ho3_next_story, s5y, "graafmachine", s6graafmachine).
 next(ho3_next_story, s5y, "telescoop", s6telescoop).
 next(ho3_next_story, s5y, "fail", s6f).
 
 state(ho3_next_story, s6f, branchingPoint).
 stateConfig(ho3_next_story, s6f, [branchDecider=entity, branchSource=ho3_story_choice]).
 next(ho3_next_story, s6f, "koelkast", s6graafmachine).
-next(ho3_next_story, s6f, "graafmachine", s6telescoop).
 next(ho3_next_story, s6f, "telescoop", s6koelkast).
 next(ho3_next_story, s6f, "fail", s6graafmachine).
 
@@ -762,10 +561,6 @@ insert_topic(ho3_next_story, s6koelkast, ho3_koelkast).
 state(ho3_next_story, s6graafmachine, say).
 text(ho3_next_story,  s6graafmachine, "Graafmachine, leuk!").
 insert_topic(ho3_next_story, s6graafmachine, ho3_graafmachine).
-
-state(ho3_next_story, s6telescoop, say).
-text(ho3_next_story,  s6telescoop, "Telescoop, leuk!").
-insert_topic(ho3_next_story, s6telescoop, ho3_telescoop).
 
 state(ho3_next_story, s2n, say).
 text(ho3_next_story,  s2n, "Helemaal prima!").
@@ -846,7 +641,9 @@ next(ho3_goodbye,  s9, "true",  s10).
 
 state(ho3_goodbye, s10, say).
 text(ho3_goodbye,  s10, "Doei %first_name%.").
+play_motion_file(ho3_goodbye, s10, "resources/gestures/wave2.json").
 next(ho3_goodbye,  s10, "true",  s11).
 
 state(ho3_goodbye, s11, say).
+go_to_base_posture(ho3_goodbye, s11).
 text(ho3_goodbye,  s11, "Bedankt, doei doei.").

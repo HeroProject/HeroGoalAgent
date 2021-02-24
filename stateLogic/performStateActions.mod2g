@@ -27,7 +27,7 @@ module performStateActions(T, S) {
 	% Play audio from server.
 	if bel(audio(T, S, server, A)) then playAudio(A).
 	% Play recorded audio.
-	if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
+	%if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
 	
 	if bel(audio(T, S, source, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
 	
@@ -35,9 +35,9 @@ module performStateActions(T, S) {
 	if bel(prepare_sound_anim(T, S), keyListValues(T, S, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), topics(AllTopics))
 		then delete(topics(AllTopics)) + insert(topics([co_sound | AllTopics]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
 	
-	if bel(save_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT), audioOrder(Order), NewOrder is Order + 1) then {
-		if bel(userId(UserId)) then
-			loadAudio(Sound) + delete(soundConfig(ID, RT), waitingForSoundAnim(ID), audioOrder(Order)) + insert(waitingForLoadedAudioID(ID, Order), audioOrder(NewOrder)) + setUserData(UserId, ID, Sound).
+	if bel(save_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
+		if bel(userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
+			delete(soundConfig(ID, RT), waitingForSoundAnim(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Sound).
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
@@ -50,7 +50,7 @@ module performStateActions(T, S) {
 	% Wake up.
 	if bel(wakeup(T, S)) then wakeUp.
 	% Rest
-	if bel(rest(T, S)) then rest + stopLedAnimation + clearLoadedAudio.
+	if bel(rest(T, S)) then rest + stopLedAnimation.
 	% Set breathing
 	if bel(enableBreathing(T, S), basePosture(Posture)) then {
 	
@@ -182,25 +182,21 @@ module performStateActions(T, S) {
 	}
 	
 	% Play a behavior with a given ID.
-	if bel(play_behavior(T, S, ID), behavior(ID, Data)) then {
-		if bel(member((motion=recording), Data), member((motionSource=MotionRecordingID), Data), motionRecording(MotionRecordingID, MotionRecording)) then playMotion(MotionRecording).
-		if bel(member((motion=file), Data), member((motionSource=MotionFilePath), Data)) then playMotionFile(MotionFilePath).
-		if bel(member((sound=recording), Data), member((soundSource=SoundRecording), Data), nth0(0, SoundRecording, Tsource), nth0(1, SoundRecording, Ssource), audioRecording(Tsource, Ssource, A)) then playLoadedAudio(A).
-		if bel(member((sound=file), Data), member((soundSource=SoundFilePath), Data)) then playAudio(SoundFilePath).
-		if bel(member((led=recording), Data), member((ledSource=LedRecording), Data), getUserModelValue(LedRecording, [Group, AnimType, Colors, Speed])) then {
-			if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
-			if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
-		}
-		if bel(member((led=file), Data), member((ledSource=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
-	}
+	%if bel(play_behavior(T, S, ID), behavior(ID, Data)) then {
+		%if bel(member((motion=recording), Data), member((motionSource=MotionRecordingID), Data), motionRecording(MotionRecordingID, MotionRecording)) then playMotion(MotionRecording).
+		%if bel(member((motion=file), Data), member((motionSource=MotionFilePath), Data)) then playMotionFile(MotionFilePath).
+		%if bel(member((sound=recording), Data), member((soundSource=ID), Data), audioRecording(ID, A)) then playAudio(A).
+		%if bel(member((sound=file), Data), member((soundSource=SoundFilePath), Data)) then playAudio(SoundFilePath).
+		%if bel(member((led=recording), Data), member((ledSource=LedRecording), Data), getUserModelValue(LedRecording, [Group, AnimType, Colors, Speed])) then {
+			%if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
+			%if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+		%}
+		%if bel(member((led=file), Data), member((ledSource=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
+	%}
 	
-	if bel(scrup_answers(T, S)) then {
-		forall bel(answer(T, States, Ans, Data)) do delete(answer(T, States, Ans, Data)).
-		
-		%if bel(branchingPointDecisions(BPDs)
+	forall bel(insert_topic(T, S, Topic)) do {
+    	if bel(topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([Topic | AllTopics])).
 	}
-	
-	if bel(insert_topic(T, S, Topic), topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([Topic | AllTopics])).
 	
 	if bel(remove_topic(T, S, TopicsToDelete), topics(AllTopics), delete_topics(AllTopics, TopicsToDelete, NewAllTopics)) then delete(topics(AllTopics)) + insert(topics(NewAllTopics)).
 	

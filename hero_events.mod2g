@@ -83,22 +83,8 @@ module hero_events {
 	}
 	
 	%Audio recording percepts
-	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), audioOrder(Order), NewOrder is Order + 1)
-		do loadAudio(FileName) + delete(waitingForAudioFile(ID), audioOrder(Order)) + insert(waitingForLoadedAudioID(ID, Order), audioOrder(NewOrder)) + setUserData(UserId, ID, FileName).
-	
-	%forall percept(loadedAudioID(ID, RemoteID)) do log(loadedAudioID(RemoteID, ID)).
-	
-	forall percept(loadedAudioID(RemoteID)), bel(loadedAudioOrder(Order), NewOrder is Order + 1) 
-		do delete(loadedAudioOrder(Order)) + insert(loadedAudioID(Order, RemoteID), loadedAudioOrder(NewOrder)).
-	
-	forall bel(loadedAudioID(Order, RemoteID), waitingForLoadedAudioID(ID, Order), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
-		do delete(loadedAudioID(Order, RemoteID), waitingForLoadedAudioID(ID, Order),  userModel(UserModel)) + insert(userModel(NewUserModel)).
-	
-	if bel(not(waitingForLoadedAudioID(_, _)), audioOrder(AudioOrder), not(AudioOrder = 0), loadedAudioOrder(LoadedAudioOrder), not(LoadedAudioOrder = 0)) 
-		then delete(audioOrder(AudioOrder), loadedAudioOrder(LoadedAudioOrder)) + insert(audioOrder(0), loadedAudioOrder(0)).
-	
-	%waitingForLoadedAudioID(ID, Order), userModel(UserModel), updateUserModel(ID, RemoteID, UserModel, NewUserModel))
-		%do delete(waitingForLoadedAudioID(ID, Order), userModel(UserModel)) + insert(userModel(NewUserModel)).
+	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), userModel(UserModel), updateUserModel(ID, FileName, UserModel, NewUserModel))
+		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel), audioRecording(ID)) + setUserData(UserId, ID, FileName).
 	
 	%Emotion detection percepts
 	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
@@ -188,10 +174,10 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID, _)), Time is RT/1000)
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(waitingForLoadedAudioID(ID, _)), Time is RT/1000)
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion

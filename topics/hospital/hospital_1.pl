@@ -29,11 +29,11 @@ text(ho1_greeting,  s5, "Ik doe een stage, hier in het Prinses Maxima centrum, a
 next(ho1_greeting,  s5, "true",  s6).
 
 state(ho1_greeting, s6, say).
-text(ho1_greeting,  s6, "Dat betekent dat ik aan het oefenen ben om een robotvriendje te worden. \pau=300\ ").
+text(ho1_greeting,  s6, "Dat betekent dat ik aan het leren ben om een robot vriendje te worden. \pau=300\ ").
 next(ho1_greeting,  s6, "true",  s7).
 
 state(ho1_greeting, s7, say).
-text(ho1_greeting,  s7, "Ik moet nog veel leren, maar ik doe mijn best.").
+text(ho1_greeting,  s7, "Ik moet nog veel oefenen, maar ik doe mijn best.").
 next(ho1_greeting,  s7, "true",  s8).
 
 state(ho1_greeting, s8, say).
@@ -53,11 +53,15 @@ text(ho1_tutorial_speech,  s1, "Laat ik uitleggen hoe je met mij kunt praten.").
 next(ho1_tutorial_speech, s1, "true", s2).
 
 state(ho1_tutorial_speech, s2, say).
-text(ho1_tutorial_speech,  s2, "Als ik een vraag stel, dan kun je na de piep een antwoord geven.").
-next(ho1_tutorial_speech, s2, "true", s3).
+text(ho1_tutorial_speech,  s2, "Als ik een vraag stel, dan kun je na de piep").
+next(ho1_tutorial_speech, s2, "true", s2b).
+
+state(ho1_tutorial_speech, s2b, say).
+text(ho1_tutorial_speech,  s2b, " \pau=300\ een antwoord geven.").
+next(ho1_tutorial_speech, s2b, "true", s3).
 
 state(ho1_tutorial_speech, s3, say).
-text(ho1_tutorial_speech,  s3, "Het helpt als je dat een beetje luid, en duidelijk doet.").
+text(ho1_tutorial_speech,  s3, "Het helpt als je dat een beetje luid, en duidelijk kan doen.").
 next(ho1_tutorial_speech, s3, "true", s4).
 
 state(ho1_tutorial_speech, s4, say).
@@ -65,7 +69,7 @@ text(ho1_tutorial_speech,  s4, "Laten we een keertje oefenen. Hier komt de eerst
 next(ho1_tutorial_speech,  s4, "true",  s5).
 
 state(ho1_tutorial_speech, s5, question).
-stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw"], inputModality=[speech=3], additionalAttempt=true]).
+stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw", "donkerblauw"], inputModality=[speech=3], additionalAttempt=true]).
 leds(ho1_tutorial_speech, s5, ["FaceLeds"], ["blauw"]).
 text(ho1_tutorial_speech, s5, "Welke kleur hebben mijn ogen nu?").
 next(ho1_tutorial_speech, s5, 'correct', s5cor).
@@ -101,7 +105,7 @@ text(ho1_tutorial_touch,  s3, "Mocht ik het weer niet verstaan, dan heb ik een a
 next(ho1_tutorial_touch,  s3, "true",  s4).
 
 state(ho1_tutorial_touch, s4, say).
-text(ho1_tutorial_touch,  s4, "Je kunt dan antwoord geven via mijn grijze tenen.").
+text(ho1_tutorial_touch,  s4, "Je kunt dan antwoord geven via mijn grijze, tenen.").
 next(ho1_tutorial_touch,  s4, "true",  s5).
 
 state(ho1_tutorial_touch, s5, say).
@@ -114,13 +118,13 @@ leds(ho1_tutorial_touch,  s6, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green'
 next(ho1_tutorial_touch,  s6, "true",  s7).
 
 state(ho1_tutorial_touch, s7, say).
-text(ho1_tutorial_touch,  s7, "Laten we dat oefenen. \pau=400\ ").
+text(ho1_tutorial_touch,  s7, "Laten we dat proberen. \pau=400\ ").
 leds(ho1_tutorial_touch,  s7, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 next(ho1_tutorial_touch,  s7, "true",  s8).
 
 state(ho1_tutorial_touch, s8, question).
 stateConfig(ho1_tutorial_touch, s8, [type=yesno, inputModality=[touch=3], maxAnswerTime=[touch=5000]]).
-text(ho1_tutorial_touch, s8, "Hou je van chocola? Druk op mijn teen om je antwoord door te geven.").
+text(ho1_tutorial_touch, s8, "Hou je van chocola? Druk tegen mijn teen om je antwoord door te geven.").
 next(ho1_tutorial_touch, s8, 'answer_yes', s9y).
 next(ho1_tutorial_touch, s8, 'answer_no', s9n).
 next(ho1_tutorial_touch, s8, 'fail', s9f).
@@ -144,7 +148,7 @@ leds(ho1_tutorial_touch,  s10, ['LeftFootLeds', 'RightFootLeds'], ['white', 'whi
 next(ho1_tutorial_touch,  s10, "true",  s11).
 
 state(ho1_tutorial_touch, s11, say).
-text(ho1_tutorial_touch,  s11, "Laten we dat ook even oefenen. \pau=400\ ").
+text(ho1_tutorial_touch,  s11, "Laten we dat ook even uitproberen. \pau=400\ ").
 next(ho1_tutorial_touch,  s11, "true",  s12).
 
 state(ho1_tutorial_touch, s12, question).
@@ -195,7 +199,7 @@ text(ho1_tutorial_question,  s2n, "Top!").
 next(ho1_tutorial_question,  s2n, "true",  s3).
 
 state(ho1_tutorial_question, s3, say).
-text(ho1_tutorial_question, s3, "Laten we beginnen met het echte gesprek!").
+text(ho1_tutorial_question, s3, "Laten we verder gaan met onze kennismaking.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Getting acquainted conversation	                   %%%
@@ -203,12 +207,20 @@ text(ho1_tutorial_question, s3, "Laten we beginnen met het echte gesprek!").
 
 %%% Animals %%%
 state(ho1_animals, s1, say).
-text(ho1_animals,  s1, "Ik hou heel erg van dieren, en praat er graag over.").
-next(ho1_animals, s1, "true", s2).
+text(ho1_animals,  s1, "Ik ben erg benieuwd naar jou en wat voor dingen jij leuk vind.").
+next(ho1_animals, s1, "true", s1a).
+
+state(ho1_animals, s1a, say).
+text(ho1_animals,  s1a, "Je zult er snel achter komen dat ik een echte klets kont ben.").
+next(ho1_animals, s1a, "true", s1b).
+
+state(ho1_animals, s1b, say).
+text(ho1_animals,  s1b, "Laten we beginnen bij een van mijn favoriete onderwerpen, dieren.").
+next(ho1_animals, s1b, "true", s2).
 
 state(ho1_animals, s2, question).
 stateConfig(ho1_animals, s2, [type=yesno, context='answer_yesno']).
-text(ho1_animals, s2, "Heb jij een huisdier thuis?").
+text(ho1_animals, s2, "Heb jij eigenlijk een huisdier thuis?").
 next(ho1_animals, s2, 'answer_yes', s3y).
 next(ho1_animals, s2, 'answer_no', s3n).
 next(ho1_animals, s2, 'answer_dontknow', s3n).
@@ -235,7 +247,7 @@ text(ho1_animals,  s5, "Leuk! Ik zou ook heel graag een %huisdier% willen.").
 next(ho1_animals, s5, "true", s6).
 
 state(ho1_animals, s6, say).
-text(ho1_animals,  s6, "Als ik er eentje zou mogen van mijn vader dan is het een robot %huisdier%, en geen echte hehaheha.").
+text(ho1_animals,  s6, "Als ik er eentje zou mogen van mijn vader dan is het een robot %huisdier%, en geen echte \pau=150\ hehaheha.").
 next(ho1_animals, s6, "true", s7).
 
 state(ho1_animals, s7, say).
@@ -289,7 +301,7 @@ text(ho1_food,  s3, "Zelf eet ik alleen stroom, en dat is een beetje saai.").
 next(ho1_food,  s3, "true",  s4).
 
 state(ho1_food, s4, say).
-text(ho1_food,  s4, "Vooral het fruit, dat jullie eten vind ik onwijs boeiend.").
+text(ho1_food,  s4, "Vooral het fruit, dat jullie mensen eten, vind ik onwijs boeiend.").
 next(ho1_food,  s4, "true",  s5).
 
 state(ho1_food, s5, question).
@@ -333,7 +345,7 @@ next(ho1_food, s10, 'success', s11).
 next(ho1_food, s10, 'fail', s11f).
 
 state(ho1_food, s11, say).
-text(ho1_food,  s11, "Het zegt veel over jou dat je %saus% op je frietjes doet.").
+text(ho1_food,  s11, "Het zegt veel over jou dat je %saus% op je frietjes doet. \pau=400\ ").
 next(ho1_food,  s11, "true",  s12).
 
 state(ho1_food, s11f, say).
@@ -343,10 +355,99 @@ next(ho1_food,  s11f, "true",  s13).
 state(ho1_food, s12, say).
 text(ho1_food,  s12, "Geintje, ik weet helemaal niet of sausjes wat kunnen zeggen over mensen").
 
-%%%
+%%% Beroep %%%
+state(ho1_beroep, s1, say).
+text(ho1_beroep,  s1, "Weet je wel wat iets over iemand zegt?").
+next(ho1_beroep,  s1, "true",  s2).
 
+state(ho1_beroep, s2, say).
+text(ho1_beroep,  s2, "Wat ze later willen worden.").
+next(ho1_beroep,  s2, "true",  s3).
+
+state(ho1_beroep, s3, say).
+text(ho1_beroep,  s3, "Ik ben vorig jaar naar school gegaan om een slimme koelkast te worden.").
+next(ho1_beroep,  s3, "true",  s4).
+
+state(ho1_beroep, s4, say).
+text(ho1_beroep,  s4, "En ik had een tijdje een bijbaantje als graafmachine.").
+next(ho1_beroep,  s4, "true",  s5).
+
+state(ho1_beroep, s5, say).
+text(ho1_beroep,  s5, "Maar ik ben nu toch heel blij dat ik aan het leren ben om een robot vriendje te worden.").
+next(ho1_beroep,  s5, "true",  s6).
+
+state(ho1_beroep, s6, question).
+stateConfig(ho1_beroep, s6, [type=input, context='answer_beroep', options= ["dokter", "politieagent", "uitvinder", "topsporter", "deejee"], umVariable=beroep, defaultAnswer="dokter"]).
+text(ho1_beroep, s6, "Wat wil jij worden later?").
+next(ho1_beroep, s6, 'success', s7).
+next(ho1_beroep, s6, 'fail', s8).
+
+state(ho1_beroep, s7, say).
+text(ho1_beroep,  s7, "%beroep%, wat interessant.").
+next(ho1_beroep,  s7, "true",  s8).
+
+state(ho1_beroep, s8, question).
+stateConfig(ho1_beroep, s8, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(ho1_beroep, s8, "Waarom wil je dat worden?").
+next(ho1_beroep, s8, 'success', s9).
+next(ho1_beroep, s8, 'fail', s9).
+
+state(ho1_beroep, s9, say).
+text(ho1_beroep,  s9, "Gaaf zeg. Ik vind het heel goed bij jou passen.").
+
+%%% Sport %%%
+state(ho1_sports, s1, say).
+text(ho1_sports,  s1, "Als robot dans en voetbal ik graag.").
+next(ho1_sports, s1, "true", s2).
+
+state(ho1_sports, s2, question).
+stateConfig(ho1_sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=favo_sport]).
+text(ho1_sports, s2, "Welke sport doe jij graag, %first_name%?").
+next(ho1_sports, s2, 'success', s3).
+next(ho1_sports, s2, 'fail', s5f).
+
+state(ho1_sports, s3, say).
+text(ho1_sports,  s3, "Wat gaaf zeg!").
+next(ho1_sports, s3, "true", s4).
+
+state(ho1_sports, s4, question).
+stateConfig(ho1_sports, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(ho1_sports, s4, "Wat vind je zo leuk aan %favo_sport%?").
+next(ho1_sports, s4, 'success', s5).
+next(ho1_sports, s4, 'fail', s5f).
+
+state(ho1_sports, s5, say).
+text(ho1_sports,  s5, "%favo_sport% klinkt inderdaad erg leuk!").
+
+state(ho1_sports, s5f, say).
+text(ho1_sports,  s5f, "Oke").
+
+%% continue?
+state(ho1_continue, s1, say).
+text(ho1_continue,  s1, "Ik heb nog twee vraagjes.").
+next(ho1_continue, s1, "true", s2).
+
+state(ho1_continue, s2, question).
+stateConfig(ho1_continue, s2, [type=yesno, context='answer_yesno']).
+text(ho1_continue, s2, "Of wil je nu al stoppen?").
+next(ho1_continue, s2, 'answer_yes', s3y).
+next(ho1_continue, s2, 'answer_no', s3n).
+next(ho1_continue, s2, 'answer_dontknow', s3d).
+next(ho1_continue, s2, 'fail', s3d).
+
+state(ho1_continue, s3y, say).
+text(ho1_continue,  s3y, "Dat is helemaal prima").
+remove_topic(ho1_continue,  s3y, [ho1_family, ho1_sports]).
+
+state(ho1_continue, s3n, say).
+text(ho1_continue,  s3n, "Gezellig, laten we verder gaan").
+
+state(ho1_continue, s3d, say).
+text(ho1_continue,  s3d, "Weetje wat, laat ik ze toch nog even stellen.").
+
+%%% Colors %%%
 state(ho1_colors, s1, say).
-text(ho1_colors,  s1, "Over kleuren gesproken.").
+text(ho1_colors,  s1, "Het woord kleuren is nu al een aantal keer gevallen.").
 next(ho1_colors, s1, "true", s2).
 
 state(ho1_colors, s2, question).
@@ -369,8 +470,8 @@ next(ho1_colors, s3, 'fail', s7).
 
 state(ho1_colors, s4, say).
 text(ho1_colors, s4, "Kijk, ik heb geprobeerd mijn buik lampje %fav_color% te maken. Het lukt niet altijd even goed.").
+stateConfig(ho1_colors, s4, [ledRemoteSource="true"]).
 leds(ho1_colors, s4, ["ChestLeds"], [fav_color]).
-stateConfig(hoi_colors, s4, [ledRemoteSource="true"]).
 next(ho1_colors, s4, "true", s5).
 
 state(ho1_colors, s5, question).
@@ -388,17 +489,17 @@ next(ho1_colors, s6, 'fail', s7).
 state(ho1_colors, s7, say).
 text(ho1_colors,  s7, "Wat gezellig dat je dit met me deelt %first_name%.").
 
-%%% Family
+%%% Family %%%
 state(ho1_family, s1, say).
 text(ho1_family,  s1, "Zal ik je een geheimpje vertellen?").
 next(ho1_family,  s1, "true",  s2).
 
 state(ho1_family, s2, say).
-text(ho1_family,  s2, "De reden dat ik zo geobserdeerd ben door kleur, is dat ik zelf niet zo veel kleur heb.").
+text(ho1_family,  s2, "De reden dat ik het zo veel over kleur heb, is dat ik zelf niet zo kleurrijk ben.").
 next(ho1_family,  s2, "true",  s3).
 
 state(ho1_family, s3, say).
-text(ho1_family,  s3, "Ik heb broertjes en zusjes, ooms en tantes, die zijn rood, en blauw, en zelfs oranje.").
+text(ho1_family,  s3, "Ik heb broertjes en zusjes en die zijn rood, en blauw, en zelfs oranje.").
 next(ho1_family,  s3, "true",  s4).
 
 state(ho1_family, s4, say).
@@ -414,7 +515,7 @@ next(ho1_family, s5, 'answer_dontknow', s7).
 next(ho1_family, s5, 'fail', s7).
 
 state(ho1_family, s6y, say).
-text(ho1_family,  s6y, "Oh leuk, ondanks dat ik soms een beetje jaloers op de mijne ben houd ik wel heel van ze hoor.").
+text(ho1_family,  s6y, "Leuk zeg. Ondanks dat ik soms een beetje jaloers ben, houd ik wel heel veel van mijn broertjes en zusjes.").
 next(ho1_family,  s6y, "true",  s7).
 
 state(ho1_family, s6n, say).
@@ -457,62 +558,6 @@ next(ho1_family,  s12, "true",  s13).
 
 state(ho1_family, s13, say).
 text(ho1_family,  s13, "Dan valt er heel wat te lachen. We hadden zelf ook de grootste lol.").
-
-%%% Sport
-state(ho1_sports, s1, say).
-text(ho1_sports,  s1, "Nu we het toch over sport hebben.").
-next(ho1_sports, s1, "true", s2).
-
-state(ho1_sports, s2, question).
-stateConfig(ho1_sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=favo_sport]).
-text(ho1_sports, s2, "Welke sport doe jij graag, %first_name%?").
-next(ho1_sports, s2, 'success', s3).
-next(ho1_sports, s2, 'fail', s5f).
-
-state(ho1_sports, s3, say).
-text(ho1_sports,  s3, "Wat gaaf zeg!").
-next(ho1_sports, s3, "true", s4).
-
-state(ho1_sports, s4, question).
-stateConfig(ho1_sports, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(ho1_sports, s4, "Wat vind je zo leuk aan %favo_sport%?").
-next(ho1_sports, s4, 'success', s5).
-next(ho1_sports, s4, 'fail', s5f).
-
-state(ho1_sports, s5, say).
-text(ho1_sports,  s5, "%favo_sport% klinkt inderdaad erg leuk!").
-
-state(ho1_sports, s5f, say).
-text(ho1_sports,  s5f, "Oke").
-
-%% continue?
-state(ho1_continue, s1, say).
-text(ho1_continue,  s1, "Ik heb nog twee vraagjes.").
-next(ho1_continue, s1, "true", s2).
-
-state(ho1_continue, s2, question).
-stateConfig(ho1_continue, s2, [type=yesno, context='answer_yesno']).
-text(ho1_continue, s2, "Of wil je nu al stoppen?").
-next(ho1_continue, s2, 'answer_yes', s3y).
-next(ho1_continue, s2, 'answer_no', s3n).
-next(ho1_continue, s2, 'answer_dontknow', s3d).
-next(ho1_continue, s2, 'fail', s3d).
-
-state(ho1_continue, s3y, say).
-text(ho1_continue,  s3y, "Dat is helemaal prima").
-%remove_topic(ho1_continue,  s3y, []).
-
-state(ho1_continue, s3n, say).
-text(ho1_continue,  s3n, "Gezellig, laten we verder gaan").
-
-state(ho1_continue, s3d, say).
-text(ho1_continue,  s3d, "Weetje wat, laat ik ze toch nog even stellen.").
-
-%%% Dromen
-% TODO
-
-%%% Lievelingsspeelgoed / beroep
-% TODO
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Preview session 2			                   %%%
@@ -571,4 +616,9 @@ text(ho1_goodbye,  s7, "Ik kijk in ieder geval uit naar de volgende keer!").
 next(ho1_goodbye,  s7, "true",  s8).
 
 state(ho1_goodbye, s8, say).
+play_motion_file(ho1_goodbye, s8, "resources/gestures/wave1.json").
 text(ho1_goodbye,  s8, "Tot dan %first_name%, doei doei \pau=300\ ").
+next(ho1_goodbye,  s8, "true",  s9).
+
+state(ho1_goodbye, s9, say).
+go_to_base_posture(ho1_goodbye, s9).

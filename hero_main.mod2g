@@ -22,7 +22,7 @@ module hero_main {
 	%TODO: make pretty
 	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
 	if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
-	if bel(stop_act) then delete(stop_act) + say("Weltrusten") + rest + stopLedAnimation + clearLoadedAudio.
+	if bel(stop_act) then delete(stop_act) + say("Weltrusten") + rest + stopLedAnimation.
 }
 	
 	

@@ -6,23 +6,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Coordination of involvement				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(co_motion, s1, say).
-scrup_answers(co_motion, s1).
-next(co_motion, s1, "true", s2).
-
-state(co_motion, s2, question).
-stateConfig(co_motion, s2, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
+state(co_motion, s1, question).
+stateConfig(co_motion, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
 branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_motion, s4]]]).
-text(co_motion, s2, "Wil jij de beweging maken of zal ik wat opties downloaden?").
-next(co_motion, s2, "success", s3).
-next(co_motion, s2, "fail", s3f).
+text(co_motion, s1, "Wil jij de beweging maken of zal ik wat opties downloaden?").
+next(co_motion, s1, "success", s3).
+next(co_motion, s1, "fail", s3f).
 
 state(co_motion, s3f, say).
 text(co_motion, s3f, "Weet je wat? Ik download gewoon wat bewegingen.").
 next(co_motion, s3f, 'true', sdownload1).
 
 state(co_motion, s3, say).
-text(co_motion,  s3, "Oke we gaan het %co_motion_s2%.").
+text(co_motion,  s3, "Oke we gaan het %co_motion_s1%.").
 next(co_motion,  s3, "true",  s4).
 
 state(co_motion, s4, branchingPoint).

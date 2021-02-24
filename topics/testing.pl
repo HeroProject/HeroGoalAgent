@@ -207,7 +207,7 @@ leds(test_emotion, s4, ["FaceLeds"], ["white"]).
 %%% Note: web server needs to be on.		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_sound2, s1, say).
-audio(test_sound2, s1, server, "resources/sounds/zooming.wav").
+audio(test_sound2, s1, server, "resources/sounds/tiktok1.wav").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Animation - Testing anim option		           %%%
@@ -276,7 +276,7 @@ set_stiffness(test_motion, s1, ['RArm', 'LArm'], 0).
 next(test_motion, s1, "true", s2).
 
 state(test_motion, s2, say).
-record_motion_timer(test_motion, s2, ['RArm', 'LArm'], 5000).
+record_motion_timer(test_motion, s2, ['RArm', 'LArm'], 6000).
 stateConfig(test_motion, s2, [umVariable=test_motion]).
 next(test_motion, s2, "true", s3).
 

@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 session(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, general_rest]).
-session(testing_short, [general_wakeup, test_sound2, general_rest]).
+session(testing_short, [general_wakeup, ho1_colors, general_rest]).
 session(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 session(lenin, [lenin]).
 
@@ -49,11 +49,9 @@ co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_han
 general_rest]).
 
 %%%%%%%%%%%%%% Hospital user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-session(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho1_tutorial_touch, ho1_tutorial_question, ho1_animals, ho1_food, ho1_colors, ho1_family, ho1_sports, ho1_continue, ho1_goodbye, general_rest]).
-%session(hospital_1, [general_wakeup, ho1_food, general_rest]).
-session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_creation_1, ho2_creation_2, ho2_creation_3, ho2_creation_4, ho2_creation_5, ho2_creation_6, ho2_creation_7, ho2_creation_8, ho2_goodbye, general_rest]).
-session(hospital_3, [general_wakeup, ho3_greeting, ho3_story_selection, ho3_goodbye, general_rest]).
-%session(hospital_3, [general_wakeup, ho3_koelkast, general_rest]).
+session(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho1_tutorial_touch, ho1_tutorial_question, ho1_animals, ho1_food, ho1_beroep, ho1_sports, ho1_continue, ho1_colors, ho1_family, ho1_goodbye, general_rest]).
+session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_story_selection, ho2_goodbye, general_rest]).
+session(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
@@ -61,7 +59,7 @@ session(hospital_3, [general_wakeup, ho3_greeting, ho3_story_selection, ho3_good
 % Use of GUI.
 % When GUI is used this userId and these localVariables are ignored.
 useGui(true).
-setUserId('996').
+setUserId('999').
 setSessionId(2).
 setBasePosture('Sit').
 addLocalVariable(first_name, "Mike").
