@@ -29,6 +29,8 @@ co_zoo_intro, co_zoo_elephant_baseline, co_zoo_lion_baseline, co_zoo_dolphin_bas
 co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_handshake_led_baseline, co_handshake_ceremonie,
 general_rest]).
 
+session(co_cretion_demo, [general_wakeup_en, co_demo_light, general_rest_en]).
+
 % Robotstories
 session(robotstories, [general_wakeup, rs_intro, rs_thread_1_seq_1, general_rest]).
 %session(robotstories, [general_wakeup, rs_thread_2_seq_1, general_rest]).
@@ -58,17 +60,17 @@ session(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Use of GUI.
 % When GUI is used this userId and these localVariables are ignored.
-useGui(true).
+useGui(false).
 setUserId('999').
-setSessionId(2).
-setBasePosture('Sit').
+setSessionId(1).
+setBasePosture('Stand').
 addLocalVariable(first_name, "Mike").
 
 
 % Session details.
 setPauseButton('MiddleTactilTouched').
-sessionOrder([hospital_1, hospital_2, hospital_3]).
+%sessionOrder([hospital_1, hospital_2, hospital_3]).
 
 %test
 %sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-%sessionOrder([testing_short]).
+sessionOrder([co_cretion_demo]).
