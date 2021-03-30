@@ -410,7 +410,7 @@ text(test_session_sound_1b, s2, "Het was het gebrul van de leeuw").
 next(test_session_sound_1b, s2, "true", s3).
 
 state(test_session_sound_1b, s3, say).
-audio(test_session_sound_1b, s3, recorded, sound_lion).
+audio(test_session_sound_1b, s3, source, sound_lion).
 next(test_session_sound_1b, s3, "true", s4).
 
 state(test_session_sound_1b, s4, say).
@@ -426,7 +426,7 @@ text(test_session_sound_2, s1, "Als machtige krijgers brullen wij als een leeuw.
 next(test_session_sound_2, s1, "true", s2).
 
 state(test_session_sound_2, s2, say).
-audio(test_session_sound_2, s2, recorded, sound_lion).
+audio(test_session_sound_2, s2, source, sound_lion).
 next(test_session_sound_2, s2, "true", s3).
 
 state(test_session_sound_2, s3, say).

@@ -13,7 +13,7 @@ module hero_main {
 	
 		if bel(not(waitingForInit), waitingForSession, memoryTasksCompleted, sessionId(SessionId), sessionOrder(SessionOrder),
 		nth1(SessionId, SessionOrder, SessionLabel), session(SessionLabel, Topics), nth0(0, Topics, FirstTopic, RestOfTopics)) 
-			then insert(currentTopic(FirstTopic), topics(RestOfTopics)) + delete(waitingForSession) + loadUserData(Topics) + adopt(topics([])).
+			then insert(currentTopic(FirstTopic), topics(RestOfTopics)) + delete(waitingForSession) + loadInteractantData(Topics) + adopt(topics([])).
 	}
 	
 	% Execute the state actions

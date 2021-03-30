@@ -133,17 +133,13 @@ define startLedAnimation(Group, AnimType, Colors, Speed) with
 define playMotionFile(Path) with
 	pre { true }
 	post { waitingForEvent('PlayMotionDone') }
-	
-define playMotionFile(Path, Emotion) with
-	pre { true }
-	post { waitingForEvent('PlayMotionDone') }
 
 define stopLedAnimation with
 	pre { true }
 	post { waitingForEvent('LedAnimationDone') }
 	
 % Agent external memory / database control
-define setSession(UserId, SessionId) with
+define setSession(ID, SessionId) with
 	pre { true }
 	post { waitingForEvent('SessionSet') }
 	
@@ -151,21 +147,21 @@ define addMemoryEntry(ID, Key, Data) with
 	pre { true }
 	post { waitingForEvent('MemoryEntryStored') }
 
-define setUserData(ID, Key, Value) with
+define setInteractantData(ID, Key, Value) with
 	pre { true }
-	post { waitingForEvent('UserDataSet') }
+	post { waitingForEvent('InteractantDataSet') }
 
-define getUserData(ID, Key) with
+define getInteractantData(ID, Key) with
 	pre { true }
 	post { waitingForMemoryData(Key) }
 
-define deleteUser(UserId) with
+define deleteInteractant(ID) with
 	pre { true }
-	post { waitingForEvent('UserDeleted') }
+	post { waitingForEvent('InteractantDeleted') }
 
-define deleteAllUsers with
+define deleteAllInteractants with
 	pre { true }
-	post { waitingForEvent('AllUsersDeleted') }
+	post { waitingForEvent('AllInteractantsDeleted') }
 	
 % DialogFlow Control
 %define setLanguage(Lang) with

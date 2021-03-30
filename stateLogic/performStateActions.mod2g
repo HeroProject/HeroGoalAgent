@@ -37,7 +37,7 @@ module performStateActions(T, S) {
 	
 	if bel(save_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
-			delete(soundConfig(ID, RT), waitingForSoundAnim(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Sound).
+			delete(soundConfig(ID, RT), waitingForSoundAnim(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
@@ -45,7 +45,7 @@ module performStateActions(T, S) {
 	if bel(play_sound_option(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
 	
 	if bel(save_sound(T, S, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
-			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Sound).
+			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 	
 	% Wake up.
 	if bel(wakeup(T, S)) then wakeUp.
@@ -90,7 +90,7 @@ module performStateActions(T, S) {
 	
 	if bel(save_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Motion, UserModel, NewUserModel), userId(UserId)) then
-			delete(userModel(UserModel), waitingForMotionAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, Motion).
+			delete(userModel(UserModel), waitingForMotionAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Motion).
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
@@ -123,13 +123,13 @@ module performStateActions(T, S) {
 	getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
 	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
 	nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
-		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
+		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	%Save a color select animation.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
 	userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
 	nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
-		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
+		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	% Save a led animation option as selected option and remove the remaining options.
 	if bel(save_led_anim_option(T, S, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then 
@@ -137,7 +137,7 @@ module performStateActions(T, S) {
 		%Store the selected uptions with the right ID in the local and remote user model.
 		if bel(userModel(UserModel), updateUserModel(ID, [Group, AnimType, Colors, Speed], UserModel, NewUserModel),
 				nested_list_to_string([Group, AnimType, Colors, Speed], AnimString), userId(UserId)) 
-			then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setUserData(UserId, ID, AnimString).
+			then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 		
 		%Remove all the stored led animation options.
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
