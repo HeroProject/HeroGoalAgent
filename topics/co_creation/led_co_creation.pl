@@ -95,12 +95,25 @@ save_led_anim_option(co_led_download, sdownload8robot, 2).
 %%% Create						   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_creation, s1, question).
-stateConfig(co_led_creation, s1, [type=yesno, context='answer_yesno']).
-text(co_led_creation, s1, "Wil je er ook een animatie in je licht show?").
-next(co_led_creation, s1, 'answer_yes', s3anim).
-next(co_led_creation, s1, 'answer_no', s3no).
-next(co_led_creation, s1, 'answer_dontknow', s3d).
-next(co_led_creation, s1, 'fail', s3d).
+stateConfig(co_led_creation, s1, [type=input, context='answer_light_animation', options=['knipperen', 'heen en weer', 'inkleuren'], defaultAnswer='knipperen']).
+text(co_led_creation, s1, "Wil je de lichtjes laten knipperen, heen en weer laten gaan, of wil je ze gewoon in kleuren?").
+next(co_led_creation, s1, 'success', s2).
+next(co_led_creation, s1, 'fail', s2f).
+
+state(co_led_creation, s2f, say).
+text(co_led_creation, s2f, "Sorry, ik heb je niet helemaal begrepen. Kom, we laten ze lekker knipperen ").
+next(co_led_creation, s2f, "true", s5animknip).
+
+state(co_led_creation, s2, say).
+text(co_led_creation, s2, "%co_led_creation_s1%, helemaal prima.").
+next(co_led_creation, s2, "true", s3).
+
+state(co_led_creation, s3, branchingPoint).
+stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s3anim]).
+next(co_led_creation, s3, "knipperen", s5animknip).
+next(co_led_creation, s3, "heen en weer", s5animheen).
+next(co_led_creation, s3, "inkleuren", s3no).
+next(co_led_creation, s3, "fail", s5animknip).
 
 %%% Create - No Animation				   %%%
 state(co_led_creation, s3no, say).
@@ -158,27 +171,6 @@ state(co_led_creation, s7no, say).
 text(co_led_creation, s7no, "Deze mooie lichtshow heb ik opgeslagen").
 save_led_anim(co_led_creation, s7no, ["FaceLeds", "ChestLeds", "FeetLeds"], colorSelect, ["co_led_creation_s4no", "co_led_creation_s5no", "co_led_creation_s6no"], 0).
 
-%%% Create - With Animation				   %%%
-state(co_led_creation, s3anim, question). % ogen of allemaal
-stateConfig(co_led_creation, s3anim, [type=input, context='answer_light_animation', options=['knipperen', 'heen en weer'], defaultAnswer='knipperen']).
-text(co_led_creation, s3anim, "Wil je dat de lichtjes knipperen of heen en weer gaan?").
-next(co_led_creation, s3anim, 'success', s4anim).
-next(co_led_creation, s3anim, 'fail', s3animf).
-
-state(co_led_creation, s3animf, say).
-text(co_led_creation, s3animf, "Sorry, ik heb je niet helemaal begrepen. Ik laat de lichtjes wel knipperen.").
-next(co_led_creation, s3animf, "true", s5animknip).
-
-state(co_led_creation, s4anim, say).
-text(co_led_creation, s4anim, "%co_led_creation_s3anim%, helemaal prima.").
-next(co_led_creation, s4anim, "true", s5anim).
-
-state(co_led_creation, s5anim, branchingPoint).
-stateConfig(co_led_creation, s5anim, [branchDecider=entity, branchSource=co_led_creation_s3anim]).
-next(co_led_creation, s5anim, "knipperen", s5animknip).
-next(co_led_creation, s5anim, "heen en weer", s5animheen).
-next(co_led_creation, s5anim, "fail", s5animf).
-
 %%%%%%%%%%%%%% Blinking animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_creation, s5animknip, question).
 stateConfig(co_led_creation, s5animknip, [type=input, context='answer_color_list', options=['blauw', 'groen', 'rood', 'oranje', 'paars'], defaultAnswer='["paars", "oranje"]', maxAnswerTime=[speechinputfirst=10000, speechinputnoninitial=8000]]).
@@ -235,4 +227,4 @@ next(co_led_creation, s6animheen, "true", s7animheen).
 %% Save result %%
 state(co_led_creation, s7animheen, say).
 text(co_led_creation, s7animheen, "Deze mooie lichtshow heb ik opgeslagen").
-save_led_anim(co_led_creation, s7animheen, "all", "alternate", ["co_led_creation_s5animweer", "co_led_creation_s5animheen"], 500).  
+save_led_anim(co_led_creation, s7animheen, "all", "alternate", ["co_led_creation_s5animweer", "co_led_creation_s5animheen"], 500).
