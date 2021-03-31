@@ -85,7 +85,7 @@ save_sound_option(co_sound, sdownload8robot, 1).
 %%% Maken						   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, smaken1, say).
-text(co_sound,  smaken1, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
+text(co_sound,  smaken1, "Als je klaar bent om te beginnen, kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(co_sound,  smaken1, ["RightFootLeds"], ["groen"]).
 stateConfig(co_sound, smaken1, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_sound,  smaken1, "true",  smaken2).

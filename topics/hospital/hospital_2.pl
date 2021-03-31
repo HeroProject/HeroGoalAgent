@@ -270,7 +270,7 @@ next(ho2_tutorial,  s46, "true",  s47).
 
 state(ho2_tutorial, s47, say).
 stop_led_anim(ho2_tutorial, s47).
-text(ho2_tutorial,  s47, "Bij het maken van een lichtshow kun je kiezen of je de lichtjes wil laten knipperen, heen en weer laten gaan, of dat je de lampjes gewoon een kleur wilt geven.").
+text(ho2_tutorial,  s47, "Bij het maken van een lichtshow kun je kiezen of je de lichtjes wil laten knipperen, heen en weer wil laten gaan, of dat je de lampjes gewoon een kleur wilt geven.").
 next(ho2_tutorial,  s47, "true",  s48).
 
 state(ho2_tutorial, s48, say).
