@@ -109,21 +109,13 @@ text(co_led_creation, s2, "%co_led_creation_s1%, helemaal prima.").
 next(co_led_creation, s2, "true", s3).
 
 state(co_led_creation, s3, branchingPoint).
-stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s3anim]).
+stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s1]).
 next(co_led_creation, s3, "knipperen", s5animknip).
 next(co_led_creation, s3, "heen en weer", s5animheen).
-next(co_led_creation, s3, "inkleuren", s3no).
+next(co_led_creation, s3, "inkleuren", s4no).
 next(co_led_creation, s3, "fail", s5animknip).
 
 %%% Create - No Animation				   %%%
-state(co_led_creation, s3no, say).
-text(co_led_creation, s3no, "Prima. Dan hoeven we nu alleen nog de kleuren te kiezen.").
-next(co_led_creation, s3no, "true", s4no).
-
-state(co_led_creation, s3d, say).
-text(co_led_creation, s3d, "Laten we dit keer alleen de kleuren kiezen.").
-next(co_led_creation, s3d, "true", s4no).
-
 state(co_led_creation, s4no, question).
 stateConfig(co_led_creation, s4no, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='groen']).
 text(co_led_creation, s4no, "Welke kleur moeten mijn ogen krijgen?").
@@ -227,4 +219,4 @@ next(co_led_creation, s6animheen, "true", s7animheen).
 %% Save result %%
 state(co_led_creation, s7animheen, say).
 text(co_led_creation, s7animheen, "Deze mooie lichtshow heb ik opgeslagen").
-save_led_anim(co_led_creation, s7animheen, "all", "alternate", ["co_led_creation_s5animweer", "co_led_creation_s5animheen"], 500).  
+save_led_anim(co_led_creation, s7animheen, "all", "alternate", ["co_led_creation_s5animweer", "co_led_creation_s5animheen"], 500).
