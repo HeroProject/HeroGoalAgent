@@ -109,10 +109,10 @@ text(co_led_creation, s2, "%co_led_creation_s1%, helemaal prima.").
 next(co_led_creation, s2, "true", s3).
 
 state(co_led_creation, s3, branchingPoint).
-stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s3anim]).
+stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s1]).
 next(co_led_creation, s3, "knipperen", s5animknip).
 next(co_led_creation, s3, "heen en weer", s5animheen).
-next(co_led_creation, s3, "inkleuren", s3no).
+next(co_led_creation, s3, "inkleuren", s4no).
 next(co_led_creation, s3, "fail", s5animknip).
 
 %%% Create - No Animation				   %%%
