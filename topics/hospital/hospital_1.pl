@@ -17,7 +17,7 @@ text(ho1_greeting, s2, "Hoe heet jij?").
 next(ho1_greeting, s2, "true", s3).
 
 state(ho1_greeting, s3, say).
-text(ho1_greeting,  s3, "%first_name%, wat een mooie naam! Ik denk niet dat ik ooit iemand heb ontmoet die zo heet. Denk ik.").
+text(ho1_greeting,  s3, "%first_name%, wat een mooie naam! Ik denk niet dat ik ooit iemand heb ontmoet die zo heet.").
 next(ho1_greeting,  s3, "true",  s4).
 
 state(ho1_greeting, s4, say).
@@ -130,7 +130,7 @@ next(ho1_tutorial_touch, s8, 'answer_no', s9n).
 next(ho1_tutorial_touch, s8, 'fail', s9f).
 
 state(ho1_tutorial_touch, s9y, say).
-text(ho1_tutorial_touch, s9y, "Ik houd ook van chocola! Goed gedrukt trouwens.").
+text(ho1_tutorial_touch, s9y, "Ik hou ook van chocola! Goed gedrukt trouwens.").
 next(ho1_tutorial_touch, s9y, "true", s10).
 
 state(ho1_tutorial_touch, s9n, say).
@@ -378,7 +378,7 @@ next(ho1_beroep,  s5, "true",  s6).
 
 state(ho1_beroep, s6, question).
 stateConfig(ho1_beroep, s6, [type=input, context='answer_beroep', options= ["dokter", "politieagent", "uitvinder", "topsporter", "deejee"], umVariable=beroep, defaultAnswer="dokter"]).
-text(ho1_beroep, s6, "Wat wil jij worden later?").
+text(ho1_beroep, s6, "Wat wil jij later worden?").
 next(ho1_beroep, s6, 'success', s7).
 next(ho1_beroep, s6, 'fail', s8).
 
