@@ -480,12 +480,6 @@ text(ho1_colors, s5, "Waar gebruik jij die kleur het meest?").
 next(ho1_colors, s5, 'success', s6).
 next(ho1_colors, s5, 'fail', s7).
 
-state(ho1_colors, s6, question).
-stateConfig(ho1_colors, s6, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(ho1_colors, s6, "Oh interessant! Vertel daar eens wat meer over?").
-next(ho1_colors, s6, 'success', s7).
-next(ho1_colors, s6, 'fail', s7).
-
 state(ho1_colors, s7, say).
 text(ho1_colors,  s7, "Wat gezellig dat je dit met me deelt %first_name%.").
 

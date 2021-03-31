@@ -153,7 +153,7 @@ text(ho2_tutorial,  s20a, "Ik zal zo aftellen en dan kun je daarna applaudiseren
 next(ho2_tutorial,  s20a, "true",  s20).
 
 state(ho2_tutorial, s20, say).
-text(ho2_tutorial,  s20, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken bij mijn linker voet waar het lampje groen is.").
+text(ho2_tutorial,  s20, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho2_tutorial,  s20, ["RightFootLeds"], ["groen"]).
 stateConfig(ho2_tutorial, s20, [next='RightBumperPressed']).
 next(ho2_tutorial,  s20, "true",  s21).
@@ -208,7 +208,7 @@ text(ho2_tutorial,  s32, "Ik zal aftellen aan het begin en aan het einde van het
 next(ho2_tutorial,  s32, "true",  s33).
 
 state(ho2_tutorial, s33, say).
-text(ho2_tutorial,  s33, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken bij mijn linker voet waar het lampje groen is en mijn armen vast pakken.").
+text(ho2_tutorial,  s33, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken waar het lampje groen is en mijn armen vast pakken.").
 leds(ho2_tutorial,  s33, ["RightFootLeds"], ["groen"]).
 stateConfig(ho2_tutorial, s33, [next='RightBumperPressed']).
 set_stiffness(ho2_tutorial, s33, ['RArm', 'LArm'], 0).
@@ -327,7 +327,7 @@ text(ho2_story_selection,  s1, "Nu weet je hoe je leuke geluidjes, bewegingen, e
 next(ho2_story_selection,  s1, "true",  s2).
 
 state(ho2_story_selection, s2, say).
-text(ho2_story_selection,  s2, "De volgende keer zal ik een verhaal vertellen over mijn vorige baaantjes.").
+text(ho2_story_selection,  s2, "De volgende keer zal ik een verhaal vertellen over 1 van mijn vorige baaantjes.").
 next(ho2_story_selection,  s2, "true",  s3).
 
 state(ho2_story_selection, s3, say).
