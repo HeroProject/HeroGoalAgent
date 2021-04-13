@@ -10,25 +10,30 @@ order=linearall.
 
 % Performs all action (modalities) at the start of a state S for topic T.
 module performStateActions(T, S) {
-	% Set led colors. (can be simplified by always running it trhough valueListFromKeyList)
-	if bel(leds(T, S, Leds, Colors)) then
-	{
-		if bel(keyValue(T, S, ledRemoteSource, "true"), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
-		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then setLedColor(Leds, Colors).
-	} 
 	% Say what needs to be said.
 	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
 	{
 		if bel(keyValue(T, S, noAnimation, "true")) then say(TextProcessed).
 		if not(bel(keyValue(T, S, noAnimation, "true"))) then sayAnimated(TextProcessed).
 	}
+
+	% Set led colors. (can be simplified by always running it trhough valueListFromKeyList)
+	if bel(leds(T, S, Leds, Colors)) then
+	{
+		if bel(keyValue(T, S, ledRemoteSource, "true"), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
+		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then setLedColor(Leds, Colors).
+	} 
+
 	% Perform gesture.
 	if bel(anim(T, S, G)) then gesture(G).
-	% Play audio from server.
-	if bel(audio(T, S, server, A)) then playAudio(A).
-	% Play recorded audio.
-	%if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
+	if bel(anim(T, S, onRobot, Anim)) then gesture(Anim).
+	if bel(anim(T, S, file, Anim)) then playMotion(Anim).
+	if bel(anim(T, S, recording, ID), getUserModelValue(ID, Recording)) then playMotion(Recording).
+	if bel(anim(T, S, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
 	
+	
+	% Play audio.
+	if bel(audio(T, S, server, A)) then playAudio(A).
 	if bel(audio(T, S, source, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
 	
 	% Audio management
@@ -94,14 +99,6 @@ module performStateActions(T, S) {
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
-	% Play motion
-	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
-	if bel(play_motion(T, S, ID), getUserModelValue(ID, Recording))
-		then playMotion(Recording).
-		
-	if bel(play_motion_file(T, S, Path)) then playMotion(Path).
-	
-	if bel(play_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
 	
 	% Led animation
 	% Set a flag that the next led animation will be linked to this id.

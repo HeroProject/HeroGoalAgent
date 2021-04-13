@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 session(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, general_rest]).
-session(testing_short, [general_wakeup, dagdromen_sport, general_rest]).
+session(testing_short, [general_wakeup, test_animation, test_motion, test_motion_file, general_rest]).
 session(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 session(lenin, [lenin]).
 
@@ -77,4 +77,4 @@ setPauseButton('MiddleTactilTouched').
 
 %test
 %sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-sessionOrder([robotstories_session_1]).
+sessionOrder([testing_short]).

@@ -79,7 +79,7 @@ text(hero_kan_dromen, s17, "Misschien weet je waar ik het over heb.").
 next(hero_kan_dromen, s17, "true", s18).
 
 state(hero_kan_dromen, s18, question).
-stateConfig(hero_kan_dromen, s18, [type=input, context="hoe_heet_dromen_antwoorden", options=['Dromen'], umVariable=hoe_heet_dromen]).
+stateConfig(hero_kan_dromen, s18, [type=input, context="hoe_heet_dromen_antwoorden", options=['Dromen', 'dromen'], umVariable=hoe_heet_dromen]).
 text(hero_kan_dromen, s18, "Hoe heet dat, wanneer je slaapt en je van alles meemaakt en ineens wordt je wakker?").
 next(hero_kan_dromen, s18, "success", s19).
 next(hero_kan_dromen, s18, "fail", s19).

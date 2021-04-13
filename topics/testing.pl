@@ -214,7 +214,7 @@ audio(test_sound2, s1, server, "resources/sounds/tiktok1.wav").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_animation, s1, say).
 text(test_animation, s1, "Ik doe nu een standaard animatie").
-anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
+anim(test_animation, s1, on_robot, "animations/Stand/Gestures/Enthusiastic_4").
 %animations/Stand/Question/NAO/Left_Neutral_QUE_01
 %animations/Stand/Gestures/Enthusiastic_4
 
@@ -285,7 +285,7 @@ text(test_motion, s3, "Dan ga ik de beweging na doen.").
 next(test_motion, s3, "true", s4).
 
 state(test_motion, s4, say).
-play_motion(test_motion, s4, test_motion).
+anim(test_motion, s4, recording, test_motion).
 next(test_motion, s4, "true", s5).
 
 state(test_motion, s5, say).
@@ -300,7 +300,7 @@ text(test_motion_file, s1, "Kijk, ik speel nu een bewegingsbestand af.").
 next(test_motion_file, s1, "true", s2).
 
 state(test_motion_file, s2, say).
-play_motion_file(test_motion_file, s2, "resources/gestures/goodbye2.xml").
+anim(test_motion_file, s2, file, "resources/gestures/goodbye2.xml").
 %audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
 next(test_motion_file, s2, "true", s3).
 
@@ -362,7 +362,7 @@ text(test_motion_co_b, s1, "Laten we eens kijken wat je hebt gemaakt").
 next(test_motion_co_b, s1, "true", s2).
 
 state(test_motion_co_b, s2, say).
-play_motion(test_motion_co_b, s2, motion_magic_wand).
+anim(test_motion_co_b, s2, recording, motion_magic_wand).
 next(test_motion_co_b, s2, "true", s3).
 
 state(test_motion_co_b, s3, say).
@@ -378,7 +378,7 @@ text(test_motion_2, s1, "Ik weet nog die beweging").
 next(test_motion_2, s1, "true", s2).
 
 state(test_motion_2, s2, say).
-play_motion(test_motion_2, s2, motion_magic_wand).
+anim(test_motion_2, s2, recording, motion_magic_wand).
 next(test_motion_2, s2, "true", s3).
 
 state(test_motion_2, s3, say).
