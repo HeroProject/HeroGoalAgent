@@ -6,18 +6,21 @@ use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
 module handleMemoryData(Key, Value) {
-	
-	if bel(not(Value = 'None'), not(waitingForMemoryAudio(Key)), not(waitingForMemoryLed(Key)), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
+	if bel(Value \= 'None', not(waitingForMemoryAudio(Key)), not(waitingForMemoryLed(Key)), waitingForMemoryData(Key), 
+			userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
 	
-	%if bel(not(Value = 'None'), waitingForMemoryAudio(Key), waitingForMemoryData(Key), audioOrder(Order), NewOrder is Order + 1)
-		%then loadAudio(Value) + delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), audioOrder(Order)) + insert(waitingForLoadedAudioID(Key, Order), audioOrder(NewOrder)).
+	%if bel(Value \= 'None', waitingForMemoryAudio(Key), waitingForMemoryData(Key), audioOrder(Order), NewOrder is Order + 1)
+		%then loadAudio(Value) + delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), audioOrder(Order)) 
+		%+ insert(waitingForLoadedAudioID(Key, Order), audioOrder(NewOrder)).
 		
-	if bel(not(Value = 'None'), waitingForMemoryAudio(Key), waitingForMemoryData(Key), userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
+	if bel(Value \= 'None', waitingForMemoryAudio(Key), waitingForMemoryData(Key), 
+			userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
-	if bel(not(Value = 'None'), waitingForMemoryLed(Key), waitingForMemoryData(Key), string_to_nested_list(Value, LedAnim), userModel(UserModel), updateUserModel(Key, LedAnim, UserModel, NewUserModel))
+	if bel(Value \= 'None', waitingForMemoryLed(Key), waitingForMemoryData(Key), string_to_nested_list(Value, LedAnim), 
+			userModel(UserModel), updateUserModel(Key, LedAnim, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key), waitingForMemoryLed(Key)) + insert(userModel(NewUserModel)).
 	
-	if bel(waitingForMemoryData(Key), Value = 'None') then delete(waitingForMemoryData(Key)).
+	if bel(Value = 'None', waitingForMemoryData(Key)) then delete(waitingForMemoryData(Key)).
 }

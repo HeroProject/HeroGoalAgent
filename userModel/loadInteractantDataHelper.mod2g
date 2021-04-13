@@ -6,11 +6,9 @@ use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
 module loadInteractantDataHelper(Keys) {
-
-	if bel(nth0(0, Keys, Key, RestOfKeys), userId(UserId)) 
+	if bel(nth0(0, Keys, Key, RestOfKeys), length(RestOfKeys, L), userId(UserId)) 
 		then {
 			if not(bel(localVariable(Key, _))) then getInteractantData(UserId, Key).
-			
-			if not(bel(length(RestOfKeys,0))) then loadInteractantDataHelper(RestOfKeys).
+			if bel(L \= 0) then loadInteractantDataHelper(RestOfKeys).
 		}
 }

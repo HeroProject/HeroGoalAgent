@@ -53,7 +53,6 @@ module performStateActions(T, S) {
 	if bel(rest(T, S)) then rest + stopLedAnimation.
 	% Set breathing
 	if bel(enableBreathing(T, S), basePosture(Posture)) then {
-	
 		if bel(Posture = 'Stand') then enableBreathing.
 		if bel(Posture = 'Sit') then enableBreathing('Head').
 	}
@@ -120,15 +119,15 @@ module performStateActions(T, S) {
 		
 	%Save a blinking, alternate, and spinning animations.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
-	getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
-	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
-	nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
+			getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
+			userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
+			nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	%Save a color select animation.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
-	userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
-	nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
+			userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
+			nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	% Save a led animation option as selected option and remove the remaining options.
@@ -147,13 +146,13 @@ module performStateActions(T, S) {
 	if bel(play_led_anim(T, S, ID), getUserModelValue(ID, [Group, AnimType, Colors, Speed])) then 
 	{
 		if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
-		if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+		if bel(AnimType \= colorSelect) then startLedAnimation(Group, AnimType, Colors, Speed).
 	}
 	
 	% Start led animation from configurations stored in option predicate.
 	if bel(play_led_anim_option(T, S, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then {
 		if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
-		if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
+		if bel(AnimType \= colorSelect) then startLedAnimation(Group, AnimType, Colors, Speed).
 	}
 	
 	% Start led animation with given configurations.
@@ -161,13 +160,13 @@ module performStateActions(T, S) {
 	{
 		if bel(keyValue(T, S, ledRemoteSource, "true"), getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR)) 
 			then {
-				if not(bel(AnimTypeR = colorSelect)) then startLedAnimation(GroupR, AnimTypeR, ColorsR, Speed). 
 				if bel(AnimTypeR = colorSelect) then setLedColor(GroupR, ColorsR).
+				if bel(AnimTypeR \= colorSelect) then startLedAnimation(GroupR, AnimTypeR, ColorsR, Speed). 
 			}
 			
 		if not(bel(keyValue(T, S, ledRemoteSource, "true"))) then {
-			if not(bel(AnimType = colorSelect)) then startLedAnimation(Group, AnimType, Colors, Speed).
 			if bel(AnimType = colorSelect) then setLedColor(Group, Colors).
+			if bel(AnimType \= colorSelect) then startLedAnimation(Group, AnimType, Colors, Speed).
 		}
 	}
 	
@@ -176,7 +175,6 @@ module performStateActions(T, S) {
 	
 	% Save behaviors (combination of gesture, sound, led)
 	if bel(save_behavior(T, S, ID, Data)) then {
-	
 		if bel(behavior(ID, ExistingData), append(ExistingData, Data, CombinedData)) then delete(behavior(ID, ExistingData)) + insert(behavior(ID, CombinedData)).
 		if not(bel(behavior(ID, _))) then insert(behavior(ID, Data)).
 	}

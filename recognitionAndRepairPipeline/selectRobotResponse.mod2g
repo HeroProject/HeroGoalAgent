@@ -8,25 +8,26 @@ use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 
 module selectRobotResponse(T, S, Ans, Data) {
-
 	if bel(keyValue(T, S, type, Type), nextCondition(Condition))
 		then {
 			% the default nextCondition will be replaced.
 			if true then delete(nextCondition(Condition)).
 			
 			% If no answer was given
-			if bel(Ans=failure)
+			if bel(Ans = failure)
 				then {
 					%The next condition is given the 'fail'  flag.
 					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
-						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+						then insert(nextCondition('fail')) 
+						+ logging([topic=T, state=S, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
-					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), userModel(UserModel), generateKeyFromTopicAndState(T, S, Key), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel), userId(UserId))
+					if bel(Type = input, keyValue(T, S, defaultAnswer, DefaultAns), userModel(UserModel), generateKeyFromTopicAndState(T, S, Key), 
+							updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel), userId(UserId))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, DefaultAns).
 					
 					%There are two ways a branching decision can deal with a fail.
-					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
+					if bel(Type = branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints))
 						then {
 							%If a default answer is available add that decision to the branching point.
 							if bel(keyValue(T, S, defaultAnswer, DefaultAns), addDecisionToBranchingPoints(BranchingPoints, DefaultAns, BPDs, UpdatedBPDs))
@@ -41,20 +42,24 @@ module selectRobotResponse(T, S, Ans, Data) {
 			if bel(Ans \= failure, not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, Key), userId(UserId))
 				then {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
-					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+					if bel(Type = yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
-					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
+					if bel(Type = input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Ans).
 					%for branch questions
-					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
-					userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
+					if bel(Type = branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
+							userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) 
+						+ insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Ans).
 					%for quiz questions
-					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					if bel(Type = quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Entity).
 					%for open questions
-					if bel(Type=openend)
+					if bel(Type = openend)
 						then insert(nextCondition('success')).
 					
 					%Logging
@@ -65,20 +70,24 @@ module selectRobotResponse(T, S, Ans, Data) {
 			if bel(Ans \= failure, keyValue(T, S, umVariable, Key), userId(UserId)) %TODO: combine with previous statement.
 				then {
 					%if the type of question was yesno, the answer (answer-yes or answer-no) is used as flag for the state transition.
-					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+					if bel(Type = yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
-					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
+					if bel(Type = input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition('success'), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Ans).
 					%for branch questions
-					if bel(Type=branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
-					userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) + insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
+					if bel(Type = branch, branchingPointDecisions(BPDs), keyValue(T, S, branchingPoints, BranchingPoints), addDecisionToBranchingPoints(BranchingPoints, Ans, BPDs, UpdatedBPDs), 
+							userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(branchingPointDecisions(BPDs), userModel(UserModel)) 
+						+ insert(nextCondition('success'), branchingPointDecisions(UpdatedBPDs), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Ans).
 					%for quiz questions
-					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					if bel(Type = quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) 
+						+ setInteractantData(UserId, Key, Entity).
 					%for open questions
-					if bel(Type=openend)
+					if bel(Type = openend)
 						then insert(nextCondition('success')).
 					
 					%Logging
@@ -89,5 +98,4 @@ module selectRobotResponse(T, S, Ans, Data) {
 			% Flag that the answer has been processed.
 			if true then insert(answerProcessed).
 		}
-	
 }

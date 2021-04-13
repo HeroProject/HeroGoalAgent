@@ -17,16 +17,17 @@ module repair(T, S) {
 					if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 						then {
 							%If there are no repair modalities left and the user is not entitled to an additional attempt: return a failure.
-							if bel(NModalities=NewModCount, not(additionalAttempt(T, S)))
-								then delete(waitingForAnswer)+ insert(answer(T, S, failure, [])).
+							if bel(NModalities = NewModCount, not(additionalAttempt(T, S)))
+								then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 								
 							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
-							if bel(not(NModalities=NewModCount), not(additionalAttempt(T, S)), nth0(NewModCount, Order, NewModality))	
+							if bel(NModalities \= NewModCount, not(additionalAttempt(T, S)), nth0(NewModCount, Order, NewModality))	
 								then modalitySwitch(T, S, speech, NewModality).
 							
 							%If the user is entiteled to an addtional attempt: give extra attempt 
 							if bel(additionalAttempt(T, S), NextAttempt is CurrentAttempt + 1)
-								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S)) + insert(start, currentAttempt(NextAttempt)).
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S)) 
+								+ insert(start, currentAttempt(NextAttempt)).
 						}				
 										
 					%If the number of attempts are not reached, the user will get a next speech recognition attempt.
@@ -43,10 +44,10 @@ module repair(T, S) {
 							if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 								then {
 									% If there are no other input modalities, this question failed.
-									if bel(NModalities=NewModCount)
+									if bel(NModalities = NewModCount)
 						 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 									% If there are other input modalities left, switch modalities.
-									if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
+									if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
 										then modalitySwitch(T, S, touch, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
@@ -60,20 +61,20 @@ module repair(T, S) {
 								then {
 									if bel(started, CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 										then {
-										% If there are no other input modalities, this question failed.
-											if bel(NModalities=NewModCount)
+											% If there are no other input modalities, this question failed.
+											if bel(NModalities = NewModCount)
 								 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
-										% If there are other input modalities left, switch modalities.
-										if bel(not(NModalities=NewModCount), nth0(NewModCount, Order, NewModality))	
-											then modalitySwitch(T, S, touch, NewModality).
+											% If there are other input modalities left, switch modalities.
+											if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
+												then modalitySwitch(T, S, touch, NewModality).
 										}
 							
 									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(touch), started)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 								}
-								
-							if bel(CountNew < NOptions) then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
+							if bel(CountNew < NOptions) 
+								then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
 						}
 				}
 		}

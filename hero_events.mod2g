@@ -8,7 +8,6 @@ use 'stateLogic/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
 module hero_events {
-	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,8 +51,10 @@ module hero_events {
 			if bel(not(isCharging), IsCharging = true) then insert(isCharging).
 		}
 			
-	forall percept(motionRecording(Recording)), bel(waitingForMotionRecording(ID), userModel(UserModel), updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
-		do delete(userModel(UserModel), waitingForMotionRecording(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Recording).
+	forall percept(motionRecording(Recording)), bel(waitingForMotionRecording(ID), userModel(UserModel), 
+														updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
+		do delete(userModel(UserModel), waitingForMotionRecording(ID)) 
+		+ insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Recording).
 			
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -103,12 +104,12 @@ module hero_events {
 				if true then stopListening + delete(waitingForDetection).
 								
 				%Dialogflow recognizes intent. Retrieve answer.
-				if bel(not(Intent='')) then processUserResponse(T, S, Intent, Text, Params).
+				if bel(Intent \= '') then processUserResponse(T, S, Intent, Text, Params).
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
-				if bel(Intent='') then {
-				 if bel(not(keyValue(T, S, type, openend))) then repair(T,S). %Log answer
-				 if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
+				if bel(Intent = '') then {
+					if not(bel(keyValue(T, S, type, openend))) then repair(T,S). %Log answer
+					if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
 				} 				
 		}
 							
@@ -121,7 +122,7 @@ module hero_events {
 			if bel(keyValue(T, S, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(T, S)).
 			
 			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
-			if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
+			if not(bel(keyValue(T, S, type, openend))) then repair(T,S).
 			if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, '', []).
 		}
 	
@@ -154,14 +155,16 @@ module hero_events {
 		then selectRobotResponse(T, S, Ans, Data).
 		
 	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), 
+			getBranchingPointDecision([T, S], Decision), nextCondition(Con))
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), 
+			keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
 	% If an emotion is expected and present, set that as the next condition.
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), not(Con=Emotion))
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), Con \= Emotion)
 		then delete(nextCondition(Con)) + insert(nextCondition(Emotion)).
 		
 		
@@ -174,10 +177,13 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, 
+			keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), 
+			not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), 
+			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion
@@ -205,5 +211,4 @@ module hero_events {
 
 	% If state has been completed,  
 	if bel(currentTopic(T), completed(S), nextCondition(C)) then performStateTransition(T, S, C).
-	
 }

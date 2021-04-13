@@ -13,15 +13,16 @@ module processUserResponse(T, S, Intent, Text, Params) {
 		then {
 			if bel(currentInputModality(speech))
 				then {
-					if true then delete(waitingForAnswer) + logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=speech, currentAttempt=CurrentAttempt]).
+					if true then delete(waitingForAnswer) 
+						+ logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=speech, currentAttempt=CurrentAttempt]).
 									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
-					if bel(Type=yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
+					if bel(Type = yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
 						
 					% input questions -> expects an entity to be returned.
-					if bel(Type=input, length(Params, 1), member((_=Ans), Params))
+					if bel(Type = input, length(Params, 1), member((_=Ans), Params))
 						then {
-							if bel(not(Ans = '')) then insert(answer(T, S, Ans, [text=Text])).
+							if bel(Ans \= '') then insert(answer(T, S, Ans, [text=Text])).
 							if bel(Ans = '') then repair(T,S). %Log
 						}
 						
@@ -30,32 +31,33 @@ module processUserResponse(T, S, Intent, Text, Params) {
 						then insert(answer(T, S, Branch, [text=Text])).
 						
 					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type=quiz, length(Params, 1), member((_=Ans), Params), keyValue(T, S, correctAnswer, CorrectAnswer))
+					if bel(Type = quiz, length(Params, 1), member((_=Ans), Params), keyValue(T, S, correctAnswer, CorrectAnswer))
 						then {
-							if bel(not(Ans = ''), member(Ans, CorrectAnswer))
+							if bel(Ans \= '', member(Ans, CorrectAnswer))
 								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
-							if bel(not(Ans = ''), not(member(Ans, CorrectAnswer)))
+							if bel(Ans \= '', not(member(Ans, CorrectAnswer)))
 								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
 							if bel(Ans = '') then repair(T,S). %Log
 						}
 					
-					if bel(Type=openend, length(Params, 0))
+					if bel(Type = openend, length(Params, 0))
 						then {
-							if bel(not(Text='')) then insert(answer(T, S, any, [text=Text])).
-							
+							if bel(Text\='') then insert(answer(T, S, any, [text=Text])).
 							if bel(Text='') then insert(answer(T, S, failure, [text=''])).
 						}
 						
-					if bel(not(answer(T,S, _, _)))
-						then print("Error: no answer was found although it was expected") + log(noAnswerError(T, S, Intent, Params)).
+					if not(bel(answer(T,S, _, _)))
+						then print("Error: no answer was found although it was expected") 
+							+ log(noAnswerError(T, S, Intent, Params)).
 				}
 				
 			if bel(currentInputModality(touch))
 				then {
-			
-					if true then delete(waitingForAnswer) + canceltimer(S) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=touch, currentAttempt=CurrentAttempt]).
+					if true then delete(waitingForAnswer) + canceltimer(S) 
+						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) 
+						+ logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=touch, currentAttempt=CurrentAttempt]).
 					
-					if bel(Type=yesno)
+					if bel(Type = yesno)
 						then insert(answer(T, S, Intent, [text=Intent])).
 					
 					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(T, S, options, Options), mcCounter(Count), nth0(Count, Options, Ans))
