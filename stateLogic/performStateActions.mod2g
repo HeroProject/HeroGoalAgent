@@ -198,13 +198,13 @@ module performStateActions(T, S) {
 	if bel(image(T, S, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
 		then renderPage(Html).
 	% Show questions
-	if bel(display(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
+	if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
 		%if bel(currentAttempt(1), html(HTxt, Html))
 		%	then renderPage(Html).
 		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
 			then renderPage(Html).
 	}
-	if bel(display(T, S, Txt), keyListValues(T, S, [type, options], [mc, List]), text(Txt, HTxt)) then {
+	if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt)) then {
 		%if bel(currentAttempt(1), html(HTxt, Html))
 		%	then renderPage(Html).
 		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
