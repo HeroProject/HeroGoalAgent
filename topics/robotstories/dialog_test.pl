@@ -307,8 +307,7 @@ leds(rs_thread_2_seq_1, s23, direct, "all", "blink", ["green", "blue", "yellow"]
 next(rs_thread_2_seq_1, s23, 'success', s24).
 next(rs_thread_2_seq_1, s23, 'fail', s24f).
 
-state(rs_thread_2_seq_1, s24, branchingPoint).
-stateConfig(rs_thread_2_seq_1, s24, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s23]).
+state(rs_thread_2_seq_1, s24, branchingPoint, rs_thread_2_seq_1_s23).
 leds(rs_thread_2_seq_1, s24, reset).
 next(rs_thread_2_seq_1, s24, "vliegen", s25vliegen).
 next(rs_thread_2_seq_1, s24, "zwemmen", s25zwemmen).
@@ -331,8 +330,7 @@ text(rs_thread_2_seq_1, s26vliegen, "Zal ik snel of langzaam vliegen?").
 next(rs_thread_2_seq_1, s26vliegen, 'success', s27vliegen).
 next(rs_thread_2_seq_1, s26vliegen, 'fail', s27vliegenf).
 
-state(rs_thread_2_seq_1, s27vliegen, branchingPoint).
-stateConfig(rs_thread_2_seq_1, s27vliegen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26vliegen]).
+state(rs_thread_2_seq_1, s27vliegen, branchingPoint, rs_thread_2_seq_1_s26vliegen).
 next(rs_thread_2_seq_1, s27vliegen, "snel", s28vliegensnel).
 next(rs_thread_2_seq_1, s27vliegen, "langzaam", s28vliegenlangzaam).
 next(rs_thread_2_seq_1, s27vliegen, "fail", s27vliegenf).
@@ -366,8 +364,7 @@ text(rs_thread_2_seq_1, s26zwemmen, "Zal ik snel of langzaam zwemmen?").
 next(rs_thread_2_seq_1, s26zwemmen, 'success', s27zwemmen).
 next(rs_thread_2_seq_1, s26zwemmen, 'fail', s27zwemmenf).
 
-state(rs_thread_2_seq_1, s27zwemmen, branchingPoint).
-stateConfig(rs_thread_2_seq_1, s27zwemmen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26zwemmen]).
+state(rs_thread_2_seq_1, s27zwemmen, branchingPoint, rs_thread_2_seq_1_s26zwemmen).
 next(rs_thread_2_seq_1, s27zwemmen, "snel", s28zwemmensnel).
 next(rs_thread_2_seq_1, s27zwemmen, "langzaam", s28zwemmenlangzaam).
 next(rs_thread_2_seq_1, s27zwemmen, "fail", s27zwemmenf).
@@ -401,8 +398,7 @@ text(rs_thread_2_seq_1, s26racen, "Zal ik snel of langzaam racen?").
 next(rs_thread_2_seq_1, s26racen, 'success', s27racen).
 next(rs_thread_2_seq_1, s26racen, 'fail', s27racenf).
 
-state(rs_thread_2_seq_1, s27racen, branchingPoint).
-stateConfig(rs_thread_2_seq_1, s27racen, [branchDecider=entity, branchSource=rs_thread_2_seq_1_s26racen]).
+state(rs_thread_2_seq_1, s27racen, branchingPoint, rs_thread_2_seq_1_s26racen).
 next(rs_thread_2_seq_1, s27racen, "snel", s28racensnel).
 next(rs_thread_2_seq_1, s27racen, "langzaam", s28racenlangzaam).
 next(rs_thread_2_seq_1, s27racen, "fail", s27racenf).

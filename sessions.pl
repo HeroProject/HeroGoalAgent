@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 session(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-session(testing_short, [general_wakeup, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
+session(testing_short, [general_wakeup, test_party, test_party2, general_rest]).
 session(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 session(lenin, [lenin]).
 
@@ -65,7 +65,7 @@ session(demo_3, [general_wakeup, ho3_koelkast, general_rest]).
 % When GUI is used this userId and these localVariables are ignored.
 useGui(false).
 setUserId('999').
-setSessionId(1).
+setSessionId(5).
 setBasePosture('Stand').
 addLocalVariable(first_name, "Tommy").
 
@@ -76,5 +76,5 @@ setPauseButton('MiddleTactilTouched').
 %sessionOrder([demo_1, demo_2, demo_3]).
 
 %test
-%sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-sessionOrder([testing_complete]).
+sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
+%sessionOrder([testing_short]).

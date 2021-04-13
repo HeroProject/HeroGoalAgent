@@ -7,8 +7,7 @@
 %%% Coordination of involvement				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, s1, question).
-stateConfig(co_sound, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_sound, s4]]]).
+stateConfig(co_sound, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
 text(co_sound, s1, "Wil jij het geluid zelf maken of zal ik wat geluiden downloaden?").
 next(co_sound, s1, "success", s3).
 next(co_sound, s1, "fail", s3f).
@@ -21,8 +20,7 @@ state(co_sound, s3, say).
 text(co_sound,  s3, "Oke we gaan het %co_sound_s1%.").
 next(co_sound,  s3, "true",  s4).
 
-state(co_sound, s4, branchingPoint).
-stateConfig(co_zoo_lion, s9downloaden, [branchDecider=entity, branchSource=co_sound_s2]).
+state(co_sound, s4, branchingPoint, co_sound_s1).
 next(co_sound, s4, "maken", smaken1).
 next(co_sound, s4, "downloaden", sdownload1).
 next(co_sound, s4, "fail", sdownload1).
@@ -54,8 +52,7 @@ play_sound_option(co_sound, sdownload5, 2).
 next(co_sound, sdownload5, "true", sdownload6).
 
 state(co_sound, sdownload6, question).
-stateConfig(co_sound, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_sound, sdownload7]]]).
+stateConfig(co_sound, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste']).
 text(co_sound, sdownload6, "Wil jij het eerste of tweede geluid, of zal ik kiezen?").
 next(co_sound, sdownload6, "success", sdownload7).
 next(co_sound, sdownload6, "fail", sdownload7f).
@@ -64,10 +61,10 @@ state(co_sound, sdownload7f, say).
 text(co_sound,  sdownload7f, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_sound,  sdownload7f, "true",  sdownload8robot).
 
-state(co_sound, sdownload7, branchingPoint).
+state(co_sound, sdownload7, branchingPoint, co_sound_sdownload6).
 next(co_sound, sdownload7, "eerste", sdownload8eerste).
 next(co_sound, sdownload7, "tweede", sdownload8tweede).
-next(co_sound, sdownload7, "robot kiest", sdownload8robot).
+next(co_sound, sdownload7, "hero", sdownload8robot).
 
 state(co_sound, sdownload8eerste, say).
 text(co_sound,  sdownload8eerste, "Het eerste, goede keuze.").

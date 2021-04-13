@@ -10,7 +10,7 @@ module hero_init {
 	if true then insert(waitingForInit).
 	
 	% Initialize state parameters.
-	if true then insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
+	if true then insert(currentState(s1), start, nextCondition('true')).
 	
 	% Initialize robot model
 	if true then insert(posture('Unknown'), stiffness(0), batteryCharge(100)).

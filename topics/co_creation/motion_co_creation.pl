@@ -7,8 +7,7 @@
 %%% Coordination of involvement				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, s1, question).
-stateConfig(co_motion, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_motion, s4]]]).
+stateConfig(co_motion, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
 text(co_motion, s1, "Wil jij de beweging maken of zal ik wat opties downloaden?").
 next(co_motion, s1, "success", s3).
 next(co_motion, s1, "fail", s3f).
@@ -21,7 +20,7 @@ state(co_motion, s3, say).
 text(co_motion,  s3, "Oke we gaan het %co_motion_s1%.").
 next(co_motion,  s3, "true",  s4).
 
-state(co_motion, s4, branchingPoint).
+state(co_motion, s4, branchingPoint, co_motion_s1).
 next(co_motion, s4, "maken", smaken1).
 next(co_motion, s4, "downloaden", sdownload1).
 next(co_motion, s4, "fail", sdownload1).
@@ -53,8 +52,7 @@ anim(co_motion, sdownload5, option, 2).
 next(co_motion, sdownload5, "true", sdownload6).
 
 state(co_motion, sdownload6, question).
-stateConfig(co_motion, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_motion, sdownload7]]]).
+stateConfig(co_motion, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste']).
 text(co_motion, sdownload6, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
 go_to_posture(co_motion, sdownload6).
 next(co_motion, sdownload6, "success", sdownload7).
@@ -64,10 +62,10 @@ state(co_motion, sdownload7f, say).
 text(co_motion,  sdownload7f, "Sorry, ik verstond je niet zo goed. Laten we voor de eerste keuze gaan.").
 next(co_motion,  sdownload7f, "true",  sdownload8robot).
 
-state(co_motion, sdownload7, branchingPoint).
+state(co_motion, sdownload7, branchingPoint, co_motion_sdownload6).
 next(co_motion, sdownload7, "eerste", sdownload8eerste).
 next(co_motion, sdownload7, "tweede", sdownload8tweede).
-next(co_motion, sdownload7, "robot kiest", sdownload8robot).
+next(co_motion, sdownload7, "hero", sdownload8robot).
 
 state(co_motion, sdownload8eerste, say).
 text(co_motion,  sdownload8eerste, "De eerste, goede keuze.").

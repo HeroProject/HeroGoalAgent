@@ -30,8 +30,7 @@ state(ho3_greeting, s6, say).
 text(ho3_greeting,  s6, "En dat kan ik nu goed gebruiken.").
 next(ho3_greeting,  s6, "true",  s7).
 
-state(ho3_greeting, s7, branchingPoint).
-stateConfig(ho3_greeting, s7, [branchDecider=entity, branchSource=ho2_story_choice]).
+state(ho3_greeting, s7, branchingPoint, ho2_story_choice).
 next(ho3_greeting, s7, "koelkast", s8koelkast).
 next(ho3_greeting, s7, "graafmachine", s8graafmachine).
 next(ho3_greeting, s7, "fail", s8koelkast).
@@ -542,14 +541,12 @@ state(ho3_next_story, s4yf, say).
 text(ho3_next_story,  s4yf, "Dat ging niet helemaal goed, maar dat is niet erg. Laten we dan maar gaan voor").
 next(ho3_next_story,  s4yf, "true",  s5y).
 
-state(ho3_next_story, s5y, branchingPoint).
-stateConfig(ho3_next_story, s5y, [branchDecider=entity, branchSource=ho3_next_story]).
+state(ho3_next_story, s5y, branchingPoint, ho3_next_story).
 next(ho3_next_story, s5y, "koelkast", s6koelkast).
 next(ho3_next_story, s5y, "telescoop", s6telescoop).
 next(ho3_next_story, s5y, "fail", s6f).
 
-state(ho3_next_story, s6f, branchingPoint).
-stateConfig(ho3_next_story, s6f, [branchDecider=entity, branchSource=ho3_story_choice]).
+state(ho3_next_story, s6f, branchingPoint, ho3_story_choice).
 next(ho3_next_story, s6f, "koelkast", s6graafmachine).
 next(ho3_next_story, s6f, "telescoop", s6koelkast).
 next(ho3_next_story, s6f, "fail", s6graafmachine).

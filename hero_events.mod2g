@@ -149,16 +149,16 @@ module hero_events {
 	%%% Answer processing			      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
+	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, quiz) the answers should be processed differently.
 	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
 		then selectRobotResponse(T, S, Ans, Data).
 		
-	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
-		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
-	
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
-		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint, Source), getUserModelValue(Source, Decision), nextCondition(Con)) then {
+		if bel(next(T, S, Decision, _)) then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+		if bel(not(next(T, S, Decision, _)), Decision \= "fail", next(T, S, "_others", _)) then delete(nextCondition(Con)) + insert(nextCondition("_others")).
+		if bel(not(next(T, S, Decision, _)), Decision \= "fail", not(next(T, S, "_others", _))) then delete(nextCondition(Con)) + insert(nextCondition("success")).
+	}
+		
 		
 	% If an emotion is expected and present, set that as the next condition.
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), not(Con=Emotion))

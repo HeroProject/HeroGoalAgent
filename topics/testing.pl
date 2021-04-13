@@ -46,37 +46,55 @@ text(test_color, s2f, "Mijn levelingskleur is %test_color_s1%.").
 %%% Party - Testing branch question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_party, s1, question).
-stateConfig(test_party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
-branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[test_party, s3], [test_party2, s2]]]).
+stateConfig(test_party, s1, [type = input, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen']).
 text(test_party, s1, "Dansen, zingen, of muziek maken?").
-next(test_party, s1, "success", s2).
+next(test_party, s1, "dansen", s2a).
+next(test_party, s1, "zingen", s2b).
+next(test_party, s1, "muziek maken", s2c).
 next(test_party, s1, "fail", s2f).
 
-state(test_party, s2, say).
-text(test_party, s2, "Ik hou je nog even in spanning.").
-next(test_party, s2, 'true', s3).
+state(test_party, s2a, say).
+text(test_party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2a, "true", s3).
+
+state(test_party, s2b, say).
+text(test_party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2b, "true", s3).
+
+state(test_party, s2c, say).
+text(test_party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2c, "true", s3).
 
 state(test_party, s2f, say).
-text(test_party, s2f, "Ik kies zelf voor zingen.").
-next(test_party, s2f, 'true', s3).
+text(test_party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2f, "true", s3).
 
-state(test_party, s3, branchingPoint).
+state(test_party, s3, branchingPoint, test_party_s1).
 next(test_party, s3, "dansen", s3a).
-next(test_party, s3, "zingen", s3b).
-next(test_party, s3, "muziek maken", s3c).
+next(test_party, s3, "_others", s3b).
 next(test_party, s3, "fail", s3f).
 
 state(test_party, s3a, say).
-text(test_party, s3a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3a, "Ik hou heel erg van dansen.").
+next(test_party, s3a, "true", s4).
 
 state(test_party, s3b, say).
-text(test_party, s3b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
-
-state(test_party, s3c, say).
-text(test_party, s3c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3b, "Ik hou heel erg van zingen en muziek maken.").
+next(test_party, s3b, "true", s4).
 
 state(test_party, s3f, say).
-text(test_party, s3f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3f, "Ik hou heel erg van dansen, zingen, en muziek maken").
+next(test_party, s3f, "true", s4).
+
+state(test_party, s4, branchingPoint, test_party_s1).
+next(test_party, s4, "success", s4a).
+next(test_party, s4, "fail", s3f).
+
+state(test_party, s4a, say).
+text(test_party, s4a, "Dat ging goed!").
+
+state(test_party, s4a, say).
+text(test_party, s4a, "Fail is goed doorgekomen").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Party2 - Testing branching point	                   %%%
@@ -86,7 +104,7 @@ state(test_party2, s1, say).
 text(test_party2, s1, "Ik ben een nieuw topic").
 next(test_party2, s1, "true", s2).
 
-state(test_party2, s2, branchingPoint).
+state(test_party2, s2, branchingPoint, test_party_s1).
 next(test_party2, s2, "dansen", s2a).
 next(test_party2, s2, "zingen", s2b).
 next(test_party2, s2, "muziek maken", s2c).
@@ -283,8 +301,7 @@ state(test_second_session, s1, say).
 text(test_second_session, s1, "Ik weet nog dat jij van %favo_sport% houdt.").
 next(test_second_session, s1, "true", s2).
 
-state(test_second_session, s2, branchingPoint).
-stateConfig(test_second_session, s2, [branchDecider=entity, branchSource=favo_sport]).
+state(test_second_session, s2, branchingPoint, favo_sport).
 next(test_second_session, s2, "floorball", s3floorball).
 next(test_second_session, s2, "voetbal", s3voetbal).
 next(test_second_session, s2, "hockey", s3hockey).
@@ -357,7 +374,7 @@ next(test_session_sound_1a, s1, "true", s2).
 
 state(test_session_sound_1a, s2, say).
 prepare_sound_anim(test_session_sound_1a, s2).
-stateConfig(test_session_sound_1a, s2, [umVariable=sound_lion,
+stateConfig(test_session_sound_1a, s2, [umVariable=test_sound_lion,
 				 option1='resources/sounds/lion1.wav',
 				 option2='resources/sounds/lion2.wav',
 				 recordTime=4000]).
@@ -371,7 +388,7 @@ text(test_session_sound_1b, s2, "Het was het gebrul van de leeuw").
 next(test_session_sound_1b, s2, "true", s3).
 
 state(test_session_sound_1b, s3, say).
-audio(test_session_sound_1b, s3, id, sound_lion).
+audio(test_session_sound_1b, s3, id, test_sound_lion).
 next(test_session_sound_1b, s3, "true", s4).
 
 state(test_session_sound_1b, s4, say).
@@ -387,7 +404,7 @@ text(test_session_sound_2, s1, "Als machtige krijgers brullen wij als een leeuw.
 next(test_session_sound_2, s1, "true", s2).
 
 state(test_session_sound_2, s2, say).
-audio(test_session_sound_2, s2, id, sound_lion).
+audio(test_session_sound_2, s2, id, test_sound_lion).
 next(test_session_sound_2, s2, "true", s3).
 
 state(test_session_sound_2, s3, say).

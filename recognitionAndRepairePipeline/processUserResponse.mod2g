@@ -19,29 +19,28 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					if bel(Type=yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
 						
 					% input questions -> expects an entity to be returned.
-					if bel(Type=input, length(Params, 1), member((_=Ans), Params))
+					if bel(Type=input)
 						then {
-							if bel(not(Ans = '')) then insert(answer(T, S, Ans, [text=Text])).
-							if bel(Ans = '') then repair(T,S). %Log
+							if bel(length(Params, 1), member((_=Ans), Params)) then {
+								if bel(Ans\='') then insert(answer(T, S, Ans, [text=Text])).
+								if bel(Ans='') then repair(T,S). %Log
+							}
+							if bel(length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
 						}
-						
-					% branch questions -> matches the intent to a specific branch
-					if bel(Type=branch, length(Params, 0), keyValue(T, S, branchIntents, BranchIntents), member((Branch=Intent), BranchIntents))
-						then insert(answer(T, S, Branch, [text=Text])).
-						
+											
 					% quiz questions -> checks whether the answer is correct or not.
 					if bel(Type=quiz, length(Params, 1), member((_=Ans), Params), keyValue(T, S, correctAnswer, CorrectAnswer))
 						then {
-							if bel(not(Ans = ''), member(Ans, CorrectAnswer))
+							if bel(Ans\='', member(Ans, CorrectAnswer))
 								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
-							if bel(not(Ans = ''), not(member(Ans, CorrectAnswer)))
+							if bel(Ans\='', not(member(Ans, CorrectAnswer)))
 								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
-							if bel(Ans = '') then repair(T,S). %Log
+							if bel(Ans='') then repair(T,S). %Log
 						}
 					
 					if bel(Type=openend, length(Params, 0))
 						then {
-							if bel(not(Text='')) then insert(answer(T, S, any, [text=Text])).
+							if bel(Text\='') then insert(answer(T, S, any, [text=Text])).
 							
 							if bel(Text='') then insert(answer(T, S, failure, [text=''])).
 						}
@@ -61,9 +60,6 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(T, S, options, Options), mcCounter(Count), nth0(Count, Options, Ans))
 						then {
 							if bel(Type=input)
-								then insert(answer(T, S, Ans, [text=Ans])).
-							
-							if bel(Type=branch)
 								then insert(answer(T, S, Ans, [text=Ans])).
 							
 							if bel(Type=quiz, keyValue(T, S, correctAnswer, CorrectAnswer))

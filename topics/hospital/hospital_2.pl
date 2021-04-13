@@ -105,8 +105,7 @@ audio(ho2_tutorial, s13, file, "resources/sounds/tiktok2.wav").
 next(ho2_tutorial,  s13, "true", s14).
 
 state(ho2_tutorial, s14, question).
-stateConfig(ho2_tutorial, s14, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'],
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[ho2_tutorial, s15]]]).
+stateConfig(ho2_tutorial, s14, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero']]).
 text(ho2_tutorial, s14, "Vind je het eerste of tweede liedje leuker, of zal ik kiezen?").
 next(ho2_tutorial, s14, "success", s15).
 next(ho2_tutorial, s14, "fail", s14f).
@@ -115,10 +114,10 @@ state(ho2_tutorial, s14f, say).
 text(ho2_tutorial,  s14f, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
 next(ho2_tutorial,  s14f, "true",  s15).
 
-state(ho2_tutorial, s15, branchingPoint).
+state(ho2_tutorial, s15, branchingPoint, ho2_tutorial_s14).
 next(ho2_tutorial, s15, "eerste", s16eerste).
 next(ho2_tutorial, s15, "tweede", s16tweede).
-next(ho2_tutorial, s15, "robot kiest", s16robot).
+next(ho2_tutorial, s15, "hero", s16robot).
 next(ho2_tutorial, s15, "fail", s16tweede).
 
 state(ho2_tutorial, s16eerste, say).
@@ -364,8 +363,7 @@ state(ho2_story_selection, s9f, say).
 text(ho2_story_selection,  s9f, "Dat ging niet helemaal goed, maar dat is niet erg. Laat ik gewoon over mijn tijd als koelkast vertellen.").
 next(ho2_story_selection,  s9f, "true",  s10).
 
-state(ho2_story_selection, s10, branchingPoint).
-stateConfig(ho2_story_selection, s10, [branchDecider=entity, branchSource=ho2_story_choice]).
+state(ho2_story_selection, s10, branchingPoint, ho2_story_choice).
 next(ho2_story_selection, s10, "koelkast", s10koelkast).
 next(ho2_story_selection, s10, "graafmachine", s10graafmachine).
 next(ho2_story_selection, s10, "fail", s10koelkast).
@@ -493,7 +491,7 @@ text(ho2_koelkast_4,  s2, "Ziet er goed uit, goed gedaan.").
 next(ho2_koelkast_4,  s2, "true",  s3).
 
 state(ho2_koelkast_4, s3, say).
-stop_led_anim(ho2_koelkast_4, s3, reset).
+leds(ho2_koelkast_4, s3, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Graafmachine			                   %%%
@@ -609,7 +607,7 @@ next(ho2_graafmachine_4, s3, "true", s4).
 
 state(ho2_graafmachine_4, s4, say).
 text(ho2_graafmachine_4, s4, "Net echt toch? Mooi gemaakt.").
-stop_led_anim(ho2_graafmachine_4, s4, reset).
+leds(ho2_graafmachine_4, s4, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Goodbye				                   %%%

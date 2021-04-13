@@ -88,8 +88,7 @@ state(hero_kan_dromen, s19, say).
 text(hero_kan_dromen, s19, "Ik heb het dus even opgezocht op wikipedia.").
 next(hero_kan_dromen, s19, "true", s20).
 
-state(hero_kan_dromen, s20, branchingPoint).
-state(hero_kan_dromen, s20, [branchDecider=entity, branchSource=hoe_heet_dromen]).
+state(hero_kan_dromen, s20, branchingPoint, hoe_heet_dromen).
 next(hero_kan_dromen, s20, "success", s21goed1).
 next(hero_kan_dromen, s20, "fail", s21fout1).
 

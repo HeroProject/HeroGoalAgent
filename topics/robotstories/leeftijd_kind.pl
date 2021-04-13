@@ -24,8 +24,7 @@ state(leeftijd_kind, s6, say).
 text(leeftijd_kind, s6, "Omgerekend naar mensenjaren ben ik denk ik...").
 next(leeftijd_kind, s6, "true", s7).
 
-state(leeftijd_kind, s7, branchingPoint).
-state(leeftijd_kind, s7, [branchDecider=entity, branchSource=leeftijd]).
+state(leeftijd_kind, s7, branchingPoint, leeftijd).
 next(leeftijd_kind, s7, "4", s831).
 next(leeftijd_kind, s7, "5", s841).
 next(leeftijd_kind, s7, "6", s851).

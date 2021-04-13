@@ -7,8 +7,7 @@
 %%% LED Animation Check					   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_selection, s1, question).
-stateConfig(co_led_selection, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_led_selection, s4]]]).
+stateConfig(co_led_selection, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
 text(co_led_selection, s1, "Wil jij de lichtshow maken of zal ik wat opties downloaden?").
 next(co_led_selection, s1, "success", s3).
 next(co_led_selection, s1, "fail", s3f).
@@ -21,7 +20,7 @@ state(co_led_selection, s3, say).
 text(co_led_selection,  s3, "Oke we gaan het %co_led_selection_s1%.").
 next(co_led_selection,  s3, "true",  s4).
 
-state(co_led_selection, s4, branchingPoint).
+state(co_led_selection, s4, branchingPoint, co_led_selection_s1).
 next(co_led_selection, s4, "maken", s5maken).
 next(co_led_selection, s4, "downloaden", s5download).
 next(co_led_selection, s4, "fail", s5download).
@@ -63,8 +62,7 @@ stateConfig(co_led_download, sdownload5, [waitTimer=3000]).
 next(co_led_download, sdownload5, "true", sdownload6).
 
 state(co_led_download, sdownload6, question).
-stateConfig(co_led_download, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_led_download, sdownload7]]]).
+stateConfig(co_led_download, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='tweede']).
 text(co_led_download, sdownload6, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
 leds(co_led_download, sdownload6, reset).
 next(co_led_download, sdownload6, "success", sdownload7).
@@ -74,10 +72,10 @@ state(co_led_download, sdownload7f, say).
 text(co_led_download,  sdownload7f, "Sorry, ik verstond je niet zo goed. Laten we voor de tweede keuze gaan.").
 next(co_led_download,  sdownload7f, "true",  sdownload8robot).
 
-state(co_led_download, sdownload7, branchingPoint).
+state(co_led_download, sdownload7, branchingPoint, co_led_download_sdownload6).
 next(co_led_download, sdownload7, "eerste", sdownload8eerste).
 next(co_led_download, sdownload7, "tweede", sdownload8tweede).
-next(co_led_download, sdownload7, "robot kiest", sdownload8robot).
+next(co_led_download, sdownload7, "hero", sdownload8robot).
 
 state(co_led_download, sdownload8eerste, say).
 text(co_led_download,  sdownload8eerste, "De eerste, goede keuze.").
@@ -108,8 +106,7 @@ state(co_led_creation, s2, say).
 text(co_led_creation, s2, "%co_led_creation_s1%, helemaal prima.").
 next(co_led_creation, s2, "true", s3).
 
-state(co_led_creation, s3, branchingPoint).
-stateConfig(co_led_creation, s3, [branchDecider=entity, branchSource=co_led_creation_s1]).
+state(co_led_creation, s3, branchingPoint, co_led_creation_s1).
 next(co_led_creation, s3, "knipperen", s5animknip).
 next(co_led_creation, s3, "heen en weer", s5animheen).
 next(co_led_creation, s3, "inkleuren", s4no).
