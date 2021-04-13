@@ -67,7 +67,7 @@ getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserM
 getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 %isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
-getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=FirstName), UserModel)).
+getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
@@ -165,7 +165,7 @@ replace_chars(I, CharI, CharO, O) :-
 %nested_list_to_atom([H | T], [Hout | Tout]) :- replace_chars(H, '@', ',', Hout), nested_list_to_atom(T, Tout), !.
 %nested_list_to_atom([], []).
 
-nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
+%nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
 
 %to_terms([H | T], [Hout | Tout]) :- term_to_atom(Hout, H), to_terms(T, Tout), !.
 %to_terms([], []).

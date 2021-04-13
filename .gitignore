@@ -1,2 +1,3 @@
-dialogflowagent.json
+*.json
+.project
 output/

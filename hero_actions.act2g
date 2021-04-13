@@ -90,9 +90,9 @@ define enableBreathing(Bodypart) with
 	pre { true }
 	post { waitingForEvent('BreathingEnabled') }
 	
-define disableBreathing(Bodypart) with
-	pre { true }
-	post { waitingForEvent('BreathingDisabled') }
+%define disableBreathing(Bodypart) with
+%	pre { true }
+%	post { waitingForEvent('BreathingDisabled') }
 
 define goToPosture(Posture) with
 	pre { true }
@@ -122,9 +122,9 @@ define setLedColor(Leds, Colors) with
 	pre { true }
 	post { waitingForEvent('LedColorDone') }
 	
-define setLedColor(Leds, Colors, Duration) with
-	pre { true }
-	post { waitingForEvent('LedColorDone') }
+%define setLedColor(Leds, Colors, Duration) with
+%	pre { true }
+%	post { waitingForEvent('LedColorDone') }
 
 define startLedAnimation(Group, AnimType, Colors, Speed) with
 	pre { true }
@@ -155,13 +155,13 @@ define getInteractantData(ID, Key) with
 	pre { true }
 	post { waitingForMemoryData(Key) }
 
-define deleteInteractant(ID) with
-	pre { true }
-	post { waitingForEvent('InteractantDeleted') }
+%define deleteInteractant(ID) with
+	%pre { true }
+	%post { waitingForEvent('InteractantDeleted') }
 
-define deleteAllInteractants with
-	pre { true }
-	post { waitingForEvent('AllInteractantsDeleted') }
+%define deleteAllInteractants with
+	%pre { true }
+	%post { waitingForEvent('AllInteractantsDeleted') }
 	
 % DialogFlow Control
 %define setLanguage(Lang) with

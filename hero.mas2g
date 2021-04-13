@@ -1,15 +1,15 @@
-use '..\..\clients\cbsr-eis-connector.jar' as environment with
+use 'cbsr-eis-connector.jar' as environment with
 		server='localhost',
-		flowkey='dialogflowagent.json',
-		flowagent='mikeagent-dsvpjs',
+		flowkey='slaapquiz-cxyr-a7a3ba745055',
+		flowagent='slaapquiz-cxyr',
 		flowlang='nl-NL'.
-		
+
 define hero as agent {
 	use hero_init as init.
 	use hero_events as event.
 	use hero_main as main.
 }
 
-launchpolicy{
+launchpolicy {
 	when * launch hero.
 }

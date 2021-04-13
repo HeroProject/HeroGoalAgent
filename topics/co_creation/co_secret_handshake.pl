@@ -657,7 +657,7 @@ text(co_handshake_ceremonie,  s5, "Doei %first_name%, bedankt!").
 next(co_handshake_ceremonie,  s5, "true",  s6).
 
 state(co_handshake_ceremonie, s6, say).
-play_behavior(co_handshake_ceremonie, s6, "GoodbyeCeremonie").
+%play_behavior(co_handshake_ceremonie, s6, "GoodbyeCeremonie").
 next(co_handshake_ceremonie,  s6, "true",  s7).
 
 state(co_handshake_ceremonie, s7, say).
