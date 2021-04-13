@@ -6,14 +6,9 @@ use hero_actions as actionspec.
 use 'userModel/initializeUserModel.mod2g' as module.
 
 module hero_init {
-	% Set loading flag.
-	if true then insert(waitingForInit).
-	
-	% Initialize state parameters.
-	if true then insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
-	
-	% Initialize robot model
-	if true then insert(posture('Unknown'), stiffness(0), batteryCharge(100)).
+	% Set loading flag and do some initialisations.
+	if true then insert(waitingForInit, currentState(s1), start, nextCondition('true'), 
+							branchingPointDecisions([]), posture('Unknown'), stiffness(0), batteryCharge(100)).
 	
 	% Initalize pause button
 	if bel(setPauseButton(PB)) then insert(waitForPause(PB)).
@@ -25,4 +20,7 @@ module hero_init {
 	% If first state is a question state, initialize required properties
 	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
+		
+	% Show a default (empty) page on any connected browser
+	if bel(html('',Html)) then renderPage(Html).
 }

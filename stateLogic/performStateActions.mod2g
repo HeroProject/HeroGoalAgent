@@ -26,9 +26,7 @@ module performStateActions(T, S) {
 	if bel(anim(T, S, G)) then gesture(G).
 	% Play audio from server.
 	if bel(audio(T, S, server, A)) then playAudio(A).
-	% Play recorded audio.
-	%if bel(audio(T, S, recorded, ID), getUserModelValue(ID, AudioID)) then playLoadedAudio(AudioID).
-	
+	% Play recorded audio.	
 	if bel(audio(T, S, source, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
 	
 	% Audio management
@@ -94,7 +92,6 @@ module performStateActions(T, S) {
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
 	% Play motion
-	%if bel(play_motion(T, S, Source), nth0(0, Source, Tsource), nth0(1, Source, Ssource), generateKeyFromTopicAndState(Tsource, Ssource, ID), motionRecording(ID, Recording))
 	if bel(play_motion(T, S, ID), getUserModelValue(ID, Recording))
 		then playMotion(Recording).
 		
@@ -191,6 +188,28 @@ module performStateActions(T, S) {
 		%}
 		%if bel(member((led=file), Data), member((ledSource=[Group, AnimType, Colors, Speed]), Data)) then startLedAnimation(Group, AnimType, Colors, Speed).
 	%}
+	
+	% Show text.
+	if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	if bel(display_raw(T, S, Txt), html(Txt, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	% Show image.
+	if bel(image(T, S, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	% Show questions
+	if bel(display(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
+		%if bel(currentAttempt(1), html(HTxt, Html))
+		%	then renderPage(Html).
+		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+	}
+	if bel(display(T, S, Txt), keyListValues(T, S, [type, options], [mc, List]), text(Txt, HTxt)) then {
+		%if bel(currentAttempt(1), html(HTxt, Html))
+		%	then renderPage(Html).
+		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+	}
 	
 	forall bel(insert_topic(T, S, Topic)) do {
     	if bel(topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([Topic | AllTopics])).
