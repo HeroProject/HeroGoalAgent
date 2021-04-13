@@ -69,15 +69,15 @@ next(co_motion, sdownload7, "hero", sdownload8robot).
 
 state(co_motion, sdownload8eerste, say).
 text(co_motion,  sdownload8eerste, "De eerste, goede keuze.").
-save_motion_option(co_motion, sdownload8eerste, 1).
+save_motion(co_motion, sdownload8eerste, option, 1).
 
 state(co_motion, sdownload8tweede, say).
 text(co_motion,  sdownload8tweede, "De tweede, goede keuze.").
-save_motion_option(co_motion, sdownload8tweede, 2).
+save_motion(co_motion, sdownload8tweede, option, 2).
 
 state(co_motion, sdownload8robot, say).
 text(co_motion,  sdownload8robot, "Prima! De eerste vond ik het leukst. Dus die heb ik gekozen.").
-save_motion_option(co_motion, sdownload8robot, 1).
+save_motion(co_motion, sdownload8robot, option, 1).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Maken						   %%%
@@ -101,7 +101,7 @@ text(co_motion, smaken3, "3. 2. 1").
 next(co_motion,  smaken3, "true",  smaken4).
 
 state(co_motion, smaken4, say).
-start_motion_recording(co_motion, smaken4, ['RArm', 'LArm']).
+record_motion(co_motion, smaken4, ['RArm', 'LArm'], 0).
 stateConfig(co_motion, smaken4, [waitTimer=5000]).
 next(co_motion,  smaken4, "true",  smaken5).
 
@@ -111,7 +111,7 @@ stateConfig(co_motion, smaken5, [noAnimation="true"]).
 next(co_motion,  smaken5, "true",  smaken6).
 
 state(co_motion, smaken6, say).
-stop_motion_recording(co_motion, smaken6, ['RArm', 'LArm']).
+save_motion(co_motion, smaken6, recording, ['RArm', 'LArm']).
 stateConfig(co_motion, smaken6, [noAnimation="true"]).
 next(co_motion,  smaken6, "true",  smaken7).
 

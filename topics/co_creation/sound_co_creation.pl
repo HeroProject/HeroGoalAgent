@@ -40,7 +40,7 @@ leds(co_sound, sdownload2, reset).
 next(co_sound,  sdownload2, "true",  sdownload3).
 
 state(co_sound, sdownload3, say).
-play_sound_option(co_sound, sdownload3, 1).
+audio(co_sound, sdownload3, option, 1).
 next(co_sound, sdownload3, "true", sdownload4).
 
 state(co_sound, sdownload4, say).
@@ -48,7 +48,7 @@ text(co_sound,  sdownload4, "En dit is optie 2").
 next(co_sound,  sdownload4, "true",  sdownload5).
 
 state(co_sound, sdownload5, say).
-play_sound_option(co_sound, sdownload5, 2).
+audio(co_sound, sdownload5, option, 2).
 next(co_sound, sdownload5, "true", sdownload6).
 
 state(co_sound, sdownload6, question).
@@ -68,15 +68,15 @@ next(co_sound, sdownload7, "hero", sdownload8robot).
 
 state(co_sound, sdownload8eerste, say).
 text(co_sound,  sdownload8eerste, "Het eerste, goede keuze.").
-save_sound_option(co_sound, sdownload8eerste, 1).
+save_sound(co_sound, sdownload8eerste, 1).
 
 state(co_sound, sdownload8tweede, say).
 text(co_sound,  sdownload8tweede, "Het tweede, goede keuze.").
-save_sound_option(co_sound, sdownload8tweede, 2).
+save_sound(co_sound, sdownload8tweede, 2).
 
 state(co_sound, sdownload8robot, say).
 text(co_sound,  sdownload8robot, "Prima! De eerste vond ik het leukst. Dus die heb ik gekozen.").
-save_sound_option(co_sound, sdownload8robot, 1).
+save_sound(co_sound, sdownload8robot, 1).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Maken						   %%%

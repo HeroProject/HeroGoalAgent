@@ -79,15 +79,15 @@ next(co_led_download, sdownload7, "hero", sdownload8robot).
 
 state(co_led_download, sdownload8eerste, say).
 text(co_led_download,  sdownload8eerste, "De eerste, goede keuze.").
-save_led_anim_option(co_led_download, sdownload8eerste, 1).
+save_led_anim(co_led_download, sdownload8eerste, 1).
 
 state(co_led_download, sdownload8tweede, say).
 text(co_led_download,  sdownload8tweede, "De tweede, goede keuze.").
-save_led_anim_option(co_led_download, sdownload8tweede, 2).
+save_led_anim(co_led_download, sdownload8tweede, 2).
 
 state(co_led_download, sdownload8robot, say).
 text(co_led_download,  sdownload8robot, "Prima! De tweede vond ik het leukst. Dus die heb ik gekozen.").
-save_led_anim_option(co_led_download, sdownload8robot, 2).
+save_led_anim(co_led_download, sdownload8robot, 2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Create						   %%%

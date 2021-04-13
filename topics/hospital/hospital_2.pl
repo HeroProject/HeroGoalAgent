@@ -219,7 +219,7 @@ text(ho2_tutorial, s34, "3. 2. 1.").
 next(ho2_tutorial,  s34, "true",  s35).
 
 state(ho2_tutorial, s35, say).
-start_motion_recording(ho2_tutorial, s35, ['RArm', 'LArm']).
+record_motion(ho2_tutorial, s35, ['RArm', 'LArm'], 0).
 audio(ho2_tutorial, s35, id, sound_koelkast_song).
 next(ho2_tutorial,  s35, "true",  s36).
 
@@ -229,7 +229,7 @@ stateConfig(ho2_tutorial, s36, [noAnimation="true"]).
 next(ho2_tutorial,  s36, "true",  s37).
 
 state(ho2_tutorial, s37, say).
-stop_motion_recording(ho2_tutorial, s37, ['RArm', 'LArm']).
+save_motion(ho2_tutorial, s37, recording, ['RArm', 'LArm']).
 stateConfig(ho2_tutorial, s37, [noAnimation="true", umVariable=motion_feest]).
 next(ho2_tutorial,  s37, "true",  s38).
 
