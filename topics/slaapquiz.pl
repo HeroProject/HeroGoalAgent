@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% 		      INTERACTIEVE SLAAPQUIZ               %%%
+%%%               INTERACTIEVE SLAAPQUIZ                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Introductie    		                           %%%
+%%% Introductie                                            %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(intro, s1, say).
@@ -113,7 +113,7 @@ state(intro, s4i, say).
 text(intro,  s4i, "Dan gaan we beginnen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Algemeen    		                           %%%
+%%% Algemeen                                               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(algemeen, s1, say).
@@ -207,7 +207,7 @@ state(activiteiten, s1t3, say).
 text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tablet mee naar bed te nemen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Routine			                           %%%
+%%% Routine                                                %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(routine, s1, say).
@@ -333,7 +333,7 @@ state(routine, s4, say).
 text(routine,  s4, "Laten we verder praten over de slaapkamer.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Slaapkamer comfortabel		                   %%%
+%%% Slaapkamer comfortabel                                 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(slaapkamer, s1, say).
@@ -449,7 +449,7 @@ state(bedtijden, s2nt, say).
 text(bedtijden,  s2nt, "Misschien dat je met papa of mama een vaste afspraak kunt maken over hoe laat je naar bed gaat, dan kunnen zij jou daarbij helpen door aan te geven wanneer het bijna bedtijd is.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Piekeren    		                           %%%
+%%% Piekeren                                               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(piekeren, s1, say).
@@ -506,7 +506,7 @@ state(piekeren, s2t2, say).
 text(piekeren,  s2t2, "Weet papa of mama dat? Misschien dat je het ook tegen de dokter kunt zeggen?").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% 's Nachts wakker   		                           %%%
+%%% 's Nachts wakker                                       %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(wakker, s1, say).
@@ -561,7 +561,7 @@ state(wakker, s1t3, say).
 text(wakker,  s1t3, "Het is beter om niet te lang naar de klok te kijken als je wakker bent.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Bewegen      		                           %%%
+%%% Bewegen                                                %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(bewegen, s1, say).
@@ -573,7 +573,7 @@ text(bewegen,  s1i1, "Ook overdag zijn er dingen die kunnen helpen bij beter sla
 next(bewegen,  s1i1, "true",  s1i2).
 
 state(bewegen, s1i2, say).
-text(bewegen,  s1i2, "Eén van die dingen is bewegen; bij bewegen kun je denken aan bijvoorbeeld sporten, buitenspelen of fietsen").
+text(bewegen,  s1i2, "EÃ©n van die dingen is bewegen; bij bewegen kun je denken aan bijvoorbeeld sporten, buitenspelen of fietsen").
 next(bewegen,  s1i2, "true",  s1q).
 
 state(bewegen, s1q, question).
@@ -678,7 +678,7 @@ next(etendrinken,  s3q, 'answer_dontknow', s3qy).
 next(etendrinken,  s3q, 'fail', s3qy).
 
 state(etendrinken, s3qy, say).
-text(etendrinken,  s3qy, "Jammer hè, dat je chocola dus beter niet 's avonds kunt eten.").
+text(etendrinken,  s3qy, "Jammer hÃ¨, dat je chocola dus beter niet 's avonds kunt eten.").
 next(etendrinken,  s3qy, "true", s3t1).
 
 state(etendrinken, s3qn, say).
@@ -693,7 +693,7 @@ state(etendrinken, s3t1, say).
 text(etendrinken,  s3t1, "Misschien dat je kunt proberen om dat niet te doen, zodat je beter kunt slapen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Afsluiting      		                           %%%
+%%% Afsluiting                                             %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(afsluiting, s1, say).
@@ -729,11 +729,11 @@ text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tab
 next(afsluiting,  s1i2, "true", s1i3).
 
 state(afsluiting, s1i3, say).
-text(afsluiting,  s1i3, "Handig hè, alle tips in één plaatje?").
+text(afsluiting,  s1i3, "Handig hÃ¨, alle tips in Ã©Ã©n plaatje?").
 next(afsluiting,  s1i3, "true", s1i4).
 
 state(afsluiting, s1i4, say).
-text(afsluiting,  s1i4, "Ik heb ze ook op een magneet gezet, kijk maar. Leuk hè?").
+text(afsluiting,  s1i4, "Ik heb ze ook op een magneet gezet, kijk maar. Leuk hÃ¨?").
 next(afsluiting,  s1i4, "true", s1i5).
 
 state(afsluiting, s1i5, say).
