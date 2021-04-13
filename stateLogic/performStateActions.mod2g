@@ -99,7 +99,7 @@ module performStateActions(T, S) {
 	if bel(play_motion(T, S, ID), getUserModelValue(ID, Recording))
 		then playMotion(Recording).
 		
-	if bel(play_motion_file(T, S, Path)) then playMotionFile(Path).
+	if bel(play_motion_file(T, S, Path)) then playMotion(Path).
 	
 	if bel(play_motion_option(T, S, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
 	
