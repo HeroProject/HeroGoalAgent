@@ -1,0 +1,19 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+module handleGuiData(Key, Value) {
+
+	if bel(Key = 'userId') then insert(userId(Value)).
+	
+	if bel(Key = 'sessionId', term_string(SessionId, Value)) then insert(sessionId(SessionId)).
+	
+	if bel(Key = 'basePosture') then insert(basePosture(Value)).
+	
+	if not(bel(Key = 'userId')), not(bel(Key = 'sessionId')), not(bel(Key = 'basePosture')) then insert(localVariable(Key, Value)).
+	
+	if bel(waitingForGuiData(Key)) then delete (waitingForGuiData(Key)).
+}

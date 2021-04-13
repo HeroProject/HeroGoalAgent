@@ -1,5 +1,7 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/co_creation/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 
 % Basic expressive actions (output modalities)
@@ -15,42 +17,34 @@ define gesture(Gesture) with
 	pre { true }
 	post { waitingForEvent('GestureDone') }
 
-define setEyeColour(Colour)  with
-	pre { true }
-	post { true }
-
-define playLoadedAudio(AudioID) with
-	pre { true }
-	post { waitingForEvent('PlayAudioDone') }
+%define playLoadedAudio(AudioID) with
+	%pre { true }
+	%post { waitingForEvent('PlayAudioDone') }
 
 define playAudio(Url) with
 	pre { true }
 	post { waitingForEvent('PlayAudioDone') }
 
-define loadAudio(Url) with
-	pre { true }
-	post { true }
+%define loadAudio(URL) with
+	%pre { true }
+	%post { true }
 
-define clearLoadedAudio with
-	pre { true }
-	post { waitingForEvent('ClearLoadedAudioDone') }
+%define clearLoadedAudio with
+	%pre { true }
+	%post { waitingForEvent('ClearLoadedAudioDone') }
 	
 % Robot start/stop actions (input modalities)
-define startListening with
+define startListening(Seconds, Context) with
 	pre { true }
-	post { true }
-	
-define startListening(Context) with
+	post { waitingForDetection }
+
+define startListening(Seconds) with
 	pre { true }
 	post { true }
 	
 define stopListening with
 	pre { true }
 	post { true }
-
-%define setSpeechParam(Param,Value) with
-	%pre { true }
-	%post { true }
 
 %define setIdle with
 	%pre { true }
@@ -60,7 +54,7 @@ define stopListening with
 	%pre { true }
 	%post { true }
 	
-define startWatching with
+define startWatching(Seconds) with
 	pre { true }
 	post { true }
 	
@@ -82,7 +76,7 @@ define wakeUp with
 
 define rest with
 	pre { true }
-	post { waitingForEvent('RestDone') }
+	post { waitingForEvent('RestDone')}
 
 define enableBreathing with
 	pre { true }
@@ -92,36 +86,84 @@ define disableBreathing with
 	pre { true }
 	post { waitingForEvent('BreathingDisabled') }
 
-%define enableBreathing(Bodypart) with
-	%pre { true }
-	%post { waitingForEvent('BreathingEnabled') }
-	
-%define disableBreathing(Bodypart) with
-	%pre { true }
-	%post { waitingForEvent('BreathingDisabled') }
-
-% Agent external memory / database control
-define getUserSession(ID) with
+define enableBreathing(Bodypart) with
 	pre { true }
-	post { waitingForMemoryData('session_number') }
+	post { waitingForEvent('BreathingEnabled') }
+	
+define disableBreathing(Bodypart) with
+	pre { true }
+	post { waitingForEvent('BreathingDisabled') }
+
+define goToPosture(Posture) with
+	pre { true }
+	post { waitingForEvent('GoToPostureDone') }
+
+define goToPosture(Posture, Speed) with
+	pre { true }
+	post { waitingForEvent('GoToPostureDone') }
+
+define setStiffness(Joints, Stiffness) with
+	pre { true }
+	post { waitingForEvent('SetStiffnessDone') }
+
+define playMotion(Motion) with
+	pre { true }
+	post { waitingForEvent('PlayMotionDone') }
+
+define startMotionRecording(Joints) with
+	pre { true }
+	post { waitingForEvent('RecordMotionStarted') } 
+
+define stopMotionRecording with
+	pre { true }
+	post { true }
+
+define setLedColor(Leds, Colors) with
+	pre { true }
+	post { waitingForEvent('LedColorDone') }
+	
+define setLedColor(Leds, Colors, Duration) with
+	pre { true }
+	post { waitingForEvent('LedColorDone') }
+
+define startLedAnimation(Group, AnimType, Colors, Speed) with
+	pre { true }
+	post { waitingForEvent('LedAnimationStarted') }
+
+define playMotionFile(Path) with
+	pre { true }
+	post { waitingForEvent('PlayMotionDone') }
+
+define stopLedAnimation with
+	pre { true }
+	post { waitingForEvent('LedAnimationDone') }
+	
+% Agent external memory / database control
+define setSession(ID, SessionId) with
+	pre { true }
+	post { waitingForEvent('SessionSet') }
 	
 define addMemoryEntry(ID, Key, Data) with
 	pre { true }
-	post { waitingForMemoryEvent('MemoryEntryStored') }
+	post { waitingForEvent('MemoryEntryStored') }
 
-define setUserData(ID, Key, Value) with
+define setInteractantData(ID, Key, Value) with
 	pre { true }
-	post { waitingForMemoryEvent('UserDataSet') }
+	post { waitingForEvent('InteractantDataSet') }
 
-define getUserData(ID, Key) with
+define getInteractantData(ID, Key) with
 	pre { true }
 	post { waitingForMemoryData(Key) }
+
+define deleteInteractant(ID) with
+	pre { true }
+	post { waitingForEvent('InteractantDeleted') }
+
+define deleteAllInteractants with
+	pre { true }
+	post { waitingForEvent('AllInteractantsDeleted') }
 	
 % DialogFlow Control
-%define setAgent(Agent) with
-	%pre { true }
-	%post { true }
-	
 %define setLanguage(Lang) with
 	%pre { true }
 	%post { true }

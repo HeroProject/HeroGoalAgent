@@ -1,0 +1,16 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+module loadInteractantDataHelper(Keys) {
+
+	if bel(nth0(0, Keys, Key, RestOfKeys), userId(UserId)) 
+		then {
+			if not(bel(localVariable(Key, _))) then getInteractantData(UserId, Key).
+			
+			if not(bel(length(RestOfKeys,0))) then loadInteractantDataHelper(RestOfKeys).
+		}
+}

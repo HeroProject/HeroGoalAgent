@@ -1,13 +1,11 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'recognitionAndRepairePipeline/startAnswerRecognition' as module.
-use 'recognitionAndRepairePipeline/retrieveInput' as module.
-use 'recognitionAndRepairePipeline/repair' as module.
-use 'recognitionAndRepairePipeline/processAnswer' as module.
-use 'stateLogic/performStateTransition' as module.
-use 'memory/handleMemoryData' as module.
+use 'recognitionAndRepairePipeline/*.mod2g' as module.
+use 'stateLogic/*.mod2g' as module.
+use 'user_model/*.mod2g' as module.
 
 module hero_events {
 	
@@ -15,29 +13,55 @@ module hero_events {
 	%%% Percept and event processing      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	% NAO event percepts
+	% Robot event percepts
 	forall percept(event(E)), not(bel(event(E)))
 		do insert(event(E)).
 	forall bel(event(E)), not(percept(event(E)))
 		do delete(event(E)).
+	
+	if bel(event(pause)) then insert(paused, pause_act).
+	if bel(waitForPause(PB), event(PB)) then insert(paused, pause_act, waitForUnPause(PB)) + delete(waitForPause(PB)).
+	
+	if bel(event(unpause)) then insert(unpause_act).
+	if bel(waitForUnPause(PB), event(PB), not(pause_act)) then insert(unpause_act, waitForPause(PB)) + delete(waitForUnPause(PB)).
+	
+	if bel(event(stop)) then insert(stop_act).
 		
-	% Memory event percepts
-	forall percept(memoryEvent(E)), not(bel(memoryEvent(E)))
-		do insert(memoryEvent(E)).
-	forall bel(memoryEvent(E)), not(percept(memoryEvent(E)))
-		do delete(memoryEvent(E)).
+	% Memory data percepts
+	forall percept(guiData(Key, Value))
+		do handleGuiData(Key, Value).
 	
 	% Memory data percepts
 	forall percept(memoryData(Key, Value))
 		do handleMemoryData(Key, Value).
-
+	
+	% Robot status percepts
+	forall percept(posture(Posture)), bel(posture(OldPosture), OldPosture \= Posture)
+		do delete(posture(OldPosture)) + insert(posture(Posture)).
+	forall percept(isAwake(IsAwake))
+		do {
+			if bel(isAwake, IsAwake = false) then delete(isAwake).
+			if bel(not(isAwake), IsAwake = true) then insert(isAwake).
+		}
+		
+	forall percept(batteryCharge(Charge)), bel(batteryCharge(OldCharge), OldCharge \= Charge)
+		do delete(batteryCharge(OldCharge)) + insert (batteryCharge(Charge)).
+	forall percept(isCharging(IsCharging))
+		do {
+			if bel(isCharging, IsCharging = false) then delete(isCharging).
+			if bel(not(isCharging), IsCharging = true) then insert(isCharging).
+		}
+			
+	forall percept(motionRecording(Recording)), bel(waitingForMotionRecording(ID), userModel(UserModel), updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
+		do delete(userModel(UserModel), waitingForMotionRecording(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Recording).
+			
 	% Handling of event waiting logic...
 	% ... for NAO events
 	forall bel(event(E), waitingForEvent(E))
 		do delete(waitingForEvent(E)).
-	% ... for memory events
-	forall bel(memoryEvent(E), waitingForMemoryEvent(E))
-		do delete(waitingForMemoryEvent(E)).
+	% ... for posture changes
+	if bel(posture(Posture), waitingForPosture(Posture))
+		then delete(waitingForPosture(Posture)).
 	
 	% Handling timeouts
 	if percept(timer(S, _)), not(bel(timeout(S)))
@@ -45,46 +69,66 @@ module hero_events {
 	if bel(timeout(S)), not(percept(timer(S, _)))
 		then delete(timeout(S)).
 		
-	%Audio recording percepts
-	if percept(audioRecording(FileName)), bel(waitingForAudioFile(Tsource, Ssource))
-		then loadAudio(FileName) + delete(waitingForAudioFile(Tsource, Ssource)) + insert(waitingForLoadedAudioID(Tsource, Ssource)).
+	% Motion recording timeout
+	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
 	
-	if percept(loadedAudioID(AudioID)), bel(waitingForLoadedAudioID(Tsource, Ssource))
-		then insert(audioRecording(Tsource, Ssource, AudioID)) + delete(waitingForLoadedAudioID(Tsource, Ssource)).
+	% waitingForTimer
+	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
+	
+	% Event fail safe TODO: fix this
+	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
+		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
+		%if bel(waitingForAudio) then delete(waitingForAudio).
+		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
+	}
+	
+	%Audio recording percepts
+	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), userModel(UserModel), updateUserModel(ID, FileName, UserModel, NewUserModel))
+		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel), audioRecording(ID)) + setInteractantData(UserId, ID, FileName).
 	
 	%Emotion detection percepts
-	if percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
-		then insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
+	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
+		do insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 	
-	%% Dialogflow tweaks %%
-	% Adding 1000ms additional waiting time after stop streaming audio to dialogflow.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(speech))
-		then stopListening + starttimer(dialogflow, 1000, 1000).
-		
-	% Cut of listening if user already answered something that did not match anything.
-	if percept(speechText(Text)), bel(currentTopic(T), currentState(S), waitingForAnswer, currentInputModality(speech), currentAttempt(CurrentAttempt))
-		then stopListening + canceltimer(S) + canceltimer(dialogflow) + insert(timeout(dialogflow), speechText(T, S, CurrentAttempt, Text)).
-
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%%% SPEECH %%%
-	% Dialogflow produces an input. Retrieve answer.
-	if percept(intent(Intent, Params)), bel(currentTopic(T), currentState(S), state(T, S, question), currentInputModality(speech), waitingForAnswer)
-		then retrieveInput(T, S, Intent, Params).
-			
-	% Dialogflow does not produce an input. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, timeout(dialogflow), currentInputModality(speech))
+	
+	% User responds. 
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
 		then {
-			if bel(keyValue(T, S, type, openend)) then retrieveInput(T, S, any, []).
-			if bel(not(keyValue(T, S, type, openend))) then repair(T, S).
+				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.				
+				if true then stopListening + delete(waitingForDetection).
+								
+				%Dialogflow recognizes intent. Retrieve answer.
+				if bel(not(Intent='')) then processUserResponse(T, S, Intent, Text, Params).
+				
+				%Dialogflow does not recognize intent. Engage repair attempt.
+				if bel(Intent='') then {
+				 if bel(not(keyValue(T, S, type, openend))) then repair(T,S). %Log answer
+				 if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
+				} 				
+		}
+							
+	% User does not respond.	
+	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
+		then {
+			% If a user does not respond, listening is already finished. Delete its waiting flag.
+			if true then delete(waitingForDetection).
+			
+			if bel(keyValue(T, S, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(T, S)).
+			
+			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
+			if bel(not(keyValue(T, S, type, openend))) then repair(T,S).
+			if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, '', []).
 		}
 	
 	%%% TOUCH %%%
 	% An answer has been selected. Retrieve answer.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
-		then retrieveInput(T, S, Intent, []).
+		then processUserResponse(T, S, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
@@ -92,12 +136,13 @@ module hero_events {
 		
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), timeout(S), waitingForAudio)
-		then stopListening + disableRecording + delete(waitingForAudio) + insert(waitingForAudioFile(T, S)).
+	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput))
+		then stopListening + disableRecording.
 
 	%%% EMOTION RECOGNITION %%%	
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), timeout(S), waitingForEmotion, not(emotion(T, S,_)))
+	%TODO add appropriate event here
+	if bel(currentTopic(T), currentState(S), state(T, S, emotion), waitingForEmotion, not(emotion(T, S,_)))
 		then stopWatching + insert(emotion(T, S, 'fail')) + delete(waitingForEmotion).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,10 +151,13 @@ module hero_events {
 	
 	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
 	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
-		then processAnswer(T, S, Ans, Data).
+		then selectRobotResponse(T, S, Ans, Data).
 		
 	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), getBranchingPointDecision([T, S], Decision), nextCondition(Con))
+		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
 		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
 		
 	% If an emotion is expected and present, set that as the next condition.
@@ -123,15 +171,33 @@ module hero_events {
 	
 	% Question
 	if bel(currentTopic(T), currentState(S), state(T, S, question), eventsCompleted, not(waitingForAnswer), not(answer(T, S, _, _)))
-		then startAnswerRecognition(T, S).
+		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, not(waitingForAudio), not(waitingForAudioFile(_, _)), not(audioRecording(T, S, _)), keyValue(T, S, recordTime, RT))
-		then enableRecording + startListening + starttimer(S, RT, RT) + insert(waitingForAudio).
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
-		then startWatching + starttimer(S, 6000, 6000) + insert(waitingForEmotion).
+		then startWatching(6) + insert(waitingForEmotion).
+	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%% Wait for event (e.g. button press) in a say state   %%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this state.	
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), not(waitingForSayClear), eventsCompleted)
+		then insert(waitingForEvent(Next), waitingForSayClear).
+	
+	% If the next event is available, clear this state.
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
+		then delete(waitingForSayClear).
+	
+	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
+		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% State transition handling            %%%

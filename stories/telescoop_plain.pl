@@ -4,7 +4,7 @@ topicOrder([story, theend]).
 
 state(intro, s1, say).
 anim(intro, s1, "wakeup/behavior_1").
-leds(intro, s1, "white").
+leds(story, s1, ["FaceLeds"], ["wit"]).
 next(intro, s1, "true", s2).
 
 state(intro, s2, say).
@@ -43,7 +43,7 @@ text(intro, s9, "Dit eerste verhaal heet telescoop.").
 
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
-leds(story, s1, "white").
+leds(story, s1, ["FaceLeds"], ["wit"]).
 next(story, s1, "true", s1b).
 
 state(story, s1b, say).

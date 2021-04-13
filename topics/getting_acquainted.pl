@@ -42,7 +42,7 @@ next(ga_prac_speech,  s3, "true",  s4).
 
 state(ga_prac_speech, s4, question).
 stateConfig(ga_prac_speech, s4, [type=quiz, context='answer_color', correctAnswer=["blauw"], inputModality=[speech=2], additionalAttempt=true]).
-leds(ga_prac_speech, s4, "blue").
+leds(ga_prac_speech, s4, ["FaceLeds"], ["blue"]).
 text(ga_prac_speech, s4, "Welke kleur hebben mijn ogen nu?").
 next(ga_prac_speech, s4, 'correct', s5cor).
 next(ga_prac_speech, s4, 'incorrect', s5incor).
@@ -61,7 +61,7 @@ text(ga_prac_speech,  s5f, "Dankjewel! Denk er aan om luid, en duidelijk, antwoo
 next(ga_prac_speech,  s5f, "true",  s6).
 
 state(ga_prac_speech, s6, say).
-leds(ga_prac_speech, s6, "white").
+leds(ga_prac_speech, s6, ["FaceLeds"], ["white"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Touch tutorial    		                           %%%
@@ -87,7 +87,7 @@ text(ga_prac_touch,  s5, "Bij sommige vragen zal ik je wat opties geven. Je kunt
 next(ga_prac_touch,  s5, "true",  s6).
 
 state(ga_prac_touch, s6, say).
-text(ga_prac_touch,  s6, "Zullen we dat even oefenen? \pau=400\ ").
+text(ga_prac_touch,  s6, "Laten we dat oefenen. \pau=400\ ").
 next(ga_prac_touch,  s6, "true",  s7).
 
 state(ga_prac_touch, s7, question).
@@ -121,9 +121,8 @@ text(ga_sports,  s1, "Het lijkt mij leuk om over sport te praten. De sporten die
 next(ga_sports, s1, "true", s2).
 
 state(ga_sports, s2, question).
-stateConfig(ga_sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], 
-defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Zou je willen kiezen uit de volgende antwoorden.']]).
-text(ga_sports, s2, "Wat is jouw lievelings sport?").
+stateConfig(ga_sports, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=favo_sport]).
+text(ga_sports, s2, "Wat is jouw lievelings sport, %first_name%?").
 next(ga_sports, s2, 'success', s3).
 next(ga_sports, s2, 'fail', s5f).
 
@@ -133,12 +132,12 @@ next(ga_sports, s3, "true", s4).
 
 state(ga_sports, s4, question).
 stateConfig(ga_sports, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(ga_sports, s4, "Wat vind je zo leuk aan %ga_sports_s2%?").
+text(ga_sports, s4, "Wat vind je zo leuk aan %favo_sport%?").
 next(ga_sports, s4, 'success', s5).
 next(ga_sports, s4, 'fail', s5f).
 
 state(ga_sports, s5, say).
-text(ga_sports,  s5, "%ga_sports_s2% klinkt inderdaad erg leuk! ").
+text(ga_sports,  s5, "%favo_sport% klinkt inderdaad erg leuk! ").
 
 state(ga_sports, s5f, say).
 text(ga_sports,  s5f, "Laten we verder gaan naar de volgende vraag."). 

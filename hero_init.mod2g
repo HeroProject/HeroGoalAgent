@@ -1,16 +1,26 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
+use 'user_model/initializeUserModel.mod2g' as module.
 
 module hero_init {
+	% Set loading flag.
+	if true then insert(waitingForInit).
+	
 	% Initialize state parameters.
-	if true then
-		insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
+	if true then insert(currentState(s1), start, nextCondition('true'), branchingPointDecisions([])).
+	
+	% Initialize robot model
+	if true then insert(posture('Unknown'), stiffness(0), batteryCharge(100)).
+	
+	% Initalize pause button
+	if bel(setPauseButton(PB)) then insert(waitForPause(PB)).
 
-	% Initialize robot memory / database.
-	if bel(userId(UserId)) then
-		insert(userModel([]), waitingForUserModelInit) + getUserSession(UserId).
+	% Initialize user model.
+	if bel(useGui(true)) then insert(waitingForGuiData('userId'), waitingForGuiData('sessionId'), waitingForGuiData('basePosture'), waitingForGuiData('first_name')).
+	if bel(useGui(false)) then initializeUserModel.
 			
 	% If first state is a question state, initialize required properties
 	if bel(currentTopic(T), currentState(S), state(T, S, question), getInputModalityOrder(T, S, Order), nth0(0, Order, NewModality)) 

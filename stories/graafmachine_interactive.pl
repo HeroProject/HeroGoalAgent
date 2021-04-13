@@ -2,7 +2,7 @@ topicOrder([story, theend]).
 
 state(story, s1, say).
 anim(story, s1, "wakeup/behavior_1").
-leds(story, s1, "white").
+leds(story, s1, ["FaceLeds"], ["wit"]).
 next(story, s1, "true", s2).
 
 state(story, s2, say).
@@ -157,12 +157,12 @@ next(story, s39, "true", s40).
 %TODO: fix steam sound
 state(story, s39b, say).
 audio(story, s39b, server, "steam.ogg").
-leds(story, s39b, "red").
+leds(story, s39b, ["FaceLeds"], ["rood"]).
 next(story, s39b, "true", s40).
 
 state(story, s40, say).
 text(story, s40, "Ik was eigenlijk al bijna vergeten waarom ik aan het graven was, zo leuk vond ik het.").
-leds(story, s40, "white").
+leds(story, s40, ["FaceLeds"], ["wit"]).
 next(story, s40, "true", s41).
 
 state(story, s41, say).
