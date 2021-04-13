@@ -77,7 +77,7 @@ module hero_events {
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
 	% Event fail safe TODO: fix this
-	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent("ClearLoadedAudioDone"))) then {
+	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent('ClearLoadedAudioDone'))) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
 		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
@@ -97,8 +97,8 @@ module hero_events {
 	
 	%%% SPEECH %%%
 	
-	% User responds. 
-	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
+	% User responded (full intent). 
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), waitingForDetection)
 		then {
 				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.				
 				if true then stopListening + delete(waitingForDetection).
@@ -108,12 +108,24 @@ module hero_events {
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
 				if bel(Intent = '') then {
-					if not(bel(keyValue(T, S, type, openend))) then repair(T,S). %Log answer
+					if not(bel(keyValue(T, S, type, openend))) then repair(T, S).
 					if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
 				} 				
 		}
+		
+		
+	% User responded (try quick transcript matching). -Vincent
+	if percept(transcript(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
+										keyListValues(T, S, [context, options, extra_options], [Intent, L1, L2]),
+										append(L1, L2, L), maplist(downcase_atom, L, DL), downcase_atom(Text, DT), member(DT, DL))
+		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=DT]).
+		
+	% User responded on the tablet. -Vincent
+	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
+									keyValue(T, S, context, Intent), downcase_atom(Text, DT))
+		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=DT]).
 							
-	% User does not respond.	
+	% User did not respond.	
 	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
 		then {
 			% If a user does not respond, listening is already finished. Delete its waiting flag.
