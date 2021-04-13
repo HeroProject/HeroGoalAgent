@@ -3,9 +3,9 @@ use 'topics/*.pl' as knowledge.
 use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'recognitionAndRepairePipeline/*.mod2g' as module.
+use 'recognitionAndRepairPipeline/*.mod2g' as module.
 use 'stateLogic/*.mod2g' as module.
-use 'user_model/*.mod2g' as module.
+use 'userModel/*.mod2g' as module.
 
 module hero_events {
 	

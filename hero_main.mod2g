@@ -4,7 +4,7 @@ use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'stateLogic/performStateActions' as module.
-use 'user_model/*.mod2g' as module.
+use 'userModel/*.mod2g' as module.
 
 module hero_main {
 	% Adapt topic goal if all the necessary information is loaded from the database.

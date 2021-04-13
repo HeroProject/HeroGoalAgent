@@ -3,7 +3,7 @@ use 'topics/*.pl' as knowledge.
 use 'topics/hospital/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'user_model/initializeUserModel.mod2g' as module.
+use 'userModel/initializeUserModel.mod2g' as module.
 
 module hero_init {
 	% Set loading flag.
