@@ -24,7 +24,7 @@ text(intro,  s1i1, "Ik weet veel over slaap.").
 next(intro,  s1i1, "true",  s1i2).
 
 state(intro, s1i2, say).
-text(intro,  s1i2, "Mijn vriendjes noemen mij daarom ook wel een slaapprofessor.").
+text(intro,  s1i2, "Mijn vriendjes noemen mij daarom ook wel een slaap professor.").
 next(intro,  s1i2, "true",  s1i3).
 
 state(intro, s1i3, say).
@@ -358,12 +358,12 @@ state(slaapkamer, s1i2, say).
 text(slaapkamer,  s1i2, "Wat mij helpt om goed te slapen, is dat mijn kamer lekker donker is.").
 next(slaapkamer,  s1i2, "true",  s1i3).
 
-state(slaapkamer, s1i3, say).
+state(slaapkamer, s1i3, say). % TODO: animation/sound
 text(slaapkamer,  s1i3, "Ik ben heel goed in gordijnen dicht doen, kijk maar.").
 next(slaapkamer,  s1i3, "true",  s2).
 
 state(slaapkamer, s2, say).
-text(slaapkamer, s2, "Is jouw kamer ook donker al je gaat slapen?").
+text(slaapkamer, s2, "Is jouw kamer ook donker als je gaat slapen?").
 next(slaapkamer, s2, "true",  s2i).
 
 state(slaapkamer, s2i, say).
@@ -398,7 +398,7 @@ text(slaapkamer,  s2i2, "Die slaapstofjes helpen je lichaam om beter te slapen."
 next(slaapkamer,  s2i2, "true",  s2t1).
 
 state(slaapkamer, s2t1, say).
-text(slaapkamer,  s2t1, "Ik heb nog een andere tip: let er ook op dat je kamer niet te warm is, dan kun je het beter wat koeler maken door bijvoorbeeld het raam open te zetten.").
+text(slaapkamer,  s2t1, "Ik heb nog een andere tip: let er ook op dat je kamer niet te warm is, dan kun je het beter wat koeler maken door bij voorbeeld het raam open te zetten.").
 next(slaapkamer,  s2t1, "true",  s2t2).
 
 state(slaapkamer, s2t2, say).
@@ -526,7 +526,7 @@ text(wakker,  s1y, "Wat vervelend! Het is normaal om soms even wakker te worden 
 next(wakker,  s1y, "true", s1i1).
 
 state(wakker, s1n, say).
-text(wakker,  s1n, "Wat fijn dat jij dat niet hebt!  Het is normaal om soms even wakker te worden 's nachts.").
+text(wakker,  s1n, "Wat fijn dat jij dat niet hebt! Het is normaal om soms even wakker te worden 's nachts.").
 next(wakker,  s1n, "true", s1i1).
 
 state(wakker, s1f, say).
@@ -542,7 +542,7 @@ text(wakker,  s1i2, "Meestal val je dan gelijk weer in slaap en kun je je niet e
 next(wakker,  s1i2, "true", s1i3).
 
 state(wakker, s1i3, say).
-text(wakker,  s1i3, "Maar als ik 's nachts wel echt lang wakker ben, dan ga ik even uit bed om iets rustigs te doen, bijvoorbeeld een boekje lezen.").
+text(wakker,  s1i3, "Maar als ik 's nachts wel echt lang wakker ben, dan ga ik even uit bed om iets rustigs te doen, bij voorbeeld een boekje lezen.").
 next(wakker,  s1i3, "true", s1i4).
 
 state(wakker, s1i4, say).
@@ -573,7 +573,7 @@ text(bewegen,  s1i1, "Ook overdag zijn er dingen die kunnen helpen bij beter sla
 next(bewegen,  s1i1, "true",  s1i2).
 
 state(bewegen, s1i2, say).
-text(bewegen,  s1i2, "Eén van die dingen is bewegen; bij bewegen kun je denken aan bijvoorbeeld sporten, buitenspelen of fietsen").
+text(bewegen,  s1i2, "Eén van die dingen is bewegen; bij bewegen kun je denken aan bij voorbeeld sporten, buitenspelen of fietsen").
 next(bewegen,  s1i2, "true",  s1q).
 
 state(bewegen, s1q, question).
@@ -602,7 +602,7 @@ next(bewegen,  s1i4, "true", s1i5).
 
 state(bewegen, s1i5, say).
 text(bewegen,  s1i5, "Dan ben je 's avonds moe en kan je beter slapen.").
-next(bewegen,  s1i5, "true", s1it).
+next(bewegen,  s1i5, "true", s1t).
 
 state(bewegen, s1t, say).
 text(bewegen,  s1t, "Mijn tip is dan ook om iedere dag even naar buiten te gaan en buiten te spelen.").
@@ -617,7 +617,7 @@ next(etendrinken,  s1, "true",  s1q).
 
 state(etendrinken, s1q, question).
 stateConfig(etendrinken, s1q, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(etendrinken,  s1q, "Wat heb jij gisteren avond gegeten?").
+text(etendrinken,  s1q, "Wat heb jij gisteravond gegeten?").
 next(etendrinken,  s1q, 'success', s1r).
 next(etendrinken,  s1q, 'fail', s1r).
 
@@ -636,6 +636,10 @@ next(etendrinken,  s2q, 'answer_yes', s2y).
 next(etendrinken,  s2q, 'answer_no', s2n).
 next(etendrinken,  s2q, 'answer_dontknow', s2n).
 next(etendrinken,  s2q, 'fail', s2n).
+
+state(etendrinken, s2n, say).
+text(etendrinken,  s2n, "Dat is niet erg. Dan zal ik er wat meer over vertellen.").
+next(etendrinken,  s2n, "true", s2i1).
 
 state(etendrinken, s2y, say).
 text(etendrinken,  s2y, "Leuk!").
@@ -658,16 +662,16 @@ text(etendrinken,  s2yr, "Goed gedaan!").
 next(etendrinken,  s2yr, "true", s2i1).
 
 state(etendrinken, s2i1, say).
-text(etendrinken,  s2i1, "In bijvoorbeeld cola, koffie of energydrinks zitten stofjes die je wakker kunnen houden.").
+text(etendrinken,  s2i1, "In bij voorbeeld cola, koffie of energy drinks zitten stofjes die je wakker kunnen houden.").
 next(etendrinken,  s2i1, "true", s2i2).
 
 state(etendrinken, s2i2, say).
 text(etendrinken,  s2i2, "Die kan je beter niet nemen vlak voordat je gaat slapen.").
 next(etendrinken,  s2i2, "true", s2i3).
 
-state(etendrinken, s2i1, say).
-text(etendrinken,  s2i1, "In chocola zitten die stofjes ook, dat vind ik wel jammer!").
-next(etendrinken,  s2i1, "true", s3q).
+state(etendrinken, s2i3, say).
+text(etendrinken,  s2i3, "In chocola zitten die stofjes ook, dat vind ik wel jammer!").
+next(etendrinken,  s2i3, "true", s3q).
 
 state(etendrinken, s3q, question).
 stateConfig(etendrinken, s3q, [type=yesno, context='answer_yesno']).
@@ -686,11 +690,11 @@ text(etendrinken,  s3qn, "Gelukkig, dat scheelt dan weer.").
 next(etendrinken,  s3qn, "true", s3t1).
 
 state(etendrinken, s3t1, say).
-text(etendrinken,  s3t1, "Eet of drink jij wel een chocola of cola voordat je gaat slapen?").
+text(etendrinken,  s3t1, "Eet of drink jij wel eens chocola of cola voordat je gaat slapen?").
 next(etendrinken,  s3t1, "true", s3t2).
 
-state(etendrinken, s3t1, say).
-text(etendrinken,  s3t1, "Misschien dat je kunt proberen om dat niet te doen, zodat je beter kunt slapen.").
+state(etendrinken, s3t2, say).
+text(etendrinken,  s3t2, "Misschien dat je kunt proberen om dat niet te doen, zodat je beter kunt slapen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Afsluiting                                             %%%
@@ -702,7 +706,7 @@ next(afsluiting,  s1, "true",  s1i1).
 
 state(afsluiting, s1i1, say).
 text(afsluiting,  s1i1, "Wat heb je goed je best gedaan, en wat vond ik het leuk om dit samen met jou te doen!").
-next(afsluiting,  s1i1, "true",  s1iq).
+next(afsluiting,  s1i1, "true",  s1q).
 
 state(afsluiting, s1q, question).
 stateConfig(afsluiting, s1q, [type=yesno, context='answer_yesno']).

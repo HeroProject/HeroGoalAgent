@@ -130,10 +130,6 @@ define startLedAnimation(Group, AnimType, Colors, Speed) with
 	pre { true }
 	post { waitingForEvent('LedAnimationStarted') }
 
-define playMotionFile(Path) with
-	pre { true }
-	post { waitingForEvent('PlayMotionDone') }
-
 define stopLedAnimation with
 	pre { true }
 	post { waitingForEvent('LedAnimationDone') }
