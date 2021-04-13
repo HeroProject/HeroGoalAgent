@@ -16,7 +16,7 @@ next(draadjesschool, s4, "true", s5).
 
 state(draadjesschool, s5, say).
 text(draadjesschool, s5, "Zo.").
-play_motion_file(draadjesschool, s5, "resources/gestures/gesture_draadjesschool_s5_5.json").
+anim(draadjesschool, s5, file, "resources/gestures/gesture_draadjesschool_s5_5.json").
 next(draadjesschool, s5, "true", s6).
 
 state(draadjesschool, s6, say).
@@ -24,7 +24,7 @@ text(draadjesschool, s6, "En dan komt alle kennis zo via een draadje mijn achter
 next(draadjesschool, s6, "true", s7).
 
 state(draadjesschool, s7, say).
-play_motion_file(draadjesschool, s7, "resources/gestures/gesture_draadjesschool_s7_7.json").
+anim(draadjesschool, s7, file, "resources/gestures/gesture_draadjesschool_s7_7.json").
 next(draadjesschool, s7, "true", s8).
 
 state(draadjesschool, s8, question).
@@ -37,12 +37,12 @@ next(draadjesschool, s8, "fail", s9nee1).
 
 state(draadjesschool, s9ja1, say).
 text(draadjesschool, s9ja1, "Goed!").
-play_motion_file(draadjesschool, s9ja1, "resources/gestures/gesture_draadjesschool_s9ja1_8.json").
+anim(draadjesschool, s9ja1, file, "resources/gestures/gesture_draadjesschool_s9ja1_8.json").
 next(draadjesschool, s9ja1, "true", s10).
 
 state(draadjesschool, s9nee1, say).
 text(draadjesschool, s9nee1, "Het zit hier!").
-play_motion_file(draadjesschool, s9nee1, "resources/gestures/gesture_draadjesschool_s9nee1_8.json").
+anim(draadjesschool, s9nee1, file, "resources/gestures/gesture_draadjesschool_s9nee1_8.json").
 next(draadjesschool, s9nee1, "true", s10).
 
 state(draadjesschool, s10, say).
@@ -63,7 +63,7 @@ next(draadjesschool, s13, "true", s14).
 
 state(draadjesschool, s14, say).
 text(draadjesschool, s14, "En toch gaan ze soms best vroeg naar bed.").
-play_motion_file(draadjesschool, s14, "resources/gestures/gesture_draadjesschool_s14_14.json").
+anim(draadjesschool, s14, file, "resources/gestures/gesture_draadjesschool_s14_14.json").
 next(draadjesschool, s14, "true", s15).
 
 state(draadjesschool, s15, question).
@@ -94,11 +94,11 @@ next(draadjesschool, s20, "true", s21).
 
 state(draadjesschool, s21, say).
 text(draadjesschool, s21, "Ik zit gewoon zo, en dan gaat mijn stroom uit").
-audio(draadjesschool, s21, server, "resources/sounds/nog_te_zoeken_uit_riedeltje.wav").
-play_motion_file(draadjesschool, s21, "resources/gestures/gesture_draadjesschool_s21_21.json").
+audio(draadjesschool, s21, file, "resources/sounds/nog_te_zoeken_uit_riedeltje.wav").
+anim(draadjesschool, s21, file, "resources/gestures/gesture_draadjesschool_s21_21.json").
 next(draadjesschool, s21, "true", s22).
 
 state(draadjesschool, s22, say).
 text(draadjesschool, s22, "Maar nu ben ik aan, ik deed maar alsof.").
-play_motion_file(draadjesschool, s22, "resources/gestures/gesture_draadjesschool_s22_22.json").
+anim(draadjesschool, s22, file, "resources/gestures/gesture_draadjesschool_s22_22.json").
 

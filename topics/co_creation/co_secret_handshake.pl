@@ -91,19 +91,19 @@ next(co_handshake_gesture, s5, "fail", s6downloaden).
 %%%%%%%%%%%%%% Create gesture %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_handshake_gesture, s6maken, say).
 text(co_handshake_gesture,  s6maken, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
-leds(co_handshake_gesture,  s6maken, ["RightFootLeds"], ["groen"]).
+leds(co_handshake_gesture,  s6maken, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_handshake_gesture, s6maken, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_handshake_gesture,  s6maken, "true",  s7maken).
 
 state(co_handshake_gesture, s7maken, say).
 text(co_handshake_gesture,  s7maken, "Pak mijn armen maar vast.").
-leds(co_handshake_gesture,  s7maken, ["RightFootLeds"], ["wit"]).
+leds(co_handshake_gesture,  s7maken, direct, ["RightFootLeds"], ["wit"]).
 stateConfig(co_handshake_gesture, s7maken, [noAnimation="true"]).
 set_stiffness(co_handshake_gesture, s7maken, ['RArm', 'LArm'], 0).
 next(co_handshake_gesture,  s7maken, "true",  s8maken).
 
 state(co_handshake_gesture, s8maken, say).
-audio(co_handshake_gesture, s8maken, server, "resources/sounds/ready_to_record_gesture.wav").
+audio(co_handshake_gesture, s8maken, file, "resources/sounds/ready_to_record_gesture.wav").
 next(co_handshake_gesture,  s8maken, "true",  s9maken).
 
 state(co_handshake_gesture, s9maken, say).
@@ -128,17 +128,17 @@ save_behavior(co_handshake_gesture, s12maken, "GoodbyeCeremonie", [motion=record
 %%%%%%%%%%%%%% Download gesture %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_handshake_gesture, s6downloaden, say).
 text(co_handshake_gesture,  s6downloaden, "Ik ben nu twee gebaren aan het downloaden.").
-start_led_anim(co_handshake_gesture, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_gesture, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_gesture, s6downloaden, [waitTimer=1500]).
 next(co_handshake_gesture,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_gesture, s7downloaden, say).
 text(co_handshake_gesture,  s7downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_handshake_gesture, s7downloaden).
+leds(co_handshake_gesture, s7downloaden, reset).
 next(co_handshake_gesture,  s7downloaden, "true",  s8downloaden).
 
 state(co_handshake_gesture, s8downloaden, say).
-play_motion_file(co_handshake_gesture, s8downloaden, "resources/gestures/goodbye1.xml").
+anim(co_handshake_gesture, s8downloaden, file, "resources/gestures/goodbye1.xml").
 next(co_handshake_gesture, s8downloaden, "true", s9downloaden).
 
 state(co_handshake_gesture, s9downloaden, say).
@@ -146,7 +146,7 @@ text(co_handshake_gesture,  s9downloaden, "En dit is optie 2").
 next(co_handshake_gesture,  s9downloaden, "true",  s10downloaden).
 
 state(co_handshake_gesture, s10downloaden, say).
-play_motion_file(co_handshake_gesture, s10downloaden, "resources/gestures/goodbye2.xml").
+anim(co_handshake_gesture, s10downloaden, file, "resources/gestures/goodbye2.xml").
 next(co_handshake_gesture, s10downloaden, "true", s11downloaden).
 
 state(co_handshake_gesture, s11downloaden, question).
@@ -207,17 +207,17 @@ text(co_handshake_gesture_baseline, s2d, "Misschien een volgende keer dan.").
 
 state(co_handshake_gesture_baseline, s6downloaden, say).
 text(co_handshake_gesture_baseline,  s6downloaden, "Ik ben nu twee gebaren aan het downloaden.").
-start_led_anim(co_handshake_gesture_baseline, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_gesture_baseline, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_gesture_baseline, s6downloaden, [waitTimer=1500]).
 next(co_handshake_gesture_baseline,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_gesture_baseline, s7downloaden, say).
 text(co_handshake_gesture_baseline,  s7downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_handshake_gesture_baseline, s7downloaden).
+leds(co_handshake_gesture_baseline, s7downloaden, reset).
 next(co_handshake_gesture_baseline,  s7downloaden, "true",  s8downloaden).
 
 state(co_handshake_gesture_baseline, s8downloaden, say).
-play_motion_file(co_handshake_gesture_baseline, s8downloaden, "resources/gestures/goodbye1.xml").
+anim(co_handshake_gesture_baseline, s8downloaden, file, "resources/gestures/goodbye1.xml").
 next(co_handshake_gesture_baseline, s8downloaden, "true", s9downloaden).
 
 state(co_handshake_gesture_baseline, s9downloaden, say).
@@ -225,7 +225,7 @@ text(co_handshake_gesture_baseline,  s9downloaden, "En dit is optie 2").
 next(co_handshake_gesture_baseline,  s9downloaden, "true",  s10downloaden).
 
 state(co_handshake_gesture_baseline, s10downloaden, say).
-play_motion_file(co_handshake_gesture_baseline, s10downloaden, "resources/gestures/goodbye2.xml").
+anim(co_handshake_gesture_baseline, s10downloaden, file, "resources/gestures/goodbye2.xml").
 next(co_handshake_gesture_baseline, s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_gesture_baseline, s13kindkiest, question).
@@ -300,12 +300,12 @@ next(co_handshake_sound, s5, "fail", s6downloaden).
 
 state(co_handshake_sound, s6maken, say).
 text(co_handshake_sound,  s6maken, "Als je wat bedacht hebt, kun je mijn linker teen indrukken.").
-leds(co_handshake_sound,  s6maken, ["RightFootLeds"], ["groen"]).
+leds(co_handshake_sound,  s6maken, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_handshake_sound, s6maken, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_handshake_sound,  s6maken, "true",  s7maken).
 
 state(co_handshake_sound, s7maken, say).
-leds(co_handshake_sound, s7maken, ["RightFootLeds"], ["wit"]).
+leds(co_handshake_sound, s7maken, direct, ["RightFootLeds"], ["wit"]).
 text(co_handshake_sound,  s7maken, "Maak je geluid in 3, 2, 1.").
 next(co_handshake_sound,  s7maken, "true",  s8maken).
 
@@ -321,17 +321,17 @@ save_behavior(co_handshake_sound, s9maken, "GoodbyeCeremonie", [sound=recording,
 
 state(co_handshake_sound, s6downloaden, say).
 text(co_handshake_sound,  s6downloaden, "Ik ben nu twee geluiden aan het downloaden.").
-start_led_anim(co_handshake_sound, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_sound, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_sound, s6downloaden, [waitTimer=1500]).
 next(co_handshake_sound,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_sound, s7downloaden, say).
-stop_led_anim(co_handshake_sound, s7downloaden).
+leds(co_handshake_sound, s7downloaden, reset).
 text(co_handshake_sound,  s7downloaden, "Klaar. Dit is de eerste").
 next(co_handshake_sound,  s7downloaden, "true", s8downloaden).
 
 state(co_handshake_sound, s8downloaden, say).
-audio(co_handshake_sound, s8downloaden, server, "resources/sounds/applaus.wav").
+audio(co_handshake_sound, s8downloaden, file, "resources/sounds/applaus.wav").
 next(co_handshake_sound,  s8downloaden, "true", s9downloaden).
 
 state(co_handshake_sound, s9downloaden, say).
@@ -339,7 +339,7 @@ text(co_handshake_sound,  s9downloaden, "En dit is de tweede").
 next(co_handshake_sound,  s9downloaden, "true", s10downloaden).
 
 state(co_handshake_sound, s10downloaden, say).
-audio(co_handshake_sound, s10downloaden, server, "resources/sounds/outro.wav").
+audio(co_handshake_sound, s10downloaden, file, "resources/sounds/outro.wav").
 next(co_handshake_sound,  s10downloaden, "true", s11downloaden).
 
 state(co_handshake_sound, s11downloaden, question).
@@ -401,17 +401,17 @@ text(co_handshake_sound_baseline, s2d, "Lastig, misschien een volgende keer.").
 
 state(co_handshake_sound_baseline, s6downloaden, say).
 text(co_handshake_sound_baseline,  s6downloaden, "Ik ben nu twee geluiden aan het downloaden.").
-start_led_anim(co_handshake_sound_baseline, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_sound_baseline, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_sound_baseline, s6downloaden, [waitTimer=1500]).
 next(co_handshake_sound_baseline,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_sound_baseline, s7downloaden, say).
-stop_led_anim(co_handshake_sound_baseline, s7downloaden).
+leds(co_handshake_sound_baseline, s7downloaden, reset).
 text(co_handshake_sound_baseline,  s7downloaden, "Klaar. Dit is de eerste").
 next(co_handshake_sound_baseline,  s7downloaden, "true", s8downloaden).
 
 state(co_handshake_sound_baseline, s8downloaden, say).
-audio(co_handshake_sound_baseline, s8downloaden, server, "resources/sounds/applaus.wav").
+audio(co_handshake_sound_baseline, s8downloaden, file, "resources/sounds/applaus.wav").
 next(co_handshake_sound_baseline,  s8downloaden, "true", s9downloaden).
 
 state(co_handshake_sound_baseline, s9downloaden, say).
@@ -419,7 +419,7 @@ text(co_handshake_sound_baseline,  s9downloaden, "En dit is de tweede").
 next(co_handshake_sound_baseline,  s9downloaden, "true", s10downloaden).
 
 state(co_handshake_sound_baseline, s10downloaden, say).
-audio(co_handshake_sound_baseline, s10downloaden, server, "resources/sounds/outro.wav").
+audio(co_handshake_sound_baseline, s10downloaden, file, "resources/sounds/outro.wav").
 next(co_handshake_sound_baseline,  s10downloaden, "true", s13kindkiest).
 
 state(co_handshake_sound_baseline, s13kindkiest, question).
@@ -498,27 +498,27 @@ save_behavior(co_handshake_led, s6maken, "GoodbyeCeremonie", [led=recording, led
 %%%%%%%%%%%%%% Download light animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_handshake_led, s6downloaden, say).
 text(co_handshake_led,  s6downloaden, "Ik ben nu twee licht animaties aan het downloaden.").
-start_led_anim(co_handshake_led, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_led, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_led, s6downloaden, [waitTimer=1500]).
 next(co_handshake_led,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_led, s7downloaden, say).
 text(co_handshake_led,  s7downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_handshake_led, s7downloaden).
+leds(co_handshake_led, s7downloaden, reset).
 next(co_handshake_led,  s7downloaden, "true",  s8downloaden).
 
 state(co_handshake_led, s8downloaden, say).
-start_led_anim(co_handshake_led, s8downloaden, "all", "blink", ["rood", "wit", "blauw"], 500).
+leds(co_handshake_led, s8downloaden, direct, "all", "blink", ["rood", "wit", "blauw"], 500).
 stateConfig(co_handshake_led, s8downloaden, [waitTimer=3000]).
 next(co_handshake_led, s8downloaden, "true", s9downloaden).
 
 state(co_handshake_led, s9downloaden, say).
 text(co_handshake_led,  s9downloaden, "En dit is optie 2").
-stop_led_anim(co_handshake_led, s9downloaden).
+leds(co_handshake_led, s9downloaden, reset).
 next(co_handshake_led,  s9downloaden, "true",  s10downloaden).
 
 state(co_handshake_led, s10downloaden, say).
-start_led_anim(co_handshake_led, s10downloaden, "all", "alternate", ["geel", "paars"], 500).
+leds(co_handshake_led, s10downloaden, direct, "all", "alternate", ["geel", "paars"], 500).
 stateConfig(co_handshake_led, s10downloaden, [waitTimer=3000]).
 next(co_handshake_led, s10downloaden, "true", s11downloaden).
 
@@ -526,7 +526,7 @@ state(co_handshake_led, s11downloaden, question).
 stateConfig(co_handshake_led, s11downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
 branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_handshake_led, s12downloaden]]]).
 text(co_handshake_led, s11downloaden, "Wil jij de eerste of tweede licht animatie, of zal ik kiezen?").
-stop_led_anim(co_handshake_led, s11downloaden).
+leds(co_handshake_led, s11downloaden, reset).
 next(co_handshake_led, s11downloaden, "success", s12downloaden).
 next(co_handshake_led, s11downloaden, "fail", s11downloadenf).
 
@@ -581,27 +581,27 @@ text(co_handshake_led_baseline, s2d, "Lastig, misschien een volgende keer.").
 
 state(co_handshake_led_baseline, s6downloaden, say).
 text(co_handshake_led_baseline,  s6downloaden, "Ik ben nu twee licht animaties aan het downloaden.").
-start_led_anim(co_handshake_led_baseline, s6downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_handshake_led_baseline, s6downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_handshake_led_baseline, s6downloaden, [waitTimer=1500]).
 next(co_handshake_led_baseline,  s6downloaden, "true",  s7downloaden).
 
 state(co_handshake_led_baseline, s7downloaden, say).
 text(co_handshake_led_baseline,  s7downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_handshake_led_baseline, s7downloaden).
+leds(co_handshake_led_baseline, s7downloaden, reset).
 next(co_handshake_led_baseline,  s7downloaden, "true",  s8downloaden).
 
 state(co_handshake_led_baseline, s8downloaden, say).
-start_led_anim(co_handshake_led_baseline, s8downloaden, "all", "blink", ["rood", "wit", "blauw"], 500).
+leds(co_handshake_led_baseline, s8downloaden, direct, "all", "blink", ["rood", "wit", "blauw"], 500).
 stateConfig(co_handshake_led_baseline, s8downloaden, [waitTimer=3000]).
 next(co_handshake_led_baseline, s8downloaden, "true", s9downloaden).
 
 state(co_handshake_led_baseline, s9downloaden, say).
 text(co_handshake_led_baseline,  s9downloaden, "En dit is optie 2").
-stop_led_anim(co_handshake_led_baseline, s9downloaden).
+leds(co_handshake_led_baseline, s9downloaden, reset).
 next(co_handshake_led_baseline,  s9downloaden, "true",  s10downloaden).
 
 state(co_handshake_led_baseline, s10downloaden, say).
-start_led_anim(co_handshake_led_baseline, s10downloaden, "all", "alternate", ["geel", "paars"], 500).
+leds(co_handshake_led_baseline, s10downloaden, direct, "all", "alternate", ["geel", "paars"], 500).
 stateConfig(co_handshake_led_baseline, s10downloaden, [waitTimer=3000]).
 next(co_handshake_led_baseline, s10downloaden, "true", s13kindkiest).
 
@@ -609,7 +609,7 @@ state(co_handshake_led_baseline, s13kindkiest, question).
 stateConfig(co_handshake_led_baseline, s13kindkiest, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
 branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_handshake_led_baseline, s15kindkiest]]]).
 text(co_handshake_led_baseline, s13kindkiest, "Wil je de eerste of de tweede licht show?").
-stop_led_anim(co_handshake_led_baseline, s13kindkiest).
+leds(co_handshake_led_baseline, s13kindkiest, reset).
 next(co_handshake_led_baseline, s13kindkiest, "success", s14kindkiest).
 next(co_handshake_led_baseline, s13kindkiest, "fail", s13kindkiestf).
 
@@ -661,4 +661,4 @@ play_behavior(co_handshake_ceremonie, s6, "GoodbyeCeremonie").
 next(co_handshake_ceremonie,  s6, "true",  s7).
 
 state(co_handshake_ceremonie, s7, say).
-stop_led_anim(co_handshake_ceremonie, s7). 
+leds(co_handshake_ceremonie, s7, reset). 

@@ -42,7 +42,7 @@ next(ga_prac_speech,  s3, "true",  s4).
 
 state(ga_prac_speech, s4, question).
 stateConfig(ga_prac_speech, s4, [type=quiz, context='answer_color', correctAnswer=["blauw"], inputModality=[speech=2], additionalAttempt=true]).
-leds(ga_prac_speech, s4, ["FaceLeds"], ["blue"]).
+leds(ga_prac_speech, s4, direct, ["FaceLeds"], ["blue"]).
 text(ga_prac_speech, s4, "Welke kleur hebben mijn ogen nu?").
 next(ga_prac_speech, s4, 'correct', s5cor).
 next(ga_prac_speech, s4, 'incorrect', s5incor).
@@ -61,7 +61,7 @@ text(ga_prac_speech,  s5f, "Dankjewel! Denk er aan om luid, en duidelijk, antwoo
 next(ga_prac_speech,  s5f, "true",  s6).
 
 state(ga_prac_speech, s6, say).
-leds(ga_prac_speech, s6, ["FaceLeds"], ["white"]).
+leds(ga_prac_speech, s6, direct, ["FaceLeds"], ["white"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Touch tutorial    		                           %%%

@@ -35,7 +35,7 @@ text(doei_was_het_leuk, s5, "Laten we onze secret handshake nog een keer doen!")
 next(doei_was_het_leuk, s5, "true", s6).
 
 state(doei_was_het_leuk, s6, say).
-play_motion_file(doei_was_het_leuk, s6, "resources/gestures/gesture_doei_was_het_leuk_s6_6.json").
+anim(doei_was_het_leuk, s6, file, "resources/gestures/gesture_doei_was_het_leuk_s6_6.json").
 next(doei_was_het_leuk, s6, "true", s7).
 
 state(doei_was_het_leuk, s7, say).

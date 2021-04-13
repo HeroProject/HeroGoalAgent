@@ -32,13 +32,13 @@ next(co_sound, s4, "fail", sdownload1).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, sdownload1, say).
 text(co_sound,  sdownload1, "Ik ben nu twee geluiden aan het downloaden.").
-start_led_anim(co_sound, sdownload1, "eyes", "rotate", ["purple"], 500).
+leds(co_sound, sdownload1, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_sound, sdownload1, [waitTimer=1500]).
 next(co_sound,  sdownload1, "true",  sdownload2).
 
 state(co_sound, sdownload2, say).
 text(co_sound,  sdownload2, "Klaar. Dit is optie 1").
-stop_led_anim(co_sound, sdownload2).
+leds(co_sound, sdownload2, reset).
 next(co_sound,  sdownload2, "true",  sdownload3).
 
 state(co_sound, sdownload3, say).
@@ -86,12 +86,12 @@ save_sound_option(co_sound, sdownload8robot, 1).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, smaken1, say).
 text(co_sound,  smaken1, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
-leds(co_sound,  smaken1, ["RightFootLeds"], ["groen"]).
+leds(co_sound,  smaken1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_sound, smaken1, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_sound,  smaken1, "true",  smaken2).
 
 state(co_sound, smaken2, say).
-leds(co_sound,  smaken2, ["RightFootLeds"], ["wit"]).
+leds(co_sound,  smaken2, direct, ["RightFootLeds"], ["wit"]).
 text(co_sound,  smaken2, "Maak je geluid in 3, 2, 1.").
 next(co_sound,  smaken2, "true",  smaken3).
 

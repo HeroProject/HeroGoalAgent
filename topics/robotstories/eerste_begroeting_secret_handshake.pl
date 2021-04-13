@@ -1,6 +1,6 @@
 state(eerste_begroeting_secret_handshake, s1, say).
 text(eerste_begroeting_secret_handshake, s1, "Hallo, mijn naam is Hero!").
-play_motion_file(eerste_begroeting_secret_handshake, s1, "resources/gestures/wave1.json").
+anim(eerste_begroeting_secret_handshake, s1, file, "resources/gestures/wave1.json").
 next(eerste_begroeting_secret_handshake, s1, "true", s2).
 
 state(eerste_begroeting_secret_handshake, s2, say).

@@ -1,6 +1,6 @@
 state(begroeting_leuke_dag_gehad, s1, say).
 text(begroeting_leuke_dag_gehad, s1, "Hallo %first_name% ").
-play_motion_file(begroeting_leuke_dag_gehad, s1, "resources/gestures/wave1.json").
+anim(begroeting_leuke_dag_gehad, s1, file, "resources/gestures/wave1.json").
 next(begroeting_leuke_dag_gehad, s1, "true", s2).
 
 state(begroeting_leuke_dag_gehad, s2, say).

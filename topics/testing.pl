@@ -159,62 +159,24 @@ text(test_sound, s4, "Het was het gebrul van de leeuw").
 next(test_sound, s4, "true", s5).
 
 state(test_sound, s5, say).
-audio(test_sound, s5, recorded, sound_lion).
+audio(test_sound, s5, id, sound_lion).
 next(test_sound, s5, "true", s6).
 
 state(test_sound, s6, say).
 text(test_sound, s6, "Gaaf zeg.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Chocolate - Testing emotion recognition		   %%%
-%%% Note: emotion service needs to be on.                  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(test_emotion, s1, say).
-text(test_emotion, s1, "Laat mij je gezicht eens goed bekijken.").
-next(test_emotion, s1, "true", s2).
-
-state(test_emotion, s2, emotion).
-next(test_emotion, s2, happy, s3h).
-next(test_emotion, s2, sad, s3s).
-next(test_emotion, s2, neutral, s3n).
-next(test_emotion, s2, "fail", s3f).
-
-state(test_emotion, s3h, say).
-leds(test_emotion, s3h, ["FaceLeds"], ["green"]).
-text(test_emotion, s3h, "Wauw, wat een blij gezicht!").
-next(test_emotion, s3h, "true", s4).
-
-state(test_emotion, s3s, say).
-leds(test_emotion, s3s, ["FaceLeds"], ["red"]).
-text(test_emotion, s3s, "Wauw, wat een zielig gezicht!").
-next(test_emotion, s3s, "true", s4).
-
-state(test_emotion, s3n, say).
-leds(test_emotion, s3n, ["FaceLeds"], ["cyan"]).
-text(test_emotion, s3n, "Wauw, wat kijk jij nietszeggend.").
-next(test_emotion, s3n, "true", s4).
-
-state(test_emotion, s3f, say).
-leds(test_emotion, s3f, ["FaceLeds"], ["white"]).
-text(test_emotion, s3f, "Ik kon helaas niks zien.").
-next(test_emotion, s3f, "true", s4).
-
-state(test_emotion, s4, say).
-leds(test_emotion, s4, ["FaceLeds"], ["white"]).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Test sound 2 - Testing playing sound from server	   %%%
-%%% Note: web server needs to be on.		           %%%
+%%% Test sound 2 				           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_sound2, s1, say).
-audio(test_sound2, s1, server, "resources/sounds/tiktok1.wav").
+audio(test_sound2, s1, file, "resources/sounds/tiktok1.wav").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Animation - Testing anim option		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_animation, s1, say).
 text(test_animation, s1, "Ik doe nu een standaard animatie").
-anim(test_animation, s1, on_robot, "animations/Stand/Gestures/Enthusiastic_4").
+anim(test_animation, s1, onRobot, "animations/Stand/Gestures/Enthusiastic_4").
 %animations/Stand/Question/NAO/Left_Neutral_QUE_01
 %animations/Stand/Gestures/Enthusiastic_4
 
@@ -223,33 +185,33 @@ anim(test_animation, s1, on_robot, "animations/Stand/Gestures/Enthusiastic_4").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds, s1, say).
 text(test_leds, s1, "Kijk, mijn ogen zijn nu groen").
-leds(test_leds, s1, ["FaceLeds"], ["groen"]).
-next(test_leds, s1, "true", s4).
+leds(test_leds, s1, direct, ["FaceLeds"], ["groen"]).
+next(test_leds, s1, "true", s2).
 
-%state(test_leds, s2, say).
-%text(test_leds, s2, "Kijk, mijn buik is nu azuur").
-%leds(test_leds, s2, ["ChestLeds"], ["azuur"]).
-%next(test_leds, s2, "true", s3).
+state(test_leds, s2, say).
+text(test_leds, s2, "Kijk, mijn buik is nu rood").
+leds(test_leds, s2, direct, ["ChestLeds"], ["rood"]).
+next(test_leds, s2, "true", s3).
 
-%state(test_leds, s3, say).
-%text(test_leds, s3, "Kijk, mijn voeten zijn nu kaki").
-%leds(test_leds, s3, ["FeetLeds"], ["kaki"]).
-%next(test_leds, s3, "true", s4).
+state(test_leds, s3, say).
+text(test_leds, s3, "Kijk, mijn voeten zijn nu oranje").
+leds(test_leds, s3, direct, ["FeetLeds"], ["oranje"]).
+next(test_leds, s3, "true", s4).
 
 state(test_leds, s4, say).
-leds(test_leds, s4, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).
+leds(test_leds, s4, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% leds - Testing led animations		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds_anim, s1, say).
 text(test_leds_anim, s1, "Kijk, ik heb mijn zwaailicht aangezet").
-start_led_anim(test_leds_anim, s1, "all", "alternate", ["red", "blue"], 500).
+leds(test_leds_anim, s1, direct, "all", "alternate", ["red", "blue"], 500).
 stateConfig(test_leds_anim, s1, [waitTimer=5000]).
 next(test_leds_anim, s1, "true", s2).
 
 state(test_leds_anim, s2, say).
-stop_led_anim(test_leds_anim, s2).
+leds(test_leds_anim, s2, reset).
 next(test_leds_anim, s2, "true", s3).
 
 state(test_leds_anim, s3, say).
@@ -285,11 +247,11 @@ text(test_motion, s3, "Dan ga ik de beweging na doen.").
 next(test_motion, s3, "true", s4).
 
 state(test_motion, s4, say).
-anim(test_motion, s4, recording, test_motion).
+anim(test_motion, s4, id, test_motion).
 next(test_motion, s4, "true", s5).
 
 state(test_motion, s5, say).
-go_to_base_posture(test_motion, s5).
+go_to_posture(test_motion, s5).
 text(test_motion, s5, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -301,7 +263,6 @@ next(test_motion_file, s1, "true", s2).
 
 state(test_motion_file, s2, say).
 anim(test_motion_file, s2, file, "resources/gestures/goodbye2.xml").
-%audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
 next(test_motion_file, s2, "true", s3).
 
 state(test_motion_file, s3, say).
@@ -311,7 +272,7 @@ text(test_motion_file, s3, "Heel leuk.").
 %%% stop led					           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_stop_led, s1, say).
-stop_led_anim(test_stop_led, s1).
+leds(test_stop_led, s1, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 2					   %%%
@@ -362,7 +323,7 @@ text(test_motion_co_b, s1, "Laten we eens kijken wat je hebt gemaakt").
 next(test_motion_co_b, s1, "true", s2).
 
 state(test_motion_co_b, s2, say).
-anim(test_motion_co_b, s2, recording, motion_magic_wand).
+anim(test_motion_co_b, s2, id, motion_magic_wand).
 next(test_motion_co_b, s2, "true", s3).
 
 state(test_motion_co_b, s3, say).
@@ -378,11 +339,11 @@ text(test_motion_2, s1, "Ik weet nog die beweging").
 next(test_motion_2, s1, "true", s2).
 
 state(test_motion_2, s2, say).
-anim(test_motion_2, s2, recording, motion_magic_wand).
+anim(test_motion_2, s2, id, motion_magic_wand).
 next(test_motion_2, s2, "true", s3).
 
 state(test_motion_2, s3, say).
-go_to_base_posture(test_motion_2, s3).
+go_to_posture(test_motion_2, s3).
 text(test_motion_2, s3, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -410,7 +371,7 @@ text(test_session_sound_1b, s2, "Het was het gebrul van de leeuw").
 next(test_session_sound_1b, s2, "true", s3).
 
 state(test_session_sound_1b, s3, say).
-audio(test_session_sound_1b, s3, source, sound_lion).
+audio(test_session_sound_1b, s3, id, sound_lion).
 next(test_session_sound_1b, s3, "true", s4).
 
 state(test_session_sound_1b, s4, say).
@@ -426,7 +387,7 @@ text(test_session_sound_2, s1, "Als machtige krijgers brullen wij als een leeuw.
 next(test_session_sound_2, s1, "true", s2).
 
 state(test_session_sound_2, s2, say).
-audio(test_session_sound_2, s2, source, sound_lion).
+audio(test_session_sound_2, s2, id, sound_lion).
 next(test_session_sound_2, s2, "true", s3).
 
 state(test_session_sound_2, s3, say).
@@ -449,7 +410,7 @@ text(test_session_led_1b, s1, "Laten we eens gaan kijken wat je er van gemaakt h
 next(test_session_led_1b, s1, "true", s2).
 
 state(test_session_led_1b, s2, say).
-play_led_anim(test_session_led_1b,  s2, test_led_show).
+leds(test_session_led_1b,  s2, id, test_led_show).
 next(test_session_led_1b, s2, "true", s3).
 
 state(test_session_led_1b, s3, say).
@@ -458,7 +419,7 @@ next(test_session_led_1b, s3, "true", s4).
 
 state(test_session_led_1b, s4, say).
 text(test_session_led_1b, s4, "Dat was het.").
-stop_led_anim(test_session_led_1b, s4).
+leds(test_session_led_1b, s4, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 8					   %%%
@@ -470,7 +431,7 @@ text(test_session_led_2, s1, "Ik heb je lichtshow van de vorige keer onthouden")
 next(test_session_led_2, s1, "true", s2).
 
 state(test_session_led_2, s2, say).
-play_led_anim(test_session_led_2,  s2, test_led_show).
+leds(test_session_led_2,  s2, id, test_led_show).
 next(test_session_led_2, s2, "true", s3).
 
 state(test_session_led_2, s3, say).
@@ -479,4 +440,4 @@ next(test_session_led_2, s3, "true", s4).
 
 state(test_session_led_2, s4, say).
 text(test_session_led_2, s4, "Dat was het.").
-stop_led_anim(test_session_led_2, s4).
+leds(test_session_led_2, s4, reset).

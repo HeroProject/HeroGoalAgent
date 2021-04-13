@@ -37,14 +37,14 @@ text(co_intro,  s7, "Kijk maar eens. Nu zit ik in een race auto.").
 next(co_intro,  s7, "true",  s8).
 
 state(co_intro, s8, say).
-audio(co_intro, s8, server, 'resources/sounds/racecar.wav').
-play_motion_file(co_intro, s8, "resources/gestures/racecar.xml").
-start_led_anim(co_intro, s8, "all", "alternate", ["oranje", "paars"], 500).
+audio(co_intro, s8, file, 'resources/sounds/racecar.wav').
+anim(co_intro, s8, file, "resources/gestures/racecar.xml").
+leds(co_intro, s8, direct, "all", "alternate", ["oranje", "paars"], 500).
 next(co_intro,  s8, "true",  s9).
 
 state(co_intro, s9, say).
 text(co_intro,  s9, "Gaaf hè?").
-stop_led_anim(co_intro, s9).
+leds(co_intro, s9, reset).
 next(co_intro,  s9, "true",  s10).
 
 state(co_intro, s10, say).
@@ -121,7 +121,7 @@ next(co_tutorial_speech,  s4, "true",  s5).
 
 state(co_tutorial_speech, s5, question).
 stateConfig(co_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw"], inputModality=[speech=3], additionalAttempt=true]).
-leds(co_tutorial_speech, s5, ["FaceLeds"], ["blauw"]).
+leds(co_tutorial_speech, s5, direct, ["FaceLeds"], ["blauw"]).
 text(co_tutorial_speech, s5, "Welke kleur hebben mijn ogen nu?").
 next(co_tutorial_speech, s5, 'correct', s5cor).
 next(co_tutorial_speech, s5, 'incorrect', s5incor).
@@ -140,7 +140,7 @@ text(co_tutorial_speech,  s5f, "Dankjewel! Denk er aan om luid, en duidelijk, an
 next(co_tutorial_speech,  s5f, "true",  s6).
 
 state(co_tutorial_speech, s6, say).
-leds(co_tutorial_speech, s6, ["FaceLeds"], ["wit"]).
+leds(co_tutorial_speech, s6, direct, ["FaceLeds"], ["wit"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - touch					   %%%
@@ -160,12 +160,12 @@ next(co_tutorial_touch,  s3, "true",  s4).
 
 state(co_tutorial_touch, s4, say).
 text(co_tutorial_touch,  s4, "Het lichtje boven de ja knop is groen en het lichtje boven de nee knop is rood. \pau=400\ ").
-leds(co_tutorial_touch,  s4, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
+leds(co_tutorial_touch,  s4, direct, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 next(co_tutorial_touch,  s4, "true",  s5).
 
 state(co_tutorial_touch, s5, say).
 text(co_tutorial_touch,  s5, "Bij sommige vragen zal ik je wat opties geven. Je kunt dan op de ja knop drukken als je jouw antwoord hoort.").
-leds(co_tutorial_touch,  s4, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+leds(co_tutorial_touch,  s4, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 next(co_tutorial_touch,  s5, "true",  s6).
 
 state(co_tutorial_touch, s6, say).
@@ -226,7 +226,7 @@ text(co_tutorial_sound,  s8, "Zo klinkt het geluidseffect nu.").
 next(co_tutorial_sound,  s8, "true",  s9).
 
 state(co_tutorial_sound, s9, say).
-audio(co_tutorial_sound, s9, recorded, [co_tutorial_sound, s6]).
+audio(co_tutorial_sound, s9, id, co_tutorial_sound_s6).
 next(co_tutorial_sound,  s9, "true",  s10).
 
 state(co_tutorial_sound, s10, say).
@@ -265,7 +265,7 @@ text(co_tutorial_gesture,  s6, "Vlak voor ik ga beginnen met opnemen maak ik dit
 next(co_tutorial_gesture,  s6, "true",  s7).
 
 state(co_tutorial_gesture, s7, say).
-audio(co_tutorial_gesture, s7, server, "resources/sounds/ready_to_record_gesture.wav").
+audio(co_tutorial_gesture, s7, file, "resources/sounds/ready_to_record_gesture.wav").
 next(co_tutorial_gesture,  s7, "true",  s8).
 
 state(co_tutorial_gesture, s8, say).
@@ -282,19 +282,19 @@ next(co_tutorial_gesture,  s10, "true",  s11).
 
 state(co_tutorial_gesture, s11, say).
 text(co_tutorial_gesture,  s11, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
-leds(co_tutorial_gesture,  s11, ["RightFootLeds"], ["groen"]).
+leds(co_tutorial_gesture,  s11, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_tutorial_gesture, s11, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_tutorial_gesture,  s11, "true",  s12).
 
 state(co_tutorial_gesture, s12, say).
 text(co_tutorial_gesture,  s12, "Pak mijn armen maar vast.").
-leds(co_tutorial_gesture,  s12, ["RightFootLeds"], ["wit"]).
+leds(co_tutorial_gesture,  s12, direct, ["RightFootLeds"], ["wit"]).
 stateConfig(co_tutorial_gesture, s12, [noAnimation="true"]).
 set_stiffness(co_tutorial_gesture, s12, ['RArm', 'LArm'], 0).
 next(co_tutorial_gesture,  s12, "true",  s13).
 
 state(co_tutorial_gesture, s13, say).
-audio(co_tutorial_gesture, s13, server, "resources/sounds/ready_to_record_gesture.wav").
+audio(co_tutorial_gesture, s13, file, "resources/sounds/ready_to_record_gesture.wav").
 next(co_tutorial_gesture,  s13, "true",  s14).
 
 state(co_tutorial_gesture, s14, say).
@@ -317,7 +317,7 @@ text(co_tutorial_gesture,  s17, "Laten we eens kijken naar de beweging die ik va
 next(co_tutorial_gesture,  s17, "true",  s18).
 
 state(co_tutorial_gesture, s18, say).
-play_motion(co_tutorial_gesture, s18, co_tutorial_gesture_s16).
+anim(co_tutorial_gesture, s18, id, co_tutorial_gesture_s16).
 next(co_tutorial_gesture, s18, "true", s19).
 
 state(co_tutorial_gesture, s19, say).
@@ -332,7 +332,7 @@ next(co_tutorial_lights,  s1, "true",  s2).
 
 state(co_tutorial_lights, s2, say).
 text(co_tutorial_lights,  s2, "Ik kan mijn ogen, buik, en voeten van kleur veranderen.").
-leds(co_tutorial_lights,  s2, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "oranje", "rood"]).
+leds(co_tutorial_lights,  s2, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "oranje", "rood"]).
 next(co_tutorial_lights,  s2, "true",  s4).
 
 state(co_tutorial_lights, s4, say).
@@ -341,22 +341,22 @@ next(co_tutorial_lights,  s4, "true",  s5).
 
 state(co_tutorial_lights, s5, say).
 text(co_tutorial_lights,  s5, "Ik kan de lichtjes laten knipperen.").
-start_led_anim(co_tutorial_lights, s5, "all", "blink", ["paars", "oranje", "groen"], 500).
+leds(co_tutorial_lights, s5, direct, "all", "blink", ["paars", "oranje", "groen"], 500).
 stateConfig(co_tutorial_lights, s5, [waitTimer=1500]).
 next(co_tutorial_lights,  s5, "true",  s6).
 
 state(co_tutorial_lights, s6, say).
-stop_led_anim(co_tutorial_lights, s6).
+leds(co_tutorial_lights, s6, reset).
 next(co_tutorial_lights,  s6, "true",  s7).
 
 state(co_tutorial_lights, s7, say).
 text(co_tutorial_lights,  s7, "of de lichtjes heen en weer laten gaan.").
-start_led_anim(co_tutorial_lights, s7, "all", "alternate", ["red", "blue"], 500).
+leds(co_tutorial_lights, s7, direct, "all", "alternate", ["red", "blue"], 500).
 stateConfig(co_tutorial_lights, s7, [waitTimer=1500]).
 next(co_tutorial_lights,  s7, "true",  s8).
 
 state(co_tutorial_lights, s8, say).
-stop_led_anim(co_tutorial_lights, s8).
+leds(co_tutorial_lights, s8, reset).
 next(co_tutorial_lights,  s8, "true",  s9).
 
 state(co_tutorial_lights, s9, say).
@@ -391,13 +391,13 @@ next(co_tutorial_lights2,  s1, "true",  s2).
 
 state(co_tutorial_lights2, s2, say).
 text(co_tutorial_lights2,  s2, "Laat het feestje met de lichtjes maar beginnen.").
-play_led_anim(co_tutorial_lights2,  s2, co_tutorial_lights_s14).
+leds(co_tutorial_lights2,  s2, id, co_tutorial_lights_s14).
 stateConfig(co_tutorial_lights2, s2, [waitTimer=2500]).
 next(co_tutorial_lights2,  s2, "true",  s3).
 
 state(co_tutorial_lights2, s3, say).
 text(co_tutorial_lights2,  s3, "Goed gedaan zeg!").
-stop_led_anim(co_tutorial_lights2,  s3).
+leds(co_tutorial_lights2,  s3, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Tutorial - final questions				   %%%

@@ -7,7 +7,7 @@ text(doei_secret_handshake_1, s2, "Laten we onze secret handshake nog een keer d
 next(doei_secret_handshake_1, s2, "true", s3).
 
 state(doei_secret_handshake_1, s3, say).
-%play_motion_file(doei_secret_handshake_1, s3, "resources/gestures/gesture_doei_secret_handshake_1_s3_3.json").
+%anim(doei_secret_handshake_1, s3, file, "resources/gestures/gesture_doei_secret_handshake_1_s3_3.json").
 next(doei_secret_handshake_1, s3, "true", s4).
 
 state(doei_secret_handshake_1, s4, say).

@@ -38,27 +38,27 @@ insert_topic(co_led_selection, s5download, co_led_download).
 
 state(co_led_download, s1, say).
 text(co_led_download,  s1, "Ik ben nu twee licht animaties aan het downloaden.").
-start_led_anim(co_led_download, s1, "eyes", "rotate", ["purple"], 500).
+leds(co_led_download, s1, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_led_download, s1, [waitTimer=1500]).
 next(co_led_download,  s1, "true",  sdownload2).
 
 state(co_led_download, sdownload2, say).
 text(co_led_download,  sdownload2, "Klaar. Dit is optie 1").
-stop_led_anim(co_led_download, sdownload2).
+leds(co_led_download, sdownload2, reset).
 next(co_led_download,  sdownload2, "true",  sdownload3).
 
 state(co_led_download, sdownload3, say).
-play_led_anim_option(co_led_download, sdownload3, 1).
+leds(co_led_download, sdownload3, option, 1).
 stateConfig(co_led_download, sdownload3, [waitTimer=3000]).
 next(co_led_download, sdownload3, "true", sdownload4).
 
 state(co_led_download, sdownload4, say).
 text(co_led_download,  sdownload4, "En dit is optie 2").
-stop_led_anim(co_led_download, sdownload4).
+leds(co_led_download, sdownload4, reset).
 next(co_led_download,  sdownload4, "true",  sdownload5).
 
 state(co_led_download, sdownload5, say).
-play_led_anim_option(co_led_download, sdownload5, 2).
+leds(co_led_download, sdownload5, option, 2).
 stateConfig(co_led_download, sdownload5, [waitTimer=3000]).
 next(co_led_download, sdownload5, "true", sdownload6).
 
@@ -66,7 +66,7 @@ state(co_led_download, sdownload6, question).
 stateConfig(co_led_download, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
 branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_led_download, sdownload7]]]).
 text(co_led_download, sdownload6, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
-stop_led_anim(co_led_download, sdownload6).
+leds(co_led_download, sdownload6, reset).
 next(co_led_download, sdownload6, "success", sdownload7).
 next(co_led_download, sdownload6, "fail", sdownload7f).
 

@@ -31,15 +31,15 @@ text(ho2_greeting,  s6, "Kijk maar eens, nu zit ik in een race auto.").
 next(ho2_greeting,  s6, "true",  s7).
 
 state(ho2_greeting, s7, say).
-audio(ho2_greeting, s7, server, 'resources/sounds/racecar.wav').
-play_motion_file(ho2_greeting, s7, "resources/gestures/racecar.xml").
-start_led_anim(ho2_greeting, s7, "all", "alternate", ["oranje", "paars"], 1000).
+audio(ho2_greeting, s7, file, 'resources/sounds/racecar.wav').
+anim(ho2_greeting, s7, file, "resources/gestures/racecar.xml").
+leds(ho2_greeting, s7, direct, "all", "alternate", ["oranje", "paars"], 1000).
 next(ho2_greeting,  s7, "true",  s8).
 
 state(ho2_greeting, s8, say).
 text(ho2_greeting,  s8, "Gaaf hè?").
-stop_led_anim(ho2_greeting, s8).
-go_to_base_posture(ho2_greeting, s8).
+leds(ho2_greeting, s8, reset).
+go_to_posture(ho2_greeting, s8).
 next(ho2_greeting,  s8, "true",  s9).
 
 state(ho2_greeting, s9, say).
@@ -93,7 +93,7 @@ text(ho2_tutorial,  s10, "Dit is de eerste").
 next(ho2_tutorial,  s10, "true", s11).
 
 state(ho2_tutorial, s11, say).
-audio(ho2_tutorial, s11, server, "resources/sounds/tiktok1.wav").
+audio(ho2_tutorial, s11, file, "resources/sounds/tiktok1.wav").
 next(ho2_tutorial,  s11, "true", s12).
 
 state(ho2_tutorial, s12, say).
@@ -101,7 +101,7 @@ text(ho2_tutorial,  s12, "En dit is de tweede").
 next(ho2_tutorial,  s12, "true", s13).
 
 state(ho2_tutorial, s13, say).
-audio(ho2_tutorial, s13, server, "resources/sounds/tiktok2.wav").
+audio(ho2_tutorial, s13, file, "resources/sounds/tiktok2.wav").
 next(ho2_tutorial,  s13, "true", s14).
 
 state(ho2_tutorial, s14, question).
@@ -154,12 +154,12 @@ next(ho2_tutorial,  s20a, "true",  s20).
 
 state(ho2_tutorial, s20, say).
 text(ho2_tutorial,  s20, "Als je er klaar voor bent dan kun je tegen mijn linker teen drukken.").
-leds(ho2_tutorial,  s20, ["RightFootLeds"], ["groen"]).
+leds(ho2_tutorial,  s20, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(ho2_tutorial, s20, [next='RightBumperPressed']).
 next(ho2_tutorial,  s20, "true",  s21).
 
 state(ho2_tutorial, s21, say).
-leds(ho2_tutorial,  s21, ["RightFootLeds"], ["wit"]).
+leds(ho2_tutorial,  s21, direct, ["RightFootLeds"], ["wit"]).
 text(ho2_tutorial,  s21, "Applaudisseer in 3, 2, 1.").
 next(ho2_tutorial,  s21, "true",  s22).
 
@@ -176,7 +176,7 @@ text(ho2_tutorial,  s24, "Zo klinkt het geluidseffect nu.").
 next(ho2_tutorial,  s24, "true",  s25).
 
 state(ho2_tutorial, s25, say).
-audio(ho2_tutorial, s25, source, sound_applaus).
+audio(ho2_tutorial, s25, id, sound_applaus).
 next(ho2_tutorial,  s25, "true",  s26).
 
 state(ho2_tutorial, s26, say).
@@ -209,19 +209,19 @@ next(ho2_tutorial,  s32, "true",  s33).
 
 state(ho2_tutorial, s33, say).
 text(ho2_tutorial,  s33, "Als je er klaar voor bent kun je tegen mijn linker teen drukken en mijn armen vast pakken.").
-leds(ho2_tutorial,  s33, ["RightFootLeds"], ["groen"]).
+leds(ho2_tutorial,  s33, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(ho2_tutorial, s33, [next='RightBumperPressed']).
 set_stiffness(ho2_tutorial, s33, ['RArm', 'LArm'], 0).
 next(ho2_tutorial,  s33, "true",  s34).
 
 state(ho2_tutorial, s34, say).
-leds(ho2_tutorial,  s34, ["RightFootLeds"], ["wit"]).
+leds(ho2_tutorial,  s34, direct, ["RightFootLeds"], ["wit"]).
 text(ho2_tutorial, s34, "3. 2. 1.").
 next(ho2_tutorial,  s34, "true",  s35).
 
 state(ho2_tutorial, s35, say).
 start_motion_recording(ho2_tutorial, s35, ['RArm', 'LArm']).
-audio(ho2_tutorial, s35, source, sound_koelkast_song).
+audio(ho2_tutorial, s35, id, sound_koelkast_song).
 next(ho2_tutorial,  s35, "true",  s36).
 
 state(ho2_tutorial, s36, say).
@@ -235,7 +235,7 @@ stateConfig(ho2_tutorial, s37, [noAnimation="true", umVariable=motion_feest]).
 next(ho2_tutorial,  s37, "true",  s38).
 
 state(ho2_tutorial, s38, say).
-go_to_base_posture(ho2_tutorial, s38).
+go_to_posture(ho2_tutorial, s38).
 text(ho2_tutorial,  s38, "Het is heel mooi geworden. Dat gaan we zo terug kijken.").
 next(ho2_tutorial,  s38, "true",  s41).
 
@@ -245,7 +245,7 @@ next(ho2_tutorial,  s41, "true",  s42).
 
 state(ho2_tutorial, s42, say).
 text(ho2_tutorial,  s42, "Ik kan namelijk mijn ogen, buik, en voeten van kleur veranderen.").
-leds(ho2_tutorial,  s42, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "oranje", "rood"]).
+leds(ho2_tutorial,  s42, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars", "oranje", "rood"]).
 next(ho2_tutorial,  s42, "true",  s43).
 
 state(ho2_tutorial, s43, say).
@@ -254,22 +254,22 @@ next(ho2_tutorial,  s43, "true",  s44).
 
 state(ho2_tutorial, s44, say).
 text(ho2_tutorial,  s44, "Ik kan de lichtjes laten knipperen.").
-start_led_anim(ho2_tutorial, s44, "all", "blink", ["paars", "oranje", "groen"], 500).
+leds(ho2_tutorial, s44, direct, "all", "blink", ["paars", "oranje", "groen"], 500).
 stateConfig(ho2_tutorial, s44, [waitTimer=1500]).
 next(ho2_tutorial,  s44, "true",  s45).
 
 state(ho2_tutorial, s45, say).
-stop_led_anim(ho2_tutorial, s45).
+leds(ho2_tutorial, s45, reset).
 next(ho2_tutorial,  s45, "true",  s46).
 
 state(ho2_tutorial, s46, say).
 text(ho2_tutorial,  s46, "of de lichtjes heen en weer laten gaan.").
-start_led_anim(ho2_tutorial, s46, "all", "alternate", ["red", "blue"], 500).
+leds(ho2_tutorial, s46, direct, "all", "alternate", ["red", "blue"], 500).
 stateConfig(ho2_tutorial, s46, [waitTimer=1500]).
 next(ho2_tutorial,  s46, "true",  s47).
 
 state(ho2_tutorial, s47, say).
-stop_led_anim(ho2_tutorial, s47).
+leds(ho2_tutorial, s47, reset).
 text(ho2_tutorial,  s47, "Bij het maken van een lichtshow kun je kiezen of je een animatie, zoals knipperen, wilt, of dat je de lampjes gewoon wilt inkleuren.").
 next(ho2_tutorial,  s47, "true",  s48).
 
@@ -287,16 +287,16 @@ text(ho2_tutorial_2,  s1, "Tijd voor een feestje!").
 next(ho2_tutorial_2,  s1, "true",  s2).
 
 state(ho2_tutorial_2, s2, say).
-play_led_anim(ho2_tutorial_2,  s2, led_show_feest).
-play_motion(ho2_tutorial_2, s2, motion_feest).
-audio(ho2_tutorial_2, s2, source, sound_koelkast_song).
+leds(ho2_tutorial_2,  s2, id, led_show_feest).
+anim(ho2_tutorial_2, s2, id, motion_feest).
+audio(ho2_tutorial_2, s2, id, sound_koelkast_song).
 next(ho2_tutorial_2,  s2, "true",  s3).
 
 state(ho2_tutorial_2, s3, say).
 text(ho2_tutorial_2, s3, "Wauw, dit is gaaf. Goed gedaan %first_name%").
-stop_led_anim(ho2_tutorial_2, s3).
-go_to_base_posture(ho2_tutorial_2, s3).
-audio(ho2_tutorial_2, s3, source, sound_applaus).
+leds(ho2_tutorial_2, s3, reset).
+go_to_posture(ho2_tutorial_2, s3).
+audio(ho2_tutorial_2, s3, id, sound_applaus).
 next(ho2_tutorial_2,  s3, "true",  s3b).
 
 state(ho2_tutorial_2, s3b, say).
@@ -422,7 +422,7 @@ text(ho2_koelkast_2,  s2, "Laatst was ik te laat op school, ik probeerde heel st
 next(ho2_koelkast_2,  s2, "true",  s3).
 
 state(ho2_koelkast_2, s3, say).
-audio(ho2_koelkast_2, s3, source, sound_knal).
+audio(ho2_koelkast_2, s3, id, sound_knal).
 next(ho2_koelkast_2,  s3, "true",  s4).
 
 state(ho2_koelkast_2, s4, say).
@@ -452,12 +452,12 @@ text(ho2_koelkast_3,  s1, "Deze tennis beweging heb ik van je geleerd.").
 next(ho2_koelkast_3,  s1, "true",  s2).
 
 state(ho2_koelkast_3, s2, say).
-play_motion(ho2_koelkast_3, s2, motion_tennis).
-audio(ho2_koelkast_3, s2, server, "resources/sounds/tennis.wav").
+anim(ho2_koelkast_3, s2, id, motion_tennis).
+audio(ho2_koelkast_3, s2, file, "resources/sounds/tennis.wav").
 next(ho2_koelkast_3, s2, "true", s3).
 
 state(ho2_koelkast_3, s3, say).
-go_to_base_posture(ho2_koelkast_3, s3).
+go_to_posture(ho2_koelkast_3, s3).
 text(ho2_koelkast_3,  s3, "Daar kan ik wel een goede bal mee slaan, al zeg ik het zelf.").
 next(ho2_koelkast_3,  s3, "true",  s4).
 
@@ -485,7 +485,7 @@ stateConfig(ho2_koelkast_3, s8, [ umVariable=led_show_duizeligheid,
 
 state(ho2_koelkast_4, s1, say).
 text(ho2_koelkast_4,  s1, "Even uitproberen.").
-play_led_anim(ho2_koelkast_4,  s1, led_show_duizeligheid).
+leds(ho2_koelkast_4,  s1, id, led_show_duizeligheid).
 next(ho2_koelkast_4,  s1, "true",  s2).
 
 state(ho2_koelkast_4, s2, say).
@@ -493,7 +493,7 @@ text(ho2_koelkast_4,  s2, "Ziet er goed uit, goed gedaan.").
 next(ho2_koelkast_4,  s2, "true",  s3).
 
 state(ho2_koelkast_4, s3, say).
-stop_led_anim(ho2_koelkast_4, s3).
+stop_led_anim(ho2_koelkast_4, s3, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Graafmachine			                   %%%
@@ -526,7 +526,7 @@ text(ho2_graafmachine_2,  s1, "Top, laten we er nog even naar luisteren").
 next(ho2_graafmachine_2,  s1, "true",  s2).
 
 state(ho2_graafmachine_2, s2, say).
-audio(ho2_graafmachine_2, s2, source, sound_mouse).
+audio(ho2_graafmachine_2, s2, id, sound_mouse).
 next(ho2_graafmachine_2,  s2, "true",  s3).
 
 state(ho2_graafmachine_2, s3, say).
@@ -572,12 +572,12 @@ text(ho2_graafmachine_3,  s5, "Ze toeterden met hun slurf van plezier.").
 next(ho2_graafmachine_3,  s5, "true",  s6).
 
 state(ho2_graafmachine_3, s6, say).
-play_motion(ho2_graafmachine_3, s6, motion_elephant).
-audio(ho2_graafmachine_3, s6, server, "resources/sounds/elephant.wav").
+anim(ho2_graafmachine_3, s6, id, motion_elephant).
+audio(ho2_graafmachine_3, s6, file, "resources/sounds/elephant.wav").
 next(ho2_graafmachine_3, s6, "true", s7).
 
 state(ho2_graafmachine_3, s7, say).
-go_to_base_posture(ho2_graafmachine_3, s7).
+go_to_posture(ho2_graafmachine_3, s7).
 text(ho2_graafmachine_3,  s7, "Ja, dit is precies wat ik zocht! Test geslaagd").
 next(ho2_graafmachine_3,  s7, "true",  s8).
 
@@ -600,7 +600,7 @@ text(ho2_graafmachine_4,  s1, "Laten we eens kijken of ik een beetje boos kan do
 next(ho2_graafmachine_4,  s1, "true",  s2).
 
 state(ho2_graafmachine_4, s2, say).
-play_led_anim(ho2_graafmachine_4,  s2, led_show_boosheid).
+leds(ho2_graafmachine_4,  s2, id, led_show_boosheid).
 next(ho2_graafmachine_4, s2, "true", s3).
 
 state(ho2_graafmachine_4, s3, say).
@@ -609,7 +609,7 @@ next(ho2_graafmachine_4, s3, "true", s4).
 
 state(ho2_graafmachine_4, s4, say).
 text(ho2_graafmachine_4, s4, "Net echt toch? Mooi gemaakt.").
-stop_led_anim(ho2_graafmachine_4, s4).
+stop_led_anim(ho2_graafmachine_4, s4, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Goodbye				                   %%%
@@ -663,9 +663,9 @@ text(ho2_goodbye,  s7, "Ik kijk er naar uit om alle creaties te gaan gebruiken v
 next(ho2_goodbye,  s7, "true",  s8).
 
 state(ho2_goodbye, s8, say).
-play_motion_file(ho2_goodbye, s8, "resources/gestures/wave1.json").
+anim(ho2_goodbye, s8, file, "resources/gestures/wave1.json").
 text(ho2_goodbye,  s8, "Tot dan %first_name%, doei doei \pau=300\ ").
 next(ho2_goodbye,  s8, "true",  s9).
 
 state(ho2_goodbye, s9, say).
-go_to_base_posture(ho2_goodbye, s9).
+go_to_posture(ho2_goodbye, s9).

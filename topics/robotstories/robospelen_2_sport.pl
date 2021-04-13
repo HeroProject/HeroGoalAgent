@@ -43,8 +43,8 @@ text(robospelen_2_sport, s3nee3, "Misschien zit mijn oormicrofoontje verkeerd.")
 next(robospelen_2_sport, s3nee3, "true", s3nee4).
 
 state(robospelen_2_sport, s3nee4, say).
-audio(robospelen_2_sport, s3nee4, server, "resources/sounds/hero_mic_test.wav").
-play_motion_file(robospelen_2_sport, s3nee4, "resources/gestures/gesture_robospelen_2_sport_s3nee4_2.json").
+audio(robospelen_2_sport, s3nee4, file, "resources/sounds/hero_mic_test.wav").
+anim(robospelen_2_sport, s3nee4, file, "resources/gestures/gesture_robospelen_2_sport_s3nee4_2.json").
 next(robospelen_2_sport, s3nee4, "true", s3nee5).
 
 state(robospelen_2_sport, s3nee5, say).

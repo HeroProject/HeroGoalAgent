@@ -52,7 +52,7 @@ text(robot_willen_zijn, s6vertellen1, "Hoera! Wacht even hoor.").
 next(robot_willen_zijn, s6vertellen1, "true", s6vertellen2).
 
 state(robot_willen_zijn, s6vertellen2, say).
-audio(robot_willen_zijn, s6vertellen2, server, "resources/sounds/nog_uit_te_zoeken_laadgeluid.wav").
+audio(robot_willen_zijn, s6vertellen2, file, "resources/sounds/nog_uit_te_zoeken_laadgeluid.wav").
 next(robot_willen_zijn, s6vertellen2, "true", s6vertellen3).
 
 state(robot_willen_zijn, s6vertellen3, say).

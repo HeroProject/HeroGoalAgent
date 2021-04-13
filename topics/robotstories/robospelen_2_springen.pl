@@ -31,7 +31,7 @@ text(robospelen_2_springen, s6, "Kijk, zo ziet het er uit als ik probeer te spri
 next(robospelen_2_springen, s6, "true", s7).
 
 state(robospelen_2_springen, s7, say).
-play_motion_file(robospelen_2_springen, s7, "resources/gestures/gesture_robospelen_2_springen_s7_7.json").
+anim(robospelen_2_springen, s7, file, "resources/gestures/gesture_robospelen_2_springen_s7_7.json").
 next(robospelen_2_springen, s7, "true", s8).
 
 state(robospelen_2_springen, s8, say).

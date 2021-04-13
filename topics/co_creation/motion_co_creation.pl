@@ -31,17 +31,17 @@ next(co_motion, s4, "fail", sdownload1).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, sdownload1, say).
 text(co_motion,  sdownload1, "Ik ben nu twee bewegingen aan het downloaden.").
-start_led_anim(co_motion, sdownload1, "eyes", "rotate", ["purple"], 500).
+leds(co_motion, sdownload1, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_motion, sdownload1, [waitTimer=1500]).
 next(co_motion,  sdownload1, "true",  sdownload2).
 
 state(co_motion, sdownload2, say).
 text(co_motion,  sdownload2, "Klaar. Dit is optie 1").
-stop_led_anim(co_motion, sdownload2).
+leds(co_motion, sdownload2, reset).
 next(co_motion,  sdownload2, "true",  sdownload3).
 
 state(co_motion, sdownload3, say).
-play_motion_option(co_motion, sdownload3, 1).
+anim(co_motion, sdownload3, option, 1).
 next(co_motion, sdownload3, "true", sdownload4).
 
 state(co_motion, sdownload4, say).
@@ -49,14 +49,14 @@ text(co_motion,  sdownload4, "En dit is optie 2").
 next(co_motion,  sdownload4, "true",  sdownload5).
 
 state(co_motion, sdownload5, say).
-play_motion_option(co_motion, sdownload5, 2).
+anim(co_motion, sdownload5, option, 2).
 next(co_motion, sdownload5, "true", sdownload6).
 
 state(co_motion, sdownload6, question).
 stateConfig(co_motion, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
 branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_motion, sdownload7]]]).
 text(co_motion, sdownload6, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
-go_to_base_posture(co_motion, sdownload6).
+go_to_posture(co_motion, sdownload6).
 next(co_motion, sdownload6, "success", sdownload7).
 next(co_motion, sdownload6, "fail", sdownload7f).
 
@@ -86,19 +86,19 @@ save_motion_option(co_motion, sdownload8robot, 1).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, smaken1, say).
 text(co_motion,  smaken1, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
-leds(co_motion,  smaken1, ["RightFootLeds"], ["groen"]).
+leds(co_motion,  smaken1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_motion, smaken1, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_motion,  smaken1, "true",  smaken2).
 
 state(co_motion, smaken2, say).
 text(co_motion,  smaken2, "Pak mijn armen maar vast.").
-leds(co_motion,  smaken2, ["RightFootLeds"], ["wit"]).
+leds(co_motion,  smaken2, direct, ["RightFootLeds"], ["wit"]).
 stateConfig(co_motion, smaken2, [noAnimation="true"]).
 set_stiffness(co_motion, smaken2, ['RArm', 'LArm'], 0).
 next(co_motion,  smaken2, "true",  smaken3).
 
 state(co_motion, smaken3, say).
-%audio(co_motion, smaken3, server, "resources/sounds/ready_to_record_gesture.wav").
+%audio(co_motion, smaken3, file, "resources/sounds/ready_to_record_gesture.wav").
 text(co_motion, smaken3, "3. 2. 1").
 next(co_motion,  smaken3, "true",  smaken4).
 
@@ -118,5 +118,5 @@ stateConfig(co_motion, smaken6, [noAnimation="true"]).
 next(co_motion,  smaken6, "true",  smaken7).
 
 state(co_motion, smaken7, say).
-go_to_base_posture(co_motion, smaken7).
+go_to_posture(co_motion, smaken7).
 text(co_motion,  smaken7, "Het is heel mooi geworden.").

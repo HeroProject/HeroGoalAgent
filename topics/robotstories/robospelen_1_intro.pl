@@ -57,12 +57,12 @@ text(robospelen_1_intro, s14, "Zoals wie het hoogst kan springen.").
 next(robospelen_1_intro, s14, "true", s15).
 
 state(robospelen_1_intro, s15, say).
-anim(robospelen_1_intro, s15, "jump_attempt/behavior_1").
+anim(robospelen_1_intro, s15, onRobot, "jump_attempt/behavior_1").
 next(robospelen_1_intro, s15, "true", s16).
 
 state(robospelen_1_intro, s16, say).
 text(robospelen_1_intro, s16, "En wie het best origami kan vouwen").
-anim(robospelen_1_intro, s16, "wiggle_fingers/behavior_1").
+anim(robospelen_1_intro, s16, onRobot, "wiggle_fingers/behavior_1").
 next(robospelen_1_intro, s16, "true", s17).
 
 state(robospelen_1_intro, s17, say).
@@ -74,7 +74,7 @@ text(robospelen_1_intro, s18, "En wie er kan voetballen.").
 next(robospelen_1_intro, s18, "true", s19).
 
 state(robospelen_1_intro, s19, say).
-%play_motion_file(robospelen_1_intro, s19, "resources/gestures/gesture_robospelen_1_intro_s19_19.json").
+%anim(robospelen_1_intro, s19, file, "resources/gestures/gesture_robospelen_1_intro_s19_19.json").
 next(robospelen_1_intro, s19, "true", s20).
 
 state(robospelen_1_intro, s20, say).

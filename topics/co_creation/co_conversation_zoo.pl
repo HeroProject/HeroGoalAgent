@@ -21,12 +21,12 @@ next(co_zoo_intro,  s3, "true",  s4).
 
 state(co_zoo_intro, s4, say).
 text(co_zoo_intro,  s4, "Het was een fijne zonnige dag.").
-leds(co_zoo_intro,  s4, ['FaceLeds', 'ChestLeds'], ['Yellow', 'Yellow']).
+leds(co_zoo_intro,  s4, direct, ['FaceLeds', 'ChestLeds'], ['Yellow', 'Yellow']).
 next(co_zoo_intro,  s4, "true",  s5).
 
 state(co_zoo_intro, s5, say).
 text(co_zoo_intro,  s5, "We kregen een rondleiding van de dierenverzorger.").
-leds(co_zoo_intro,  s5, ['FaceLeds', 'ChestLeds'], ['White', 'White']).
+leds(co_zoo_intro,  s5, direct, ['FaceLeds', 'ChestLeds'], ['White', 'White']).
 next(co_zoo_intro,  s5, "true",  s6).
 
 state(co_zoo_intro, s6, say).
@@ -106,19 +106,19 @@ next(co_zoo_elephant, s8, "fail", s8downloaden).
 %%%%%%%%%%%%%% Create gesture %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_elephant, s8maken, say).
 text(co_zoo_elephant,  s8maken, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
-leds(co_zoo_elephant,  s8maken, ["RightFootLeds"], ["groen"]).
+leds(co_zoo_elephant,  s8maken, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_zoo_elephant, s8maken, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_zoo_elephant,  s8maken, "true",  s8maken2).
 
 state(co_zoo_elephant, s8maken2, say).
 text(co_zoo_elephant,  s8maken2, "Pak mijn armen maar vast.").
-leds(co_zoo_elephant,  s8maken2, ["RightFootLeds"], ["wit"]).
+leds(co_zoo_elephant,  s8maken2, direct, ["RightFootLeds"], ["wit"]).
 stateConfig(co_zoo_elephant, s8maken2, [noAnimation="true"]).
 set_stiffness(co_zoo_elephant, s8maken2, ['RArm', 'LArm'], 0).
 next(co_zoo_elephant,  s8maken2, "true",  s9maken).
 
 state(co_zoo_elephant, s9maken, say).
-audio(co_zoo_elephant, s9maken, server, "resources/sounds/ready_to_record_gesture.wav").
+audio(co_zoo_elephant, s9maken, file, "resources/sounds/ready_to_record_gesture.wav").
 next(co_zoo_elephant,  s9maken, "true",  s10maken).
 
 state(co_zoo_elephant, s10maken, say).
@@ -143,17 +143,17 @@ next(co_zoo_elephant,  s13maken, "true",  s14).
 %%%%%%%%%%%%%% Download gesture %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_elephant, s8downloaden, say).
 text(co_zoo_elephant,  s8downloaden, "Ik ben nu twee gebaren aan het downloaden.").
-start_led_anim(co_zoo_elephant, s8downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_elephant, s8downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_elephant, s8downloaden, [waitTimer=1500]).
 next(co_zoo_elephant,  s8downloaden, "true",  s9downloaden).
 
 state(co_zoo_elephant, s9downloaden, say).
 text(co_zoo_elephant,  s9downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_zoo_elephant, s9downloaden).
+leds(co_zoo_elephant, s9downloaden, reset).
 next(co_zoo_elephant,  s9downloaden, "true",  s9downloadeno1).
 
 state(co_zoo_elephant, s9downloadeno1, say).
-play_motion_file(co_zoo_elephant, s9downloadeno1, "resources/gestures/elephant1.xml").
+anim(co_zoo_elephant, s9downloadeno1, file, "resources/gestures/elephant1.xml").
 next(co_zoo_elephant, s9downloadeno1, "true", s10downloaden).
 
 state(co_zoo_elephant, s10downloaden, say).
@@ -161,7 +161,7 @@ text(co_zoo_elephant,  s10downloaden, "En dit is optie 2").
 next(co_zoo_elephant,  s10downloaden, "true",  s10downloadeno2).
 
 state(co_zoo_elephant, s10downloadeno2, say).
-play_motion_file(co_zoo_elephant, s10downloadeno2, "resources/gestures/elephant2.xml").
+anim(co_zoo_elephant, s10downloadeno2, file, "resources/gestures/elephant2.xml").
 next(co_zoo_elephant, s10downloadeno2, "true", s11downloaden).
 
 state(co_zoo_elephant, s11downloaden, question).
@@ -224,8 +224,8 @@ next(co_zoo_elephant, s20, "downloaden", s20downloaden).
 next(co_zoo_elephant, s20, "fail", s20downloaden).
 
 state(co_zoo_elephant, s20maken, say).
-play_motion(co_zoo_elephant, s20maken, co_zoo_elephant_s12maken).
-audio(co_zoo_elephant, s20maken, server, "resources/sounds/elephant.wav").
+anim(co_zoo_elephant, s20maken, id, co_zoo_elephant_s12maken).
+audio(co_zoo_elephant, s20maken, file, "resources/sounds/elephant.wav").
 next(co_zoo_elephant, s20maken, "true", s21).
 
 state(co_zoo_elephant, s20downloaden, branchingPoint).
@@ -235,13 +235,13 @@ next(co_zoo_elephant, s20downloaden, "robot kiest", s20eerste).
 next(co_zoo_elephant, s20downloaden, "fail", s20eerste).
 
 state(co_zoo_elephant, s20eerste, say).
-play_motion_file(co_zoo_elephant, s20eerste, "resources/gestures/elephant1.xml").
-audio(co_zoo_elephant, s20eerste, server, "resources/sounds/elephant.wav").
+anim(co_zoo_elephant, s20eerste, file, "resources/gestures/elephant1.xml").
+audio(co_zoo_elephant, s20eerste, file, "resources/sounds/elephant.wav").
 next(co_zoo_elephant, s20eerste, "true", s21).
 
 state(co_zoo_elephant, s20tweede, say).
-play_motion_file(co_zoo_elephant, s20tweede, "resources/gestures/elephant2.xml").
-audio(co_zoo_elephant, s20tweede, server, "resources/sounds/elephant.wav").
+anim(co_zoo_elephant, s20tweede, file, "resources/gestures/elephant2.xml").
+audio(co_zoo_elephant, s20tweede, file, "resources/sounds/elephant.wav").
 next(co_zoo_elephant, s20tweede, "true", s21).
 
 state(co_zoo_elephant, s21, say).
@@ -277,17 +277,17 @@ next(co_zoo_elephant_baseline,  s5, "true",  s6).
 
 state(co_zoo_elephant_baseline, s6, say).
 text(co_zoo_elephant_baseline,  s6, "Ik ben nu twee gebaren aan het downloaden.").
-start_led_anim(co_zoo_elephant_baseline, s6, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_elephant_baseline, s6, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_elephant_baseline, s6, [waitTimer=1500]).
 next(co_zoo_elephant_baseline,  s6, "true",  s7).
 
 state(co_zoo_elephant_baseline, s7, say).
 text(co_zoo_elephant_baseline,  s7, "Klaar. Dit is optie 1").
-stop_led_anim(co_zoo_elephant_baseline, s7).
+leds(co_zoo_elephant_baseline, s7, reset).
 next(co_zoo_elephant_baseline,  s7, "true",  s8).
 
 state(co_zoo_elephant_baseline, s8, say).
-play_motion_file(co_zoo_elephant_baseline, s8, "resources/gestures/elephant1.xml").
+anim(co_zoo_elephant_baseline, s8, file, "resources/gestures/elephant1.xml").
 next(co_zoo_elephant_baseline, s8, "true", s9).
 
 state(co_zoo_elephant_baseline, s9, say).
@@ -295,7 +295,7 @@ text(co_zoo_elephant_baseline,  s9, "En dit is optie 2").
 next(co_zoo_elephant_baseline,  s9, "true",  s10).
 
 state(co_zoo_elephant_baseline, s10, say).
-play_motion_file(co_zoo_elephant_baseline, s10, "resources/gestures/elephant2.xml").
+anim(co_zoo_elephant_baseline, s10, file, "resources/gestures/elephant2.xml").
 next(co_zoo_elephant_baseline, s10, "true", s11).
 
 state(co_zoo_elephant_baseline, s11, question).
@@ -343,13 +343,13 @@ next(co_zoo_elephant_baseline, s20, "tweede", s21tweede).
 next(co_zoo_elephant_baseline, s20, "fail", s21eerste).
 
 state(co_zoo_elephant_baseline, s21eerste, say).
-play_motion_file(co_zoo_elephant_baseline, s21eerste, "resources/gestures/elephant1.xml").
-audio(co_zoo_elephant_baseline, s21eerste, server, "resources/sounds/elephant.wav").
+anim(co_zoo_elephant_baseline, s21eerste, file, "resources/gestures/elephant1.xml").
+audio(co_zoo_elephant_baseline, s21eerste, file, "resources/sounds/elephant.wav").
 next(co_zoo_elephant_baseline, s21eerste, "true", s22).
 
 state(co_zoo_elephant_baseline, s21tweede, say).
-play_motion_file(co_zoo_elephant_baseline, s21tweede, "resources/gestures/elephant2.xml").
-audio(co_zoo_elephant_baseline, s21tweede, server, "resources/sounds/elephant.wav").
+anim(co_zoo_elephant_baseline, s21tweede, file, "resources/gestures/elephant2.xml").
+audio(co_zoo_elephant_baseline, s21tweede, file, "resources/sounds/elephant.wav").
 next(co_zoo_elephant_baseline, s21tweede, "true", s22).
 
 state(co_zoo_elephant_baseline, s22, say).
@@ -429,13 +429,13 @@ next(co_zoo_lion,  s10maken, "true",  s16).
 %%%%%%%%%%%%%% Download sound %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_lion, s8downloaden, say).
 text(co_zoo_lion,  s8downloaden, "Ik ben nu twee geluiden aan het downloaden.").
-start_led_anim(co_zoo_lion, s8downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_lion, s8downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_lion, s8downloaden, [waitTimer=1500]).
 next(co_zoo_lion,  s8downloaden, "true",  s9downloaden).
 
 state(co_zoo_lion, s9downloaden, branchingPoint).
 stateConfig(co_zoo_lion, s9downloaden, [branchDecider=entity, branchSource=co_zoo_lion_s2]).
-stop_led_anim(co_zoo_lion, s9downloaden).
+leds(co_zoo_lion, s9downloaden, reset).
 next(co_zoo_lion, s9downloaden, "leeuw", s10leeuw).
 next(co_zoo_lion, s9downloaden, "tijger", s10tijger).
 next(co_zoo_lion, s9downloaden, "fail", s10leeuw).
@@ -445,7 +445,7 @@ text(co_zoo_lion,  s10leeuw, "Klaar. Dit is de eerste").
 next(co_zoo_lion,  s10leeuw, "true", s10leeuwo1).
 
 state(co_zoo_lion, s10leeuwo1, say).
-audio(co_zoo_lion, s10leeuwo1, server, "resources/sounds/lion1.wav").
+audio(co_zoo_lion, s10leeuwo1, file, "resources/sounds/lion1.wav").
 next(co_zoo_lion,  s10leeuwo1, "true", s11leeuw).
 
 state(co_zoo_lion, s11leeuw, say).
@@ -453,7 +453,7 @@ text(co_zoo_lion,  s11leeuw, "En dit is de tweede").
 next(co_zoo_lion,  s11leeuw, "true", s11leeuwo2).
 
 state(co_zoo_lion, s11leeuwo2, say).
-audio(co_zoo_lion, s11leeuwo2, server, "resources/sounds/lion2.wav").
+audio(co_zoo_lion, s11leeuwo2, file, "resources/sounds/lion2.wav").
 next(co_zoo_lion,  s11leeuwo2, "true", s12downloaden).
 
 state(co_zoo_lion, s10tijger, say).
@@ -461,7 +461,7 @@ text(co_zoo_lion,  s10tijger, "Klaar. Dit is de eerste").
 next(co_zoo_lion,  s10tijger, "true", s10tijgero1).
 
 state(co_zoo_lion, s10tijgero1, say).
-audio(co_zoo_lion, s10tijgero1, server, "resources/sounds/tiger1.wav").
+audio(co_zoo_lion, s10tijgero1, file, "resources/sounds/tiger1.wav").
 next(co_zoo_lion,  s10tijgero1, "true", s11tijger).
 
 state(co_zoo_lion, s11tijger, say).
@@ -469,7 +469,7 @@ text(co_zoo_lion,  s11tijger, "En dit is de tweede").
 next(co_zoo_lion,  s11tijger, "true", s11tijgero2).
 
 state(co_zoo_lion, s11tijgero2, say).
-audio(co_zoo_lion, s11tijgero2, server, "resources/sounds/tiger2.wav").
+audio(co_zoo_lion, s11tijgero2, file, "resources/sounds/tiger2.wav").
 next(co_zoo_lion,  s11tijgero2, "true", s12downloaden).
 
 state(co_zoo_lion, s12downloaden, question).
@@ -524,7 +524,7 @@ next(co_zoo_lion, s20, "downloaden", s20downloaden).
 next(co_zoo_lion, s20, "fail", s20downloaden).
 
 state(co_zoo_lion, s20maken, say).
-audio(co_zoo_lion, s20maken, recorded, [co_zoo_lion, s9maken]).
+audio(co_zoo_lion, s20maken, id, co_zoo_lion_s9maken).
 next(co_zoo_lion, s20maken, "true", s21).
 
 state(co_zoo_lion, s20downloaden, branchingPoint).
@@ -546,19 +546,19 @@ next(co_zoo_lion, s20tweede, "tijger", s20tijgertweede).
 next(co_zoo_lion, s20tweede, "fail", s20leeuwtweede).
 
 state(co_zoo_lion, s20leeuweerste, say).
-audio(co_zoo_lion, s20leeuweerste, server, "resources/sounds/lion1.wav").
+audio(co_zoo_lion, s20leeuweerste, file, "resources/sounds/lion1.wav").
 next(co_zoo_lion, s20leeuweerste, "true", s21).
 
 state(co_zoo_lion, s20leeuwtweede, say).
-audio(co_zoo_lion, s20leeuwtweede, server, "resources/sounds/lion2.wav").
+audio(co_zoo_lion, s20leeuwtweede, file, "resources/sounds/lion2.wav").
 next(co_zoo_lion, s20leeuwtweede, "true", s21).
 
 state(co_zoo_lion, s20tijgereerste, say).
-audio(co_zoo_lion, s20tijgereerste, server, "resources/sounds/tiger1.wav").
+audio(co_zoo_lion, s20tijgereerste, file, "resources/sounds/tiger1.wav").
 next(co_zoo_lion, s20tijgereerste, "true", s21).
 
 state(co_zoo_lion, s20tijgertweede, say).
-audio(co_zoo_lion, s20tijgertweede, server, "resources/sounds/tiger2.wav").
+audio(co_zoo_lion, s20tijgertweede, file, "resources/sounds/tiger2.wav").
 next(co_zoo_lion, s20tijgertweede, "true", s21).
 
 state(co_zoo_lion, s21, say).
@@ -611,13 +611,13 @@ next(co_zoo_lion_baseline,  s5, "true",  s6).
 
 state(co_zoo_lion_baseline, s6, say).
 text(co_zoo_lion_baseline,  s6, "Ik ben nu twee geluiden aan het downloaden.").
-start_led_anim(co_zoo_lion_baseline, s6, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_lion_baseline, s6, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_lion_baseline, s6, [waitTimer=1500]).
 next(co_zoo_lion_baseline,  s6, "true",  s7).
 
 state(co_zoo_lion_baseline, s7, branchingPoint).
 stateConfig(co_zoo_lion_baseline, s7, [branchDecider=entity, branchSource=co_zoo_lion_baseline_s2]).
-stop_led_anim(co_zoo_lion_baseline, s7).
+leds(co_zoo_lion_baseline, s7, reset).
 next(co_zoo_lion_baseline, s7, "leeuw", s10leeuw).
 next(co_zoo_lion_baseline, s7, "tijger", s10tijger).
 next(co_zoo_lion_baseline, s7, "fail", s10leeuw).
@@ -627,7 +627,7 @@ text(co_zoo_lion_baseline,  s10leeuw, "Klaar. Dit is de eerste").
 next(co_zoo_lion_baseline,  s10leeuw, "true", s10leeuwo1).
 
 state(co_zoo_lion_baseline, s10leeuwo1, say).
-audio(co_zoo_lion_baseline, s10leeuwo1, server, "resources/sounds/lion1.wav").
+audio(co_zoo_lion_baseline, s10leeuwo1, file, "resources/sounds/lion1.wav").
 next(co_zoo_lion_baseline,  s10leeuwo1, "true", s11leeuw).
 
 state(co_zoo_lion_baseline, s11leeuw, say).
@@ -635,7 +635,7 @@ text(co_zoo_lion_baseline,  s11leeuw, "En dit is de tweede").
 next(co_zoo_lion_baseline,  s11leeuw, "true", s11leeuwo2).
 
 state(co_zoo_lion_baseline, s11leeuwo2, say).
-audio(co_zoo_lion_baseline, s11leeuwo2, server, "resources/sounds/lion2.wav").
+audio(co_zoo_lion_baseline, s11leeuwo2, file, "resources/sounds/lion2.wav").
 next(co_zoo_lion_baseline,  s11leeuwo2, "true", s12).
 
 state(co_zoo_lion_baseline, s10tijger, say).
@@ -643,7 +643,7 @@ text(co_zoo_lion_baseline,  s10tijger, "Klaar. Dit is de eerste").
 next(co_zoo_lion_baseline,  s10tijger, "true", s10tijgero1).
 
 state(co_zoo_lion_baseline, s10tijgero1, say).
-audio(co_zoo_lion_baseline, s10tijgero1, server, "resources/sounds/tiger1.wav").
+audio(co_zoo_lion_baseline, s10tijgero1, file, "resources/sounds/tiger1.wav").
 next(co_zoo_lion_baseline,  s10tijgero1, "true", s11tijger).
 
 state(co_zoo_lion_baseline, s11tijger, say).
@@ -651,7 +651,7 @@ text(co_zoo_lion_baseline,  s11tijger, "En dit is de tweede").
 next(co_zoo_lion_baseline,  s11tijger, "true", s11tijgero2).
 
 state(co_zoo_lion_baseline, s11tijgero2, say).
-audio(co_zoo_lion_baseline, s11tijgero2, server, "resources/sounds/tiger2.wav").
+audio(co_zoo_lion_baseline, s11tijgero2, file, "resources/sounds/tiger2.wav").
 next(co_zoo_lion_baseline,  s11tijgero2, "true", s12).
 
 state(co_zoo_lion_baseline, s12, question).
@@ -697,11 +697,11 @@ next(co_zoo_lion_baseline, s20leeuw, "tweede", s20leeuwtweede).
 next(co_zoo_lion_baseline, s20leeuw, "fail", s20leeuweerste).
 
 state(co_zoo_lion_baseline, s20leeuweerste, say).
-audio(co_zoo_lion_baseline, s20leeuweerste, server, "resources/sounds/lion1.wav").
+audio(co_zoo_lion_baseline, s20leeuweerste, file, "resources/sounds/lion1.wav").
 next(co_zoo_lion_baseline, s20leeuweerste, "true", s21).
 
 state(co_zoo_lion_baseline, s20leeuwtweede, say).
-audio(co_zoo_lion_baseline, s20leeuwtweede, server, "resources/sounds/lion2.wav").
+audio(co_zoo_lion_baseline, s20leeuwtweede, file, "resources/sounds/lion2.wav").
 next(co_zoo_lion_baseline, s20leeuwtweede, "true", s21).
 
 state(co_zoo_lion_baseline, s20tijger, branchingPoint).
@@ -710,11 +710,11 @@ next(co_zoo_lion_baseline, s20tijger, "tweede", s20tijgertweede).
 next(co_zoo_lion_baseline, s20tijger, "fail", s20tijgereerste).
 
 state(co_zoo_lion_baseline, s20tijgereerste, say).
-audio(co_zoo_lion_baseline, s20tijgereerste, server, "resources/sounds/tiger1.wav").
+audio(co_zoo_lion_baseline, s20tijgereerste, file, "resources/sounds/tiger1.wav").
 next(co_zoo_lion_baseline, s20tijgereerste, "true", s21).
 
 state(co_zoo_lion_baseline, s20tijgertweede, say).
-audio(co_zoo_lion_baseline, s20tijgertweede, server, "resources/sounds/tiger2.wav").
+audio(co_zoo_lion_baseline, s20tijgertweede, file, "resources/sounds/tiger2.wav").
 next(co_zoo_lion_baseline, s20tijgertweede, "true", s21).
 
 state(co_zoo_lion_baseline, s21, say).
@@ -814,27 +814,27 @@ prepare_led_anim(co_zoo_dolphin, s14maken).
 %%%%%%%%%%%%%% Download light animation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_zoo_dolphin, s14downloaden, say).
 text(co_zoo_dolphin,  s14downloaden, "Ik ben nu twee licht animaties aan het downloaden.").
-start_led_anim(co_zoo_dolphin, s14downloaden, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_dolphin, s14downloaden, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_dolphin, s14downloaden, [waitTimer=1500]).
 next(co_zoo_dolphin,  s14downloaden, "true",  s15downloaden).
 
 state(co_zoo_dolphin, s15downloaden, say).
 text(co_zoo_dolphin,  s15downloaden, "Klaar. Dit is optie 1").
-stop_led_anim(co_zoo_dolphin, s15downloaden).
+leds(co_zoo_dolphin, s15downloaden, reset).
 next(co_zoo_dolphin,  s15downloaden, "true",  s15downloadeno1).
 
 state(co_zoo_dolphin, s15downloadeno1, say).
-start_led_anim(co_zoo_dolphin, s15downloadeno1, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
+leds(co_zoo_dolphin, s15downloadeno1, direct, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
 stateConfig(co_zoo_dolphin, s15downloadeno1, [waitTimer=3000]).
 next(co_zoo_dolphin, s15downloadeno1, "true", s16downloaden).
 
 state(co_zoo_dolphin, s16downloaden, say).
 text(co_zoo_dolphin,  s16downloaden, "En dit is optie 2").
-stop_led_anim(co_zoo_dolphin, s16downloaden).
+leds(co_zoo_dolphin, s16downloaden, reset).
 next(co_zoo_dolphin,  s16downloaden, "true",  s16downloadeno2).
 
 state(co_zoo_dolphin, s16downloadeno2, say).
-start_led_anim(co_zoo_dolphin, s16downloadeno2, "all", "alternate", ["blauw", "oranje"], 500).
+leds(co_zoo_dolphin, s16downloadeno2, direct, "all", "alternate", ["blauw", "oranje"], 500).
 stateConfig(co_zoo_dolphin, s16downloadeno2, [waitTimer=3000]).
 next(co_zoo_dolphin, s16downloadeno2, "true", s17downloaden).
 
@@ -842,7 +842,7 @@ state(co_zoo_dolphin, s17downloaden, question).
 stateConfig(co_zoo_dolphin, s17downloaden, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
 branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_zoo_dolphin, s18downloaden], [co_zoo_dolphin_showtime, s7downloaden]]]).
 text(co_zoo_dolphin, s17downloaden, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
-stop_led_anim(co_zoo_dolphin, s17downloaden).
+leds(co_zoo_dolphin, s17downloaden, reset).
 next(co_zoo_dolphin, s17downloaden, "success", s18downloaden).
 next(co_zoo_dolphin, s17downloaden, "fail", s17downloadenf).
 
@@ -891,8 +891,8 @@ next(co_zoo_dolphin_showtime, s6, "downloaden", s7downloaden).
 next(co_zoo_dolphin_showtime, s6, "fail", s7downloaden).
 
 state(co_zoo_dolphin_showtime, s7maken, say).
-audio(co_zoo_dolphin_showtime, s7maken, server, "resources/sounds/dolphin_show.wav").
-play_led_anim(co_zoo_dolphin_showtime,  s7maken, co_zoo_dolphin_s14maken).
+audio(co_zoo_dolphin_showtime, s7maken, file, "resources/sounds/dolphin_show.wav").
+leds(co_zoo_dolphin_showtime,  s7maken, id, co_zoo_dolphin_s14maken).
 next(co_zoo_dolphin_showtime,  s7maken, "true",  s8).
 
 state(co_zoo_dolphin_showtime, s7downloaden, branchingPoint).
@@ -902,18 +902,18 @@ next(co_zoo_dolphin_showtime, s7downloaden, "robot kiest", s7tweede).
 next(co_zoo_dolphin_showtime, s7downloaden, "fail", s7tweede).
 
 state(co_zoo_dolphin_showtime, s7eerste, say).
-audio(co_zoo_dolphin_showtime, s7eerste, server, "resources/sounds/dolphin_show.wav").
-start_led_anim(co_zoo_dolphin_showtime, s7eerste, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
+audio(co_zoo_dolphin_showtime, s7eerste, file, "resources/sounds/dolphin_show.wav").
+leds(co_zoo_dolphin_showtime, s7eerste, direct, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
 next(co_zoo_dolphin_showtime,  s7eerste, "true",  s8).
 
 state(co_zoo_dolphin_showtime, s7tweede, say).
-audio(co_zoo_dolphin_showtime, s7tweede, server, "resources/sounds/dolphin_show.wav").
-start_led_anim(co_zoo_dolphin_showtime, s7tweede, "all", "alternate", ["blauw", "oranje"], 500).
+audio(co_zoo_dolphin_showtime, s7tweede, file, "resources/sounds/dolphin_show.wav").
+leds(co_zoo_dolphin_showtime, s7tweede, direct, "all", "alternate", ["blauw", "oranje"], 500).
 next(co_zoo_dolphin_showtime,  s7tweede, "true",  s8).
 
 state(co_zoo_dolphin_showtime, s8, say).
 text(co_zoo_dolphin_showtime,  s8, "Dat was echt fantastisch.").
-stop_led_anim(co_zoo_dolphin_showtime, s8).
+leds(co_zoo_dolphin_showtime, s8, reset).
 next(co_zoo_dolphin_showtime,  s8, "true", s9).
 
 state(co_zoo_dolphin_showtime, s9, say).
@@ -983,34 +983,34 @@ next(co_zoo_dolphin_baseline,  s10, "true",  s11).
 
 state(co_zoo_dolphin_baseline, s11, say).
 text(co_zoo_dolphin_baseline,  s11, "Ik ben nu twee licht animaties aan het downloaden.").
-start_led_anim(co_zoo_dolphin_baseline, s11, "eyes", "rotate", ["purple"], 500).
+leds(co_zoo_dolphin_baseline, s11, direct, "eyes", "rotate", ["purple"], 500).
 stateConfig(co_zoo_dolphin_baseline, s11, [waitTimer=1500]).
 next(co_zoo_dolphin_baseline,  s11, "true",  s12).
 
 state(co_zoo_dolphin_baseline, s12, say).
 text(co_zoo_dolphin_baseline,  s12, "Klaar. Dit is optie 1").
-stop_led_anim(co_zoo_dolphin_baseline, s12).
+leds(co_zoo_dolphin_baseline, s12, reset).
 next(co_zoo_dolphin_baseline,  s12, "true",  s13).
 
 state(co_zoo_dolphin_baseline, s13, say).
-start_led_anim(co_zoo_dolphin_baseline, s13, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
+leds(co_zoo_dolphin_baseline, s13, direct, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
 stateConfig(co_zoo_dolphin_baseline, s13, [waitTimer=3000]).
 next(co_zoo_dolphin_baseline, s13, "true", s14).
 
 state(co_zoo_dolphin_baseline, s14, say).
 text(co_zoo_dolphin_baseline,  s14, "En dit is optie 2").
-stop_led_anim(co_zoo_dolphin_baseline, s14).
+leds(co_zoo_dolphin_baseline, s14, reset).
 next(co_zoo_dolphin_baseline,  s14, "true",  s15).
 
 state(co_zoo_dolphin_baseline, s15, say).
-start_led_anim(co_zoo_dolphin_baseline, s15, "all", "alternate", ["blauw", "oranje"], 500).
+leds(co_zoo_dolphin_baseline, s15, direct, "all", "alternate", ["blauw", "oranje"], 500).
 stateConfig(co_zoo_dolphin_baseline, s15, [waitTimer=3000]).
 next(co_zoo_dolphin_baseline, s15, "true", s16).
 
 state(co_zoo_dolphin_baseline, s16, question).
 stateConfig(co_zoo_dolphin_baseline, s16, [type = branch, context = "involvement_which_option", options = ['eerste', 'tweede'], defaultAnswer='tweede',
 branchIntents=['eerste' = 'involvement_option_one_baseline', 'tweede' = 'involvement_option_two_baseline'], branchingPoints=[[co_zoo_dolphin_baseline, s23]]]).
-stop_led_anim(co_zoo_dolphin_baseline, s16).
+leds(co_zoo_dolphin_baseline, s16, reset).
 text(co_zoo_dolphin_baseline, s16, "Wil je de eerste of de tweede licht show?").
 next(co_zoo_dolphin_baseline, s16, "success", s17).
 next(co_zoo_dolphin_baseline, s16, "fail", s16f).
@@ -1049,18 +1049,18 @@ next(co_zoo_dolphin_baseline, s23, "tweede", s24tweede).
 next(co_zoo_dolphin_baseline, s23, "fail", s24tweede).
 
 state(co_zoo_dolphin_baseline, s24eerste, say).
-audio(co_zoo_dolphin_baseline, s24eerste, server, "resources/sounds/dolphin_show.wav").
-start_led_anim(co_zoo_dolphin_baseline, s24eerste, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
+audio(co_zoo_dolphin_baseline, s24eerste, file, "resources/sounds/dolphin_show.wav").
+leds(co_zoo_dolphin_baseline, s24eerste, direct, "all", "blink", ["rood", "oranje", "geel", "groen", "blauw", "paars"], 500).
 next(co_zoo_dolphin_baseline,  s24eerste, "true",  s25).
 
 state(co_zoo_dolphin_baseline, s24tweede, say).
-audio(co_zoo_dolphin_baseline, s24tweede, server, "resources/sounds/dolphin_show.wav").
-start_led_anim(co_zoo_dolphin_baseline, s24tweede, "all", "alternate", ["blauw", "oranje"], 500).
+audio(co_zoo_dolphin_baseline, s24tweede, file, "resources/sounds/dolphin_show.wav").
+leds(co_zoo_dolphin_baseline, s24tweede, direct, "all", "alternate", ["blauw", "oranje"], 500).
 next(co_zoo_dolphin_baseline,  s24tweede, "true",  s25).
 
 state(co_zoo_dolphin_baseline, s25, say).
 text(co_zoo_dolphin_baseline,  s25, "Dat was echt fantastisch.").
-stop_led_anim(co_zoo_dolphin_baseline, s25).
+leds(co_zoo_dolphin_baseline, s25, reset).
 next(co_zoo_dolphin_baseline,  s25, "true", s26).
 
 state(co_zoo_dolphin_baseline, s26, say).

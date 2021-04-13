@@ -49,12 +49,12 @@ stateConfig(ho3_greeting, s8graafmachine, [loadUserModel="true"]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_koelkast, s1, say).
 text(ho3_koelkast,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
-leds(ho3_koelkast,  s1, ["RightFootLeds"], ["groen"]).
+leds(ho3_koelkast,  s1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_koelkast, s1, [next='RightBumperPressed']).
 next(ho3_koelkast,  s1, "true",  s2).
 
 state(ho3_koelkast, s2, say).
-leds(ho3_koelkast,  s2, ["RightFootLeds"], ["wit"]).
+leds(ho3_koelkast,  s2, direct, ["RightFootLeds"], ["wit"]).
 text(ho3_koelkast, s2, "Graag vertel ik jou een verhaal van de tijd toen ik een koelkast was.").
 next(ho3_koelkast, s2, "true", s3).
 
@@ -68,13 +68,13 @@ next(ho3_koelkast, s4, "true", s5).
 
 state(ho3_koelkast, s5, say).
 text(ho3_koelkast, s5, "en met mevrouw Kaas heb ik vroeger nog veel tennis gespeeld.").
-play_motion(ho3_koelkast, s5, motion_tennis).
-audio(ho3_koelkast, s5, server, "resources/sounds/tennis.wav").
+anim(ho3_koelkast, s5, id, motion_tennis).
+audio(ho3_koelkast, s5, file, "resources/sounds/tennis.wav").
 next(ho3_koelkast, s5, "true", s6).
 
 state(ho3_koelkast, s6, say).
 text(ho3_koelkast, s6, "Oh, mevrouw Kaas \pau=500\ ").
-go_to_base_posture(ho3_koelkast, s6).
+go_to_posture(ho3_koelkast, s6).
 next(ho3_koelkast, s6, "true", s7).
 
 state(ho3_koelkast, s7, say).
@@ -98,15 +98,15 @@ text(ho3_koelkast, s11, "Deejay %fruit% draaide de lekkerste plaatjes met de lek
 next(ho3_koelkast, s11, "true", s12).
 
 state(ho3_koelkast, s12, say).
-play_motion(ho3_koelkast, s12, motion_feest).
-audio(ho3_koelkast, s12, source, sound_koelkast_song).
-play_led_anim(ho3_koelkast, s12, led_show_feest).
+anim(ho3_koelkast, s12, id, motion_feest).
+audio(ho3_koelkast, s12, id, sound_koelkast_song).
+leds(ho3_koelkast, s12, id, led_show_feest).
 next(ho3_koelkast, s12, "true", s13).
 
 state(ho3_koelkast, s13, say).
 text(ho3_koelkast, s13, " Pak Melk en Sinaasappelsap waren de hele tijd aan het breek dansen, het was altijd feest.").
-stop_led_anim(ho3_koelkast, s13).
-go_to_base_posture(ho3_koelkast, s13).
+leds(ho3_koelkast, s13, reset).
+go_to_posture(ho3_koelkast, s13).
 next(ho3_koelkast, s13, "true", s14).
 
 state(ho3_koelkast, s14, say).
@@ -146,7 +146,7 @@ text(ho3_koelkast, s24, "Hij moest mee, mijn koelkast uit.").
 next(ho3_koelkast, s24, "true", s25).
 
 state(ho3_koelkast, s25, say).
-audio(ho3_koelkast, s25, source, sound_knal).
+audio(ho3_koelkast, s25, id, sound_knal).
 text(ho3_koelkast, s25, "De deur sloeg met een klap dicht.").
 next(ho3_koelkast, s25, "true", s26).
 
@@ -192,7 +192,7 @@ next(ho3_koelkast, s41, "true", s42).
 
 state(ho3_koelkast, s42, say).
 text(ho3_koelkast, s42, "Hij zette %saus% op de plank en deed de deur dicht.").
-audio(ho3_koelkast, s42, source, sound_knal).
+audio(ho3_koelkast, s42, id, sound_knal).
 next(ho3_koelkast, s42, "true", s44).
 
 state(ho3_koelkast, s44, say).
@@ -201,7 +201,7 @@ next(ho3_koelkast, s44, "true", s45).
 
 state(ho3_koelkast, s45, say).
 text(ho3_koelkast, s45, "Was het eng?").
-play_led_anim(ho3_koelkast,  s45, led_show_duizeligheid).
+leds(ho3_koelkast,  s45, id, led_show_duizeligheid).
 next(ho3_koelkast, s45, "true", s46).
 
 state(ho3_koelkast, s46, say).
@@ -214,7 +214,7 @@ next(ho3_koelkast, s49, "true", s50).
 
 state(ho3_koelkast, s50, say).
 text(ho3_koelkast, s50, "Hij liep naar het midden van de koelkast.").
-stop_led_anim(ho3_koelkast, s50).
+leds(ho3_koelkast, s50, reset).
 next(ho3_koelkast, s50, "true", s51).
 
 state(ho3_koelkast, s51, say).
@@ -234,21 +234,21 @@ text(ho3_koelkast, s54, "Om te vieren dat %saus% terug was gingen we weer een fe
 next(ho3_koelkast, s54, "true", s55).
 
 state(ho3_koelkast, s55, say).
-play_motion(ho3_koelkast, s55, motion_feest).
-audio(ho3_koelkast, s55, source, sound_koelkast_song).
-play_led_anim(ho3_koelkast, s55, led_show_feest).
+anim(ho3_koelkast, s55, id, motion_feest).
+audio(ho3_koelkast, s55, id, sound_koelkast_song).
+leds(ho3_koelkast, s55, id, led_show_feest).
 next(ho3_koelkast, s55, "true", s56).
 
 state(ho3_koelkast, s56, say).
 text(ho3_koelkast, s56, "Einde \pau=300\ ").
-audio(ho3_koelkast, s56, source, sound_applaus).
-go_to_base_posture(ho3_koelkast, s56).
-stop_led_anim(ho3_koelkast, s56).
+audio(ho3_koelkast, s56, id, sound_applaus).
+go_to_posture(ho3_koelkast, s56).
+leds(ho3_koelkast, s56, reset).
 %next(ho3_koelkast, s56, "true", s57).
 
 %state(ho3_koelkast, s57, say).
 %text(ho3_koelkast,  s57, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
-%leds(ho3_koelkast,  s57, ["RightFootLeds"], ["groen"]).
+%leds(ho3_koelkast,  s57, direct, ["RightFootLeds"], ["groen"]).
 %stateConfig(ho3_koelkast, s57, [next='RightBumperPressed']).
 %next(ho3_koelkast,  s57, "true",  s58).
 
@@ -260,12 +260,12 @@ stop_led_anim(ho3_koelkast, s56).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_graafmachine, s1, say).
 text(ho3_graafmachine,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
-leds(ho3_graafmachine,  s1, ["RightFootLeds"], ["groen"]).
+leds(ho3_graafmachine,  s1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_graafmachine, s1, [next='RightBumperPressed']).
 next(ho3_graafmachine,  s1, "true",  s2).
 
 state(ho3_graafmachine, s2, say).
-leds(ho3_graafmachine,  s2, ["RightFootLeds"], ["wit"]).
+leds(ho3_graafmachine,  s2, direct, ["RightFootLeds"], ["wit"]).
 text(ho3_graafmachine, s2, "Graag vertel ik jou een verhaal van de tijd toen ik een graafmachine was.").
 next(ho3_graafmachine, s2, "true", s5).
 
@@ -282,13 +282,13 @@ text(ho3_graafmachine, s7, "Ik zag eruit als een olifant van ijzer.").
 next(ho3_graafmachine, s7, "true", s8).
 
 state(ho3_graafmachine, s8, say).
-play_motion(ho3_graafmachine, s8, motion_elephant).
-audio(ho3_graafmachine, s8, server, "resources/sounds/elephant.wav").
+anim(ho3_graafmachine, s8, id, motion_elephant).
+audio(ho3_graafmachine, s8, file, "resources/sounds/elephant.wav").
 next(ho3_graafmachine, s8, "true", s9).
 
 state(ho3_graafmachine, s9, say).
 text(ho3_graafmachine, s9, "Ik reed met mijn familie in een optocht naar de graaf plek. Ik was blij want mijn lievelings graafmachine reed achter mij,").
-go_to_base_posture(ho3_graafmachine, s9).
+go_to_posture(ho3_graafmachine, s9).
 next(ho3_graafmachine, s9, "true", s11).
 
 state(ho3_graafmachine, s11, say).
@@ -328,7 +328,7 @@ text(ho3_graafmachine, s20, "Als ik achteruit reed, piepte ik als een muis.").
 next(ho3_graafmachine, s20, "true", s21).
 
 state(ho3_graafmachine, s21, say).
-audio(ho3_graafmachine, s21, source, sound_mouse).
+audio(ho3_graafmachine, s21, id, sound_mouse).
 next(ho3_graafmachine, s21, "true", s27).
 
 state(ho3_graafmachine, s27, say).
@@ -377,7 +377,7 @@ next(ho3_graafmachine, s40, "true", s41).
 
 state(ho3_graafmachine, s41, say).
 text(ho3_graafmachine, s41, "En toen zat ik opeens vast.").
-audio(ho3_graafmachine, s41, server, "resources/sounds/door_slam1.wav").
+audio(ho3_graafmachine, s41, file, "resources/sounds/door_slam1.wav").
 next(ho3_graafmachine, s41, "true", s45).
 
 state(ho3_graafmachine, s45, say).
@@ -390,7 +390,7 @@ next(ho3_graafmachine, s46, "true", s47).
 
 state(ho3_graafmachine, s47, say).
 text(ho3_graafmachine, s47, "Ik probeerde naar achter te rijden en ik begon wel te piepen als een muis maar naar achter rijden lukte ook niet.").
-audio(ho3_graafmachine, s47, source, sound_mouse).
+audio(ho3_graafmachine, s47, id, sound_mouse).
 next(ho3_graafmachine, s47, "true", s48).
 
 state(ho3_graafmachine, s48, say).
@@ -410,7 +410,7 @@ text(ho3_graafmachine, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzi
 next(ho3_graafmachine, s51, "true", s52).
 
 state(ho3_graafmachine, s52, say).
-audio(ho3_graafmachine, s52, server, "resources/sounds/steam_hiss2.wav").
+audio(ho3_graafmachine, s52, file, "resources/sounds/steam_hiss2.wav").
 next(ho3_graafmachine, s52, "true", s53).
 
 state(ho3_graafmachine, s53, say).
@@ -450,12 +450,12 @@ text(ho3_graafmachine, s75d, "En toen heeft ze het katrol heel precies schoongeb
 next(ho3_graafmachine, s75d, "true", s76).
 
 state(ho3_graafmachine, s76, say).
-audio(ho3_graafmachine, s76, server, "resources/sounds/steam_hiss1.wav").
+audio(ho3_graafmachine, s76, file, "resources/sounds/steam_hiss1.wav").
 next(ho3_graafmachine, s76, "true", s77).
 
 state(ho3_graafmachine, s77, say).
 text(ho3_graafmachine, s77, "En ze pakte het katrol uit mijn handen.").
-play_led_anim(ho3_graafmachine, s77, led_show_boosheid).
+leds(ho3_graafmachine, s77, id, led_show_boosheid).
 next(ho3_graafmachine, s77, "true", s79).
 
 state(ho3_graafmachine, s79, say).
@@ -463,7 +463,7 @@ text(ho3_graafmachine, s79, "En toen wilde ik eerst super boos op haar worden wa
 next(ho3_graafmachine, s79, "true", s80).
 
 state(ho3_graafmachine, s80, say).
-stop_led_anim(ho3_graafmachine, s80).
+leds(ho3_graafmachine, s80, reset).
 text(ho3_graafmachine, s80, "Omdat ik zonder haar nooit het katrol had gevonden.").
 next(ho3_graafmachine, s80, "true", s82).
 
@@ -492,21 +492,21 @@ text(ho3_graafmachine, s90, "Het was tijd voor een feestje.").
 next(ho3_graafmachine, s90, "true", s91).
 
 state(ho3_graafmachine, s91, say).
-play_motion(ho3_graafmachine, s91, motion_feest).
-audio(ho3_graafmachine, s91, source, sound_koelkast_song).
-play_led_anim(ho3_graafmachine, s91, led_show_feest).
+anim(ho3_graafmachine, s91, id, motion_feest).
+audio(ho3_graafmachine, s91, id, sound_koelkast_song).
+leds(ho3_graafmachine, s91, id, led_show_feest).
 next(ho3_graafmachine, s91, "true", s92).
 
 state(ho3_graafmachine, s92, say).
 text(ho3_graafmachine, s92, "Einde \pau=300\ ").
-audio(ho3_graafmachine, s92, source, sound_applaus).
-go_to_base_posture(ho3_graafmachine, s92).
-stop_led_anim(ho3_graafmachine, s92).
+audio(ho3_graafmachine, s92, id, sound_applaus).
+go_to_posture(ho3_graafmachine, s92).
+leds(ho3_graafmachine, s92, reset).
 %next(ho3_graafmachine, s90, "true", s91).
 
 %state(ho3_graafmachine, s91, say).
 %text(ho3_graafmachine,  s91, "Als je klaar bent om verder te gaan, dan kun je op mijn linker teen drukken.").
-%leds(ho3_graafmachine,  s91, ["RightFootLeds"], ["groen"]).
+%leds(ho3_graafmachine,  s91, direct, ["RightFootLeds"], ["groen"]).
 %stateConfig(ho3_graafmachine, s91, [next='RightBumperPressed']).
 %next(ho3_graafmachine,  s91, "true",  s92).
 
@@ -578,12 +578,12 @@ text(ho3_next_story,  s3nd, "Dat waren mijn verhaaltjes, bedankt voor het luiste
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_goodbye, s1, say).
 text(ho3_goodbye,  s1, "Als je klaar bent om doei te zeggen, dan kun je op mijn linker teen drukken.").
-leds(ho3_goodbye,  s1, ["RightFootLeds"], ["groen"]).
+leds(ho3_goodbye,  s1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_goodbye, s1, [next='RightBumperPressed']).
 next(ho3_goodbye,  s1, "true",  s2).
 
 state(ho3_goodbye, s2, say).
-leds(ho3_goodbye,  s2, ["RightFootLeds"], ["wit"]).
+leds(ho3_goodbye,  s2, direct, ["RightFootLeds"], ["wit"]).
 text(ho3_goodbye,  s2, "Wat fijn dat ik mijn verhalen aan jou mocht vertellen, %first_name%").
 next(ho3_goodbye,  s2, "true",  s3).
 
@@ -641,9 +641,9 @@ next(ho3_goodbye,  s9, "true",  s10).
 
 state(ho3_goodbye, s10, say).
 text(ho3_goodbye,  s10, "Doei %first_name%.").
-play_motion_file(ho3_goodbye, s10, "resources/gestures/wave2.json").
+anim(ho3_goodbye, s10, file, "resources/gestures/wave2.json").
 next(ho3_goodbye,  s10, "true",  s11).
 
 state(ho3_goodbye, s11, say).
-go_to_base_posture(ho3_goodbye, s11).
+go_to_posture(ho3_goodbye, s11).
 text(ho3_goodbye,  s11, "Bedankt, doei doei.").

@@ -119,11 +119,8 @@ odd_elements([_, X], [X]) :- !.
 odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 
 % Create list of values from a list of keys of user model entries
-%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Ori), getTranslation(Ori, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
-%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
-
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
 valueListFromKeyList([], []).
 
@@ -187,8 +184,8 @@ delete_topics(TopicsList, [H | []], NewTopicsList):- delete(TopicsList, H, NewTo
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ready for action
-readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, recorded, _)).
-readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, ID), getUserModelValue(ID, _).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, id, _)).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, id, ID), getUserModelValue(ID, _).
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).

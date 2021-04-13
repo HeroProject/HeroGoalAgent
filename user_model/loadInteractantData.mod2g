@@ -20,14 +20,13 @@ module loadInteractantData(Topics) {
 				forall bel(insert_topic(Topic, S, NewTopic), keyValue(Topic, S, loadUserModel, "true"), additionalTopics(AdditionalTopics)) do delete(additionalTopics(AdditionalTopics)) + insert(additionalTopics([NewTopic | AdditionalTopics])).
 				
 				% Load motions
-				forall bel(play_motion(Topic, _, Key)) do getInteractantData(UserId, Key).
+				forall bel(anim(Topic, _, id, Key)) do getInteractantData(UserId, Key).
 				
 				% Load audio
-				forall bel(audio(Topic, _, recorded, Key), not(waitingForMemoryAudio(Key))) do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
-				forall bel(audio(Topic, _, source, Key), not(waitingForMemoryAudio(Key))) do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
+				forall bel(audio(Topic, _, id, Key), not(waitingForMemoryAudio(Key))) do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
 				
 				% Load led animations
-				forall bel(play_led_anim(Topic, _, Key)) do getInteractantData(UserId, Key) + insert(waitingForMemoryLed(Key)).
+				forall bel(leds(Topic, _, id, Key)) do getInteractantData(UserId, Key) + insert(waitingForMemoryLed(Key)).
 				
 				% Recursive continue with the next topic.
 				if not(bel(length(RestOfTopics,0))), bel(additionalTopics(AT), length(AT, 0)) then delete(additionalTopics(AT)) +  loadInteractantData(RestOfTopics).
