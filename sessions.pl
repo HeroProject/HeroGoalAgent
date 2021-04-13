@@ -57,6 +57,9 @@ session(demo_1, [general_wakeup, ho1_animals, ho1_food, general_rest]).
 session(demo_2, [general_wakeup, ho2_tutorial, general_rest]).
 session(demo_3, [general_wakeup, ho3_koelkast, general_rest]).
 
+%%%%%%%%%%%%%% Interactieve slaapquiz %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, slaapkamer, bedtijden, piekeren, wakker, bewegen, etendrinken, afsluiting, general_rest]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,11 +69,11 @@ useGui(false).
 setUserId('999').
 setSessionId(1).
 setBasePosture('Stand').
-addLocalVariable(first_name, "Tommy").
+addLocalVariable(first_name, "Samuel").
 
 % Session details.
 setPauseButton('MiddleTactilTouched').
-sessionOrder([hospital_1, hospital_2, hospital_3]).
+sessionOrder([slaapquiz]).
 %sessionOrder([demo_1, demo_2, demo_3]).
 
 %test
