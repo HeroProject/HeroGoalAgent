@@ -2,7 +2,7 @@ use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
 use 'topics/co_creation/*.pl' as knowledge.
 use 'topics/hospital/*.pl' as knowledge.
-use sessions as knowledge.
+use 'topics/robotstories/*.pl' as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with
