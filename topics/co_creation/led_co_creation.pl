@@ -7,7 +7,7 @@
 %%% LED Animation Check					   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_selection, s1, question).
-stateConfig(co_led_selection, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
+stateConfig(co_led_selection, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden'], fast=yes]).
 text(co_led_selection, s1, "Wil jij de lichtshow maken of zal ik wat opties downloaden?").
 next(co_led_selection, s1, "success", s3).
 next(co_led_selection, s1, "fail", s3f).
@@ -62,7 +62,7 @@ stateConfig(co_led_download, sdownload5, [waitTimer=3000]).
 next(co_led_download, sdownload5, "true", sdownload6).
 
 state(co_led_download, sdownload6, question).
-stateConfig(co_led_download, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='tweede']).
+stateConfig(co_led_download, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='tweede', fast=yes]).
 text(co_led_download, sdownload6, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
 leds(co_led_download, sdownload6, reset).
 next(co_led_download, sdownload6, "success", sdownload7).
@@ -93,7 +93,7 @@ save_led_anim(co_led_download, sdownload8robot, 2).
 %%% Create						   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_creation, s1, question).
-stateConfig(co_led_creation, s1, [type=input, context='answer_light_animation', options=['knipperen', 'heen en weer', 'inkleuren'], defaultAnswer='knipperen']).
+stateConfig(co_led_creation, s1, [type=input, context='answer_light_animation', options=['knipperen', 'heen en weer', 'inkleuren'], defaultAnswer='knipperen', fast=yes]).
 text(co_led_creation, s1, "Wil je de lichtjes laten knipperen, heen en weer laten gaan, of wil je ze gewoon in kleuren?").
 next(co_led_creation, s1, 'success', s2).
 next(co_led_creation, s1, 'fail', s2f).

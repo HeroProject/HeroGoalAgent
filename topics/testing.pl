@@ -30,7 +30,7 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_color, s1, question).
-stateConfig(test_color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
+stateConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
 defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
@@ -293,18 +293,46 @@ state(test_stop_led, s1, say).
 leds(test_stop_led, s1, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test session 1					   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_first_session, s1, say).
+text(test_first_session,  s1, "Het lijkt mij leuk om over sport te praten. De sporten die ik zelf graag doe zijn dansen of voetballen met andere robots").
+next(test_first_session, s1, "true", s2).
+
+state(test_first_session, s2, question).
+stateConfig(test_first_session, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=test_favo_sport, fast=yes]).
+text(test_first_session, s2, "Wat is jouw lievelings sport, %first_name%?").
+next(test_first_session, s2, 'success', s3).
+next(test_first_session, s2, 'fail', s5f).
+
+state(test_first_session, s3, say).
+text(test_first_session,  s3, "Wat gaaf zeg!").
+next(test_first_session, s3, "true", s4).
+
+state(test_first_session, s4, question).
+stateConfig(test_first_session, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(test_first_session, s4, "Wat vind je zo leuk aan %test_favo_sport%?").
+next(test_first_session, s4, 'success', s5).
+next(test_first_session, s4, 'fail', s5f).
+
+state(test_first_session, s5, say).
+text(test_first_session,  s5, "%test_favo_sport% klinkt inderdaad erg leuk! ").
+
+state(test_first_session, s5f, say).
+text(test_first_session,  s5f, "Laten we verder gaan naar de volgende vraag."). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 2					   %%%
-%%% Note: a previous session should contain the 	   %%%
-%%% 'ga_sports' topic		           		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_second_session, s1, say).
-text(test_second_session, s1, "Ik weet nog dat jij van %favo_sport% houdt.").
+text(test_second_session, s1, "Ik weet nog dat jij van %test_favo_sport% houdt.").
 next(test_second_session, s1, "true", s2).
 
-state(test_second_session, s2, branchingPoint, favo_sport).
+state(test_second_session, s2, branchingPoint, test_favo_sport).
 next(test_second_session, s2, "floorball", s3floorball).
 next(test_second_session, s2, "voetbal", s3voetbal).
 next(test_second_session, s2, "hockey", s3hockey).
+next(test_second_session, s2, "_others", s3others).
 next(test_second_session, s2, "fail", s3fail).
 
 state(test_second_session, s3floorball, say).
@@ -315,6 +343,9 @@ text(test_second_session, s3voetbal, "Lekker tegen een bal aan schoppen.").
 
 state(test_second_session, s3hockey, say).
 text(test_second_session, s3hockey, "Lekker tegen de bal aan slaan.").
+
+state(test_second_session, s3others, say).
+text(test_second_session, s3others, "Lijkt mij ook leuk om eens te doen.").
 
 state(test_second_session, s3fail, say).
 text(test_second_session, s3fail, "Dat ging een beetje mis geloof ik.").

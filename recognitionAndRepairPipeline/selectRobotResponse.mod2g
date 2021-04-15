@@ -33,7 +33,7 @@ module selectRobotResponse(T, S, Ans, Data) {
 					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
-					if bel(Type=input, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) then 
+					if bel(Type=input, userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) then 
 					{
 						if true then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
 						

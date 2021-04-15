@@ -1,0 +1,43 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use loadInteractantDataHelper as module.
+
+order=linearall.
+
+module loadInteractantData(Topics) {
+	if bel(nth0(0, Topics, Topic, RestOfTopics), length(RestOfTopics, L), userId(UserId))
+		then {
+			% Load text variables
+			forall bel(text(Topic, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
+				do loadInteractantDataHelper(Keys).
+			
+			if true then insert(additionalTopics([])).
+			
+			forall bel(insert_topic(Topic, S, NewTopic), keyValue(Topic, S, loadUserModel, "true"), additionalTopics(AdditionalTopics))
+				do delete(additionalTopics(AdditionalTopics)) + insert(additionalTopics([NewTopic | AdditionalTopics])).
+			
+			% Load motions
+			forall bel(anim(Topic, _, id, Key))
+				do getInteractantData(UserId, Key).
+			
+			% Load audio
+			forall bel(audio(Topic, _, id, Key), not(waitingForMemoryAudio(Key)))
+				do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
+			
+			% Load led animations
+			forall bel(leds(Topic, _, id, Key))
+				do getInteractantData(UserId, Key) + insert(waitingForMemoryLed(Key)).
+			
+			% Recursive continue with the next topic.
+			if bel(L \= 0, additionalTopics(AT), length(AT, 0)) 
+				then delete(additionalTopics(AT)) +  loadInteractantData(RestOfTopics).
+			if bel(L \= 0, additionalTopics(AT), not(length(AT, 0)), append(AT, RestOfTopics, Combined)) 
+				then delete(additionalTopics(AT)) +  loadInteractantData(Combined).
+			if bel(L = 0, additionalTopics(AT), not(length(AT, 0))) 
+				then delete(additionalTopics(AT)) +  loadInteractantData(AT).
+		}
+}

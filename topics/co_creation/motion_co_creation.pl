@@ -7,7 +7,7 @@
 %%% Coordination of involvement				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, s1, question).
-stateConfig(co_motion, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
+stateConfig(co_motion, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden'], fast = yes]).
 text(co_motion, s1, "Wil jij de beweging maken of zal ik wat opties downloaden?").
 next(co_motion, s1, "success", s3).
 next(co_motion, s1, "fail", s3f).
@@ -52,7 +52,7 @@ anim(co_motion, sdownload5, option, 2).
 next(co_motion, sdownload5, "true", sdownload6).
 
 state(co_motion, sdownload6, question).
-stateConfig(co_motion, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste']).
+stateConfig(co_motion, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste', fast = yes]).
 text(co_motion, sdownload6, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
 go_to_posture(co_motion, sdownload6).
 next(co_motion, sdownload6, "success", sdownload7).

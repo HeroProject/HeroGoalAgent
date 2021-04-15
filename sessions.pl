@@ -6,13 +6,13 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 session(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-session(testing_short, [general_wakeup, ho2_tutorial, general_rest]).
+session(testing_short, [general_wakeup, test_color, general_rest]).
 session(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 session(lenin, [lenin]).
 
 % Multi session
 session(getting_acquainted, [general_wakeup, ga_intro, ga_prac_speech, ga_prac_touch, ga_bridge, ga_sports, general_rest]).
-session(test_session_1, [general_wakeup, ga_sports, general_rest]).
+session(test_session_1, [general_wakeup, test_first_session, general_rest]).
 session(test_session_2, [general_wakeup, test_second_session, general_rest]).
 session(test_session_3, [general_wakeup, test_motion_co_a, test_motion_co_b, general_rest]).
 session(test_session_4, [general_wakeup, test_motion_2, general_rest]).
@@ -68,7 +68,7 @@ setUserId('999').
 setSessionId(1).
 setBasePosture('Stand').
 addLocalVariable(first_name, "Tommy").
-evenFailSafeActive.
+evenFailSafeActive(false).
 
 
 % Session details.

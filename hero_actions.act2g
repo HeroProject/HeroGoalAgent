@@ -17,22 +17,10 @@ define gesture(Gesture) with
 	pre { true }
 	post { waitingForEvent('GestureDone') }
 
-%define playLoadedAudio(AudioID) with
-	%pre { true }
-	%post { waitingForEvent('PlayAudioDone') }
-
 define playAudio(Url) with
 	pre { true }
 	post { waitingForEvent('PlayAudioDone') }
 
-%define loadAudio(URL) with
-	%pre { true }
-	%post { true }
-
-%define clearLoadedAudio with
-	%pre { true }
-	%post { waitingForEvent('ClearLoadedAudioDone') }
-	
 % Robot start/stop actions (input modalities)
 define startListening(Seconds, Context) with
 	pre { true }
@@ -46,14 +34,6 @@ define stopListening with
 	pre { true }
 	post { true }
 
-%define setIdle with
-	%pre { true }
-	%post { true }
-	
-%define setNonIdle with
-	%pre { true }
-	%post { true }
-	
 define startWatching(Seconds) with
 	pre { true }
 	post { true }
@@ -130,10 +110,6 @@ define startLedAnimation(Group, AnimType, Colors, Speed) with
 	pre { true }
 	post { waitingForEvent('LedAnimationStarted') }
 
-define playMotionFile(Path) with
-	pre { true }
-	post { waitingForEvent('PlayMotionDone') }
-
 define stopLedAnimation with
 	pre { true }
 	post { waitingForEvent('LedAnimationDone') }
@@ -163,12 +139,7 @@ define deleteAllInteractants with
 	pre { true }
 	post { waitingForEvent('AllInteractantsDeleted') }
 	
-% DialogFlow Control
-%define setLanguage(Lang) with
-	%pre { true }
-	%post { true }
-	
-% Special actions
-%define takePicture with
-	%pre { true }
-	%post { true }
+% Webpage actions	
+define renderPage(Html) with
+	pre { true }
+	post { true }

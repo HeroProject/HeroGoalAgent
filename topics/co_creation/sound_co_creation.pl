@@ -7,7 +7,7 @@
 %%% Coordination of involvement				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, s1, question).
-stateConfig(co_sound, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden']]).
+stateConfig(co_sound, s1, [type = input, context = "involvement_selection", options = ['maken', 'downloaden'], fast=yes]).
 text(co_sound, s1, "Wil jij het geluid zelf maken of zal ik wat geluiden downloaden?").
 next(co_sound, s1, "success", s3).
 next(co_sound, s1, "fail", s3f).
@@ -52,7 +52,7 @@ audio(co_sound, sdownload5, option, 2).
 next(co_sound, sdownload5, "true", sdownload6).
 
 state(co_sound, sdownload6, question).
-stateConfig(co_sound, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste']).
+stateConfig(co_sound, sdownload6, [type = input, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'hero'], defaultAnswer='eerste', fast=yes]).
 text(co_sound, sdownload6, "Wil jij het eerste of tweede geluid, of zal ik kiezen?").
 next(co_sound, sdownload6, "success", sdownload7).
 next(co_sound, sdownload6, "fail", sdownload7f).

@@ -25,9 +25,9 @@ module performStateActions(T, S) {
 	if bel(leds(T, S, direct, Leds, Colors), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
 	if bel(leds(T, S, direct, Leds, AnimType, Colors, Speed)) then startLedAnimation(Leds, AnimType, Colors, Speed).
 	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
-	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), not(AnimType = colorSelect)) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
 	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
-	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, AnimType, Colors, Speed]), not(AnimType = colorSelect)) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
 	if bel(leds(T, S, reset)) then stopLedAnimation.
 
 	% Play motions.
@@ -58,6 +58,31 @@ module performStateActions(T, S) {
 	% Set stiffness
 	if bel(set_stiffness(T, S, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
 	
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%					WEBPAGE						%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	% Show text.
+	if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	if bel(display_raw(T, S, Txt), html(Txt, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	% Show image.
+	if bel(image(T, S, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
+		then renderPage(Html).
+	% Show questions
+	if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
+		%if bel(currentAttempt(1), html(HTxt, Html))
+		%	then renderPage(Html).
+		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+	}
+	if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt)) then {
+		%if bel(currentAttempt(1), html(HTxt, Html))
+		%	then renderPage(Html).
+		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+	}
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					CO-CREATION					%%
@@ -160,7 +185,9 @@ module performStateActions(T, S) {
 	
 	if bel(remove_topic(T, S, TopicsToDelete), topics(AllTopics), delete_topics(AllTopics, TopicsToDelete, NewAllTopics)) then delete(topics(AllTopics)) + insert(topics(NewAllTopics)).
 	
-	% Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
-	%if true then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).
-	if bel(evenFailSafeActive) then delete(start) + insert(started) + starttimer(eventFailSafe, 16000, 16000).
+	%Active eventFailSave if required.	
+	if bel(evenFailSafeActive(true)) then starttimer(eventFailSafe, 16000, 16000).
+	
+	%Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
+	if true then delete(start) + insert(started).
 }

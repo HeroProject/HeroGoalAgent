@@ -8,7 +8,6 @@
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
 	audioRecording/1,
-	behavior/2,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
 	basePosture/1.
@@ -16,7 +15,6 @@
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
 	isAwake/0,
-	stiffness/1,
 	batteryCharge/1,
 	isCharging/0.
 	
@@ -55,6 +53,16 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 % Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
+
+%yesno synonyms
+answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk"]).
+answer_no_synonyms(["nee", "neen", "nah"]).
+answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
+
+string_match_word_list(S, L, DS) :- downcase_atom(S, DS), maplist(downcase_atom, L, DL), member(DS, DL), !.
+string_match_word_list(S, L, R) :- split_string(S," ",", ", SL), maplist(downcase_atom, SL, DSL), maplist(downcase_atom, L, DL), any_list_match(DSL, DL, R), !.
+any_list_match([H | _], L, H) :- member(H, L).
+any_list_match([H | T], L, R) :- not(member(H, L)), any_list_match(T, L, R), !.
 
 %Update the local instance of the user model.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(member((Key=_), OldUserModel)), append(OldUserModel, [Key=Value], NewUserModel), !.
@@ -119,16 +127,18 @@ nested_list_to_string(L1, L4) :-
   	maplist(term_to_atom, L1, L2),
     	nested_list_to_nested_string(L2, L3),
   	atomics_to_string(L3, ',', L4).
+
+nested_list_to_nested_string([H | T], [HProcessed | TProcessed]) :- is_nested_list(H),
+    replace_chars(H, ',', '@', HProcessed), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([H | T], [H | TProcessed]):- not(is_nested_list(H)), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([], []).
  
 string_to_nested_list(Input, Output) :- 
     atomics_to_string(A, ',', Input),
     maplist(nested_list_to_atom, A, AFixed),
     maplist(term_to_atom, Output, AFixed).
 
-nested_list_to_nested_string([H | T], [HProcessed | TProcessed]) :- is_nested_list(H),
-    replace_chars(H, ',', '@', HProcessed), nested_list_to_nested_string(T, TProcessed), !.
-nested_list_to_nested_string([H | T], [H | TProcessed]):- not(is_nested_list(H)), nested_list_to_nested_string(T, TProcessed), !.
-nested_list_to_nested_string([], []).
+nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
 
 replace_char([H | T], CharI, CharO, [CharO | Tout]) :- H = CharI, replace_char(T, CharI, CharO, Tout), !.
 replace_char([H | T], CharI, CharO, [H | Tout]) :- not(H = CharI), replace_char(T, CharI, CharO, Tout), !.
@@ -141,7 +151,7 @@ replace_chars(I, CharI, CharO, O) :-
 
 is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 
-
+% Delete topics from topic list
 delete_topics(TopicsList, [H | T], NewTopicsList) :- delete(TopicsList, H, IntermidiateList), delete_topics(IntermidiateList, T, NewTopicsList), !.
 delete_topics(TopicsList, [H | []], NewTopicsList):- delete(TopicsList, H, NewTopicsList), !.
 

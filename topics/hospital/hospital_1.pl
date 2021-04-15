@@ -69,7 +69,7 @@ text(ho1_tutorial_speech,  s4, "Laten we een keertje oefenen. Hier komt de eerst
 next(ho1_tutorial_speech,  s4, "true",  s5).
 
 state(ho1_tutorial_speech, s5, question).
-stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw", "donkerblauw"], inputModality=[speech=3], additionalAttempt=true]).
+stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw", "donkerblauw"], inputModality=[speech=3], additionalAttempt=true, fast=yes]).
 leds(ho1_tutorial_speech, s5, direct, ["FaceLeds"], ["blauw"]).
 text(ho1_tutorial_speech, s5, "Welke kleur hebben mijn ogen nu?").
 next(ho1_tutorial_speech, s5, 'correct', s5cor).
