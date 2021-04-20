@@ -1,32 +1,32 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use modalitySwitch as module.
 
 % add started to call
-module repair(T, S) {
-	if bel(getInputModalityOrder(T, S, Order), modalityCounter(ModCount), currentAttempt(CurrentAttempt), started)
+module repair(Minidialog, Move) {
+	if bel(getInputModalityOrder(Minidialog, Move, Order), modalityCounter(ModCount), currentAttempt(CurrentAttempt), started)
 		then {
-			if bel(currentInputModality(speech), getMaxAnswerAttempts(T, S, speech, MaxAnswerAttempts))
+			if bel(currentInputModality(speech), getMaxAnswerAttempts(Minidialog, Move, speech, MaxAnswerAttempts))
 				then {
 					%If the number of attempts are reached.
 					if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 						then {
 							%If there are no repair modalities left and the user is not entitled to an additional attempt: return a failure.
-							if bel(NModalities = NewModCount, not(additionalAttempt(T, S)))
-								then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
+							if bel(NModalities = NewModCount, not(additionalAttempt(Minidialog, Move)))
+								then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 								
 							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
-							if bel(NModalities \= NewModCount, not(additionalAttempt(T, S)), nth0(NewModCount, Order, NewModality))	
-								then modalitySwitch(T, S, speech, NewModality).
+							if bel(NModalities \= NewModCount, not(additionalAttempt(Minidialog, Move)), nth0(NewModCount, Order, NewModality))	
+								then modalitySwitch(Minidialog, Move, speech, NewModality).
 							
 							%If the user is entiteled to an addtional attempt: give extra attempt 
-							if bel(additionalAttempt(T, S), NextAttempt is CurrentAttempt + 1)
-								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S))
+							if bel(additionalAttempt(Minidialog, Move), NextAttempt is CurrentAttempt + 1)
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(Minidialog, Move))
 								+ insert(start, currentAttempt(NextAttempt)).
 						}				
 										
@@ -35,7 +35,7 @@ module repair(T, S) {
 						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 			}
 
-			if bel(currentInputModality(touch), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, touch, MaxAnswerAttempts), started)
+			if bel(currentInputModality(touch), keyValue(Minidialog, Move, type, Type), getMaxAnswerAttempts(Minidialog, Move, touch, MaxAnswerAttempts), started)
 				then {
 					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
@@ -45,17 +45,17 @@ module repair(T, S) {
 								then {
 									% If there are no other input modalities, this question failed.
 									if bel(NModalities = NewModCount)
-						 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
+						 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 									% If there are other input modalities left, switch modalities.
 									if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-										then modalitySwitch(T, S, touch, NewModality).
+										then modalitySwitch(Minidialog, Move, touch, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
 									insert(start, currentAttempt(NextAttempt)).
 						}
 				
-					if bel(Type \= yesno, mcCounter(Count), CountNew is Count + 1, keyValue(T, S, options, Options), length(Options, NOptions))
+					if bel(Type \= yesno, mcCounter(Count), CountNew is Count + 1, keyValue(Minidialog, Move, options, Options), length(Options, NOptions))
 						then {						
 							if bel(CountNew >= NOptions)
 								then {
@@ -63,10 +63,10 @@ module repair(T, S) {
 										then {
 											% If there are no other input modalities, this question failed.
 											if bel(NModalities = NewModCount)
-								 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
+								 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 											% If there are other input modalities left, switch modalities.
 											if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-												then modalitySwitch(T, S, touch, NewModality).
+												then modalitySwitch(Minidialog, Move, touch, NewModality).
 										}
 							
 									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(touch), started)

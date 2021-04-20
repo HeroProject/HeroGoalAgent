@@ -8,6 +8,6 @@
     <Resources>
         <File name="disco" src="disco.wav" />
     </Resources>
-    <Topics />
+    <MiniDialogs />
     <IgnoredPaths />
 </Package>

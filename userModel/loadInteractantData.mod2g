@@ -1,44 +1,44 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use loadInteractantDataHelper as module.
 
 order=linearall.
 
-module loadInteractantData(Topics) {
-	if bel(nth0(0, Topics, Topic, RestOfTopics), length(RestOfTopics, L), userId(UserId))
+module loadInteractantData(MiniDialogs) {
+	if bel(nth0(0, MiniDialogs, Minidialog, RestOfMinidialogs), length(RestOfMinidialogs, L), userId(UserId))
 		then {
 			% Load text variables
-			forall bel(text(Topic, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
+			forall bel(text(Minidialog, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
 				do loadInteractantDataHelper(Keys).
 			
-			if true then insert(additionalTopics([])).
+			if true then insert(additionalMinidialogs([])).
 			
-			forall bel(insert_topic(Topic, S, NewTopic), keyValue(Topic, S, loadUserModel, "true"), additionalTopics(AdditionalTopics))
-				do delete(additionalTopics(AdditionalTopics)) + insert(additionalTopics([NewTopic | AdditionalTopics])).
+			forall bel(insert_minidialog(Minidialog, Move, NewMinidialog), keyValue(Minidialog, Move, loadUserModel, "true"), additionalMinidialogs(AdditionalMinidialogs))
+				do delete(additionalMinidialogs(AdditionalMinidialogs)) + insert(additionalMinidialogs([NewMinidialog | AdditionalMinidialogs])).
 			
 			% Load motions
-			forall bel(anim(Topic, _, id, Key))
+			forall bel(anim(Minidialog, _, id, Key))
 				do getInteractantData(UserId, Key).
 			
 			% Load audio
-			forall bel(audio(Topic, _, id, Key), not(waitingForMemoryAudio(Key)))
+			forall bel(audio(Minidialog, _, id, Key), not(waitingForMemoryAudio(Key)))
 				do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
 			
 			% Load led animations
-			forall bel(leds(Topic, _, id, Key))
+			forall bel(leds(Minidialog, _, id, Key))
 				do getInteractantData(UserId, Key) + insert(waitingForMemoryLed(Key)).
 			
-			% Recursive continue with the next topic.
-			if bel(L \= 0, additionalTopics(AT), length(AT, 0)) 
-				then delete(additionalTopics(AT)) +  loadInteractantData(RestOfTopics).
-			if bel(L \= 0, additionalTopics(AT), not(length(AT, 0)), append(AT, RestOfTopics, Combined)) 
-				then delete(additionalTopics(AT)) +  loadInteractantData(Combined).
-			if bel(L = 0, additionalTopics(AT), not(length(AT, 0))) 
-				then delete(additionalTopics(AT)) +  loadInteractantData(AT).
+			% Recursive continue with the next minidialog.
+			if bel(L \= 0, additionalMinidialogs(AT), length(AT, 0)) 
+				then delete(additionalMinidialogs(AT)) +  loadInteractantData(RestOfMinidialogs).
+			if bel(L \= 0, additionalMinidialogs(AT), not(length(AT, 0)), append(AT, RestOfMinidialogs, Combined)) 
+				then delete(additionalMinidialogs(AT)) +  loadInteractantData(Combined).
+			if bel(L = 0, additionalMinidialogs(AT), not(length(AT, 0))) 
+				then delete(additionalMinidialogs(AT)) +  loadInteractantData(AT).
 		}
 }

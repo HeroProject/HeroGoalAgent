@@ -1,12 +1,12 @@
 use 'util/*.pl' as knowledge.
-use 'topics/*.pl' as knowledge.
-use 'topics/co_creation/*.pl' as knowledge.
-use 'topics/hospital/*.pl' as knowledge.
-use 'topics/robotstories/*.pl' as knowledge.
+use 'minidialogs/*.pl' as knowledge.
+use 'minidialogs/co_creation/*.pl' as knowledge.
+use 'minidialogs/hospital/*.pl' as knowledge.
+use 'minidialogs/robotstories/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'recognitionAndRepairPipeline/*.mod2g' as module.
-use 'stateLogic/*.mod2g' as module.
+use 'dialogMoves/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
 module hero_events {
@@ -68,10 +68,10 @@ module hero_events {
 		then delete(waitingForPosture(Posture)).
 	
 	% Handling timeouts
-	if percept(timer(S, _)), not(bel(timeout(S)))
-		then insert(timeout(S)).
-	if bel(timeout(S)), not(percept(timer(S, _)))
-		then delete(timeout(S)).
+	if percept(timer(Move, _)), not(bel(timeout(Move)))
+		then insert(timeout(Move)).
+	if bel(timeout(Move)), not(percept(timer(Move, _)))
+		then delete(timeout(Move)).
 		
 	% Motion recording timeout
 	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
@@ -83,16 +83,16 @@ module hero_events {
 	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
-		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
+		if bel(currentMinidialog(Minidialog), currentMove(Move)) then log(eventFailSafe(Minidialog, Move)).
 	}
 	
 	%Audio recording percepts
 	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), userModel(UserModel), updateUserModel(ID, FileName, UserModel, NewUserModel))
-		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel), audioRecording(ID)) + setInteractantData(UserId, ID, FileName).
+		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, FileName).
 	
 	%Emotion detection percepts
-	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
-		do insert(emotion(T, S, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
+	forall percept(emotionDetected(Emotion)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForEmotion)
+		do insert(emotion(Minidialog, Move, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
@@ -101,93 +101,93 @@ module hero_events {
 	%%% SPEECH %%%
 	
 	% User responded (full intent).
-	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentMinidialog(Minidialog), currentMove(Move), currentInputModality(speech), waitingForDetection)
 		then {
 				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.				
 				if true then stopListening + delete(waitingForDetection).
 								
 				%Dialogflow recognizes intent. Retrieve answer.
-				if bel(Intent \= '') then processUserResponse(T, S, Intent, Text, Params).
+				if bel(Intent \= '') then processUserResponse(Minidialog, Move, Intent, Text, Params).
 				
 				%Dialogflow does not recognize intent. Engage repair attempt.
 				if bel(Intent = '') then {
-					if not(bel(keyValue(T, S, type, openend))) then repair(T, S).
-					if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
+					if not(bel(keyValue(Minidialog, Move, type, openend))) then repair(Minidialog, Move).
+					if bel(keyValue(Minidialog, Move, type, openend)) then processUserResponse(Minidialog, Move, any, Text, []).
 				} 				
 		}
 	
 	% User responded (try quick transcript matching).
-	if percept(transcript(Text)), bel(currentTopic(T), currentState(S), waitingForDetection)
+	if percept(transcript(Text)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForDetection)
 		then {
-			if bel(keyValue(T, S, type, yesno), answer_yes_synonyms(Yes), string_match_word_list(Text, Yes, _)) 
-				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_yes, Text, []).
-			if bel(keyValue(T, S, type, yesno), answer_no_synonyms(No), string_match_word_list(Text, No, _))
-				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_no, Text, []).
-			if bel(keyValue(T, S, type, yesno), answer_dontknow_synonyms(Dontknow), string_match_word_list(Text, Dontknow, _))
-				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_dontknow, Text, []).
+			if bel(keyValue(Minidialog, Move, type, yesno), answer_yes_synonyms(Yes), string_match_word_list(Text, Yes, _)) 
+				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, answer_yes, Text, []).
+			if bel(keyValue(Minidialog, Move, type, yesno), answer_no_synonyms(No), string_match_word_list(Text, No, _))
+				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, answer_no, Text, []).
+			if bel(keyValue(Minidialog, Move, type, yesno), answer_dontknow_synonyms(Dontknow), string_match_word_list(Text, Dontknow, _))
+				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, answer_dontknow, Text, []).
 			
-			if bel(not(keyValue(T, S, type, yesno)), keyListValues(T, S, [context, options, fast], [Intent, Options, yes]), string_match_word_list(Text, Options, Ans))
-				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Ans]).
+			if bel(not(keyValue(Minidialog, Move, type, yesno)), keyListValues(Minidialog, Move, [context, options, fast], [Intent, Options, yes]), string_match_word_list(Text, Options, Ans))
+				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, Intent, Text, [answer=Ans]).
 		}
 										
 	% User responded on the tablet. -Vincent
-	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
-									keyValue(T, S, context, Intent), downcase_atom(Text, DT))
-		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=DT]).
+	if percept(answer(Text)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForDetection,
+									keyValue(Minidialog, Move, context, Intent), downcase_atom(Text, DT))
+		then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, Intent, Text, [answer=DT]).
 							
 	% User did not respond.	
-	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
+	if bel(event('IntentDetectionDone'), currentMinidialog(Minidialog), currentMove(Move), waitingForDetection)
 		then {
 			% If a user does not respond, listening is already finished. Delete its waiting flag.
 			if true then delete(waitingForDetection).
 			
-			if bel(keyValue(T, S, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(T, S)).
+			if bel(keyValue(Minidialog, Move, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(Minidialog, Move)).
 			
 			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
-			if not(bel(keyValue(T, S, type, openend))) then repair(T,S).
-			if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, '', []).
+			if not(bel(keyValue(Minidialog, Move, type, openend))) then repair(Minidialog,Move).
+			if bel(keyValue(Minidialog, Move, type, openend)) then processUserResponse(Minidialog, Move, any, '', []).
 		}
 	
 	%%% TOUCH %%%
 	% An answer has been selected. Retrieve answer.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
-		then processUserResponse(T, S, Intent, '', []).
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), waitingForAnswer, feetBumperEventAnswer(Intent))
+		then processUserResponse(Minidialog, Move, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
-		then repair(T, S).
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), timeout(Move), waitingForAnswer, currentInputModality(touch))
+		then repair(Minidialog, Move).
 		
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
-	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), state(T, S, audioInput))
+	if bel(event('IntentDetectionDone'), currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, audioInput))
 		then stopListening + disableRecording.
 
 	%%% EMOTION RECOGNITION %%%	
 	% When timeout occurs while waiting for emotion, emotion detection is stopped.
 	%TODO add appropriate event here
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), waitingForEmotion, not(emotion(T, S,_)))
-		then stopWatching + insert(emotion(T, S, 'fail')) + delete(waitingForEmotion).
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, emotion), waitingForEmotion, not(emotion(Minidialog, Move,_)))
+		then stopWatching + insert(emotion(Minidialog, Move, 'fail')) + delete(waitingForEmotion).
 		
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Answer processing			      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, quiz) the answers should be processed differently.
-	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
-		then selectRobotResponse(T, S, Ans, Data).
+	%Given an answer(Minidialog, Move, Ans, Details) and the type of question (yesno, input, quiz) the answers should be processed differently.
+	if bel(currentMinidialog(Minidialog), currentMove(Move), answer(Minidialog,Move, Ans, Data), not(answerProcessed))
+		then selectRobotResponse(Minidialog, Move, Ans, Data).
 		
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint, Source), getUserModelValue(Source, Decision), nextCondition(Con)) then {
-		if bel(next(T, S, Decision, _))
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, branchingPoint, Source), getUserModelValue(Source, Decision), nextCondition(Con)) then {
+		if bel(next(Minidialog, Move, Decision, _))
 			then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
-		if bel(not(next(T, S, Decision, _)), Decision \= "fail", next(T, S, "_others", _))
+		if bel(not(next(Minidialog, Move, Decision, _)), Decision \= "fail", next(Minidialog, Move, "_others", _))
 			then delete(nextCondition(Con)) + insert(nextCondition("_others")).
-		if bel(not(next(T, S, Decision, _)), Decision \= "fail", not(next(T, S, "_others", _)))
+		if bel(not(next(Minidialog, Move, Decision, _)), Decision \= "fail", not(next(Minidialog, Move, "_others", _)))
 			then delete(nextCondition(Con)) + insert(nextCondition("success")).
 	}
 		
 		
 	% If an emotion is expected and present, set that as the next condition.
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), not(Con=Emotion))
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, emotion), emotion(Minidialog, Move,Emotion), nextCondition(Con), not(Con=Emotion))
 		then delete(nextCondition(Con)) + insert(nextCondition(Emotion)).
 		
 		
@@ -196,43 +196,43 @@ module hero_events {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	% Question
-	if bel(currentTopic(T), currentState(S), state(T, S, question), eventsCompleted, not(waitingForAnswer), not(answer(T, S, _, _)))
-		then askQuestion(T, S).
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), eventsCompleted, not(waitingForAnswer), not(answer(Minidialog, Move, _, _)))
+		then askQuestion(Minidialog, Move).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted,
-			keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)),
-			not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, audioInput), eventsCompleted,
+			keyListValues(Minidialog, Move, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)),
+			not(waitingForAudioFile(ID)),  not(getUserModelValue(ID, _)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID),
-			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, audioInput), eventsCompleted, waitingForSoundAnim(ID),
+			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(getUserModelValue(ID, _)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion
-	if bel(currentTopic(T), currentState(S), state(T, S, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(T, S,_)))
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(Minidialog, Move,_)))
 		then startWatching(6) + insert(waitingForEmotion).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Wait for event (e.g. button press) in a say state   %%%
+	%%% Wait for event (e.g. button press) in a say move   %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this state.	
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), not(waitingForSayClear), eventsCompleted)
+	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this move.	
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), not(waitingForSayClear), eventsCompleted)
 		then insert(waitingForEvent(Next), waitingForSayClear).
 	
-	% If the next event is available, clear this state.
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
+	% If the next event is available, clear this move.
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
 		then delete(waitingForSayClear).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, say), keyValue(T, S, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
 		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% State transition handling            %%%
+	%%% Move transition handling            %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	% If state has been completed,  
-	if bel(currentTopic(T), completed(S), nextCondition(C)) then performStateTransition(T, S, C).
+	% If move has been completed,  
+	if bel(currentMinidialog(Minidialog), completed(Move), nextCondition(C)) then nextDialogMove(Minidialog, Move, C).
 	
 }

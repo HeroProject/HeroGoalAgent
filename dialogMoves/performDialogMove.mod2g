@@ -1,83 +1,83 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
 order=linearall.
 
-% Performs all action (modalities) at the start of a state S for topic T.
-module performStateActions(T, S) {
+% Performs all action (modalities) at the start of a move Move for minidialog Minidialog.
+module performDialogMove(Minidialog, Move) {
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				DIALOG ATTRIBUTES				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Say what needs to be said.
-	if bel(text(T, S, Text), keyValue(T, S, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
+	if bel(text(Minidialog, Move, Text), keyValue(Minidialog, Move, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
 	{
-		if bel(keyValue(T, S, noAnimation, "true")) then say(TextProcessed).
-		if not(bel(keyValue(T, S, noAnimation, "true"))) then sayAnimated(TextProcessed).
+		if bel(keyValue(Minidialog, Move, noAnimation, "true")) then say(TextProcessed).
+		if not(bel(keyValue(Minidialog, Move, noAnimation, "true"))) then sayAnimated(TextProcessed).
 	}
 
 	% Led there be light.
-	if bel(leds(T, S, direct, Leds, Colors), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
-	if bel(leds(T, S, direct, Leds, AnimType, Colors, Speed)) then startLedAnimation(Leds, AnimType, Colors, Speed).
-	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
-	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
-	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
-	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
-	if bel(leds(T, S, reset)) then stopLedAnimation.
+	if bel(leds(Minidialog, Move, direct, Leds, Colors), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
+	if bel(leds(Minidialog, Move, direct, Leds, AnimType, Colors, Speed)) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	if bel(leds(Minidialog, Move, id, ID), getUserModelValue(ID, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
+	if bel(leds(Minidialog, Move, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	if bel(leds(Minidialog, Move, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
+	if bel(leds(Minidialog, Move, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	if bel(leds(Minidialog, Move, reset)) then stopLedAnimation.
 
 	% Play motions.
-	if bel(anim(T, S, onRobot, Anim)) then gesture(Anim).
-	if bel(anim(T, S, file, Anim)) then playMotion(Anim).
-	if bel(anim(T, S, id, ID), getUserModelValue(ID, Recording)) then playMotion(Recording).
-	if bel(anim(T, S, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
+	if bel(anim(Minidialog, Move, onRobot, Anim)) then gesture(Anim).
+	if bel(anim(Minidialog, Move, file, Anim)) then playMotion(Anim).
+	if bel(anim(Minidialog, Move, id, ID), getUserModelValue(ID, Recording)) then playMotion(Recording).
+	if bel(anim(Minidialog, Move, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
 	
 	% Play audio.
-	if bel(audio(T, S, file, A)) then playAudio(A).
-	if bel(audio(T, S, id, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
-	if bel(audio(T, S, option, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
+	if bel(audio(Minidialog, Move, file, A)) then playAudio(A).
+	if bel(audio(Minidialog, Move, id, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
+	if bel(audio(Minidialog, Move, option, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
 	
 	% Wake up and rest.
-	if bel(wakeup(T, S)) then wakeUp.
-	if bel(rest(T, S)) then rest + stopLedAnimation.
+	if bel(wakeup(Minidialog, Move)) then wakeUp.
+	if bel(rest(Minidialog, Move)) then rest + stopLedAnimation.
 	
 	% Set breathing
-	if bel(enableBreathing(T, S), basePosture('Stand')) then enableBreathing.
-	if bel(enableBreathing(T, S), basePosture('Sit')) then enableBreathing('Head').
-	if bel(disableBreathing(T, S)) then disableBreathing.
+	if bel(enableBreathing(Minidialog, Move), basePosture('Stand')) then enableBreathing.
+	if bel(enableBreathing(Minidialog, Move), basePosture('Sit')) then enableBreathing('Head').
+	if bel(disableBreathing(Minidialog, Move)) then disableBreathing.
 	
 	% Go to posture
-	if bel(go_to_posture(T, S, Posture, Speed)) then goToPosture(Posture, Speed).
-	if bel(go_to_posture(T, S, Posture)) then goToPosture(Posture).
-	if bel(go_to_posture(T, S), basePosture(Posture)) then goToPosture(Posture).
+	if bel(go_to_posture(Minidialog, Move, Posture, Speed)) then goToPosture(Posture, Speed).
+	if bel(go_to_posture(Minidialog, Move, Posture)) then goToPosture(Posture).
+	if bel(go_to_posture(Minidialog, Move), basePosture(Posture)) then goToPosture(Posture).
 	
 	% Set stiffness
-	if bel(set_stiffness(T, S, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
+	if bel(set_stiffness(Minidialog, Move, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					WEBPAGE						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Show text.
-	if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
+	if bel(display(Minidialog, Move, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
 		then renderPage(Html).
-	if bel(display_raw(T, S, Txt), html(Txt, Html), currentAttempt(1)) 
+	if bel(display_raw(Minidialog, Move, Txt), html(Txt, Html), currentAttempt(1)) 
 		then renderPage(Html).
 	% Show image.
-	if bel(image(T, S, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
+	if bel(image(Minidialog, Move, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
 		then renderPage(Html).
 	% Show questions
-	if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
+	if bel(text(Minidialog, Move, Txt), keyValue(Minidialog, Move, type, yesno), text(Txt, HTxt)) then {
 		%if bel(currentAttempt(1), html(HTxt, Html))
 		%	then renderPage(Html).
 		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
 			then renderPage(Html).
 	}
-	if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt)) then {
+	if bel(text(Minidialog, Move, Txt), keyListValues(Minidialog, Move, [type, options], [quiz, List]), text(Txt, HTxt)) then {
 		%if bel(currentAttempt(1), html(HTxt, Html))
 		%	then renderPage(Html).
 		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
@@ -90,14 +90,14 @@ module performStateActions(T, S) {
 	
 	%%%% AUDIO %%%%
 	% Prepare co-creation of audio
-	if bel(prepare_sound_anim(T, S), keyListValues(T, S, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), topics(AllTopics))
-		then delete(topics(AllTopics)) + insert(topics([co_sound | AllTopics]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
+	if bel(prepare_sound_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), minidialogs(AllMinidialogs))
+		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_sound | AllMinidialogs]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
 	
 	% Save result of audio co-creation
-	if bel(save_sound(T, S, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
+	if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
 			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 	
-	if bel(save_sound(T, S, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
+	if bel(save_sound(Minidialog, Move, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
 			delete(soundConfig(ID, RT), waitingForSoundAnim(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 		
@@ -106,25 +106,25 @@ module performStateActions(T, S) {
 	
 	%%%%% MOTIONS %%%%
 	% Prepare co-creation of a motion
-	if bel(prepare_motion_anim(T, S), keyListValues(T, S, [umVariable, option1, option2], [ID, Option1, Option2]), topics(AllTopics))
-		then delete(topics(AllTopics)) + insert(topics([co_motion | AllTopics]), waitingForMotionAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+	if bel(prepare_motion_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), minidialogs(AllMinidialogs))
+		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_motion | AllMinidialogs]), waitingForMotionAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
 	
 	% Co-create motion
-	if bel(record_motion(T, S, Joints, Duration), Duration > 0, (keyValue(T, S, umVariable, ID) ; not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID))) 
+	if bel(record_motion(Minidialog, Move, Joints, Duration), Duration > 0, (keyValue(Minidialog, Move, umVariable, ID) ; not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID))) 
 		then insert(waitingForMotionRecording(ID)) + setStiffness(Joints, 0) + startMotionRecording(Joints) + starttimer(recordMotion, Duration, Duration).
 		
-	if bel(record_motion(T, S, Joints, 0))
+	if bel(record_motion(Minidialog, Move, Joints, 0))
 		then setStiffness(Joints, 0) + startMotionRecording(Joints).
 	
 	% Save result of motion co-creation
-	if bel(save_motion(T, S, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then {
+	if bel(save_motion(Minidialog, Move, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Motion, UserModel, NewUserModel), userId(UserId)) then
 			delete(userModel(UserModel), waitingForMotionAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Motion).
 		
 		forall bel(animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 	}
 	
-	if bel(save_motion(T, S, recording, Joints), (waitingForMotionAnim(ID); not(waitingForMotionAnim(_)), keyValue(T, S, umVariable, ID); not(waitingForMotionAnim(_)), not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID)))
+	if bel(save_motion(Minidialog, Move, recording, Joints), (waitingForMotionAnim(ID); not(waitingForMotionAnim(_)), keyValue(Minidialog, Move, umVariable, ID); not(waitingForMotionAnim(_)), not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID)))
 		then {
 			if true then stopMotionRecording + setStiffness(Joints, 100) + insert(waitingForMotionRecording(ID)).
 			
@@ -136,34 +136,34 @@ module performStateActions(T, S) {
 	
 	%%%% LED ANIMATIONS %%%%
 	% Prepare co-creation of led animation. Set a flag that the next led animation will be linked to this id.
-	if bel(prepare_led_anim(T, S), not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, ID), topics(AllTopics))
-		then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(Minidialog, Move), not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID), minidialogs(AllMinidialogs))
+		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_selection | AllMinidialogs]), waitingForLedAnim(ID)).
 	
-	if bel(prepare_led_anim(T, S), keyListValues(T, S, [umVariable, option1, option2], [ID, Option1, Option2]), topics(AllTopics))
-		then delete(topics(AllTopics)) + insert(topics([co_led_selection | AllTopics]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+	if bel(prepare_led_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), minidialogs(AllMinidialogs))
+		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_selection | AllMinidialogs]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
 	
-	if bel(prepare_led_anim(T, S), keyValue(T, S, umVariable, ID), not(keyListValues(T, S, [option1, option2], [_, _])), topics(AllTopics))
-		then delete(topics(AllTopics)) + insert(topics([co_led_creation | AllTopics]), waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(Minidialog, Move), keyValue(Minidialog, Move, umVariable, ID), not(keyListValues(Minidialog, Move, [option1, option2], [_, _])), minidialogs(AllMinidialogs))
+		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_creation | AllMinidialogs]), waitingForLedAnim(ID)).
 
 	% Save the led animation configurations.
 	% Remove all the downloaded options
-	forall bel(save_led_anim(T, S, _, _, _, _), waitingForLedAnim(ID), animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+	forall bel(save_led_anim(Minidialog, Move, _, _, _, _), waitingForLedAnim(ID), animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
 		
 	%Save a blinking, alternate, and spinning animations.
-	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
+	if bel(save_led_anim(Minidialog, Move, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
 	getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
 	userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
 	nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	%Save a color select animation.
-	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
+	if bel(save_led_anim(Minidialog, Move, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
 	userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
 	nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
 	% Save a led animation option as selected option and remove the remaining options.
-	if bel(save_led_anim(T, S, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then 
+	if bel(save_led_anim(Minidialog, Move, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Group, AnimType, Colors, Speed])) then 
 	{
 		%Store the selected uptions with the right ID in the local and remote user model.
 		if bel(userModel(UserModel), updateUserModel(ID, [Group, AnimType, Colors, Speed], UserModel, NewUserModel),
@@ -176,14 +176,14 @@ module performStateActions(T, S) {
 	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%				TOPIC MANAGEMENT				%%
+	%%				MINIDIALOG MANAGEMENT				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	forall bel(insert_topic(T, S, Topic)) do {
-    	if bel(topics(AllTopics)) then delete(topics(AllTopics)) + insert(topics([Topic | AllTopics])).
+	forall bel(insert_minidialog(Minidialog, Move, Minidialog)) do {
+    	if bel(minidialogs(AllMinidialogs)) then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([Minidialog | AllMinidialogs])).
 	}
 	
-	if bel(remove_topic(T, S, TopicsToDelete), topics(AllTopics), delete_topics(AllTopics, TopicsToDelete, NewAllTopics)) then delete(topics(AllTopics)) + insert(topics(NewAllTopics)).
+	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), minidialogs(AllMinidialogs), delete_minidialogs(AllMinidialogs, MinidialogsToDelete, NewAllMinidialogs)) then delete(minidialogs(AllMinidialogs)) + insert(minidialogs(NewAllMinidialogs)).
 	
 	%Active eventFailSave if required.	
 	if bel(evenFailSafeActive(true)) then starttimer(eventFailSafe, 16000, 16000).

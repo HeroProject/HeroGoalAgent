@@ -1,42 +1,41 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 
 order=linearall.
 
-module performStateTransition(T, S, C) {
+module nextDialogMove(Minidialog, Move, C) {
 	if bel(evenFailSafeActive(true)) then canceltimer(eventFailSafe).
 	% ... clean up (and reset nextCondition to default value 'true') ...
 	% reset answers processing flag
 	if bel(answerProcessed) then delete(answerProcessed).
 	
-	% Cleanup: remove state specific parameters (if any).	
-	if bel(state(T, S, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
+	% Cleanup: remove move specific parameters (if any).	
+	if bel(move(Minidialog, Move, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
 		then delete(modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count)). 
 	
 	% Cleanup: answers have been stored and processed. Temporary placeholder can be removed.
-	if bel(answer(T, S, Ans, Data)) then delete(answer(T, S, Ans, Data)).
-	forall bel(audioRecording(ID)) do delete(audioRecording(ID)).
+	if bel(answer(Minidialog, Move, Ans, Data)) then delete(answer(Minidialog, Move, Ans, Data)).
 	
-	% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
-	if bel(currentState(S), started)
-		then delete(currentState(S), started, nextCondition(C))
+	% Cleanup: Remove current, completed move and reset move tracking parameters to their default values.
+	if bel(currentMove(Move), started)
+		then delete(currentMove(Move), started, nextCondition(C))
 			+ insert(start, nextCondition('true')).
 
-	% ... and transition to next state (if there is one) ...
-	if bel(next(T, S, C, Snext))
-		then insert(currentState(Snext)). % Progress: move to next state
+	% ... and transition to next move (if there is one) ...
+	if bel(next(Minidialog, Move, C, NextMove), userId(UserId))
+		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove). % Progress: move to next move
 		
-	% ... or go to next topic if a topic has been completed (no next state has been specified for the topic).
-	if goal(topics([])), not(bel(next(T, S, C, _))), bel(topics(AllTopics), pop(AllTopics, NewTopic, RemainingTopics), getUserModelWithoutLocal(UserModel))
-		then delete(currentTopic(T), topics(AllTopics)) + insert(currentTopic(NewTopic), topics(RemainingTopics), currentState(s1)) + logging([userModel=UserModel]).
+	% ... or go to next minidialog if a minidialog has been completed (no next move has been specified for the minidialog).
+	if goal(minidialogs([])), not(bel(next(Minidialog, Move, _, _))), bel(minidialogs(AllMinidialogs), pop(AllMinidialogs, NewMinidialog, RemainingMinidialogs), getUserModelWithoutLocal(UserModel))
+		then delete(currentMinidialog(Minidialog), minidialogs(AllMinidialogs)) + insert(currentMinidialog(NewMinidialog), minidialogs(RemainingMinidialogs), currentMove(s1)) + logging([userModel=UserModel]).
 			
-	% And, finally, initialize state specific parameters for new state (if any).
-	if bel(currentTopic(Tnew), currentState(Snew), state(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 
+	% And, finally, initialize move specific parameters for new move (if any).
+	if bel(currentMinidialog(Tnew), currentMove(Snew), move(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 }

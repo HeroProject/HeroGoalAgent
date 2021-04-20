@@ -1,15 +1,15 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
 order=linearall.
 
-module modalitySwitch(T, S, From, To) {
-	if bel(getModalitySwitchResponse(T, S, From, To, Response)) then say(Response).
+module modalitySwitch(Minidialog, Move, From, To) {
+	if bel(getModalitySwitchResponse(Minidialog, Move, From, To, Response)) then say(Response).
 	
 	if bel(modalityCounter(ModCount), currentAttempt(CurrentAttempt), NewModCount is ModCount + 1) 
 		then delete(currentInputModality(From), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started) 

@@ -1,34 +1,34 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 
-module askQuestion(T, S) {
+module askQuestion(Minidialog, Move) {
 	if bel(currentAttempt(CurrentAttempt))
 		then {
 			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.
-			if bel(currentInputModality(speech), keyListValues(T, S, [type, context], [Type, Context]),
-					getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime), Time is MaxAnswerTime/1000)
+			if bel(currentInputModality(speech), keyListValues(Minidialog, Move, [type, context], [Type, Context]),
+					getMaxAnswerTime(Minidialog, Move, speech, Type, CurrentAttempt, MaxAnswerTime), Time is MaxAnswerTime/1000)
 				then startListening(Time, Context) + insert(waitingForAnswer).
 			
-			if bel(currentInputModality(touch), getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime))
+			if bel(currentInputModality(touch), getMaxAnswerTime(Minidialog, Move, touch, _, _, MaxAnswerTime))
 				then {
-					% Start timer for question state with touch response and set waitingForAnswer flag.
+					% Start timer for question move with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).
-					if bel(keyValue(T, S, type, yesno))
-						then starttimer(S,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer)
+					if bel(keyValue(Minidialog, Move, type, yesno))
+						then starttimer(Move,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer)
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
-					% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
+					% Cycle through multiple choice options, start timer for question move with touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).	
-					if bel(keyListValues(T, S, [type, options], [Type, Values]), Type \= yesno,
+					if bel(keyListValues(Minidialog, Move, [type, options], [Type, Values]), Type \= yesno,
 							mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
-						then say(String) + starttimer(S, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer)
+						then say(String) + starttimer(Move, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer)
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 				}
 		}

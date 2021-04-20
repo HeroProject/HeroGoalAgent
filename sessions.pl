@@ -63,6 +63,7 @@ useGui(false).
 % When no GUI is uses, these variables need to be specified.
 setUserId('999').
 setSessionId(1).
+setContinueSession(false).
 setBasePosture('Stand').
 addLocalVariable(first_name, "Tommy").
 

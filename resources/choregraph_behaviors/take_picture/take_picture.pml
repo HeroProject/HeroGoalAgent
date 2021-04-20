@@ -8,7 +8,7 @@
     <Resources>
         <File name="camera1" src="behavior_1/camera1.ogg" />
     </Resources>
-    <Topics />
+    <MiniDialogs />
     <IgnoredPaths />
     <Translations auto-fill="en_US">
         <Translation name="translation_en_US" src="translations/translation_en_US.ts" language="en_US" />

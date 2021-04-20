@@ -8,6 +8,6 @@
     <Resources>
         <File name="elephant" src="behavior_1/elephant.ogg" />
     </Resources>
-    <Topics />
+    <MiniDialogs />
     <IgnoredPaths />
 </Package>

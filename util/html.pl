@@ -9,7 +9,7 @@ html(Main,Html) :- header(H), main(MT), format(atom(M),MT,[Main]), footer(F),
 	atom_concat(H,M,HM), atom_concat(HM,F,SubHtml), bg(BG), format(atom(Html),BG,[SubHtml]).
 
 text('<h1>~a</h1>').
-text(Content,Html) :- text(T), format(atom(Html),T,[Content]).
+text(Content,Html) :- text(Minidialog), format(atom(Html),Minidialog,[Content]).
 
 img('<img class="img-fluid" src="~a"/>').
 img(Src,Html) :- img(I), format(atom(Html),I,[Src]).

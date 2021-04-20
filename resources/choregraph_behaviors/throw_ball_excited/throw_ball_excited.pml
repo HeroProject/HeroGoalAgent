@@ -8,6 +8,6 @@
     <Resources>
         <File name="vacuum1" src="behavior_1/vacuum1.ogg" />
     </Resources>
-    <Topics />
+    <MiniDialogs />
     <IgnoredPaths />
 </Package>

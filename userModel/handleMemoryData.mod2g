@@ -1,23 +1,41 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
 module handleMemoryData(Key, Value) {
+	% import user model data
 	if bel(Value \= 'None', not(waitingForMemoryAudio(Key)), not(waitingForMemoryLed(Key)), waitingForMemoryData(Key), 
 			userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key)) + insert(userModel(NewUserModel)).
-			
+	
+	% import user audio data
 	if bel(Value \= 'None', waitingForMemoryAudio(Key), waitingForMemoryData(Key),
 			userModel(UserModel),updateUserModel(Key, Value, UserModel, NewUserModel))
 		then delete(waitingForMemoryData(Key), waitingForMemoryAudio(Key), userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
+	% import user led data
 	if bel(Value \= 'None', waitingForMemoryLed(Key), waitingForMemoryData(Key), string_to_nested_list(Value, LedAnim),
 			userModel(UserModel), updateUserModel(Key, LedAnim, UserModel, NewUserModel))
 		then delete(userModel(UserModel), waitingForMemoryData(Key), waitingForMemoryLed(Key)) + insert(userModel(NewUserModel)).
 	
+	% import dialog history
+	if bel(Value \= 'None', Key = 'DialogHistory', waitingForMemoryData('DialogHistory')) then 
+	{
+		if bel(dialogHistory(History)) then delete(dialogHistory(History)) + insert(dialogHistory(Value)).
+		if bel(not(waitingForMemoryData('NarrativeHistory')), waitingForHistory) then delete(waitingForHistory).
+	}
+	
+	% import narrative history
+	if bel(Value \= 'None', Key = 'NarrativeHistory', waitingForMemoryData('NarrativeHistory')) then 
+	{
+		if bel(narrativeHistory(History)) then delete(narrativeHistory(History)) + insert(narrativeHistory(Value)).
+		if bel(not(waitingForMemoryData('DialogHistory')), waitingForHistory) then delete(waitingForHistory).
+	}
+	
+	% release key if not data could be imported
 	if bel(waitingForMemoryData(Key), Value = 'None') then delete(waitingForMemoryData(Key)).
 }

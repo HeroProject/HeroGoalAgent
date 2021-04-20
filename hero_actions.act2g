@@ -1,8 +1,8 @@
 use 'util/*.pl' as knowledge.
-use 'topics/*.pl' as knowledge.
-use 'topics/co_creation/*.pl' as knowledge.
-use 'topics/hospital/*.pl' as knowledge.
-use 'topics/robotstories/*.pl' as knowledge.
+use 'minidialogs/*.pl' as knowledge.
+use 'minidialogs/co_creation/*.pl' as knowledge.
+use 'minidialogs/hospital/*.pl' as knowledge.
+use 'minidialogs/robotstories/*.pl' as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with
@@ -121,7 +121,7 @@ define setSession(ID, SessionId) with
 	
 define addMemoryEntry(ID, Key, Data) with
 	pre { true }
-	post { waitingForEvent('MemoryEntryStored') }
+	post { true }
 
 define setInteractantData(ID, Key, Value) with
 	pre { true }
@@ -130,6 +130,34 @@ define setInteractantData(ID, Key, Value) with
 define getInteractantData(ID, Key) with
 	pre { true }
 	post { waitingForMemoryData(Key) }
+
+define setDialogHistory(ID, MinidialogId) with
+	pre { true }
+	post { waitingForEvent('DialogHistorySet') }
+
+define getDialogHistory(ID) with
+	pre { true }
+	post { waitingForMemoryData('DialogHistory') }
+
+define setNarrativeHistory(ID, Thread, Position) with
+	pre { true }
+	post { waitingForEvent('NarrativeHistorySet') }
+
+define getNarrativeHistory(ID) with
+	pre { true }
+	post { waitingForMemoryData('NarrativeHistory') }
+	
+define setMoveHistory(ID, Move) with
+	pre { true }
+	post { waitingForEvent('MoveHistorySet') }
+
+define getMoveHistory(ID) with
+	pre { true }
+	post { waitingForMemoryData('MoveHistory') }
+
+define clearHistory(ID, SessionId) with
+	pre { true }
+	post { waitingForEvent('HistoryCleared') }
 
 define deleteInteractant(ID) with
 	pre { true }

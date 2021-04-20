@@ -1,8 +1,8 @@
 use '../util/*.pl' as knowledge.
-use '../topics/*.pl' as knowledge.
-use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/hospital/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -10,7 +10,7 @@ order=linearall.
 
 module initializeUserModel {
 	% Initialize user model
-	if true then insert(userModel([])).
+	if true then insert(userModel([]), dialogHistory([])).
 
 	% Load local variables into user model
 	if bel(useGui(false)) then {
@@ -24,11 +24,18 @@ module initializeUserModel {
 		}
 	
 
-	% Set userId and sessionId if not provided by gui.
+	% Set userId, sessionId, basePosture and continueSession if not provided by gui.
 	if bel(useGui(false), setUserId(UserId), setSessionId(SessionId), setBasePosture(BasePosture))
 		then insert(userId(UserId), sessionId(SessionId), basePosture(BasePosture)).
+	
+	if bel(setContinueSession(true)) then insert(continueSession).
+	
 	
 	% Initialize remote user model.
 	if bel(userId(UserId), sessionId(SessionId))
 		then delete(waitingForInit) + setSession(UserId, SessionId) + insert(waitingForSession).
+	
+	% Initialize history
+	if bel(continueSession, userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + insert(waitingForHistory).
+	if bel(not(continueSession), userId(UserId), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
 }
