@@ -76,7 +76,7 @@ text(intro,  s3i4, "Ik ga je steeds eerst een vraag stellen, en daar kun jij dan
 next(intro,  s3i4, "true",  s3i5).
 
 state(intro, s3i5, say).
-text(intro,  s3i5, "Dat kan door met mij te praten, maar soms gaan we ook de tablet gebruiken; dan zal ik dat erbij zeggen.").
+text(intro,  s3i5, "Dat kan door met mij te praten, maar soms gaan we ook de tè blèet gebruiken; dan zal ik dat er bij zeggen.").
 next(intro,  s3i5, "true",  s3i6).
 
 state(intro, s3i6, say).
@@ -125,7 +125,7 @@ text(algemeen,  s1i1, "Vind je zelf dat je goed slaapt?").
 next(algemeen,  s1i1, "true",  s1i2).
 
 state(algemeen, s1i2, say).
-text(algemeen,  s1i2, "Je kunt op de tablet kiezen tussen drie antwoorden.").
+text(algemeen,  s1i2, "Je kunt op de tè blèet kiezen tussen drie antwoorden.").
 next(algemeen,  s1i2, "true",  s1i3).
 
 state(algemeen, s1i3, say).
@@ -204,7 +204,7 @@ text(activiteiten,  s1t2, "Kijken op een scherm houdt je namelijk wakker.").
 next(activiteiten,  s1t2, "true",  s1t3).
 
 state(activiteiten, s1t3, say).
-text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tablet mee naar bed te nemen.").
+text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tè blèet mee naar bed te nemen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Routine                                                %%%
@@ -241,7 +241,7 @@ next(routine,  s2y, "true",  s2yq).
 
 state(routine, s2yq, question).
 stateConfig(routine, s2yq, [type=yesno, context='answer_yesno']).
-text(routine,  s2yq, "Wil je die met behulp van de tablet aan mij laten zien?").
+text(routine,  s2yq, "Wil je die met behulp van de tè blèet aan mij laten zien?").
 next(routine,  s2yq, 'answer_yes', s2yy).
 next(routine,  s2yq, 'answer_no', s2yn).
 next(routine,  s2yq, 'answer_dontknow', s2yn).
@@ -256,10 +256,10 @@ text(routine,  s2yn, "Dat is niet erg.").
 next(routine,  s2yn, "true", s4).
 
 state(routine, s3y, say).
-text(routine,  s3y, "Op de tablet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
+text(routine,  s3y, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3y, "true", s3yq).
 
-state(routine, s3yq, question). % TODO: complicated tablet task?
+state(routine, s3yq, question). % TODO: complicated tè blèet task?
 stateConfig(routine, s3yq, [type=yesno, context='answer_yesno']).
 text(routine,  s3yq, "Kun jij de plaatjes op volgorde zetten zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jouw routine horen.").
 next(routine,  s3yq, 'answer_yes', s3yr).
@@ -286,7 +286,7 @@ next(routine,  s1n2, "true", s2nq).
 
 state(routine, s2nq, question).
 stateConfig(routine, s2nq, [type=yesno, context='answer_yesno']).
-text(routine,  s2nq, "Zullen we samen met behulp van de tablet een routine maken? ").
+text(routine,  s2nq, "Zullen we samen met behulp van de tè blèet een routine maken? ").
 next(routine,  s2nq, 'answer_yes', s2ny).
 next(routine,  s2nq, 'answer_no', s2nn).
 next(routine,  s2nq, 'answer_dontknow', s2nn).
@@ -301,12 +301,12 @@ text(routine,  s2nn, "Oke.").
 next(routine,  s2nn, "true", s4).
 
 state(routine, s3n, say).
-text(routine,  s3n, "Op de tablet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
+text(routine,  s3n, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3n, "true", s3nq).
 
-state(routine, s3nq, question). % TODO: complicated tablet task?
+state(routine, s3nq, question). % TODO: complicated tè blèet task?
 stateConfig(routine, s3nq, [type=yesno, context='answer_yesno']).
-text(routine,  s3nq, "Kun jij de plaatjes op een volgorde zetten die jou handig lijkt? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jou passen. Papa of mama mag natuurlijk helpen.").
+text(routine,  s3nq, "Kun jij de plaatjes op een volgorde zetten die jou handig lijkt? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jou passen. Papa of mamma mag natuurlijk helpen.").
 next(routine,  s3nq, 'answer_yes', s3nr).
 next(routine,  s3nq, 'answer_no', s3nr).
 next(routine,  s3nq, 'answer_dontknow', s3nr).
@@ -337,11 +337,11 @@ text(routine,  s4, "Laten we verder praten over de slaapkamer.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(slaapkamer, s1, say).
-text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tablet!").
+text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!").
 next(slaapkamer,  s1, "true",  s1i1).
 
 state(slaapkamer, s1i1, say).
-text(slaapkamer,  s1i1, "Dit is mijn kamer. Ik heb veel robotknuffels en een heel zacht bed.").
+text(slaapkamer,  s1i1, "Dit is mijn kamer. Ik heb veel robot knuffels en een heel zacht bed.").
 next(slaapkamer,  s1i1, "true",  s1q).
 
 state(slaapkamer, s1q, question).
@@ -367,7 +367,7 @@ text(slaapkamer, s2, "Is jouw kamer ook donker als je gaat slapen?").
 next(slaapkamer, s2, "true",  s2i).
 
 state(slaapkamer, s2i, say).
-text(slaapkamer,  s2i, "Je kunt op de tablet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
+text(slaapkamer,  s2i, "Je kunt op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
 next(slaapkamer,  s2i, "true",  s2q).
 
 state(slaapkamer, s2q, question).
@@ -402,7 +402,7 @@ text(slaapkamer,  s2t1, "Ik heb nog een andere tip: let er ook op dat je kamer n
 next(slaapkamer,  s2t1, "true",  s2t2).
 
 state(slaapkamer, s2t2, say).
-text(slaapkamer,  s2t2, "Maar niet te lang hoor, want je moet het natuurlijk ook niet koud krijgen; papa of mama kan daar vast bij helpen.").
+text(slaapkamer,  s2t2, "Maar niet te lang hoor, want je moet het natuurlijk ook niet koud krijgen; pappa of mamma kan daar vast bij helpen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Regelmatige bedtijden                                  %%%
@@ -446,7 +446,7 @@ text(bedtijden,  s2ni, "Het is wel belangrijk om elke avond op ongeveer dezelfde
 next(bedtijden,  s2ni, "true", s2nt).
 
 state(bedtijden, s2nt, say).
-text(bedtijden,  s2nt, "Misschien dat je met papa of mama een vaste afspraak kunt maken over hoe laat je naar bed gaat, dan kunnen zij jou daarbij helpen door aan te geven wanneer het bijna bedtijd is.").
+text(bedtijden,  s2nt, "Misschien dat je met pappa of mamma een vaste afspraak kunt maken over hoe laat je naar bed gaat, dan kunnen zij jou daarbij helpen door aan te geven wanneer het bijna bedtijd is.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Piekeren                                               %%%
@@ -488,12 +488,12 @@ next(piekeren,  s2q, 'answer_no', s2n).
 next(piekeren,  s2q, 'answer_dontknow', s2f).
 next(piekeren,  s2q, 'fail', s2f).
 
-state(piekeren, s2y, say).
-text(piekeren,  s2y, "Dat is fijn! Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
-
 state(piekeren, s2n, say).
-text(piekeren,  s2n, "Wat balen. Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
-next(piekeren,  s2n, "true", s2t1).
+text(piekeren,  s2n, "Dat is fijn! Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
+
+state(piekeren, s2y, say).
+text(piekeren,  s2y, "Wat balen. Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
+next(piekeren,  s2y, "true", s2t1).
 
 state(piekeren, s2f, say).
 text(piekeren,  s2f, "Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
@@ -503,7 +503,7 @@ text(piekeren,  s2t1, "Als dat ook niet helpt, kun je er misschien met iemand ov
 next(piekeren,  s2t1, "true", s2t2).
 
 state(piekeren, s2t2, say).
-text(piekeren,  s2t2, "Weet papa of mama dat? Misschien dat je het ook tegen de dokter kunt zeggen?").
+text(piekeren,  s2t2, "Weet pappa of mamma dat? Misschien dat je het ook tegen de dokter kunt zeggen?").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 's Nachts wakker                                       %%%
@@ -631,7 +631,7 @@ next(etendrinken,  s2, "true",  s2q).
 
 state(etendrinken, s2q, question).
 stateConfig(etendrinken, s2q, [type=yesno, context='answer_yesno']).
-text(etendrinken,  s2q, "Wil je dat met behulp van de tablet aan mij laten zien?").
+text(etendrinken,  s2q, "Wil je dat met behulp van de tè blèet aan mij laten zien?").
 next(etendrinken,  s2q, 'answer_yes', s2y).
 next(etendrinken,  s2q, 'answer_no', s2n).
 next(etendrinken,  s2q, 'answer_dontknow', s2n).
@@ -646,10 +646,10 @@ text(etendrinken,  s2y, "Leuk!").
 next(etendrinken,  s2y, "true", s2yi).
 
 state(etendrinken, s2yi, say).
-text(etendrinken,  s2yi, "Kijk: op de tablet zie je allerlei soorten eten en drinken, zoals cola, energy drink, (warme) melk, en chocola.").
+text(etendrinken,  s2yi, "Kijk: op de tè blèet zie je allerlei soorten eten en drinken, zoals cola, energy drink, (warme) melk, en chocola.").
 next(etendrinken,  s2yq, "true", s2yq).
 
-state(etendrinken, s2yq, question). % TODO: complicated tablet task?
+state(etendrinken, s2yq, question). % TODO: complicated tè blèet task?
 stateConfig(etendrinken, s2yq, [type=yesno, context='answer_yesno']).
 text(etendrinken,  s2yq, "Kun jij het eten en drinken aanklikken waarvan jij denkt dat je deze beter niet kunt nemen voordat je gaat slapen?").
 next(etendrinken,  s2yq, 'answer_yes', s2yr).
@@ -728,8 +728,8 @@ state(afsluiting, s1f, say).
 text(afsluiting,  s1f, "Fijn dat we zo veel te weten zijn gekomen over hoe jij slaapt en hoe je beter zou kunnen slapen.").
 next(afsluiting,  s1f, "true", s1i2).
 
-state(afsluiting, s1i2, say). % FIXME: tablet show
-text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tablet. Kijk je mee?").
+state(afsluiting, s1i2, say). % FIXME: tè blèet show
+text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tè blèet. Kijk je mee?").
 next(afsluiting,  s1i2, "true", s1i3).
 
 state(afsluiting, s1i3, say).
@@ -753,7 +753,7 @@ text(afsluiting,  s1o2, "Ik ben benieuwd of ze jou kunnen helpen.").
 next(afsluiting,  s1o2, "true", s1o3).
 
 state(afsluiting, s1o3, say).
-text(afsluiting,  s1o3, "Daarom ga ik jou en papa of mama over een week nog een vragenlijst sturen over slaap.").
+text(afsluiting,  s1o3, "Daarom ga ik jou en pappa of mamma over een week nog een vragenlijst sturen over slaap.").
 next(afsluiting,  s1o3, "true", s1o4).
 
 state(afsluiting, s1o4, say).
