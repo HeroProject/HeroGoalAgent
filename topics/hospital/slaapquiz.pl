@@ -259,7 +259,7 @@ state(routine, s3y, say).
 text(routine,  s3y, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3y, "true", s3yq).
 
-state(routine, s3yq, question). % TODO: complicated tè blèet task?
+state(routine, s3yq, question). % TODO: complicated tablet task?
 stateConfig(routine, s3yq, [type=yesno, context='answer_yesno']).
 text(routine,  s3yq, "Kun jij de plaatjes op volgorde zetten zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jouw routine horen.").
 next(routine,  s3yq, 'answer_yes', s3yr).
@@ -304,7 +304,7 @@ state(routine, s3n, say).
 text(routine,  s3n, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3n, "true", s3nq).
 
-state(routine, s3nq, question). % TODO: complicated tè blèet task?
+state(routine, s3nq, question). % TODO: complicated tablet task?
 stateConfig(routine, s3nq, [type=yesno, context='answer_yesno']).
 text(routine,  s3nq, "Kun jij de plaatjes op een volgorde zetten die jou handig lijkt? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jou passen. Papa of mamma mag natuurlijk helpen.").
 next(routine,  s3nq, 'answer_yes', s3nr).
@@ -375,7 +375,7 @@ stateConfig(slaapkamer, s2q, [type=quiz, context='answer_sleep', options=["Donke
 text(slaapkamer, s2q, "Welke kamer lijkt het meest op die van jou?").
 next(slaapkamer, s2q, 'correct', s2d).
 next(slaapkamer, s2q, 'incorrect', s2l).
-next(slaapkamer, s2q, 'fail', s2dn). % TODO: actual 3 choices
+next(slaapkamer, s2q, 'fail', s2dn). % TODO: actual image choices on tablet
 
 state(slaapkamer, s2d, say).
 text(slaapkamer,  s2d, "Heel goed! In een donkere kamer kun je beter slapen").
@@ -649,7 +649,7 @@ state(etendrinken, s2yi, say).
 text(etendrinken,  s2yi, "Kijk: op de tè blèet zie je allerlei soorten eten en drinken, zoals cola, energy drink, (warme) melk, en chocola.").
 next(etendrinken,  s2yq, "true", s2yq).
 
-state(etendrinken, s2yq, question). % TODO: complicated tè blèet task?
+state(etendrinken, s2yq, question). % TODO: complicated tablet task?
 stateConfig(etendrinken, s2yq, [type=yesno, context='answer_yesno']).
 text(etendrinken,  s2yq, "Kun jij het eten en drinken aanklikken waarvan jij denkt dat je deze beter niet kunt nemen voordat je gaat slapen?").
 next(etendrinken,  s2yq, 'answer_yes', s2yr).
@@ -728,7 +728,7 @@ state(afsluiting, s1f, say).
 text(afsluiting,  s1f, "Fijn dat we zo veel te weten zijn gekomen over hoe jij slaapt en hoe je beter zou kunnen slapen.").
 next(afsluiting,  s1f, "true", s1i2).
 
-state(afsluiting, s1i2, say). % FIXME: tè blèet show
+state(afsluiting, s1i2, say). % FIXME: tablet show
 text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tè blèet. Kijk je mee?").
 next(afsluiting,  s1i2, "true", s1i3).
 
