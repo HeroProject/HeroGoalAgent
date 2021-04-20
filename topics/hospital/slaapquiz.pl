@@ -216,7 +216,7 @@ text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tè blèet mee
 state(routine, s1, say).
 text(routine,  s1, "Ik ben ook wel benieuwd wat je doet voordat je gaat slapen.").
 leds(routine,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
-next(routine,  s1, "true",  s3yq).
+next(routine,  s1, "true",  s1i1).
 
 state(routine, s1i1, say).
 text(routine,  s1i1, "Ik poets altijd eerst mijn tanden, dan ga ik plassen en lees ik een boekje.").
