@@ -54,6 +54,9 @@ session(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho1_tuto
 session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_story_selection, ho2_goodbye, general_rest]).
 session(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 
+%%%%%%%%%%%%%% Interactieve slaapquiz %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, slaapkamer, bedtijden, piekeren, wakker, bewegen, etendrinken, afsluiting, general_rest]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,7 +67,7 @@ useGui(false).
 setUserId('999').
 setSessionId(1).
 setBasePosture('Stand').
-addLocalVariable(first_name, "Tommy").
+addLocalVariable(first_name, "Samuel").
 
 % Button to pause and resume the robot during the interaction
 setPauseButton('MiddleTactilTouched').
@@ -73,8 +76,8 @@ setPauseButton('MiddleTactilTouched').
 % Useful if functionality of naoqi is buggy and the right events are not returned.
 evenFailSafeActive(false).
 
-
 % Session details.
+sessionOrder([slaapquiz]).
 %sessionOrder([hospital_1, hospital_2, hospital_3]).
 %sessionOrder([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-sessionOrder([testing_short]).
+%sessionOrder([testing_short]).
