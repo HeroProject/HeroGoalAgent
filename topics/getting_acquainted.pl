@@ -92,7 +92,7 @@ next(ga_prac_touch,  s6, "true",  s7).
 
 state(ga_prac_touch, s7, question).
 stateConfig(ga_prac_touch, s7, [type=quiz, context='answer_color', options=['rood', 'licht blauw', 'donker grijs', 'groen'], 
-	correctAnswer=['donker grijs'], inputModality=[touch=3]]).
+	correctAnswer=['donker grijs'], inputModality=[feet=3]]).
 text(ga_prac_touch, s7, "Welke kleur hebben mijn schouders? Druk op de ja knop als je het antwoord hoort.").
 next(ga_prac_touch, s7, 'correct', s8cor).
 next(ga_prac_touch, s7, 'incorrect', s8incor).

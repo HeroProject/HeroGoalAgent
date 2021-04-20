@@ -30,8 +30,8 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_color, s1, question).
-stateConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
-defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
+stateConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, feet=2], options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
+defaultAnswer="rood", modalitySwitchResponse=[speechfeet='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
 next(test_color, s1, 'fail', s2f).

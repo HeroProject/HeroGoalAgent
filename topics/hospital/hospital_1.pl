@@ -123,7 +123,7 @@ leds(ho1_tutorial_touch,  s7, direct, ['LeftFootLeds', 'RightFootLeds'], ['white
 next(ho1_tutorial_touch,  s7, "true",  s8).
 
 state(ho1_tutorial_touch, s8, question).
-stateConfig(ho1_tutorial_touch, s8, [type=yesno, inputModality=[touch=3], maxAnswerTime=[touch=5000]]).
+stateConfig(ho1_tutorial_touch, s8, [type=yesno, inputModality=[feet=3], maxAnswerTime=[feet=5000]]).
 text(ho1_tutorial_touch, s8, "Hou je van chocola? Druk tegen mijn teen om je antwoord door te geven.").
 next(ho1_tutorial_touch, s8, 'answer_yes', s9y).
 next(ho1_tutorial_touch, s8, 'answer_no', s9n).
@@ -153,7 +153,7 @@ next(ho1_tutorial_touch,  s11, "true",  s12).
 
 state(ho1_tutorial_touch, s12, question).
 stateConfig(ho1_tutorial_touch, s12, [type=quiz, options=['paars', 'blauw', 'groen', 'oranje'], 
-	correctAnswer=['groen'], inputModality=[touch=3]]).
+	correctAnswer=['groen'], inputModality=[feet=3]]).
 leds(ho1_tutorial_touch, s12, direct, ["FaceLeds"], ["groen"]).
 text(ho1_tutorial_touch, s12, "Welke kleur hebben mijn ogen nu? Druk op de ja knop als je het antwoord hoort.").
 next(ho1_tutorial_touch, s12, 'correct', s13cor).

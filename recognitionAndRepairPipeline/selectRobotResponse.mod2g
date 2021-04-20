@@ -8,7 +8,6 @@ use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 
 module selectRobotResponse(T, S, Ans, Data) {
-
 	if bel(keyValue(T, S, type, Type), nextCondition(Condition), userId(UserId), (keyValue(T, S, umVariable, Key); not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, Key)))
 		then {
 			% the default nextCondition will be replaced.
@@ -57,5 +56,4 @@ module selectRobotResponse(T, S, Ans, Data) {
 			% Flag that the answer has been processed.
 			if true then insert(answerProcessed).
 		}
-	
 }

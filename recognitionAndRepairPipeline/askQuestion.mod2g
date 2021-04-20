@@ -17,14 +17,14 @@ module askQuestion(T, S) {
 					getMaxAnswerTime(T, S, speech, Type, CurrentAttempt, MaxAnswerTime), Time is MaxAnswerTime/1000)
 				then startListening(Time, Context) + insert(waitingForAnswer).
 			
-			if bel(currentInputModality(touch), getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime))
+			if bel(currentInputModality(feet), getMaxAnswerTime(T, S, feet, _, _, MaxAnswerTime))
 				then {
-					% Start timer for question state with touch response and set waitingForAnswer flag.
+					% Start timer for question state with a feet touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).
 					if bel(keyValue(T, S, type, yesno))
 						then starttimer(S,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer)
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
-					% Cycle through multiple choice options, start timer for question state with touch response and set waitingForAnswer flag.
+					% Cycle through multiple choice options, start timer for question state with a feet touch response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).	
 					if bel(keyListValues(T, S, [type, options], [Type, Values]), Type \= yesno,
 							mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))

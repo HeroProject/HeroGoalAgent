@@ -153,7 +153,7 @@ module hero_events {
 		then processUserResponse(T, S, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
-	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(touch))
+	if bel(currentTopic(T), currentState(S), state(T, S, question), timeout(S), waitingForAnswer, currentInputModality(feet))
 		then repair(T, S).
 		
 	%%% AUDIO RECORDING %%%

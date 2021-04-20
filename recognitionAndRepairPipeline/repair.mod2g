@@ -35,7 +35,7 @@ module repair(T, S) {
 						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 			}
 
-			if bel(currentInputModality(touch), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, touch, MaxAnswerAttempts), started)
+			if bel(currentInputModality(feet), keyValue(T, S, type, Type), getMaxAnswerAttempts(T, S, feet, MaxAnswerAttempts), started)
 				then {
 					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
@@ -48,7 +48,7 @@ module repair(T, S) {
 						 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 									% If there are other input modalities left, switch modalities.
 									if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-										then modalitySwitch(T, S, touch, NewModality).
+										then modalitySwitch(T, S, feet, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
@@ -66,10 +66,10 @@ module repair(T, S) {
 								 				then delete(waitingForAnswer) + insert(answer(T, S, failure, [])).
 											% If there are other input modalities left, switch modalities.
 											if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-												then modalitySwitch(T, S, touch, NewModality).
+												then modalitySwitch(T, S, feet, NewModality).
 										}
 							
-									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(touch), started)
+									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(feet), started)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 								}

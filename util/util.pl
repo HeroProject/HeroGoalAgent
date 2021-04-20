@@ -50,7 +50,7 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Right bumper means yes and left bumper means no (used if current state is yes/no question with touch response).
+% Right bumper means yes and left bumper means no (used if current state is yes/no question with feet touch response).
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
@@ -96,7 +96,7 @@ getMaxAnswerAttempts(T, S, Modality, MaxAnsAttempts) :- keyValue(T, S, inputModa
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
 
-getMaxAnswerTime(T, S, touch, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
+getMaxAnswerTime(T, S, feet, _, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((feet=MaxAnswerTime), Times), !.
 getMaxAnswerTime(T, S, speech, openend, _, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !.
 getMaxAnswerTime(T, S, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(T, S, maxAnswerTime, Times), Attempt = 1, 
 								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
@@ -137,8 +137,6 @@ string_to_nested_list(Input, Output) :-
     atomics_to_string(A, ',', Input),
     maplist(nested_list_to_atom, A, AFixed),
     maplist(term_to_atom, Output, AFixed).
-
-nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
 
 replace_char([H | T], CharI, CharO, [CharO | Tout]) :- H = CharI, replace_char(T, CharI, CharO, Tout), !.
 replace_char([H | T], CharI, CharO, [H | Tout]) :- not(H = CharI), replace_char(T, CharI, CharO, Tout), !.
@@ -202,14 +200,14 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % override config param for specific state by using key-label in key-value list associated with that state.
 
-% Order for input modalities and respective maximum number of attempts. Available modalities are speech and touch.
-keyValue(_, _, inputModality, [speech=2, touch=2]).
+% Order for input modalities and respective maximum number of attempts. Available modalities are speech and feet.
+keyValue(_, _, inputModality, [speech=2, feet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
-keyValue(_, _, maxAnswerTime, [	touch=3000, 
+keyValue(_, _, maxAnswerTime, [	feet=3000, 
 				speechopenend=12000,
 				speechyesnofirst=3500, 
 				speechyesnononinitial=3500, 
@@ -218,5 +216,5 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 				speechquizfirst=5000,
 				speechquiznoninitial=3500]).						 
 % Default responses of robot to an input modality switch.
-keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
-					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
+keyValue(_, _, modalitySwitchResponse, [speechfeet='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
+					feetspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).

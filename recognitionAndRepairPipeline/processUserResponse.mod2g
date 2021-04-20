@@ -51,11 +51,11 @@ module processUserResponse(T, S, Intent, Text, Params) {
 							+ log(noAnswerError(T, S, Intent, Params)).
 				}
 				
-			if bel(currentInputModality(touch))
+			if bel(currentInputModality(feet))
 				then {
 					if true then delete(waitingForAnswer) + canceltimer(S) 
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) 
-						+ logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=touch, currentAttempt=CurrentAttempt]).
+						+ logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=feet, currentAttempt=CurrentAttempt]).
 					
 					if bel(Type = yesno)
 						then insert(answer(T, S, Intent, [text=Intent])).
