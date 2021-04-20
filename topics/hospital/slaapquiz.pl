@@ -134,10 +134,10 @@ next(algemeen,  s1i3, "true",  s1q).
 
 state(algemeen, s1q, question).
 stateConfig(algemeen, s1q, [type=quiz, context='answer_sleep', options=["Meestal goed", "Soms goed soms slecht", "Meestal slecht"], correctAnswer=["Meestal goed"]]).
-text(algemeen, s1q, "Welk antwoord past het beste bij jou?").
-next(algemeen, s1q, 'correct', s1g1).
-next(algemeen, s1q, 'incorrect', s1s1).
-next(algemeen, s1q, 'fail', s1s1). % TODO: failure case?
+text(algemeen,  s1q, "Welk antwoord past het beste bij jou?").
+next(algemeen,  s1q, 'correct', s1g1).
+next(algemeen,  s1q, 'incorrect', s1s1).
+next(algemeen,  s1q, 'fail', s1s1). % TODO: failure case?
 
 state(algemeen, s1g1, say).
 text(algemeen,  s1g1, "Wat fijn om te horen!").
@@ -363,8 +363,8 @@ text(slaapkamer,  s1i3, "Ik ben heel goed in gordijnen dicht doen, kijk maar.").
 next(slaapkamer,  s1i3, "true",  s2).
 
 state(slaapkamer, s2, say).
-text(slaapkamer, s2, "Is jouw kamer ook donker als je gaat slapen?").
-next(slaapkamer, s2, "true",  s2i).
+text(slaapkamer,  s2, "Is jouw kamer ook donker als je gaat slapen?").
+next(slaapkamer,  s2, "true",  s2i).
 
 state(slaapkamer, s2i, say).
 text(slaapkamer,  s2i, "Je kunt op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
@@ -372,10 +372,10 @@ next(slaapkamer,  s2i, "true",  s2q).
 
 state(slaapkamer, s2q, question).
 stateConfig(slaapkamer, s2q, [type=quiz, context='answer_sleep', options=["Donker", "Licht", "Donker met nachtlampje"], correctAnswer=["Donker"]]).
-text(slaapkamer, s2q, "Welke kamer lijkt het meest op die van jou?").
-next(slaapkamer, s2q, 'correct', s2d).
-next(slaapkamer, s2q, 'incorrect', s2l).
-next(slaapkamer, s2q, 'fail', s2dn). % TODO: actual image choices on tablet
+text(slaapkamer,  s2q, "Welke kamer lijkt het meest op die van jou?").
+next(slaapkamer,  s2q, 'correct', s2d).
+next(slaapkamer,  s2q, 'incorrect', s2l).
+next(slaapkamer,  s2q, 'fail', s2dn). % TODO: actual image choices on tablet
 
 state(slaapkamer, s2d, say).
 text(slaapkamer,  s2d, "Heel goed! In een donkere kamer kun je beter slapen").
@@ -769,7 +769,7 @@ text(afsluiting,  s1a1, "Het was leuk om je te ontmoeten en samen over slaap te 
 next(afsluiting,  s1a1, "true", s1a2).
 
 state(afsluiting, s1a2, say).
-anim(afsluiting, s1a2, file, "resources/gestures/wave1.json").
+anim(afsluiting,  s1a2, file, "resources/gestures/wave1.json").
 text(afsluiting,  s1a2, "Bedankt voor het meedoen, je hebt het goed gedaan! Doei doei!").
 next(afsluiting,  s1a2, "true", s1a3).
 
