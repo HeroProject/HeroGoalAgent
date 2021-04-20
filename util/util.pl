@@ -200,10 +200,10 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % override config param for specific state by using key-label in key-value list associated with that state.
 
-% Order for input modalities and respective maximum number of attempts. Available modalities are speech and feet.
-keyValue(_, _, inputModality, [speech=2, feet=2]).
+% Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
+keyValue(_, _, inputModality, [speech=2, /*feet=2,*/ tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
-keyValue(_, _, additionalAttempt, true).
+keyValue(_, _, additionalAttempt, false).
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
@@ -217,4 +217,6 @@ keyValue(_, _, maxAnswerTime, [	feet=3000,
 				speechquiznoninitial=3500]).						 
 % Default responses of robot to an input modality switch.
 keyValue(_, _, modalitySwitchResponse, [speechfeet='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
-					feetspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
+					feetspeech='Je mag je antwoord nu hardop tegen mij zeggen.',
+					speechtablet='Sorry, ik kan het even niet verstaan. Je kunt nu de tè blèet gebruiken.',
+					tabletspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).

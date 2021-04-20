@@ -20,7 +20,7 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					if bel(Type = yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
 						
 					% input questions -> expects an entity to be returned.
-					if bel(Type=input)
+					if bel(Type = input)
 						then {
 							if bel(length(Params, 1), member((_=Ans), Params)) then {
 								if bel(Ans\='') then insert(answer(T, S, Ans, [text=Text])).
@@ -42,7 +42,6 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					if bel(Type = openend, length(Params, 0))
 						then {
 							if bel(Text\='') then insert(answer(T, S, any, [text=Text])).
-							
 							if bel(Text='') then insert(answer(T, S, failure, [text=''])).
 						}
 						
@@ -76,6 +75,37 @@ module processUserResponse(T, S, Intent, Text, Params) {
 					
 					if bel(Type \= yesno, Intent = 'answer_no')
 						then repair(T,S).
+				}
+			
+			if bel(currentInputModality(tablet))
+				then {
+					if true then delete(waitingForAnswer) 
+						+ logging([topic=T, state=S, action=userResponse, text=Text, intent=Intent, params=Params, modality=tablet, currentAttempt=CurrentAttempt]).
+									
+					% yesno questions -> answer_yes or answer_no are the expected answers.	
+					if bel(Type = yesno, length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
+						
+					% input questions -> expects an entity to be returned.
+					if bel(Type = input)
+						then {
+							if bel(length(Params, 1), member((_=Ans), Params)) then insert(answer(T, S, Ans, [text=Text])).
+							if bel(length(Params, 0)) then insert(answer(T, S, Intent, [text=Text])).
+						}
+						
+					if bel(Type = sorter) then insert(answer(T, S, Intent, [text=Text])).
+					
+					% quiz questions -> checks whether the answer is correct or not.
+					if bel(Type = quiz, length(Params, 1), member((_=Ans), Params), keyValue(T, S, correctAnswer, CorrectAnswer))
+						then {
+							if bel(member(Ans, CorrectAnswer))
+								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
+							if not(bel(member(Ans, CorrectAnswer)))
+								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
+						}
+						
+					if not(bel(answer(T,S, _, _)))
+						then print("Error: no answer was found although it was expected") 
+							+ log(noAnswerError(T, S, Intent, Params)).
 				}
 		}
 }

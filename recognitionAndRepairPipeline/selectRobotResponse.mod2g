@@ -47,6 +47,10 @@ module selectRobotResponse(T, S, Ans, Data) {
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).
+						
+					%for sorting questions
+					if bel(Type=sorter)
+						then insert(nextCondition('true')).
 					
 					%Logging
 					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))

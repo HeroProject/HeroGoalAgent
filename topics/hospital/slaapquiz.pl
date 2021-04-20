@@ -216,7 +216,7 @@ text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tè blèet mee
 state(routine, s1, say).
 text(routine,  s1, "Ik ben ook wel benieuwd wat je doet voordat je gaat slapen.").
 leds(routine,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
-next(routine,  s1, "true",  s1i1).
+next(routine,  s1, "true",  s3yq).
 
 state(routine, s1i1, say).
 text(routine,  s1i1, "Ik poets altijd eerst mijn tanden, dan ga ik plassen en lees ik een boekje.").
@@ -260,16 +260,13 @@ text(routine,  s2yn, "Dat is niet erg.").
 next(routine,  s2yn, "true", s4).
 
 state(routine, s3y, say).
-text(routine,  s3y, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
+text(routine,  s3y, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3y, "true", s3yq).
 
 state(routine, s3yq, question). % TODO: complicated tablet task?
-stateConfig(routine, s3yq, [type=yesno, context='answer_yesno']).
-text(routine,  s3yq, "Kun jij de plaatjes op volgorde zetten zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jouw routine horen.").
-next(routine,  s3yq, 'answer_yes', s3yr).
-next(routine,  s3yq, 'answer_no', s3yr).
-next(routine,  s3yq, 'answer_dontknow', s3yr).
-next(routine,  s3yq, 'fail', s3yr).
+stateConfig(routine, s3yq, [type=sorter, inputModality=[tablet=1], options=['pyjama'='https://i.pinimg.com/originals/3c/f8/34/3cf8347b5f1108562937acfbb2738140.jpg', 'poetsen'='https://i.pinimg.com/originals/e4/9b/f5/e49bf527682f10088fd1b051475783cb.jpg', 'lezen'='https://i.pinimg.com/474x/3f/ec/dc/3fecdc2f5560ec8a940c08d78ad6ee88.jpg']]).
+text(routine,  s3yq, "Kun jij de plaatjes op volgorde aanklikken zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes aan te klikken als sommige dingen niet bij jouw routine horen.").
+next(routine,  s3yq, "true", s3yr).
 
 state(routine, s3yr, say).
 text(routine,  s3yr, "Wauw, dat is een goede routine!").

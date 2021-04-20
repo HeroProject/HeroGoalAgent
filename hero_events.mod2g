@@ -124,14 +124,22 @@ module hero_events {
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_no, Text, []).
 			if bel(keyValue(T, S, type, yesno), answer_dontknow_synonyms(Dontknow), string_match_word_list(Text, Dontknow, _))
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_dontknow, Text, []).
-			
 			if bel(not(keyValue(T, S, type, yesno)), keyListValues(T, S, [context, options, fast], [Intent, Options, yes]), string_match_word_list(Text, Options, Ans))
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Ans]).
 		}
 										
-	% User responded on the tablet. -Vincent
-	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection, keyValue(T, S, context, Intent))
-		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Text]).
+	% User responded (browser button).
+	if percept(answer(Text)), bel(currentTopic(T), currentState(S))
+		then {
+			if bel(keyValue(T, S, type, yesno), answer_yes_synonyms(Yes), string_match_word_list(Text, Yes, _)) 
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_yes, Text, []).
+			if bel(keyValue(T, S, type, yesno), answer_no_synonyms(No), string_match_word_list(Text, No, _))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_no, Text, []).
+			if bel(keyValue(T, S, type, sorter))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_sort, Text, []).
+			if bel(not(keyValue(T, S, type, yesno)), keyListValues(T, S, [context, options], [Intent, Options]), string_match_word_list(Text, Options, Ans))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Ans]).
+		}
 							
 	% User did not respond.	
 	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
@@ -146,7 +154,7 @@ module hero_events {
 			if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, '', []).
 		}
 	
-	%%% TOUCH %%%
+	%%% TOUCH FEET %%%
 	% An answer has been selected. Retrieve answer.
 	if bel(currentTopic(T), currentState(S), state(T, S, question), waitingForAnswer, feetBumperEventAnswer(Intent))
 		then processUserResponse(T, S, Intent, '', []).

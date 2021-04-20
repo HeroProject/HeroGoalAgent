@@ -20,3 +20,10 @@ button(Content,Html) :- button(B), format(atom(Html),B,[Content]).
 buttons([],Html,Html).
 buttons([Curr|Rest],Tmp,Html) :- button(Curr,B), atom_concat(Tmp,B,New), buttons(Rest,New,Html).
 buttons(ContentList,Html) :- buttons(ContentList,'',Html).
+
+sortItem('<div id="~a" class="card sortitem"><div class="card-img-caption"><h1 class="card-text bg-secondary"></h1><img class="card-img-top" src="~a"></div></div>').
+sortItem(Id=Src,Html) :- sortItem(T), format(atom(Html),T,[Id,Src]).
+
+sortItems([],Final,Html) :- format(atom(Html),'<div class="card-group">~a</div>',[Final]).
+sortItems([Curr|Rest],Tmp,Html) :- sortItem(Curr,B), atom_concat(Tmp,B,New), sortItems(Rest,New,Html).
+sortItems(ContentList,Html) :- sortItems(ContentList,'',Html).

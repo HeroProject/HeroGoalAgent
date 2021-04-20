@@ -69,13 +69,6 @@ module performStateActions(T, S) {
 		% Show image
 		if bel(image(T, S, I), img(I, Img), html(Img, Html)) 
 			then renderPage(Html).
-		% Show questions
-		if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt),  
-				buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
-			then renderPage(Html).
-		if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt), 
-				buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
-			then renderPage(Html).
 		% Clear the page otherwise
 		if bel(text(T, S, _), not(display(T, S, _)), not(display_raw(T, S, _)), not(image(T, S, _)), 
 				not(keyValue(T, S, type, _)), html('',Html))
