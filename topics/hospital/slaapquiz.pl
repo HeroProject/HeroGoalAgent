@@ -84,7 +84,7 @@ text(intro,  s3i6, "Als jij je antwoord hebt gegeven, ga ik je meer vertellen ov
 next(intro,  s3i6, "true",  s3i7).
 
 state(intro, s3i7, say).
-text(intro,  s3i7, "Als ik een tip heb, dan zal ik mijn hand in de lucht steken en al mijn lichtjes oranje maken, dan kun je de tips goed herkennen.").
+text(intro,  s3i7, "Als ik een tip heb, dan zal ik al mijn lichtjes oranje maken, zo kun je de tips goed herkennen.").
 next(intro,  s3i7, "true",  s4q).
 
 state(intro, s4q, question).
@@ -197,6 +197,7 @@ next(activiteiten,  s1i4, "true",  s1t1).
 
 state(activiteiten, s1t1, say).
 text(activiteiten,  s1t1, "Wat je beter ook niet kunt doen vlak voor het slapen, is TikTok of Youtube filmpjes kijken of berichtjes beantwoorden op je telefoon.").
+leds(activiteiten,  s1t1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(activiteiten,  s1t1, "true",  s1t2).
 
 state(activiteiten, s1t2, say).
@@ -212,6 +213,7 @@ text(activiteiten,  s1t3, "Het beste zou zijn om geen telefoon of tè blèet mee
 
 state(routine, s1, say).
 text(routine,  s1, "Ik ben ook wel benieuwd wat je doet voordat je gaat slapen.").
+leds(routine,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(routine,  s1, "true",  s1i1).
 
 state(routine, s1i1, say).
@@ -273,6 +275,7 @@ next(routine,  s3yr, "true", s3yt).
 
 state(routine, s3yt, say).
 text(routine,  s3yt, "Ga vooral door met een routine voordat je gaat slapen.").
+leds(routine,  s3yt, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(routine,  s3yt, "true", s4).
 
 %%% NO BRANCH %%%
@@ -318,6 +321,7 @@ next(routine,  s3nr, "true", s3nt1).
 
 state(routine, s3nt1, say).
 text(routine,  s3nt1, "Wil je die routine thuis eens uitproberen?").
+leds(routine,  s3nt1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(routine,  s3nt1, "true", s3nt2).
 
 state(routine, s3nt2, say).
@@ -337,7 +341,8 @@ text(routine,  s4, "Laten we verder praten over de slaapkamer.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(slaapkamer, s1, say).
-text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!").
+text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!"). % TODO: tablet image
+leds(slaapkamer,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(slaapkamer,  s1, "true",  s1i1).
 
 state(slaapkamer, s1i1, say).
@@ -399,6 +404,7 @@ next(slaapkamer,  s2i2, "true",  s2t1).
 
 state(slaapkamer, s2t1, say).
 text(slaapkamer,  s2t1, "Ik heb nog een andere tip: let er ook op dat je kamer niet te warm is, dan kun je het beter wat koeler maken door bij voorbeeld het raam open te zetten.").
+leds(slaapkamer,  s2t1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(slaapkamer,  s2t1, "true",  s2t2).
 
 state(slaapkamer, s2t2, say).
@@ -410,6 +416,7 @@ text(slaapkamer,  s2t2, "Maar niet te lang hoor, want je moet het natuurlijk ook
 
 state(bedtijden, s1, say).
 text(bedtijden,  s1, "Even denken, wat wil ik nog meer vragen. Oh ja!").
+leds(bedtijden,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(bedtijden,  s1, "true",  s1q).
 
 state(bedtijden, s1q, question).
@@ -447,6 +454,7 @@ next(bedtijden,  s2ni, "true", s2nt).
 
 state(bedtijden, s2nt, say).
 text(bedtijden,  s2nt, "Misschien dat je met pappa of mamma een vaste afspraak kunt maken over hoe laat je naar bed gaat, dan kunnen zij jou daarbij helpen door aan te geven wanneer het bijna bedtijd is.").
+leds(bedtijden,  s2nt, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Piekeren                                               %%%
@@ -454,6 +462,7 @@ text(bedtijden,  s2nt, "Misschien dat je met pappa of mamma een vaste afspraak k
 
 state(piekeren, s1, say).
 text(piekeren,  s1, "Oke, volgende vraag.").
+leds(piekeren,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(piekeren,  s1, "true",  s1q).
 
 state(piekeren, s1q, question).
@@ -500,6 +509,7 @@ text(piekeren,  s2f, "Het helpt mij als ik er overdag aan denk of er met iemand 
 
 state(piekeren, s2t1, say).
 text(piekeren,  s2t1, "Als dat ook niet helpt, kun je er misschien met iemand over praten die je daarbij kan helpen.").
+leds(piekeren,  s2t1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(piekeren,  s2t1, "true", s2t2).
 
 state(piekeren, s2t2, say).
@@ -511,6 +521,7 @@ text(piekeren,  s2t2, "Weet pappa of mamma dat? Misschien dat je het ook tegen d
 
 state(wakker, s1, say).
 text(wakker,  s1, "En als je in slaap bent gevallen?").
+leds(wakker,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(wakker,  s1, "true",  s1q).
 
 state(wakker, s1q, question).
@@ -551,6 +562,7 @@ next(wakker,  s1i4, "true", s1t1).
 
 state(wakker, s1t1, say).
 text(wakker,  s1t1, "Ik heb ook nog een andere tip.").
+leds(wakker,  s1t1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(wakker,  s1t1, "true", s1t2).
 
 state(wakker, s1t2, say).
@@ -566,6 +578,7 @@ text(wakker,  s1t3, "Het is beter om niet te lang naar de klok te kijken als je 
 
 state(bewegen, s1, say).
 text(bewegen,  s1, "Zo, we hebben nu al best veel dingen besproken die te maken hebben met naar bed gaan, je slaapkamer en slapen.").
+leds(bewegen,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(bewegen,  s1, "true",  s1i1).
 
 state(bewegen, s1i1, say).
@@ -606,6 +619,7 @@ next(bewegen,  s1i5, "true", s1t).
 
 state(bewegen, s1t, say).
 text(bewegen,  s1t, "Mijn tip is dan ook om iedere dag even naar buiten te gaan en buiten te spelen.").
+leds(bewegen,  s1t, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Eten/drinken                                           %%%
@@ -613,6 +627,7 @@ text(bewegen,  s1t, "Mijn tip is dan ook om iedere dag even naar buiten te gaan 
 
 state(etendrinken, s1, say).
 text(etendrinken,  s1, "Ook eten en drinken kunnen invloed hebben op je slaap.").
+leds(etendrinken,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(etendrinken,  s1, "true",  s1q).
 
 state(etendrinken, s1q, question).
@@ -691,6 +706,7 @@ next(etendrinken,  s3qn, "true", s3t1).
 
 state(etendrinken, s3t1, say).
 text(etendrinken,  s3t1, "Eet of drink jij wel eens chocola of cola voordat je gaat slapen?").
+leds(etendrinken,  s3t1, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(etendrinken,  s3t1, "true", s3t2).
 
 state(etendrinken, s3t2, say).
@@ -702,6 +718,7 @@ text(etendrinken,  s3t2, "Misschien dat je kunt proberen om dat niet te doen, zo
 
 state(afsluiting, s1, say).
 text(afsluiting,  s1, "Nou, volgens mij hebben we nu alles wel zo'n beetje besproken").
+leds(afsluiting,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(afsluiting,  s1, "true",  s1i1).
 
 state(afsluiting, s1i1, say).
