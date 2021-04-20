@@ -1,6 +1,8 @@
 use 'util/*.pl' as knowledge.
 use 'topics/*.pl' as knowledge.
+use 'topics/co_creation/*.pl' as knowledge.
 use 'topics/hospital/*.pl' as knowledge.
+use 'topics/robotstories/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'recognitionAndRepairPipeline/*.mod2g' as module.
@@ -54,7 +56,7 @@ module hero_events {
 	forall percept(motionRecording(Recording)), bel(waitingForMotionRecording(ID), userModel(UserModel), 
 														updateUserModel(ID, Recording, UserModel, NewUserModel), userId(UserId))
 		do delete(userModel(UserModel), waitingForMotionRecording(ID)) 
-		+ insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Recording).
+			+ insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Recording).
 			
 	% Handling of event waiting logic...
 	% ... for NAO events
@@ -77,7 +79,7 @@ module hero_events {
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
 	% Event fail safe TODO: fix this
-	if bel(timeout(eventFailSafe), not(waitingForSayClear), not(waitingForEvent('ClearLoadedAudioDone'))) then {
+	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
 		if bel(currentTopic(T), currentState(S)) then log(eventFailSafe(T, S)).
@@ -97,8 +99,8 @@ module hero_events {
 	
 	%%% SPEECH %%%
 	
-	% User responded (full intent). 
-	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), waitingForDetection)
+	% User responded (full intent).
+	if percept(intent(Intent, Params, _, Text, _)), bel(currentTopic(T), currentState(S), currentInputModality(speech), waitingForDetection)
 		then {
 				%If a user responded the agent can stop listening, delete its waiting flag, and insert the received speech text.				
 				if true then stopListening + delete(waitingForDetection).
@@ -112,14 +114,21 @@ module hero_events {
 					if bel(keyValue(T, S, type, openend)) then processUserResponse(T, S, any, Text, []).
 				} 				
 		}
-		
-		
-	% User responded (try quick transcript matching). -Vincent
-	if percept(transcript(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
-										keyListValues(T, S, [context, options, extra_options], [Intent, L1, L2]),
-										append(L1, L2, L), maplist(downcase_atom, L, DL), downcase_atom(Text, DT), member(DT, DL))
-		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=DT]).
-		
+	
+	% User responded (try quick transcript matching).
+	if percept(transcript(Text)), bel(currentTopic(T), currentState(S), waitingForDetection)
+		then {
+			if bel(keyValue(T, S, type, yesno), answer_yes_synonyms(Yes), string_match_word_list(Text, Yes, _)) 
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_yes, Text, []).
+			if bel(keyValue(T, S, type, yesno), answer_no_synonyms(No), string_match_word_list(Text, No, _))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_no, Text, []).
+			if bel(keyValue(T, S, type, yesno), answer_dontknow_synonyms(Dontknow), string_match_word_list(Text, Dontknow, _))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_dontknow, Text, []).
+			
+			if bel(not(keyValue(T, S, type, yesno)), keyListValues(T, S, [context, options, fast], [Intent, Options, yes]), string_match_word_list(Text, Options, Ans))
+				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Ans]).
+		}
+										
 	% User responded on the tablet. -Vincent
 	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
 									keyValue(T, S, context, Intent), downcase_atom(Text, DT))
@@ -162,18 +171,19 @@ module hero_events {
 	%%% Answer processing			      %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, branch, quiz) the answers should be processed differently.
+	%Given an answer(T, S, Ans, Details) and the type of question (yesno, input, quiz) the answers should be processed differently.
 	if bel(currentTopic(T), currentState(S), answer(T,S, Ans, Data), not(answerProcessed))
 		then selectRobotResponse(T, S, Ans, Data).
 		
-	% If the state is a branching point, retrieve the decision and insert that as the nextCondition.
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), not(keyValue(T, S, branchingDecider, entity)), 
-			getBranchingPointDecision([T, S], Decision), nextCondition(Con))
-		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
-	
-	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint), 
-			keyListValues(T, S, [branchDecider, branchSource], [entity, Source]), getUserModelValue(Source, Decision), nextCondition(Con))
-		then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+	if bel(currentTopic(T), currentState(S), state(T, S, branchingPoint, Source), getUserModelValue(Source, Decision), nextCondition(Con)) then {
+		if bel(next(T, S, Decision, _))
+			then delete(nextCondition(Con)) + insert(nextCondition(Decision)).
+		if bel(not(next(T, S, Decision, _)), Decision \= "fail", next(T, S, "_others", _))
+			then delete(nextCondition(Con)) + insert(nextCondition("_others")).
+		if bel(not(next(T, S, Decision, _)), Decision \= "fail", not(next(T, S, "_others", _)))
+			then delete(nextCondition(Con)) + insert(nextCondition("success")).
+	}
+		
 		
 	% If an emotion is expected and present, set that as the next condition.
 	if bel(currentTopic(T), currentState(S), state(T, S, emotion), emotion(T, S,Emotion), nextCondition(Con), Con \= Emotion)
@@ -189,12 +199,12 @@ module hero_events {
 		then askQuestion(T, S).
 		
 	% Audiorecording
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, 
-			keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)), 
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted,
+			keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)),
 			not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
-	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID), 
+	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID),
 			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	

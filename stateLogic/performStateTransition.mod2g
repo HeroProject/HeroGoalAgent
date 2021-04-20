@@ -10,7 +10,7 @@ use '../util/logging' as module.
 order=linearall.
 
 module performStateTransition(T, S, C) {
-	if true then canceltimer(eventFailSafe).
+	if bel(evenFailSafeActive(true)) then canceltimer(eventFailSafe).
 	% ... clean up (and reset nextCondition to default value 'true') ...
 	% reset answers processing flag
 	if bel(answerProcessed) then delete(answerProcessed).

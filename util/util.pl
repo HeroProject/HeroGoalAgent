@@ -3,13 +3,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Predicates for event percept processing. 
 :-dynamic answer/4, % answer(Topic, State, Answer, [Details]) keeps track of answers to questions.
-	branchingPointDecisions/1,
 	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
 	waitingForMotionRecording/1,
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
 	audioRecording/1,
-	behavior/2,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
 	basePosture/1.
@@ -17,7 +15,6 @@
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
 	isAwake/0,
-	stiffness/1,
 	batteryCharge/1,
 	isCharging/0.
 	
@@ -57,17 +54,26 @@ keyValue(Topic, State, Key, Value) :- stateConfig(Topic, State, Pairs), member((
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
+%yesno synonyms
+answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk"]).
+answer_no_synonyms(["nee", "neen", "nah"]).
+answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
+
+string_match_word_list(S, L, DS) :- downcase_atom(S, DS), maplist(downcase_atom, L, DL), member(DS, DL), !.
+string_match_word_list(S, L, R) :- split_string(S," ",", ", SL), maplist(downcase_atom, SL, DSL), maplist(downcase_atom, L, DL), any_list_match(DSL, DL, R), !.
+any_list_match([H | _], L, H) :- member(H, L).
+any_list_match([H | T], L, R) :- not(member(H, L)), any_list_match(T, L, R), !.
+
 %Update the local instance of the user model.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(member((Key=_), OldUserModel)), append(OldUserModel, [Key=Value], NewUserModel), !.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel), !.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel, !.
-%updateUserModel(_, Value, OldUserModel, NewUserModel) :- Value = 'None', NewUserModel = OldUserModel.
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
 getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
-%isInUserModel(Key) :- userModel(UserModel), member((Key=_), UserModel).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
+
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
 replaceVar(Text, Result) :- split_string(Text, '%', "", TextParts), replaceKeys(TextParts, Replaced), concatenate(Replaced, Result).
@@ -81,14 +87,6 @@ concatenate([H], H).
 
 %Generate a key in the form of Topic_State for referencing a particular topic-state pair.
 generateKeyFromTopicAndState(T, S, Key) :- atomics_to_string([T, S], '_', KeyS), atom_string(Key, KeyS).
-
-updateBPDs(BPDs, Key, Decision, NewBPDs) :- not(member((Key=_), BPDs)), append(BPDs, [Key=Decision], NewBPDs), !.
-updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=OldValue), BPDs), not(OldValue = Decision), delete(BPDs, (Key=OldValue), BPDsTemp), append(BPDsTemp, [Key=Decision], NewBPDs), !.
-updateBPDs(BPDs, Key, Decision, NewBPDs) :- member((Key=OldValue), BPDs), OldValue = Decision, NewBPDs=BPDs, !.
-getBranchingPointDecision(BP, Decision) :- branchingPointDecisions(BPDs), member((BP=Decision), BPDs).
-
-addDecisionToBranchingPoints([H | T], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, TempBPDs),  addDecisionToBranchingPoints(T, Decision, TempBPDs, NewBPDs).
-addDecisionToBranchingPoints([H | []], Decision, BPDs, NewBPDs) :- updateBPDs(BPDs, H, Decision, NewBPDs).
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
@@ -119,34 +117,28 @@ odd_elements([_, X], [X]) :- !.
 odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 
 % Create list of values from a list of keys of user model entries
-%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Ori), getTranslation(Ori, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
-%valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getTranslation(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
-
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
 valueListFromKeyList([], []).
 
 %Parse led animation (a nested list) to a string to store in memory
-%nested_list_to_string(L1, L4) :-
-  	%to_atoms(L1, L2),
-    	%nested_list_to_nested_string(L2, L3),
-  	%atomics_to_string(L3, ',', L4).
-
 nested_list_to_string(L1, L4) :-
   	maplist(term_to_atom, L1, L2),
     	nested_list_to_nested_string(L2, L3),
   	atomics_to_string(L3, ',', L4).
+
+nested_list_to_nested_string([H | T], [HProcessed | TProcessed]) :- is_nested_list(H),
+    replace_chars(H, ',', '@', HProcessed), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([H | T], [H | TProcessed]):- not(is_nested_list(H)), nested_list_to_nested_string(T, TProcessed), !.
+nested_list_to_nested_string([], []).
  
 string_to_nested_list(Input, Output) :- 
     atomics_to_string(A, ',', Input),
     maplist(nested_list_to_atom, A, AFixed),
     maplist(term_to_atom, Output, AFixed).
 
-nested_list_to_nested_string([H | T], [HProcessed | TProcessed]) :- is_nested_list(H),
-    replace_chars(H, ',', '@', HProcessed), nested_list_to_nested_string(T, TProcessed), !.
-nested_list_to_nested_string([H | T], [H | TProcessed]):- not(is_nested_list(H)), nested_list_to_nested_string(T, TProcessed), !.
-nested_list_to_nested_string([], []).
+nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
 
 replace_char([H | T], CharI, CharO, [CharO | Tout]) :- H = CharI, replace_char(T, CharI, CharO, Tout), !.
 replace_char([H | T], CharI, CharO, [H | Tout]) :- not(H = CharI), replace_char(T, CharI, CharO, Tout), !.
@@ -157,29 +149,9 @@ replace_chars(I, CharI, CharO, O) :-
    	replace_char(IChars, CharI, CharO, OChars),
     	atom_chars(O, OChars).
 
-%string_to_nested_list(Input, Output) :- 
-    	%atomics_to_string(A, ',', Input),
-   	%nested_list_to_atom(A, AFixed),
-   	%to_terms(AFixed, Output).
- 
-%nested_list_to_atom([H | T], [Hout | Tout]) :- replace_chars(H, '@', ',', Hout), nested_list_to_atom(T, Tout), !.
-%nested_list_to_atom([], []).
-
-%nested_list_to_atom(I, O) :- replace_chars(I, '@', ',', O).
-
-%to_terms([H | T], [Hout | Tout]) :- term_to_atom(Hout, H), to_terms(T, Tout), !.
-%to_terms([], []).
-
-%to_atoms([H | T], [Hout | Tout]) :- term_to_atom(H, Hout), to_atoms(T, Tout), !.
-%to_atoms([], []).
-
 is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 
-%string_to_nested_list2(Input, Output) :- 
-%    atomics_to_string(A, ',', Input),
-%    maplist('nested_list_to_atom2', A, AFixed),
-%    maplist('term_to_atom', Output, AFixed).
- 
+% Delete topics from topic list
 delete_topics(TopicsList, [H | T], NewTopicsList) :- delete(TopicsList, H, IntermidiateList), delete_topics(IntermidiateList, T, NewTopicsList), !.
 delete_topics(TopicsList, [H | []], NewTopicsList):- delete(TopicsList, H, NewTopicsList), !.
 
@@ -187,8 +159,8 @@ delete_topics(TopicsList, [H | []], NewTopicsList):- delete(TopicsList, H, NewTo
 %%% State completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ready for action
-readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, recorded, _)).
-readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, recorded, ID), getUserModelValue(ID, _).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), not(audio(T, S, id, _)).
+readyForAction(T, S) :- start, not(waitingForEvent(_)), audio(T, S, id, ID), getUserModelValue(ID, _).
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).
@@ -223,7 +195,7 @@ completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State
 
 completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, emotion), eventsCompleted, emotionReceived, correctPosture.
 
-completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint), eventsCompleted, correctPosture.
+completed(State) :- currentTopic(Topic), currentState(State), state(Topic, State, branchingPoint, _), eventsCompleted, correctPosture.
 					
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT CONVERSATIONAL SETTINGS %%%
@@ -243,8 +215,6 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 				speechyesnononinitial=3500, 
 				speechinputfirst=5000, 
 				speechinputnoninitial=3500,
-				speechbranchfirst=6000,
-				speechbranchnoninitial=4000,
 				speechquizfirst=5000,
 				speechquiznoninitial=3500]).						 
 % Default responses of robot to an input modality switch.

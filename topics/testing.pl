@@ -30,7 +30,7 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_color, s1, question).
-stateConfig(test_color, s1, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
+stateConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
 defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
@@ -46,37 +46,55 @@ text(test_color, s2f, "Mijn levelingskleur is %test_color_s1%.").
 %%% Party - Testing branch question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_party, s1, question).
-stateConfig(test_party, s1, [type = branch, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen',
-branchIntents=['dansen' = 'answer_koelkast_dansen', 'zingen' = 'answer_koelkast_zingen', 'muziek maken' = 'answer_koelkast_muziek'], branchingPoints=[[test_party, s3], [test_party2, s2]]]).
+stateConfig(test_party, s1, [type = input, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen']).
 text(test_party, s1, "Dansen, zingen, of muziek maken?").
-next(test_party, s1, "success", s2).
+next(test_party, s1, "dansen", s2a).
+next(test_party, s1, "zingen", s2b).
+next(test_party, s1, "muziek maken", s2c).
 next(test_party, s1, "fail", s2f).
 
-state(test_party, s2, say).
-text(test_party, s2, "Ik hou je nog even in spanning.").
-next(test_party, s2, 'true', s3).
+state(test_party, s2a, say).
+text(test_party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2a, "true", s3).
+
+state(test_party, s2b, say).
+text(test_party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2b, "true", s3).
+
+state(test_party, s2c, say).
+text(test_party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2c, "true", s3).
 
 state(test_party, s2f, say).
-text(test_party, s2f, "Ik kies zelf voor zingen.").
-next(test_party, s2f, 'true', s3).
+text(test_party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+next(test_party, s2f, "true", s3).
 
-state(test_party, s3, branchingPoint).
+state(test_party, s3, branchingPoint, test_party_s1).
 next(test_party, s3, "dansen", s3a).
-next(test_party, s3, "zingen", s3b).
-next(test_party, s3, "muziek maken", s3c).
+next(test_party, s3, "_others", s3b).
 next(test_party, s3, "fail", s3f).
 
 state(test_party, s3a, say).
-text(test_party, s3a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3a, "Ik hou heel erg van dansen.").
+next(test_party, s3a, "true", s4).
 
 state(test_party, s3b, say).
-text(test_party, s3b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
-
-state(test_party, s3c, say).
-text(test_party, s3c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3b, "Ik hou heel erg van zingen en muziek maken.").
+next(test_party, s3b, "true", s4).
 
 state(test_party, s3f, say).
-text(test_party, s3f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(test_party, s3f, "Ik hou heel erg van dansen, zingen, en muziek maken").
+next(test_party, s3f, "true", s4).
+
+state(test_party, s4, branchingPoint, test_party_s1).
+next(test_party, s4, "success", s4a).
+next(test_party, s4, "fail", s3f).
+
+state(test_party, s4a, say).
+text(test_party, s4a, "Dat ging goed!").
+
+state(test_party, s4a, say).
+text(test_party, s4a, "Fail is goed doorgekomen").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Party2 - Testing branching point	                   %%%
@@ -86,7 +104,7 @@ state(test_party2, s1, say).
 text(test_party2, s1, "Ik ben een nieuw topic").
 next(test_party2, s1, "true", s2).
 
-state(test_party2, s2, branchingPoint).
+state(test_party2, s2, branchingPoint, test_party_s1).
 next(test_party2, s2, "dansen", s2a).
 next(test_party2, s2, "zingen", s2b).
 next(test_party2, s2, "muziek maken", s2c).
@@ -159,62 +177,24 @@ text(test_sound, s4, "Het was het gebrul van de leeuw").
 next(test_sound, s4, "true", s5).
 
 state(test_sound, s5, say).
-audio(test_sound, s5, recorded, sound_lion).
+audio(test_sound, s5, id, sound_lion).
 next(test_sound, s5, "true", s6).
 
 state(test_sound, s6, say).
 text(test_sound, s6, "Gaaf zeg.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Chocolate - Testing emotion recognition		   %%%
-%%% Note: emotion service needs to be on.                  %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-state(test_emotion, s1, say).
-text(test_emotion, s1, "Laat mij je gezicht eens goed bekijken.").
-next(test_emotion, s1, "true", s2).
-
-state(test_emotion, s2, emotion).
-next(test_emotion, s2, happy, s3h).
-next(test_emotion, s2, sad, s3s).
-next(test_emotion, s2, neutral, s3n).
-next(test_emotion, s2, "fail", s3f).
-
-state(test_emotion, s3h, say).
-leds(test_emotion, s3h, ["FaceLeds"], ["green"]).
-text(test_emotion, s3h, "Wauw, wat een blij gezicht!").
-next(test_emotion, s3h, "true", s4).
-
-state(test_emotion, s3s, say).
-leds(test_emotion, s3s, ["FaceLeds"], ["red"]).
-text(test_emotion, s3s, "Wauw, wat een zielig gezicht!").
-next(test_emotion, s3s, "true", s4).
-
-state(test_emotion, s3n, say).
-leds(test_emotion, s3n, ["FaceLeds"], ["cyan"]).
-text(test_emotion, s3n, "Wauw, wat kijk jij nietszeggend.").
-next(test_emotion, s3n, "true", s4).
-
-state(test_emotion, s3f, say).
-leds(test_emotion, s3f, ["FaceLeds"], ["white"]).
-text(test_emotion, s3f, "Ik kon helaas niks zien.").
-next(test_emotion, s3f, "true", s4).
-
-state(test_emotion, s4, say).
-leds(test_emotion, s4, ["FaceLeds"], ["white"]).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Test sound 2 - Testing playing sound from server	   %%%
-%%% Note: web server needs to be on.		           %%%
+%%% Test sound 2 				           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_sound2, s1, say).
-audio(test_sound2, s1, server, "resources/sounds/tiktok1.wav").
+audio(test_sound2, s1, file, "resources/sounds/tiktok1.wav").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Animation - Testing anim option		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_animation, s1, say).
 text(test_animation, s1, "Ik doe nu een standaard animatie").
-anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
+anim(test_animation, s1, onRobot, "animations/Stand/Gestures/Enthusiastic_4").
 %animations/Stand/Question/NAO/Left_Neutral_QUE_01
 %animations/Stand/Gestures/Enthusiastic_4
 
@@ -223,33 +203,33 @@ anim(test_animation, s1, "animations/Stand/Gestures/Enthusiastic_4").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds, s1, say).
 text(test_leds, s1, "Kijk, mijn ogen zijn nu groen").
-leds(test_leds, s1, ["FaceLeds"], ["groen"]).
-next(test_leds, s1, "true", s4).
+leds(test_leds, s1, direct, ["FaceLeds"], ["groen"]).
+next(test_leds, s1, "true", s2).
 
-%state(test_leds, s2, say).
-%text(test_leds, s2, "Kijk, mijn buik is nu azuur").
-%leds(test_leds, s2, ["ChestLeds"], ["azuur"]).
-%next(test_leds, s2, "true", s3).
+state(test_leds, s2, say).
+text(test_leds, s2, "Kijk, mijn buik is nu rood").
+leds(test_leds, s2, direct, ["ChestLeds"], ["rood"]).
+next(test_leds, s2, "true", s3).
 
-%state(test_leds, s3, say).
-%text(test_leds, s3, "Kijk, mijn voeten zijn nu kaki").
-%leds(test_leds, s3, ["FeetLeds"], ["kaki"]).
-%next(test_leds, s3, "true", s4).
+state(test_leds, s3, say).
+text(test_leds, s3, "Kijk, mijn voeten zijn nu oranje").
+leds(test_leds, s3, direct, ["FeetLeds"], ["oranje"]).
+next(test_leds, s3, "true", s4).
 
 state(test_leds, s4, say).
-leds(test_leds, s4, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).
+leds(test_leds, s4, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["wit", "wit", "wit"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% leds - Testing led animations		           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_leds_anim, s1, say).
 text(test_leds_anim, s1, "Kijk, ik heb mijn zwaailicht aangezet").
-start_led_anim(test_leds_anim, s1, "all", "alternate", ["red", "blue"], 500).
+leds(test_leds_anim, s1, direct, "all", "alternate", ["red", "blue"], 500).
 stateConfig(test_leds_anim, s1, [waitTimer=5000]).
 next(test_leds_anim, s1, "true", s2).
 
 state(test_leds_anim, s2, say).
-stop_led_anim(test_leds_anim, s2).
+leds(test_leds_anim, s2, reset).
 next(test_leds_anim, s2, "true", s3).
 
 state(test_leds_anim, s3, say).
@@ -276,7 +256,7 @@ set_stiffness(test_motion, s1, ['RArm', 'LArm'], 0).
 next(test_motion, s1, "true", s2).
 
 state(test_motion, s2, say).
-record_motion_timer(test_motion, s2, ['RArm', 'LArm'], 6000).
+record_motion(test_motion, s2, ['RArm', 'LArm'], 6000).
 stateConfig(test_motion, s2, [umVariable=test_motion]).
 next(test_motion, s2, "true", s3).
 
@@ -285,11 +265,11 @@ text(test_motion, s3, "Dan ga ik de beweging na doen.").
 next(test_motion, s3, "true", s4).
 
 state(test_motion, s4, say).
-play_motion(test_motion, s4, test_motion).
+anim(test_motion, s4, id, test_motion).
 next(test_motion, s4, "true", s5).
 
 state(test_motion, s5, say).
-go_to_base_posture(test_motion, s5).
+go_to_posture(test_motion, s5).
 text(test_motion, s5, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -300,8 +280,7 @@ text(test_motion_file, s1, "Kijk, ik speel nu een bewegingsbestand af.").
 next(test_motion_file, s1, "true", s2).
 
 state(test_motion_file, s2, say).
-play_motion_file(test_motion_file, s2, "resources/gestures/goodbye2.xml").
-%audio(test_motion_file, s2, server, "resources/sounds/elephant.wav").
+anim(test_motion_file, s2, file, "resources/gestures/goodbye2.xml").
 next(test_motion_file, s2, "true", s3).
 
 state(test_motion_file, s3, say).
@@ -311,22 +290,49 @@ text(test_motion_file, s3, "Heel leuk.").
 %%% stop led					           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_stop_led, s1, say).
-stop_led_anim(test_stop_led, s1).
+leds(test_stop_led, s1, reset).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test session 1					   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+state(test_first_session, s1, say).
+text(test_first_session,  s1, "Het lijkt mij leuk om over sport te praten. De sporten die ik zelf graag doe zijn dansen of voetballen met andere robots").
+next(test_first_session, s1, "true", s2).
+
+state(test_first_session, s2, question).
+stateConfig(test_first_session, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=test_favo_sport, fast=yes]).
+text(test_first_session, s2, "Wat is jouw lievelings sport, %first_name%?").
+next(test_first_session, s2, 'success', s3).
+next(test_first_session, s2, 'fail', s5f).
+
+state(test_first_session, s3, say).
+text(test_first_session,  s3, "Wat gaaf zeg!").
+next(test_first_session, s3, "true", s4).
+
+state(test_first_session, s4, question).
+stateConfig(test_first_session, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(test_first_session, s4, "Wat vind je zo leuk aan %test_favo_sport%?").
+next(test_first_session, s4, 'success', s5).
+next(test_first_session, s4, 'fail', s5f).
+
+state(test_first_session, s5, say).
+text(test_first_session,  s5, "%test_favo_sport% klinkt inderdaad erg leuk! ").
+
+state(test_first_session, s5f, say).
+text(test_first_session,  s5f, "Laten we verder gaan naar de volgende vraag."). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 2					   %%%
-%%% Note: a previous session should contain the 	   %%%
-%%% 'ga_sports' topic		           		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(test_second_session, s1, say).
-text(test_second_session, s1, "Ik weet nog dat jij van %favo_sport% houdt.").
+text(test_second_session, s1, "Ik weet nog dat jij van %test_favo_sport% houdt.").
 next(test_second_session, s1, "true", s2).
 
-state(test_second_session, s2, branchingPoint).
-stateConfig(test_second_session, s2, [branchDecider=entity, branchSource=favo_sport]).
+state(test_second_session, s2, branchingPoint, test_favo_sport).
 next(test_second_session, s2, "floorball", s3floorball).
 next(test_second_session, s2, "voetbal", s3voetbal).
 next(test_second_session, s2, "hockey", s3hockey).
+next(test_second_session, s2, "_others", s3others).
 next(test_second_session, s2, "fail", s3fail).
 
 state(test_second_session, s3floorball, say).
@@ -337,6 +343,9 @@ text(test_second_session, s3voetbal, "Lekker tegen een bal aan schoppen.").
 
 state(test_second_session, s3hockey, say).
 text(test_second_session, s3hockey, "Lekker tegen de bal aan slaan.").
+
+state(test_second_session, s3others, say).
+text(test_second_session, s3others, "Lijkt mij ook leuk om eens te doen.").
 
 state(test_second_session, s3fail, say).
 text(test_second_session, s3fail, "Dat ging een beetje mis geloof ik.").
@@ -362,7 +371,7 @@ text(test_motion_co_b, s1, "Laten we eens kijken wat je hebt gemaakt").
 next(test_motion_co_b, s1, "true", s2).
 
 state(test_motion_co_b, s2, say).
-play_motion(test_motion_co_b, s2, motion_magic_wand).
+anim(test_motion_co_b, s2, id, motion_magic_wand).
 next(test_motion_co_b, s2, "true", s3).
 
 state(test_motion_co_b, s3, say).
@@ -378,11 +387,11 @@ text(test_motion_2, s1, "Ik weet nog die beweging").
 next(test_motion_2, s1, "true", s2).
 
 state(test_motion_2, s2, say).
-play_motion(test_motion_2, s2, motion_magic_wand).
+anim(test_motion_2, s2, id, motion_magic_wand).
 next(test_motion_2, s2, "true", s3).
 
 state(test_motion_2, s3, say).
-go_to_base_posture(test_motion_2, s3).
+go_to_posture(test_motion_2, s3).
 text(test_motion_2, s3, "Gaaf hè").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -396,7 +405,7 @@ next(test_session_sound_1a, s1, "true", s2).
 
 state(test_session_sound_1a, s2, say).
 prepare_sound_anim(test_session_sound_1a, s2).
-stateConfig(test_session_sound_1a, s2, [umVariable=sound_lion,
+stateConfig(test_session_sound_1a, s2, [umVariable=test_sound_lion,
 				 option1='resources/sounds/lion1.wav',
 				 option2='resources/sounds/lion2.wav',
 				 recordTime=4000]).
@@ -410,7 +419,7 @@ text(test_session_sound_1b, s2, "Het was het gebrul van de leeuw").
 next(test_session_sound_1b, s2, "true", s3).
 
 state(test_session_sound_1b, s3, say).
-audio(test_session_sound_1b, s3, source, sound_lion).
+audio(test_session_sound_1b, s3, id, test_sound_lion).
 next(test_session_sound_1b, s3, "true", s4).
 
 state(test_session_sound_1b, s4, say).
@@ -426,7 +435,7 @@ text(test_session_sound_2, s1, "Als machtige krijgers brullen wij als een leeuw.
 next(test_session_sound_2, s1, "true", s2).
 
 state(test_session_sound_2, s2, say).
-audio(test_session_sound_2, s2, source, sound_lion).
+audio(test_session_sound_2, s2, id, test_sound_lion).
 next(test_session_sound_2, s2, "true", s3).
 
 state(test_session_sound_2, s3, say).
@@ -449,7 +458,7 @@ text(test_session_led_1b, s1, "Laten we eens gaan kijken wat je er van gemaakt h
 next(test_session_led_1b, s1, "true", s2).
 
 state(test_session_led_1b, s2, say).
-play_led_anim(test_session_led_1b,  s2, test_led_show).
+leds(test_session_led_1b,  s2, id, test_led_show).
 next(test_session_led_1b, s2, "true", s3).
 
 state(test_session_led_1b, s3, say).
@@ -458,7 +467,7 @@ next(test_session_led_1b, s3, "true", s4).
 
 state(test_session_led_1b, s4, say).
 text(test_session_led_1b, s4, "Dat was het.").
-stop_led_anim(test_session_led_1b, s4).
+leds(test_session_led_1b, s4, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 8					   %%%
@@ -470,7 +479,7 @@ text(test_session_led_2, s1, "Ik heb je lichtshow van de vorige keer onthouden")
 next(test_session_led_2, s1, "true", s2).
 
 state(test_session_led_2, s2, say).
-play_led_anim(test_session_led_2,  s2, test_led_show).
+leds(test_session_led_2,  s2, id, test_led_show).
 next(test_session_led_2, s2, "true", s3).
 
 state(test_session_led_2, s3, say).
@@ -479,4 +488,4 @@ next(test_session_led_2, s3, "true", s4).
 
 state(test_session_led_2, s4, say).
 text(test_session_led_2, s4, "Dat was het.").
-stop_led_anim(test_session_led_2, s4).
+leds(test_session_led_2, s4, reset).

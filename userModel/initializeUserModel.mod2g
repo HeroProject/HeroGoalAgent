@@ -1,8 +1,8 @@
 use '../util/*.pl' as knowledge.
 use '../topics/*.pl' as knowledge.
 use '../topics/co_creation/*.pl' as knowledge.
-use '../topics/robotstories/*.pl' as knowledge.
 use '../topics/hospital/*.pl' as knowledge.
+use '../topics/robotstories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -19,16 +19,16 @@ module initializeUserModel {
 
 	forall bel(localVariable(Key, Value))
 		do {
-			if bel(userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel)) 
+			if bel(userModel(UserModel), updateUserModel(Key, Value, UserModel, NewUserModel))
 				then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 		}
 	
 
 	% Set userId and sessionId if not provided by gui.
-	if bel(useGui(false), setUserId(UserId), setSessionId(SessionId), setBasePosture(BasePosture)) 
+	if bel(useGui(false), setUserId(UserId), setSessionId(SessionId), setBasePosture(BasePosture))
 		then insert(userId(UserId), sessionId(SessionId), basePosture(BasePosture)).
 	
 	% Initialize remote user model.
-	if bel(userId(UserId), sessionId(SessionId)) 
+	if bel(userId(UserId), sessionId(SessionId))
 		then delete(waitingForInit) + setSession(UserId, SessionId) + insert(waitingForSession).
 }

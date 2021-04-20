@@ -26,7 +26,7 @@ module repair(T, S) {
 							
 							%If the user is entiteled to an addtional attempt: give extra attempt 
 							if bel(additionalAttempt(T, S), NextAttempt is CurrentAttempt + 1)
-								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S)) 
+								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), additionalAttempt(T, S))
 								+ insert(start, currentAttempt(NextAttempt)).
 						}				
 										
@@ -73,7 +73,7 @@ module repair(T, S) {
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 								}
-							if bel(CountNew < NOptions) 
+							if bel(CountNew < NOptions)
 								then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
 						}
 				}

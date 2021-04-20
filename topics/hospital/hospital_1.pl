@@ -69,8 +69,8 @@ text(ho1_tutorial_speech,  s4, "Laten we een keertje oefenen. Hier komt de eerst
 next(ho1_tutorial_speech,  s4, "true",  s5).
 
 state(ho1_tutorial_speech, s5, question).
-stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw", "donkerblauw"], inputModality=[speech=3], additionalAttempt=true]).
-leds(ho1_tutorial_speech, s5, ["FaceLeds"], ["blauw"]).
+stateConfig(ho1_tutorial_speech, s5, [type=quiz, context='answer_color', correctAnswer=["blauw", "donkerblauw"], inputModality=[speech=3], additionalAttempt=true, fast=yes]).
+leds(ho1_tutorial_speech, s5, direct, ["FaceLeds"], ["blauw"]).
 text(ho1_tutorial_speech, s5, "Welke kleur hebben mijn ogen nu?").
 next(ho1_tutorial_speech, s5, 'correct', s5cor).
 next(ho1_tutorial_speech, s5, 'incorrect', s5incor).
@@ -89,7 +89,7 @@ text(ho1_tutorial_speech,  s5f, "Dankjewel! Denk er aan om luid, en duidelijk, a
 next(ho1_tutorial_speech,  s5f, "true",  s6).
 
 state(ho1_tutorial_speech, s6, say).
-leds(ho1_tutorial_speech, s6, ["FaceLeds"], ["wit"]).
+leds(ho1_tutorial_speech, s6, direct, ["FaceLeds"], ["wit"]).
 
 %%% Touch %%%
 state(ho1_tutorial_touch, s1, say).
@@ -114,12 +114,12 @@ next(ho1_tutorial_touch,  s5, "true", s6).
 
 state(ho1_tutorial_touch, s6, say).
 text(ho1_tutorial_touch,  s6, "Links, waar het lampje nu groen is, betekent ja \pau=400\ en rechts, waar het lampje nu rood is betekent nee").
-leds(ho1_tutorial_touch,  s6, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
+leds(ho1_tutorial_touch,  s6, direct, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 next(ho1_tutorial_touch,  s6, "true",  s7).
 
 state(ho1_tutorial_touch, s7, say).
 text(ho1_tutorial_touch,  s7, "Laten we dat proberen. \pau=400\ ").
-leds(ho1_tutorial_touch,  s7, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+leds(ho1_tutorial_touch,  s7, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 next(ho1_tutorial_touch,  s7, "true",  s8).
 
 state(ho1_tutorial_touch, s8, question).
@@ -144,7 +144,7 @@ next(ho1_tutorial_touch, s9f, "true", s10).
 
 state(ho1_tutorial_touch, s10, say).
 text(ho1_tutorial_touch,  s10, "Soms zal ik wat opties opnoemen. Dan kun je op de ja knop drukken als je jouw antwoord hoort.").
-leds(ho1_tutorial_touch,  s10, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+leds(ho1_tutorial_touch,  s10, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 next(ho1_tutorial_touch,  s10, "true",  s11).
 
 state(ho1_tutorial_touch, s11, say).
@@ -154,7 +154,7 @@ next(ho1_tutorial_touch,  s11, "true",  s12).
 state(ho1_tutorial_touch, s12, question).
 stateConfig(ho1_tutorial_touch, s12, [type=quiz, options=['paars', 'blauw', 'groen', 'oranje'], 
 	correctAnswer=['groen'], inputModality=[touch=3]]).
-leds(ho1_tutorial_touch, s12, ["FaceLeds"], ["groen"]).
+leds(ho1_tutorial_touch, s12, direct, ["FaceLeds"], ["groen"]).
 text(ho1_tutorial_touch, s12, "Welke kleur hebben mijn ogen nu? Druk op de ja knop als je het antwoord hoort.").
 next(ho1_tutorial_touch, s12, 'correct', s13cor).
 next(ho1_tutorial_touch, s12, 'incorrect', s13incor).
@@ -173,7 +173,7 @@ text(ho1_tutorial_touch, s13incor2, "Mocht je te laat of te vroeg hebben gedrukt
 next(ho1_tutorial_touch,  s13incor2, "true",  s14).
 
 state(ho1_tutorial_touch, s14, say).
-leds(ho1_tutorial_touch, s14, ["FaceLeds"], ["wit"]).
+leds(ho1_tutorial_touch, s14, direct, ["FaceLeds"], ["wit"]).
 text(ho1_tutorial_touch, s14, "Mocht jouw antwoord er niet tussen zitten, dan kun je eentje kiezen die het beste bij jou past.").
 
 %%% Final questions %%%
@@ -470,8 +470,7 @@ next(ho1_colors, s3, 'fail', s7).
 
 state(ho1_colors, s4, say).
 text(ho1_colors, s4, "Kijk, ik heb geprobeerd mijn buik lampje %fav_color% te maken. Het lukt niet altijd even goed.").
-stateConfig(ho1_colors, s4, [ledRemoteSource="true"]).
-leds(ho1_colors, s4, ["ChestLeds"], [fav_color]).
+leds(ho1_colors, s4, direct, ["ChestLeds"], [fav_color]).
 next(ho1_colors, s4, "true", s5).
 
 state(ho1_colors, s5, question).
@@ -616,9 +615,9 @@ text(ho1_goodbye,  s7, "Ik kijk in ieder geval uit naar de volgende keer!").
 next(ho1_goodbye,  s7, "true",  s8).
 
 state(ho1_goodbye, s8, say).
-play_motion_file(ho1_goodbye, s8, "resources/gestures/wave1.json").
+anim(ho1_goodbye, s8, file, "resources/gestures/wave1.json").
 text(ho1_goodbye,  s8, "Tot dan %first_name%, doei doei \pau=300\ ").
 next(ho1_goodbye,  s8, "true",  s9).
 
 state(ho1_goodbye, s9, say).
-go_to_base_posture(ho1_goodbye, s9).
+go_to_posture(ho1_goodbye, s9).
