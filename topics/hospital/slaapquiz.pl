@@ -84,11 +84,13 @@ text(intro,  s3i6, "Als jij je antwoord hebt gegeven, ga ik je meer vertellen ov
 next(intro,  s3i6, "true",  s3i7).
 
 state(intro, s3i7, say).
-text(intro,  s3i7, "Als ik een tip heb, dan zal ik al mijn lichtjes oranje maken, zo kun je de tips goed herkennen.").
+text(intro,  s3i7, "Als ik een tip heb, dan zal ik al mijn lichtjes zoals nu oranje maken, zo kun je de tips goed herkennen.").
+leds(intro,  s3i7, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
 next(intro,  s3i7, "true",  s4q).
 
 state(intro, s4q, question).
 stateConfig(intro, s4q, [type=yesno, context='answer_yesno']).
+leds(intro,  s4q, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 text(intro,  s4q, "Ben je er klaar voor?").
 next(intro,  s4q, 'answer_yes', s4y).
 next(intro,  s4q, 'answer_no', s4n).
