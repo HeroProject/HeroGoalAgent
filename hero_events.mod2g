@@ -130,9 +130,8 @@ module hero_events {
 		}
 										
 	% User responded on the tablet. -Vincent
-	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection,
-									keyValue(T, S, context, Intent), downcase_atom(Text, DT))
-		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=DT]).
+	if percept(answer(Text)), bel(currentTopic(T), currentState(S), waitingForDetection, keyValue(T, S, context, Intent))
+		then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Text]).
 							
 	% User did not respond.	
 	if bel(event('IntentDetectionDone'), currentTopic(T), currentState(S), waitingForDetection)
