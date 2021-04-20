@@ -127,7 +127,7 @@ text(algemeen,  s1i1, "Vind je zelf dat je goed slaapt?").
 next(algemeen,  s1i1, "true",  s1i2).
 
 state(algemeen, s1i2, say).
-text(algemeen,  s1i2, "Je kunt op de tè blèet kiezen tussen drie antwoorden.").
+text(algemeen,  s1i2, "Je kunt zo op de tè blèet kiezen tussen drie antwoorden.").
 next(algemeen,  s1i2, "true",  s1i3).
 
 state(algemeen, s1i3, say).
@@ -306,7 +306,7 @@ text(routine,  s2nn, "Oke.").
 next(routine,  s2nn, "true", s4).
 
 state(routine, s3n, say).
-text(routine,  s3n, "Op de tè blèet zie je allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
+text(routine,  s3n, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3n, "true", s3nq).
 
 state(routine, s3nq, question). % TODO: complicated tablet task?
@@ -374,7 +374,7 @@ text(slaapkamer,  s2, "Is jouw kamer ook donker als je gaat slapen?").
 next(slaapkamer,  s2, "true",  s2i).
 
 state(slaapkamer, s2i, say).
-text(slaapkamer,  s2i, "Je kunt op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
+text(slaapkamer,  s2i, "Je kunt zo op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
 next(slaapkamer,  s2i, "true",  s2q).
 
 state(slaapkamer, s2q, question).

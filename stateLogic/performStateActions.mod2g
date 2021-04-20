@@ -10,7 +10,6 @@ order=linearall.
 
 % Performs all action (modalities) at the start of a state S for topic T.
 module performStateActions(T, S) {
-
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				DIALOG ATTRIBUTES				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,28 +60,26 @@ module performStateActions(T, S) {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					WEBPAGE						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-	% Show text.
-	if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
-		then renderPage(Html).
-	if bel(display_raw(T, S, Txt), html(Txt, Html), currentAttempt(1)) 
-		then renderPage(Html).
-	% Show image.
-	if bel(image(T, S, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
-		then renderPage(Html).
-	% Show questions
-	if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt)) then {
-		%if bel(currentAttempt(1), html(HTxt, Html))
-		%	then renderPage(Html).
-		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+	
+		% Show text
+		if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html)) 
 			then renderPage(Html).
-	}
-	if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt)) then {
-		%if bel(currentAttempt(1), html(HTxt, Html))
-		%	then renderPage(Html).
-		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+		if bel(display_raw(T, S, Txt), html(Txt, Html)) 
 			then renderPage(Html).
-	}
+		% Show image
+		if bel(image(T, S, I), img(I, Img), html(Img, Html)) 
+			then renderPage(Html).
+		% Show questions
+		if bel(text(T, S, Txt), keyValue(T, S, type, yesno), text(Txt, HTxt),  
+				buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+		if bel(text(T, S, Txt), keyListValues(T, S, [type, options], [quiz, List]), text(Txt, HTxt), 
+				buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+			then renderPage(Html).
+		% Clear the page otherwise
+		if bel(text(T, S, _), not(display(T, S, _)), not(display_raw(T, S, _)), not(image(T, S, _)), 
+				not(keyValue(T, S, type, _)), html('',Html))
+			then renderPage(Html).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					CO-CREATION					%%
@@ -147,16 +144,17 @@ module performStateActions(T, S) {
 
 	% Save the led animation configurations.
 	% Remove all the downloaded options
-	forall bel(save_led_anim(T, S, _, _, _, _), waitingForLedAnim(ID), animOption(ID, Number, Option)) do delete(animOption(ID, Number, Option)).
+	forall bel(save_led_anim(T, S, _, _, _, _), waitingForLedAnim(ID), animOption(ID, Number, Option)) 
+		do delete(animOption(ID, Number, Option)).
 		
-	%Save a blinking, alternate, and spinning animations.
+	% Save a blinking, alternate, and spinning animations.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), not(AnimType = colorSelect),
 			getUserModelValue(Group, GroupR), getUserModelValue(AnimType, AnimTypeR), valueListFromKeyList(Colors, ColorsR), 
 			userModel(UserModel), updateUserModel(ID, [GroupR, AnimTypeR, ColorsR, Speed], UserModel, NewUserModel),
 			nested_list_to_string([GroupR, AnimTypeR, ColorsR, Speed], AnimString), userId(UserId)) 
 		then delete(userModel(UserModel), waitingForLedAnim(ID)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, AnimString).
 	
-	%Save a color select animation.
+	% Save a color select animation.
 	if bel(save_led_anim(T, S, Group, AnimType, Colors, Speed), waitingForLedAnim(ID), AnimType = colorSelect, valueListFromKeyList(Colors, ColorsR), 
 			userModel(UserModel), updateUserModel(ID, [Group, AnimType, ColorsR, Speed], UserModel, NewUserModel),
 			nested_list_to_string([Group, AnimType, ColorsR, Speed], AnimString), userId(UserId)) 
