@@ -1,0 +1,61 @@
+use '../util/*.pl' as knowledge.
+use '../topics/*.pl' as knowledge.
+use '../topics/co_creation/*.pl' as knowledge.
+use '../topics/robotstories/*.pl' as knowledge.
+use '../topics/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+use '../util/logging' as module.
+
+module selectRobotResponse(T, S, Ans, Data) {
+
+	if bel(keyValue(T, S, type, Type), nextCondition(Condition), userId(UserId), (keyValue(T, S, umVariable, Key); not(keyValue(T, S, umVariable, _)), generateKeyFromTopicAndState(T, S, Key)))
+		then {
+			% the default nextCondition will be replaced.
+			if true then delete(nextCondition(Condition)).
+			
+			% If no answer was given
+			if bel(Ans=failure)
+				then {
+					%The next condition is given the 'fail'  flag.
+					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
+						then insert(nextCondition('fail')) + logging([topic=T, state=S, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+					
+					%If a default answer is provided for an input question, that is stored userModel key-value list
+					if bel(Type=input, keyValue(T, S, defaultAnswer, DefaultAns), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, DefaultAns).	
+				}
+			
+			% If an answer was given
+			if bel(Ans \= failure)
+				then {
+					%if the type of question was yesno, the answer (answer_yes or answer_no) is used as flag for the state transition.
+					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
+					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
+					if bel(Type=input, userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) then 
+					{
+						if true then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Ans).
+						
+						if bel(next(T, S, Ans, _)) then insert(nextCondition(Ans)).
+						if bel(not(next(T, S, Ans, _)), next(T, S, "_others", _)) then insert(nextCondition("_others")).
+						if bel(not(next(T, S, Ans, _)), not(next(T, S, "_others", _))) then insert(nextCondition("success")).
+					}
+					
+					%for quiz questions
+					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					%for open questions
+					if bel(Type=openend)
+						then insert(nextCondition('success')).
+					
+					%Logging
+					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
+						then logging([topic=T, state=S, action=questionFinalResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+				}
+						
+			% Flag that the answer has been processed.
+			if true then insert(answerProcessed).
+		}
+	
+}

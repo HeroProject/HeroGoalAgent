@@ -54,7 +54,7 @@ session(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho1_tuto
 session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_story_selection, ho2_goodbye, general_rest]).
 session(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 
-%%%%%%%%%%%%%% Interactieve slaapquiz %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Interactieve slaapquiz %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, slaapkamer, bedtijden, piekeren, wakker, bewegen, etendrinken, afsluiting, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,7 +63,7 @@ session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, slaa
 % Use of GUI.
 useGui(false).
 % When GUI is used this userId and these localVariables are ignored.
-% When no GUI is uses, these variables need to be specified.
+% When no GUI is used, these variables need to be specified.
 setUserId('999').
 setSessionId(1).
 setBasePosture('Stand').
