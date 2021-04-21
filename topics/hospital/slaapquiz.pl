@@ -382,7 +382,7 @@ text(slaapkamer,  s2i, "Je kunt zo op de tè blèet kiezen uit drie plaatjes: op
 next(slaapkamer,  s2i, "true",  s2q).
 
 state(slaapkamer, s2q, question). % afbeeldingen: donker, licht, donker met nachtlampje
-stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=['<img class="img-responsive center-block" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">', '<img class="img-responsive center-block" src="https://i.pinimg.com/originals/f4/98/d6/f498d616a68c7690f66a0e413ca11939.jpg">', '<img class="img-responsive center-block" src="https://media.s-bol.com/xkwQvq9Vz1K9/550x550.jpg">'], correctAnswer=['<img class="img-responsive center-block" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">']]).
+stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=['<img class="w-25" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">', '<img class="w-25" src="https://i.pinimg.com/originals/f4/98/d6/f498d616a68c7690f66a0e413ca11939.jpg">', '<img class="w-25" src="https://media.s-bol.com/xkwQvq9Vz1K9/550x550.jpg">'], correctAnswer=['<img class="w-25" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">']]).
 text(slaapkamer,  s2q, "Welke kamer lijkt het meest op die van jou?").
 next(slaapkamer,  s2q, 'correct', s2d).
 next(slaapkamer,  s2q, 'incorrect', s2l).
