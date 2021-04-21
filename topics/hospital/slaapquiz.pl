@@ -667,7 +667,7 @@ text(etendrinken,  s2yi, "Kijk: op de tè blèet zie je allerlei soorten eten en
 next(etendrinken,  s2yq, "true", s2yq).
 
 state(etendrinken, s2yq, question).
-stateConfig(routine, s2yq, [type=sorter, inputModality=[tablet=1], options=['cola'='https://spng.subpng.com/20191208/ul/transparent-beverage-can-diet-soda-logo-font-cola-cola5e396ebbabb864.8670916515808222037034.jpg', 'energy'='https://mpng.subpng.com/20190429/arl/kisspng-red-bull-x-fighters-red-bull-energy-drink-rbregcan-ieee-sb-university-of-patras-5cc6d9c9dc3831.611955141556535753902.jpg', 'chocola'='https://mpng.subpng.com/20200926/br/transparent-chocolate-bar-5f6fb02a625932.7410209016011551144028.jpg']]).
+stateConfig(etendrinken, s2yq, [type=sorter, inputModality=[tablet=1], options=['cola'='https://spng.subpng.com/20191208/ul/transparent-beverage-can-diet-soda-logo-font-cola-cola5e396ebbabb864.8670916515808222037034.jpg', 'energy'='https://mpng.subpng.com/20190429/arl/kisspng-red-bull-x-fighters-red-bull-energy-drink-rbregcan-ieee-sb-university-of-patras-5cc6d9c9dc3831.611955141556535753902.jpg', 'chocola'='https://mpng.subpng.com/20200926/br/transparent-chocolate-bar-5f6fb02a625932.7410209016011551144028.jpg']]).
 text(etendrinken,  s2yq, "Kun jij het eten en drinken aanklikken waarvan jij denkt dat je deze beter niet kunt nemen voordat je gaat slapen?").
 next(etendrinken,  s2yq, 'answer_yes', s2yr).
 next(etendrinken,  s2yq, 'answer_no', s2yr).
