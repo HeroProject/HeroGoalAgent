@@ -381,8 +381,8 @@ state(slaapkamer, s2i, say).
 text(slaapkamer,  s2i, "Je kunt zo op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
 next(slaapkamer,  s2i, "true",  s2q).
 
-state(slaapkamer, s2q, question).
-stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=["Donker", "Licht", "Donker met nachtlampje"], correctAnswer=["Donker"]]).
+state(slaapkamer, s2q, question). % afbeeldingen: donker, licht, donker met nachtlampje
+stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=['<img class="img-responsive center-block" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">', '<img class="img-responsive center-block" src="https://i.pinimg.com/originals/f4/98/d6/f498d616a68c7690f66a0e413ca11939.jpg">', '<img class="img-responsive center-block" src="https://media.s-bol.com/xkwQvq9Vz1K9/550x550.jpg">'], correctAnswer=['<img class="img-responsive center-block" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">']]).
 text(slaapkamer,  s2q, "Welke kamer lijkt het meest op die van jou?").
 next(slaapkamer,  s2q, 'correct', s2d).
 next(slaapkamer,  s2q, 'incorrect', s2l).
