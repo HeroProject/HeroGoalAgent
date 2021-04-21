@@ -135,7 +135,7 @@ text(algemeen,  s1i3, "De eerste is dat je meestal goed slaapt, de tweede is dat
 next(algemeen,  s1i3, "true",  s1q).
 
 state(algemeen, s1q, question).
-stateConfig(algemeen, s1q, [type=quiz, context='answer_sleep', options=["Meestal goed", "Soms goed soms slecht", "Meestal slecht"], correctAnswer=["Meestal goed"]]).
+stateConfig(algemeen, s1q, [type=quiz, context='answer_sleep', inputModality=[tablet=1], options=["Meestal goed", "Soms goed soms slecht", "Meestal slecht"], correctAnswer=["Meestal goed"]]).
 text(algemeen,  s1q, "Welk antwoord past het beste bij jou?").
 next(algemeen,  s1q, 'correct', s1g1).
 next(algemeen,  s1q, 'incorrect', s1s1).
@@ -263,7 +263,7 @@ state(routine, s3y, say).
 text(routine,  s3y, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3y, "true", s3yq).
 
-state(routine, s3yq, question). % TODO: complicated tablet task?
+state(routine, s3yq, question).
 stateConfig(routine, s3yq, [type=sorter, inputModality=[tablet=1], options=['pyjama'='https://i.pinimg.com/originals/3c/f8/34/3cf8347b5f1108562937acfbb2738140.jpg', 'poetsen'='https://i.pinimg.com/originals/e4/9b/f5/e49bf527682f10088fd1b051475783cb.jpg', 'lezen'='https://i.pinimg.com/474x/3f/ec/dc/3fecdc2f5560ec8a940c08d78ad6ee88.jpg']]).
 text(routine,  s3yq, "Kun jij de plaatjes op volgorde aanklikken zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes aan te klikken als sommige dingen niet bij jouw routine horen.").
 next(routine,  s3yq, "true", s3yr).
@@ -288,7 +288,7 @@ next(routine,  s1n2, "true", s2nq).
 
 state(routine, s2nq, question).
 stateConfig(routine, s2nq, [type=yesno, context='answer_yesno']).
-text(routine,  s2nq, "Zullen we samen met behulp van de tè blèet een routine maken? ").
+text(routine,  s2nq, "Zullen we samen met behulp van de tè blèet een routine maken?").
 next(routine,  s2nq, 'answer_yes', s2ny).
 next(routine,  s2nq, 'answer_no', s2nn).
 next(routine,  s2nq, 'answer_dontknow', s2nn).
@@ -306,9 +306,9 @@ state(routine, s3n, say).
 text(routine,  s3n, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, plassen, gordijnen dicht doen, en een boekje lezen.").
 next(routine,  s3n, "true", s3nq).
 
-state(routine, s3nq, question). % TODO: complicated tablet task?
-stateConfig(routine, s3nq, [type=yesno, context='answer_yesno']).
-text(routine,  s3nq, "Kun jij de plaatjes op een volgorde zetten die jou handig lijkt? Je hoeft niet alle plaatjes te gebruiken als sommige dingen niet bij jou passen. Papa of mamma mag natuurlijk helpen.").
+state(routine, s3nq, question).
+stateConfig(routine, s3nq, [type=sorter, inputModality=[tablet=1], options=['pyjama'='https://i.pinimg.com/originals/3c/f8/34/3cf8347b5f1108562937acfbb2738140.jpg', 'poetsen'='https://i.pinimg.com/originals/e4/9b/f5/e49bf527682f10088fd1b051475783cb.jpg', 'lezen'='https://i.pinimg.com/474x/3f/ec/dc/3fecdc2f5560ec8a940c08d78ad6ee88.jpg']]).
+text(routine,  s3nq, "Kun jij de plaatjes op een volgorde aanklikken die jou handig lijkt? Je hoeft niet alle plaatjes aan te klikken als sommige dingen niet bij jou passen. Pappa of mamma mag natuurlijk helpen.").
 next(routine,  s3nq, 'answer_yes', s3nr).
 next(routine,  s3nq, 'answer_no', s3nr).
 next(routine,  s3nq, 'answer_dontknow', s3nr).
@@ -334,18 +334,20 @@ next(routine,  s3nt3, "true", s4).
 %%% COMMON END %%%
 state(routine, s4, say).
 text(routine,  s4, "Laten we verder praten over de slaapkamer.").
+leds(routine,  s4, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Slaapkamer comfortabel                                 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(slaapkamer, s1, say).
-text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!"). % TODO: tablet image
-leds(slaapkamer,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
+text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!").
+image(slaapkamer, s1i, "https://horecatrends.com/wordpress/wp-content/uploads/Robot-Mario-test-het-bed-ht.jpg").
 next(slaapkamer,  s1, "true",  s1i1).
 
 state(slaapkamer, s1i1, say).
 text(slaapkamer,  s1i1, "Dit is mijn kamer. Ik heb veel robot knuffels en een heel zacht bed.").
+image(slaapkamer, s1i1, "https://horecatrends.com/wordpress/wp-content/uploads/Robot-Mario-test-het-bed-ht.jpg").
 next(slaapkamer,  s1i1, "true",  s1q).
 
 state(slaapkamer, s1q, question).
@@ -362,9 +364,14 @@ state(slaapkamer, s1i2, say).
 text(slaapkamer,  s1i2, "Wat mij helpt om goed te slapen, is dat mijn kamer lekker donker is.").
 next(slaapkamer,  s1i2, "true",  s1i3).
 
-state(slaapkamer, s1i3, say). % TODO: animation/sound
+state(slaapkamer, s1i3, say).
 text(slaapkamer,  s1i3, "Ik ben heel goed in gordijnen dicht doen, kijk maar.").
-next(slaapkamer,  s1i3, "true",  s2).
+next(slaapkamer,  s1i3, "true",  s1i4).
+
+state(slaapkamer, s1i4, say).
+audio(slaapkamer, s1i4, file, 'resources/sounds/racecar.wav').
+anim(slaapkamer,  s1i4, file, "resources/gestures/racecar.xml").
+next(slaapkamer,  s1i4, "true",  s2).
 
 state(slaapkamer, s2, say).
 text(slaapkamer,  s2, "Is jouw kamer ook donker als je gaat slapen?").
@@ -375,23 +382,19 @@ text(slaapkamer,  s2i, "Je kunt zo op de tè blèet kiezen uit drie plaatjes: op
 next(slaapkamer,  s2i, "true",  s2q).
 
 state(slaapkamer, s2q, question).
-stateConfig(slaapkamer, s2q, [type=quiz, context='answer_sleep', options=["Donker", "Licht", "Donker met nachtlampje"], correctAnswer=["Donker"]]).
+stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=["Donker", "Licht", "Donker met nachtlampje"], correctAnswer=["Donker"]]).
 text(slaapkamer,  s2q, "Welke kamer lijkt het meest op die van jou?").
 next(slaapkamer,  s2q, 'correct', s2d).
 next(slaapkamer,  s2q, 'incorrect', s2l).
-next(slaapkamer,  s2q, 'fail', s2dn). % TODO: actual image choices on tablet
+next(slaapkamer,  s2q, 'fail', s2l).
 
 state(slaapkamer, s2d, say).
-text(slaapkamer,  s2d, "Heel goed! In een donkere kamer kun je beter slapen").
+text(slaapkamer,  s2d, "Heel goed! Ik had zelf vroeger een nachtlampje, maar mijn nachtlampje was niet te fel. Dat is belangrijk, want in een donkere kamer kun je beter slapen.").
 next(slaapkamer,  s2d, "true",  s2i1).
 
 state(slaapkamer, s2l, say).
 text(slaapkamer,  s2l, "Soms kan een donkere kamer helpen om beter te slapen.").
 next(slaapkamer,  s2l, "true",  s2i1).
-
-state(slaapkamer, s2dn, say).
-text(slaapkamer,  s2dn, "Dat had ik vroeger ook, een nachtlampje! Mijn nachtlapje was niet te fel, dat is belangrijk, want in een donkere kamer kun je beter slapen.").
-next(slaapkamer,  s2dn, "true",  s2i1).
 
 state(slaapkamer, s2i1, say).
 text(slaapkamer,  s2i1, "Als er niet te veel licht is, dan helpt dat je lichaam om slaapstofjes aan te maken.").
@@ -663,8 +666,8 @@ state(etendrinken, s2yi, say).
 text(etendrinken,  s2yi, "Kijk: op de tè blèet zie je allerlei soorten eten en drinken, zoals cola, energy drink, (warme) melk, en chocola.").
 next(etendrinken,  s2yq, "true", s2yq).
 
-state(etendrinken, s2yq, question). % TODO: complicated tablet task?
-stateConfig(etendrinken, s2yq, [type=yesno, context='answer_yesno']).
+state(etendrinken, s2yq, question).
+stateConfig(routine, s2yq, [type=sorter, inputModality=[tablet=1], options=['cola'='https://spng.subpng.com/20191208/ul/transparent-beverage-can-diet-soda-logo-font-cola-cola5e396ebbabb864.8670916515808222037034.jpg', 'energy'='https://mpng.subpng.com/20190429/arl/kisspng-red-bull-x-fighters-red-bull-energy-drink-rbregcan-ieee-sb-university-of-patras-5cc6d9c9dc3831.611955141556535753902.jpg', 'chocola'='https://mpng.subpng.com/20200926/br/transparent-chocolate-bar-5f6fb02a625932.7410209016011551144028.jpg']]).
 text(etendrinken,  s2yq, "Kun jij het eten en drinken aanklikken waarvan jij denkt dat je deze beter niet kunt nemen voordat je gaat slapen?").
 next(etendrinken,  s2yq, 'answer_yes', s2yr).
 next(etendrinken,  s2yq, 'answer_no', s2yr).
@@ -744,12 +747,14 @@ state(afsluiting, s1f, say).
 text(afsluiting,  s1f, "Fijn dat we zo veel te weten zijn gekomen over hoe jij slaapt en hoe je beter zou kunnen slapen.").
 next(afsluiting,  s1f, "true", s1i2).
 
-state(afsluiting, s1i2, say). % FIXME: tablet show
+state(afsluiting, s1i2, say).
 text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tè blèet. Kijk je mee?").
+image(afsluiting, s1i2, "https://www.elsevier.com/__data/assets/image/0008/822977/iStock-540400568-credit-Michail_Petrov-96-1200x600.jpg").
 next(afsluiting,  s1i2, "true", s1i3).
 
 state(afsluiting, s1i3, say).
 text(afsluiting,  s1i3, "Handig hè, alle tips in één plaatje?").
+image(afsluiting, s1i3, "https://www.elsevier.com/__data/assets/image/0008/822977/iStock-540400568-credit-Michail_Petrov-96-1200x600.jpg").
 next(afsluiting,  s1i3, "true", s1i4).
 
 state(afsluiting, s1i4, say).

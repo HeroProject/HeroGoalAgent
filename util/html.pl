@@ -1,5 +1,3 @@
-:-dynamic display/3, display_raw/3, image/3.
-
 bg('<div class="bg-info vh-100 vw-100">~a</div>').
 header('<nav class="navbar mb-3"><div class="navbar-brand listening_icon"></div></nav>').
 main('<main class="container text-white text-center">~a</main>').

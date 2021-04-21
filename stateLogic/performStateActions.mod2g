@@ -61,18 +61,16 @@ module performStateActions(T, S) {
 	%%					WEBPAGE						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-		% Show text
-		if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html)) 
-			then renderPage(Html).
-		if bel(display_raw(T, S, Txt), html(Txt, Html)) 
-			then renderPage(Html).
-		% Show image
-		if bel(image(T, S, I), img(I, Img), html(Img, Html)) 
-			then renderPage(Html).
-		% Clear the page otherwise
-		if bel(text(T, S, _), not(display(T, S, _)), not(display_raw(T, S, _)), not(image(T, S, _)), 
-				not(keyValue(T, S, type, _)), html('',Html))
-			then renderPage(Html).
+	% Show text
+	if bel(display(T, S, Txt), text(Txt, HTxt), html(HTxt, Html)) 
+		then renderPage(Html).
+	% Show image
+	if bel(image(T, S, I), img(I, Img), html(Img, Html)) 
+		then renderPage(Html).
+	% Clear the page otherwise
+	if bel(text(T, S, _), not(display(T, S, _)), not(image(T, S, _)), 
+			not(keyValue(T, S, type, _)), html('',Html))
+		then renderPage(Html).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					CO-CREATION					%%
