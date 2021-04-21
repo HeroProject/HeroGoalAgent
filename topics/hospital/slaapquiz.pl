@@ -663,7 +663,7 @@ text(etendrinken,  s2y, "Leuk!").
 next(etendrinken,  s2y, "true", s2yi).
 
 state(etendrinken, s2yi, say).
-text(etendrinken,  s2yi, "Op de tè blèet zie je zo allerlei soorten eten en drinken, zoals cola, energy drink, (warme) melk, en chocola.").
+text(etendrinken,  s2yi, "Op de tè blèet zie je zo allerlei soorten eten en drinken, zoals cola, energy drink, warme melk, en chocola.").
 next(etendrinken,  s2yi, "true", s2yq).
 
 state(etendrinken, s2yq, question).
