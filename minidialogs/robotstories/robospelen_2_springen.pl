@@ -1,7 +1,8 @@
 minidialog(robospelen_2_springen, [type=narrative, thread=robospelen, position=2]).
 
 move(robospelen_2_springen, s1, say).
-text(robospelen_2_springen, s1, "Hé, ik heb opeens een heel goed idee!").
+text(robospelen_2_springen, s1, "Springen").
+% text(robospelen_2_springen, s1, "Hé, ik heb opeens een heel goed idee!").
 %next(robospelen_2_springen, s1, "true", s2).
 
 move(robospelen_2_springen, s2, say).

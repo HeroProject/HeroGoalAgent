@@ -1,0 +1,14 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../userModel/loadInteractantData' as module.
+use '../hero_actions' as actionspec.
+
+order=linear.
+
+module selectChitchatDialog(SessionElement, RemainingElements) {
+	if true then log(chitchat(SessionElement, RemainingElements)).
+}

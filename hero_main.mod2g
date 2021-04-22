@@ -5,7 +5,7 @@ use 'minidialogs/hospital/*.pl' as knowledge.
 use 'minidialogs/robotstories/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'dialogMoves/*.mod2g' as module.
+use 'dialogManagement/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
 module hero_main {

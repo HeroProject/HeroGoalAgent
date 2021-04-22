@@ -71,5 +71,5 @@ evenFailSafeActive(false).
 
 % Session details.
 %multiSessionDesign([hospital_1, hospital_2, hospital_3]).
-multiSessionDesign([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-%multiSessionDesign([nar_dial_1]).
+%multiSessionDesign([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
+multiSessionDesign([nar_dial_1]).

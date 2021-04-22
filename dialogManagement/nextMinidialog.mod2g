@@ -5,7 +5,10 @@ use '../minidialogs/robotstories/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../userModel/loadInteractantData' as module.
+use selectNarrativeDialog as module.
+use selectChitchatDialog as module.
 use '../hero_actions' as actionspec.
+
 
 order=linearall.
 
@@ -13,13 +16,16 @@ module nextMinidialog {
 
 	if bel(session(Session), pop(Session, SessionElement, RemainingElements)) then
 	{
-		if bel(SessionElement \= [_=_]) then insert(selectedMinidialog(SessionElement, RemainingElements)).
-						
-		if bel(SessionElement = [thread = Thread], getNarrativeThreadPos(Thread, LatestPos), NewPos is LatestPos + 1) then
-		{
-			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=NewPos]))
-				then insert(selectedMinidialog(Minidialog, RemainingElements)).
-		}
+		% SessionElements contains a direct id to a minidialog.
+		if bel(SessionElement \= [_=_])
+			then insert(selectedMinidialog(SessionElement, RemainingElements)).
+		
+		% SessionElement contains a session block of a narrative thread. Select the best fitting narrative minidialog.		
+		if bel(SessionElement = [thread=Thread], getNarrativeThreadPos(Thread, LatestPos), NewPos is LatestPos + 1)
+			then selectNarrativeDialog(Thread, NewPos, RemainingElements).
+		
+		% SessionElement contains a session block of a chitchat. Select the best fitting chitchat minidialog.	
+		if bel(SessionElement = [topic=_] ; SessionElement = [theme=_]) then selectChitchatDialog(SessionElement, RemainingElements).
 			
 		% Process the selected minidialog.
 		if bel(selectedMinidialog(Selected, Remaining), userId(UserId)) then 
