@@ -9,36 +9,27 @@ use loadInteractantDataHelper as module.
 
 order=linearall.
 
-module loadInteractantData(MiniDialogs) {
-	if bel(nth0(0, MiniDialogs, Minidialog, RestOfMinidialogs), length(RestOfMinidialogs, L), userId(UserId))
+module loadInteractantData(Minidialog) {
+	if bel(userId(UserId))
 		then {
 			% Load text variables
 			forall bel(text(Minidialog, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
 				do loadInteractantDataHelper(Keys).
-			
-			if true then insert(additionalMinidialogs([])).
-			
-			forall bel(insert_minidialog(Minidialog, Move, NewMinidialog), keyValue(Minidialog, Move, loadUserModel, "true"), additionalMinidialogs(AdditionalMinidialogs))
-				do delete(additionalMinidialogs(AdditionalMinidialogs)) + insert(additionalMinidialogs([NewMinidialog | AdditionalMinidialogs])).
 			
 			% Load motions
 			forall bel(anim(Minidialog, _, id, Key))
 				do getInteractantData(UserId, Key).
 			
 			% Load audio
-			forall bel(audio(Minidialog, _, id, Key), not(waitingForMemoryAudio(Key)))
-				do getInteractantData(UserId, Key) + insert(waitingForMemoryAudio(Key)).
+			forall bel(audio(Minidialog, _, id, Key))
+				do getInteractantData(UserId, Key).
 			
 			% Load led animations
 			forall bel(leds(Minidialog, _, id, Key))
-				do getInteractantData(UserId, Key) + insert(waitingForMemoryLed(Key)).
+				do insert(waitingForMemoryLed(Key)) + getInteractantData(UserId, Key).
 			
-			% Recursive continue with the next minidialog.
-			if bel(L \= 0, additionalMinidialogs(AT), length(AT, 0)) 
-				then delete(additionalMinidialogs(AT)) +  loadInteractantData(RestOfMinidialogs).
-			if bel(L \= 0, additionalMinidialogs(AT), not(length(AT, 0)), append(AT, RestOfMinidialogs, Combined)) 
-				then delete(additionalMinidialogs(AT)) +  loadInteractantData(Combined).
-			if bel(L = 0, additionalMinidialogs(AT), not(length(AT, 0))) 
-				then delete(additionalMinidialogs(AT)) +  loadInteractantData(AT).
+			% Load variables for nested minidialogs
+			forall bel(insert_minidialog(Minidialog, Move, NestedMinidialog), keyValue(Minidialog, Move, loadUserModel, "true"))
+				do loadInteractantData(NestedMinidialog).
 		}
 }

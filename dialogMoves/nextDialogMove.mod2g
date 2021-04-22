@@ -5,7 +5,7 @@ use '../minidialogs/robotstories/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
-use '../util/logging' as module.
+use nextMinidialog as module.
 
 order=linearall.
 
@@ -32,10 +32,9 @@ module nextDialogMove(Minidialog, Move, C) {
 		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove). % Progress: move to next move
 		
 	% ... or go to next minidialog if a minidialog has been completed (no next move has been specified for the minidialog).
-	if goal(minidialogs([])), not(bel(next(Minidialog, Move, _, _))), bel(minidialogs(AllMinidialogs), pop(AllMinidialogs, NewMinidialog, RemainingMinidialogs), getUserModelWithoutLocal(UserModel))
-		then delete(currentMinidialog(Minidialog), minidialogs(AllMinidialogs)) + insert(currentMinidialog(NewMinidialog), minidialogs(RemainingMinidialogs), currentMove(s1)) + logging([userModel=UserModel]).
-			
+	if goal(session([])), not(bel(next(Minidialog, Move, _, _))) then nextMinidialog.
+				
 	% And, finally, initialize move specific parameters for new move (if any).
-	if bel(currentMinidialog(Tnew), currentMove(Snew), move(Tnew, Snew, question), getInputModalityOrder(Tnew, Snew, Order), nth0(0, Order, NewModality)) 
+	if bel(currentMinidialog(MDnew), currentMove(MVnew), move(MDnew, MVnew, question), getInputModalityOrder(MDnew, MVnew, Order), nth0(0, Order, NewModality)) 
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 }

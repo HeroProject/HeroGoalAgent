@@ -5,24 +5,21 @@ use 'minidialogs/hospital/*.pl' as knowledge.
 use 'minidialogs/robotstories/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
-use 'dialogMoves/performDialogMove' as module.
+use 'dialogMoves/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
 module hero_main {
 	% Adapt minidialog goal if all the necessary information is loaded from the database.
-	if not(goal(minidialogs([]))) then {
+	if not(goal(session([]))) then {
 		if bel(useGui(true), not(waitingForGuiData(_)), waitingForInit) then initializeUserModel.
 		
-		if bel(waitingForHistory, not(waitingForEvent('ClearHistory')), userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId).
+		if bel(waitingForHistory, not(waitingForEvent('ClearHistory')), userId(UserId), 
+				not(waitingForMemoryData('DialogHistory')), not(waitingForMemoryData('NarrativeHistory')))
+			then getDialogHistory(UserId) + getNarrativeHistory(UserId).
 	
-		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), sessionOrder(SessionOrder), userId(UserId),
-				nth1(SessionId, SessionOrder, SessionLabel), session(SessionLabel, MiniDialogs), nth0(0, MiniDialogs, FirstMinidialog, RestOfMinidialogs),
-				dialogHistory(History), updateDialogHistory(FirstMinidialog, UpdatedHistory), currentMove(Move)) 
-			then delete(waitingForSession, dialogHistory(History)) 
-			+ insert(currentMinidialog(FirstMinidialog), minidialogs(RestOfMinidialogs), dialogHistory(UpdatedHistory))
-			+ setDialogHistory(UserId, FirstMinidialog)
-			+ setMoveHistory(UserId, Move)
-			+ loadInteractantData(MiniDialogs) + adopt(minidialogs([])).
+		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), multiSessionDesign(MultiSessionDesign),
+				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))
+			then delete(waitingForSession) + insert(session(Session)) + adopt(session([])) + nextMinidialog.
 	}
 	
 	% Execute the move actions

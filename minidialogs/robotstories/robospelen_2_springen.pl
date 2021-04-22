@@ -1,6 +1,8 @@
+minidialog(robospelen_2_springen, [type=narrative, thread=robospelen, position=2]).
+
 move(robospelen_2_springen, s1, say).
 text(robospelen_2_springen, s1, "Hé, ik heb opeens een heel goed idee!").
-next(robospelen_2_springen, s1, "true", s2).
+%next(robospelen_2_springen, s1, "true", s2).
 
 move(robospelen_2_springen, s2, say).
 text(robospelen_2_springen, s2, "Jij kunt volgens mij heel veel écht moeilijke dingen.").
@@ -31,7 +33,7 @@ text(robospelen_2_springen, s6, "Kijk, zo ziet het er uit als ik probeer te spri
 next(robospelen_2_springen, s6, "true", s7).
 
 move(robospelen_2_springen, s7, say).
-anim(robospelen_2_springen, s7, file, "resources/gestures/gesture_robospelen_2_springen_s7_7.json").
+%anim(robospelen_2_springen, s7, file, "resources/gestures/gesture_robospelen_2_springen_s7_7.json").
 next(robospelen_2_springen, s7, "true", s8).
 
 move(robospelen_2_springen, s8, say).

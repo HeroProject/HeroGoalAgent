@@ -1,0 +1,53 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../userModel/loadInteractantData' as module.
+use '../hero_actions' as actionspec.
+
+order=linearall.
+
+module nextMinidialog {
+
+	if bel(session(Session), pop(Session, SessionElement, RemainingElements)) then
+	{
+		if bel(SessionElement \= [_=_]) then insert(selectedMinidialog(SessionElement, RemainingElements)).
+						
+		if bel(SessionElement = [thread = Thread], getNarrativeThreadPos(Thread, LatestPos), NewPos is LatestPos + 1) then
+		{
+			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=NewPos]))
+				then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		}
+			
+		% Process the selected minidialog.
+		if bel(selectedMinidialog(Selected, Remaining), userId(UserId)) then 
+		{
+			% Delete currentMinidialog if there is any (on init there is not currentMinidialog)
+			if bel(currentMinidialog(Minidialog)) then delete(currentMinidialog(Minidialog)).
+			
+			% Delete the current session and insert currentMinidialog, currentMove (start is default s1), and the remaining session elements.
+			% Import relevant user model variables for this minidialog.
+			if true then delete(session(Session))
+				+ insert(currentMinidialog(Selected), currentMove(s1), session(Remaining))
+				+ loadInteractantData(Selected)
+				+ setMoveHistory(UserId, s1).
+			
+			% Update dialog history.
+			if bel(dialogHistory(History), updateDialogHistory(Selected, UpdatedHistory))
+				then delete(dialogHistory(History)) + insert(dialogHistory(UpdatedHistory))+ setDialogHistory(UserId, Selected) + setMoveHistory(UserId, s1).
+			
+			% If minidialog is part of narrative thread then update narrative history.
+			if bel(minidialog(Selected, [type=narrative, thread=Thread, position=Pos]), narrativeHistory(History), updateNarrativeHistory(Thread, UpdatedHistory))
+				then delete(narrativeHistory(History)) + insert(narrativeHistory(UpdatedHistory)) + setNarrativeHistory(UserId, Thread, Pos).
+			
+			% Clean selectedMinidialog.
+			if true then delete(selectedMinidialog(Selected, Remaining)).
+		}
+		
+		% Log the user model during each minidialog change.
+		if bel(getUserModelWithoutLocal(UserModel)) then log(userModel(UserModel)).
+	}	
+	
+}

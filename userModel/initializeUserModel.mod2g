@@ -10,7 +10,7 @@ order=linearall.
 
 module initializeUserModel {
 	% Initialize user model
-	if true then insert(userModel([]), dialogHistory([])).
+	if true then insert(userModel([]), dialogHistory([[]]), narrativeHistory([])).
 
 	% Load local variables into user model
 	if bel(useGui(false)) then {

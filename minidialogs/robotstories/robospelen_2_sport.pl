@@ -1,3 +1,6 @@
+%minidialog(robospelen_2_sport, [type=narrative, thread=robospelen, position=2]).
+%dependency(robospelen_2_sport, dagdromen_sport, user_model, 0).
+
 move(robospelen_2_sport, s1, say).
 text(robospelen_2_sport, s1, "Hé, ik heb opeens een heel goed idee!").
 next(robospelen_2_sport, s1, "true", s2).

@@ -24,13 +24,12 @@
 	waitingForGuiData/1,
 	userId/1, sessionId/1,
 	continueSession/0, localVariable/2,
-	additionalMinidialogs/1,
 	dialogHistory/1, narrativeHistory/1.
 
 % Predicates related to move execution and transition handling.
-:-dynamic currentMinidialog/1, currentMove/1, currentInputModality/1, currentAttempt/1,   
+:-dynamic currentMinidialog/1, selectedMinidialog/2, currentMove/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
-	nextCondition/1, start/0, started/0, timeout/1, minidialogs/1, 
+	nextCondition/1, start/0, started/0, timeout/1, session/1, 
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryAudio/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
@@ -81,7 +80,12 @@ updateNarrativeHistory(Thread, UpdatedHistory) :- narrativeHistory(History), mem
 	delete(History, (Thread=Pos), HistoryTemp), NewPos is Pos + 1, append(HistoryTemp, [Thread=NewPos], UpdatedHistory), !.
 
 getNarrativeThreadPos(Thread, Pos) :- narrativeHistory(History), member((Thread=Pos), History), !.
+getNarrativeThreadPos(Thread, 1) :- narrativeHistory(History), not(member((Thread=_), History)), !.
 
+getNarrativeDialogs(_, _, 0, []).
+getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :- 
+	minidialog(NarrativeMD, [type=narrative, thread=Thread, position=FromPos]),
+	NFP is FromPos + 1, NA is Amount - 1, getNarrativeDialogs(Thread, NFP, NA, RemainingMD), !.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

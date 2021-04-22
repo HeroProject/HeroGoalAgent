@@ -10,7 +10,7 @@ use 'userModel/initializeUserModel.mod2g' as module.
 module hero_init {
 	% Set loading flag, initialize move parameters, and initialize robot model.
 	if true then insert(waitingForInit,
-						currentMove(s1), start, nextCondition('true'),
+						start, nextCondition('true'),
 						posture('Unknown'), batteryCharge(100)).
 	
 	% Initalize pause button

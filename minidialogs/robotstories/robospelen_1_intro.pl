@@ -1,11 +1,11 @@
-minidialog(robospelen_1_intro, [type=narrative, thread=robospelen, position=1, depedencies=[]]).
+minidialog(robospelen_1_intro, [type=narrative, thread=robospelen, position=1]).
 
 move(robospelen_1_intro, s1, say).
 text(robospelen_1_intro, s1, "Ik ben blij dat je er bent!").
-next(robospelen_1_intro, s1, "true", s2).
+%next(robospelen_1_intro, s1, "true", s2).
 
 move(robospelen_1_intro, s2, say).
-text(robospelen_1_intro, s2, "Ik vind het heel leuk om met een mens praten.").
+text(robospelen_1_intro, s2, "Ik vind het heel leuk om met een mens te praten.").
 next(robospelen_1_intro, s2, "true", s3).
 
 move(robospelen_1_intro, s3, say).

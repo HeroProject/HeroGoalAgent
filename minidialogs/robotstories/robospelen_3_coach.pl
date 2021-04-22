@@ -1,6 +1,8 @@
+minidialog(robospelen_3_coach, [type=narrative, thread=robospelen, position=3]).
+
 move(robospelen_3_coach, s1, say).
 text(robospelen_3_coach, s1, "En misschien kun je me dingen leren die jij veel beter kunt.").
-next(robospelen_3_coach, s1, "true", s2).
+%next(robospelen_3_coach, s1, "true", s2).
 
 move(robospelen_3_coach, s2, say).
 text(robospelen_3_coach, s2, "Zoals springen, of verstoppertje, of mensendingen begrijpen.").

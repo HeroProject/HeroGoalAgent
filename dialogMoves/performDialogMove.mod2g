@@ -90,8 +90,8 @@ module performDialogMove(Minidialog, Move) {
 	
 	%%%% AUDIO %%%%
 	% Prepare co-creation of audio
-	if bel(prepare_sound_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), minidialogs(AllMinidialogs))
-		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_sound | AllMinidialogs]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
+	if bel(prepare_sound_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), session(Session))
+		then delete(session(Session)) + insert(session([co_sound | Session]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
 	
 	% Save result of audio co-creation
 	if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
@@ -106,8 +106,8 @@ module performDialogMove(Minidialog, Move) {
 	
 	%%%%% MOTIONS %%%%
 	% Prepare co-creation of a motion
-	if bel(prepare_motion_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), minidialogs(AllMinidialogs))
-		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_motion | AllMinidialogs]), waitingForMotionAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+	if bel(prepare_motion_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), session(Session))
+		then delete(session(Session)) + insert(session([co_motion | Session]), waitingForMotionAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
 	
 	% Co-create motion
 	if bel(record_motion(Minidialog, Move, Joints, Duration), Duration > 0, (keyValue(Minidialog, Move, umVariable, ID) ; not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID))) 
@@ -136,14 +136,14 @@ module performDialogMove(Minidialog, Move) {
 	
 	%%%% LED ANIMATIONS %%%%
 	% Prepare co-creation of led animation. Set a flag that the next led animation will be linked to this id.
-	if bel(prepare_led_anim(Minidialog, Move), not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID), minidialogs(AllMinidialogs))
-		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_selection | AllMinidialogs]), waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(Minidialog, Move), not(keyValue(Minidialog, Move, umVariable, _)), generateKeyFromMinidialogAndMove(Minidialog, Move, ID), session(Session))
+		then delete(session(Session)) + insert(session([co_led_selection | Session]), waitingForLedAnim(ID)).
 	
-	if bel(prepare_led_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), minidialogs(AllMinidialogs))
-		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_selection | AllMinidialogs]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
+	if bel(prepare_led_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2], [ID, Option1, Option2]), session(Session))
+		then delete(session(Session)) + insert(session([co_led_selection | Session]), waitingForLedAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2)).
 	
-	if bel(prepare_led_anim(Minidialog, Move), keyValue(Minidialog, Move, umVariable, ID), not(keyListValues(Minidialog, Move, [option1, option2], [_, _])), minidialogs(AllMinidialogs))
-		then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([co_led_creation | AllMinidialogs]), waitingForLedAnim(ID)).
+	if bel(prepare_led_anim(Minidialog, Move), keyValue(Minidialog, Move, umVariable, ID), not(keyListValues(Minidialog, Move, [option1, option2], [_, _])), session(Session))
+		then delete(session(Session)) + insert(session([co_led_creation | Session]), waitingForLedAnim(ID)).
 
 	% Save the led animation configurations.
 	% Remove all the downloaded options
@@ -179,11 +179,11 @@ module performDialogMove(Minidialog, Move) {
 	%%				MINIDIALOG MANAGEMENT				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	forall bel(insert_minidialog(Minidialog, Move, Minidialog)) do {
-    	if bel(minidialogs(AllMinidialogs)) then delete(minidialogs(AllMinidialogs)) + insert(minidialogs([Minidialog | AllMinidialogs])).
+	forall bel(insert_minidialog(Minidialog, Move, NestedMinidialog)) do {
+    	if bel(session(Session)) then delete(session(Session)) + insert(session([NestedMinidialog | Session])).
 	}
 	
-	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), minidialogs(AllMinidialogs), delete_minidialogs(AllMinidialogs, MinidialogsToDelete, NewAllMinidialogs)) then delete(minidialogs(AllMinidialogs)) + insert(minidialogs(NewAllMinidialogs)).
+	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
 	
 	%Active eventFailSave if required.	
 	if bel(evenFailSafeActive(true)) then starttimer(eventFailSafe, 16000, 16000).
