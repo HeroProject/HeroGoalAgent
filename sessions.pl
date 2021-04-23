@@ -26,7 +26,7 @@ sessionDesign(robotstories_session_1, [general_wakeup, eerste_begroeting_secret_
 hero_kan_dromen, dagdromen_beroep, robospelen_2_sport, robospelen_3_coach, doei_secret_handshake_1, general_rest]).
 
 % Narrative dialogs
-sessionDesign(nar_dial_1, [general_wakeup, robospelen_1_intro, dagdromen_sport, [thread=robospelen], [thread=robospelen], general_rest]).
+sessionDesign(nar_dial_1, [general_wakeup, [topic=beroep], robospelen_1_intro, dagdromen_sport, [thread=robospelen], [thread=robospelen], [topic=beroep], general_rest]).
 
 %%%%%%%%%%%%%% Co-creation user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Experimental condition

@@ -26,7 +26,10 @@ module nextMinidialog {
 		
 		% SessionElement contains a session block of a chitchat. Select the best fitting chitchat minidialog.	
 		if bel(SessionElement = [topic=_] ; SessionElement = [theme=_]) then selectChitchatDialog(SessionElement, RemainingElements).
-			
+		
+		% If no minidialog could be selected, go to the next element of the session.
+		if not(bel(selectedMinidialog(_, _))) then delete(session(Session)) + insert(session(RemainingElements)) + nextMinidialog.
+		
 		% Process the selected minidialog.
 		if bel(selectedMinidialog(Selected, Remaining), userId(UserId)) then 
 		{

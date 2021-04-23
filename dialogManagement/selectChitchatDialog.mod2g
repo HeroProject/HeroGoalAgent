@@ -10,5 +10,14 @@ use '../hero_actions' as actionspec.
 order=linear.
 
 module selectChitchatDialog(SessionElement, RemainingElements) {
-	if true then log(chitchat(SessionElement, RemainingElements)).
+
+	% Select a new minidialog of a topic.
+	if bel(SessionElement = [topic=Topic],
+			minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)))
+		then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	
+	% Select a new minidialog of a topic.
+	if bel(SessionElement = [theme=Theme],
+			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)))
+		then insert(selectedMinidialog(Minidialog, RemainingElements)).
 }
