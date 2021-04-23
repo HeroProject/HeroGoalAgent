@@ -13,7 +13,7 @@ module loadInteractantData(Minidialog) {
 	if bel(userId(UserId))
 		then {
 			% Load text variables
-			forall bel(text(Minidialog, _, Text), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Keys))
+			forall bel(text(Minidialog, _, Text), getVarsFromText(Text, Keys))
 				do loadInteractantDataHelper(Keys).
 			
 			% Load motions

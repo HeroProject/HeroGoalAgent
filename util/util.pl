@@ -155,6 +155,8 @@ getModalitySwitchResponse(Minidialog, Move, From, To, Response) :- keyValue(Mini
 % Pop first element out of list.
 pop([H | Minidialog], H, Minidialog).
 
+getVarsFromText(Text, Vars) :- string_chars(Text, CharList), member('%', CharList), split_string(Text, '%', "", TextParts), odd_elements(TextParts, Vars), !.
+
 % get all odd elements of list
 odd_elements([], []).
 odd_elements([_ | []], []):-  !.
