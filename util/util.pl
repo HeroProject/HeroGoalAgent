@@ -87,6 +87,10 @@ getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :-
 	minidialog(NarrativeMD, [type=narrative, thread=Thread, position=FromPos]),
 	NFP is FromPos + 1, NA is Amount - 1, getNarrativeDialogs(Thread, NFP, NA, RemainingMD), !.
 
+%%% Dependencies %%%
+matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; matchesDepencencies(Rest), !.
+matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%

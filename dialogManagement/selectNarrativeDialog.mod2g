@@ -10,9 +10,10 @@ use '../hero_actions' as actionspec.
 order=linear.
 
 module selectNarrativeDialog(Thread, Pos, RemainingSessionElements) {
-			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=Pos]), dependency(Minidialog, Target, _, _), isInDialogHistory(Target, _))
+			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=Pos]),
+				dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
 				then insert(selectedMinidialog(Minidialog, RemainingSessionElements)).
 			
-			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=Pos]), not(dependency(Minidialog, _, _, _)))
+			if bel(minidialog(Minidialog, [type=narrative, thread=Thread, position=Pos]), not(dependencies(Minidialog, _)))
 				then insert(selectedMinidialog(Minidialog, RemainingSessionElements)).
 }
