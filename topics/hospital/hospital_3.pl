@@ -48,7 +48,7 @@ stateConfig(ho3_greeting, s8graafmachine, [loadUserModel="true"]).
 %%% Koelkast		 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_koelkast, s1, say).
-text(ho3_koelkast,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
+text(ho3_koelkast,  s1, "Als je klaar bent om te beginnen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_koelkast,  s1, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_koelkast, s1, [next='RightBumperPressed']).
 next(ho3_koelkast,  s1, "true",  s2).
@@ -259,7 +259,7 @@ stop_led_anim(ho3_koelkast, s56).
 %%% Graafmachine	 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_graafmachine, s1, say).
-text(ho3_graafmachine,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
+text(ho3_graafmachine,  s1, "Als je klaar bent om te beginnen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_graafmachine,  s1, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_graafmachine, s1, [next='RightBumperPressed']).
 next(ho3_graafmachine,  s1, "true",  s2).
@@ -577,7 +577,7 @@ text(ho3_next_story,  s3nd, "Dat waren mijn verhaaltjes, bedankt voor het luiste
 %%% Afscheid		 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(ho3_goodbye, s1, say).
-text(ho3_goodbye,  s1, "Als je klaar bent om doei te zeggen, dan kun je op mijn linker teen drukken.").
+text(ho3_goodbye,  s1, "Als je klaar bent om doei te zeggen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_goodbye,  s1, ["RightFootLeds"], ["groen"]).
 stateConfig(ho3_goodbye, s1, [next='RightBumperPressed']).
 next(ho3_goodbye,  s1, "true",  s2).

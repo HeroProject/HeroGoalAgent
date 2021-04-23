@@ -477,7 +477,7 @@ next(ho1_colors, s4, "true", s5).
 state(ho1_colors, s5, question).
 stateConfig(ho1_colors, s5, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(ho1_colors, s5, "Waar gebruik jij die kleur het meest?").
-next(ho1_colors, s5, 'success', s6).
+next(ho1_colors, s5, 'success', s7).
 next(ho1_colors, s5, 'fail', s7).
 
 state(ho1_colors, s7, say).
@@ -526,7 +526,7 @@ next(ho1_family, s7, 'fail', s8n).
 
 state(ho1_family, s8y, question).
 stateConfig(ho1_family, s8y, [type=openend, context='answer_open', inputModality=[speech=1], maxAnswerTime=[speechopenend=15000]]).
-text(ho1_family, s8y, "Ben benieuwd, vertel maar.").
+text(ho1_family, s8y, "Ik ben benieuwd, vertel maar.").
 next(ho1_family, s8y, 'success', s9).
 next(ho1_family, s8y, 'fail', s9).
 

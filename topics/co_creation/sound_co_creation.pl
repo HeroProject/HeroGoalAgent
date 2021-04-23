@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_sound, s1, question).
 stateConfig(co_sound, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_sound, s4]]]).
+branchIntents=['maken' = 'maken', 'downloaden' = 'downloaden'], branchingPoints=[[co_sound, s4]]]).
 text(co_sound, s1, "Wil jij het geluid zelf maken of zal ik wat geluiden downloaden?").
 next(co_sound, s1, "success", s3).
 next(co_sound, s1, "fail", s3f).
@@ -55,7 +55,7 @@ next(co_sound, sdownload5, "true", sdownload6).
 
 state(co_sound, sdownload6, question).
 stateConfig(co_sound, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_sound, sdownload7]]]).
+branchIntents=['eerste' = 'eerste', 'tweede' = 'tweede', 'robot kiest' = 'hero'], branchingPoints=[[co_sound, sdownload7]]]).
 text(co_sound, sdownload6, "Wil jij het eerste of tweede geluid, of zal ik kiezen?").
 next(co_sound, sdownload6, "success", sdownload7).
 next(co_sound, sdownload6, "fail", sdownload7f).

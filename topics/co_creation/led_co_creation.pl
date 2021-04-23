@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_led_selection, s1, question).
 stateConfig(co_led_selection, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_led_selection, s4]]]).
+branchIntents=['maken' = 'maken', 'downloaden' = 'downloaden'], branchingPoints=[[co_led_selection, s4]]]).
 text(co_led_selection, s1, "Wil jij de lichtshow maken of zal ik wat opties downloaden?").
 next(co_led_selection, s1, "success", s3).
 next(co_led_selection, s1, "fail", s3f).
@@ -64,7 +64,7 @@ next(co_led_download, sdownload5, "true", sdownload6).
 
 state(co_led_download, sdownload6, question).
 stateConfig(co_led_download, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='tweede',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_led_download, sdownload7]]]).
+branchIntents=['eerste' = 'eerste', 'tweede' = 'tweede', 'robot kiest' = 'hero'], branchingPoints=[[co_led_download, sdownload7]]]).
 text(co_led_download, sdownload6, "Wil jij de eerste of tweede licht show, of zal ik kiezen?").
 stop_led_anim(co_led_download, sdownload6).
 next(co_led_download, sdownload6, "success", sdownload7).

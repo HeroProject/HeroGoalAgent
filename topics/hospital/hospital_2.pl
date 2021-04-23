@@ -106,7 +106,7 @@ next(ho2_tutorial,  s13, "true", s14).
 
 state(ho2_tutorial, s14, question).
 stateConfig(ho2_tutorial, s14, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'],
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[ho2_tutorial, s15]]]).
+branchIntents=['eerste' = 'eerste', 'tweede' = 'tweede', 'robot kiest' = 'hero'], branchingPoints=[[ho2_tutorial, s15]]]).
 text(ho2_tutorial, s14, "Vind je het eerste of tweede liedje leuker, of zal ik kiezen?").
 next(ho2_tutorial, s14, "success", s15).
 next(ho2_tutorial, s14, "fail", s14f).

@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, s1, question).
 stateConfig(co_motion, s1, [type = branch, context = "involvement_selection", options = ['maken', 'downloaden'],
-branchIntents=['maken' = 'involvement_maken', 'downloaden' = 'involvement_downloaden'], branchingPoints=[[co_motion, s4]]]).
+branchIntents=['maken' = 'maken', 'downloaden' = 'downloaden'], branchingPoints=[[co_motion, s4]]]).
 text(co_motion, s1, "Wil jij de beweging maken of zal ik wat opties downloaden?").
 next(co_motion, s1, "success", s3).
 next(co_motion, s1, "fail", s3f).
@@ -54,7 +54,7 @@ next(co_motion, sdownload5, "true", sdownload6).
 
 state(co_motion, sdownload6, question).
 stateConfig(co_motion, sdownload6, [type = branch, context = "involvement_which_option_or_robot", options = ['eerste', 'tweede', 'robot kiest'], defaultAnswer='eerste',
-branchIntents=['eerste' = 'involvement_option_one', 'tweede' = 'involvement_option_two', 'robot kiest' = 'involvement_robot_picks'], branchingPoints=[[co_motion, sdownload7]]]).
+branchIntents=['eerste' = 'eerste', 'tweede' = 'tweede', 'robot kiest' = 'hero'], branchingPoints=[[co_motion, sdownload7]]]).
 text(co_motion, sdownload6, "Wil jij de eerste of tweede beweging, of zal ik kiezen?").
 go_to_base_posture(co_motion, sdownload6).
 next(co_motion, sdownload6, "success", sdownload7).
