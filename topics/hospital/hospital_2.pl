@@ -354,7 +354,7 @@ text(ho2_story_selection,  s8, "Maar ik vertel graag over al mijn avontuuuren al
 next(ho2_story_selection,  s8, "true",  s9).
 
 state(ho2_story_selection, s9, question).
-stateConfig(ho2_story_selection, s9, [type=input, context='choose_story', options= ["koelkast", "graafmachine"], umVariable=ho2_story_choice]).
+stateConfig(ho2_story_selection, s9, [type=input, context='choose_story', options= ["koelkast", "graafmachine"], umVariable=ho2_story_choice, fast = yes]).
 text(ho2_story_selection, s9, "Wil jij de volgende keer horen over mijn avontuur als koelkast of als graafmachine?").
 next(ho2_story_selection, s9, 'success', s10).
 next(ho2_story_selection, s9, 'fail', s9f).

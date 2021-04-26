@@ -96,7 +96,6 @@ set_stiffness(co_motion, smaken2, ['RArm', 'LArm'], 0).
 next(co_motion,  smaken2, "true",  smaken3).
 
 state(co_motion, smaken3, say).
-%audio(co_motion, smaken3, file, "resources/sounds/ready_to_record_gesture.wav").
 text(co_motion, smaken3, "3. 2. 1").
 next(co_motion,  smaken3, "true",  smaken4).
 
