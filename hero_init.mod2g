@@ -26,4 +26,7 @@ module hero_init {
 	
 	% Show a default (empty) page on any connected browser
 	if bel(html('',Html)) then renderPage(Html).
+	
+	% Initialize probe counter
+	if bel(recordInteractionActive(true)) then insert(probes(0)).
 }

@@ -24,13 +24,14 @@
 	waitingForGuiData/1,
 	userId/1, sessionId/1,
 	continueSession/0, localVariable/2,
-	dialogHistory/1, narrativeHistory/1.
+	dialogHistory/1, narrativeHistory/1,
+	probes/1.
 
 % Predicates related to move execution and transition handling.
 :-dynamic currentMinidialog/1, selectedMinidialog/2, currentMove/1, currentInputModality/1, currentAttempt/1,   
 	mcCounter/1, modalityCounter/1, % counter to keep track of options that have been checked for multiple choice question (start counting from 0).
 	nextCondition/1, start/0, started/0, timeout/1, session/1, 
-	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryAudio/1, waitingForMemoryLed/1,
+	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForSayClear/0, waitingForTimer/0,
@@ -92,6 +93,18 @@ matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; m
 matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
 matchesDependency([]).
 
+matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! ; matchesConditionals(Rest), !.
+matchesConditional([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesConditional(T), !.
+matchesConditional([]).
+
+extractVariablesFromConditionals([Conditional | Rest], UniqueVars) 
+	:- extractVariablesFromConditional(Conditional, Vars), extractVariablesFromConditionals(Rest, VarsRest),
+       append(Vars, VarsRest, VarsTotal), sort(VarsTotal, UniqueVars).
+extractVariablesFromConditionals([], []).
+extractVariablesFromConditional([[umVariable=Var, filter=_, values=_] | T], [Var | RestVariables])
+	:- extractVariablesFromConditional(T, RestVariables).
+extractVariablesFromConditional([], []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,6 +131,9 @@ getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserM
 getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
+
+listMatchInUserModel(Key, green, Values) :- getUserModelValue(Key, Value), member(Value, Values), !.
+listMatchInUserModel(Key, red, Values) :- getUserModelValue(Key, Value), not(member(Value, Values)), !.
 
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
@@ -202,6 +218,11 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
 
+% Generate interaction recording id
+interaction_recording_id(ID) :- userId(UserId), atom_string(UserId, SUserId), sessionId(Session), atom_string(Session, SSession), string_concat(SUserId, "_", Left), string_concat(Left, SSession, ID).
+interaction_probe_id(Count, ID) :- atom_string(Count, SCount), userId(UserId), atom_string(UserId, SUserId), sessionId(Session), atom_string(Session, SSession), string_concat(SUserId, "_", Left),
+					string_concat(Left, SSession, MiddleL), string_concat(MiddleL, "_", MiddleR), string_concat(MiddleR, SCount, ID).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -243,6 +264,8 @@ completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidi
 completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, emotion), eventsCompleted, emotionReceived, correctPosture.
 
 completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, branchingPoint, _), eventsCompleted, correctPosture.
+
+completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, continuator), eventsCompleted, correctPosture.
 					
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT CONVERSATIONAL SETTINGS %%%

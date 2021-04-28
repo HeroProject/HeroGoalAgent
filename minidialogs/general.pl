@@ -16,7 +16,11 @@ go_to_posture(general_wakeup, s2).
 next(general_wakeup, s2, "true", s3).
 
 move(general_wakeup, s3, say).
-enableBreathing(general_wakeup, s3).
+start_interaction_recording(general_wakeup, s3).
+next(general_wakeup, s3, "true", s4).
+
+move(general_wakeup, s4, say).
+enableBreathing(general_wakeup, s4).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Rest	    		                           %%%
@@ -28,4 +32,8 @@ leds(general_rest, s1, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", 
 next(general_rest, s1, 'true', s2).
 
 move(general_rest, s2, say). 
-rest(general_rest, s2). 
+rest(general_rest, s2).
+next(general_rest, s2, 'true', s3).
+
+move(general_rest, s3, say).
+stop_interaction_recording(general_rest, s3).

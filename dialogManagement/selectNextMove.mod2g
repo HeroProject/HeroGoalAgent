@@ -1,0 +1,19 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+order=linear.
+
+module selectNextMove(Minidialog, Move) {
+
+	if bel(next(Minidialog, Move, Conditionals, NextMove), is_list(Conditionals), matchesConditionals(Conditionals), userId(UserId))
+		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove).
+	
+	if bel(next(Minidialog, Move, Conditional, NextMove), not(is_list(Conditional)), userId(UserId))
+		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove).
+	
+}

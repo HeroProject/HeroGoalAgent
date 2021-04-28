@@ -176,7 +176,7 @@ module performDialogMove(Minidialog, Move) {
 	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%				MINIDIALOG MANAGEMENT				%%
+	%%				MINIDIALOG MANAGEMENT			%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	forall bel(insert_minidialog(Minidialog, Move, NestedMinidialog)) do {
@@ -184,9 +184,21 @@ module performDialogMove(Minidialog, Move) {
 	}
 	
 	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%				 	OTHER						%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	%Active eventFailSave if required.	
 	if bel(evenFailSafeActive(true)) then starttimer(eventFailSafe, 16000, 16000).
+	
+	if bel(recordInteractionActive(true)) then {
+		if bel(start_interaction_recording(Minidialog, Move), interaction_recording_id(ID)) then startInteractionRecording(ID).
+		if bel(stop_interaction_recording(Minidialog, Move)) then stopInteractionRecording.
+		if bel(start_interaction_probe(Minidialog, Move), probes(Count), NewCount is Count + 1, interaction_probe_id(NewCount, ID)) then delete(probes(Count)) + insert(probes(NewCount)) + startInteractionProbe(ID).
+		if bel(stop_interaction_probe(Minidialog, Move)) then stopInteractionProbe.
+	}
+	
 	
 	%Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

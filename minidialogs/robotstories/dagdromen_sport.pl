@@ -1,6 +1,6 @@
 move(dagdromen_sport, s1, say).
 text(dagdromen_sport, s1, "Weet je wat ik me wel eens afvraag?").
-%next(dagdromen_sport, s1, "true", s2).
+next(dagdromen_sport, s1, "true", s2).
 
 move(dagdromen_sport, s2, say).
 text(dagdromen_sport, s2, "Of ik een sportrobot zou kunnen zijn.").

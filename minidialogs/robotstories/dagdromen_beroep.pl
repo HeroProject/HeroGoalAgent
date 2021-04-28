@@ -2,7 +2,7 @@ minidialog(dagdromen_beroep, [type=chitchat, theme=personalia, topic=beroep]).
 
 move(dagdromen_beroep, s1, say).
 text(dagdromen_beroep, s1, "Soms kijk ik uit het raam en denk ik helemaal niets.").
-%next(dagdromen_beroep, s1, "true", s2).
+next(dagdromen_beroep, s1, "true", s2).
 
 move(dagdromen_beroep, s2, say).
 text(dagdromen_beroep, s2, "Soms denk ik wel iets.").

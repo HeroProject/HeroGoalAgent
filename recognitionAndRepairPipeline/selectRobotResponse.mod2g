@@ -22,7 +22,7 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 						then insert(nextCondition('fail')) + logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
-					if bel(Type=input, keyValue(Minidialog, Move, defaultAnswer, DefaultAns), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
+					if bel(Type=_, keyValue(Minidialog, Move, defaultAnswer, DefaultAns), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, DefaultAns).	
 				}
 			
@@ -31,7 +31,7 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 				then {
 					%if the type of question was yesno, the answer (answer_yes or answer_no) is used as flag for the move transition.
 					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)).
+						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + setInteractantData(UserId, Key, Ans).
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
 					if bel(Type=input, userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) then 
 					{

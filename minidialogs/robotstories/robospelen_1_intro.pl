@@ -2,7 +2,20 @@ minidialog(robospelen_1_intro, [type=narrative, thread=robospelen, position=1]).
 
 move(robospelen_1_intro, s1, say).
 text(robospelen_1_intro, s1, "Ik ben blij dat je er bent!").
-%next(robospelen_1_intro, s1, "true", s2).
+next(robospelen_1_intro, s1, "true", s2t).
+
+move(robospelen_1_intro, s2t, continuator).
+next(robospelen_1_intro, s2t, [[[umVariable=beroep_van_kind, filter=green, values=['brandweerman']], [umVariable=sport_van_kind, filter=green, values=['voetbal']]], [[umVariable=sport_van_kind, filter=green, values=['honkbal']]]], s3t_tuinman).
+next(robospelen_1_intro, s2t, [[[umVariable=sport_van_kind, filter=green, values=['honkbal']]]], s3t_voetbal).
+next(robospelen_1_intro, s2t, "true", s3).
+
+move(robospelen_1_intro, s3t_tuinman, say).
+text(robospelen_1_intro, s3t_tuinman, "Brandweerman en voetbal of honkbal").
+next(robospelen_1_intro, s3t_tuinman, "true", s4).
+
+move(robospelen_1_intro, s3t_voetbal, say).
+text(robospelen_1_intro, s3t_voetbal, "tennis").
+next(robospelen_1_intro, s3t_voetbal, "true", s4).
 
 move(robospelen_1_intro, s2, say).
 text(robospelen_1_intro, s2, "Ik vind het heel leuk om met een mens te praten.").
@@ -28,6 +41,7 @@ next(robospelen_1_intro, s6, "true", s7).
 
 move(robospelen_1_intro, s7, say).
 text(robospelen_1_intro, s7, "Ik ben vandaag hierheen gekomen met Mike.").
+start_interaction_probe(robospelen_1_intro, s7).
 next(robospelen_1_intro, s7, "true", s8).
 
 move(robospelen_1_intro, s8, say).
@@ -69,6 +83,7 @@ next(robospelen_1_intro, s16, "true", s17).
 
 move(robospelen_1_intro, s17, say).
 text(robospelen_1_intro, s17, "Wie het beleefdst is en wie de meeste mensen kan helpen oversteken.").
+stop_interaction_probe(robospelen_1_intro, s17).
 next(robospelen_1_intro, s17, "true", s18).
 
 move(robospelen_1_intro, s18, say).

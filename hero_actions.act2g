@@ -113,6 +113,23 @@ define startLedAnimation(Group, AnimType, Colors, Speed) with
 define stopLedAnimation with
 	pre { true }
 	post { waitingForEvent('LedAnimationDone') }
+
+% Interaction recording
+define startInteractionRecording(ID) with
+	pre { true }
+	post { waitingForEvent('InteractionRecordingStarted') }
+
+define stopInteractionRecording with
+	pre { true }
+	post { waitingForEvent('InteractionRecordingStopped') }
+	
+define startInteractionProbe(ID) with
+	pre { true }
+	post { waitingForEvent('InteractionProbeStarted') }
+
+define stopInteractionProbe with
+	pre { true }
+	post { waitingForEvent('InteractionProbeStopped') }
 	
 % Agent external memory / database control
 define setSession(ID, SessionId) with

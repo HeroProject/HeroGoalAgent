@@ -6,6 +6,7 @@ use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use nextMinidialog as module.
+use selectNextMove as module.
 
 order=linearall.
 
@@ -28,8 +29,10 @@ module nextDialogMove(Minidialog, Move, C) {
 			+ insert(start, nextCondition('true')).
 
 	% ... and transition to next move (if there is one) ...
-	if bel(next(Minidialog, Move, C, NextMove), userId(UserId))
+	if bel(not(move(Minidialog, Move, continuator)), next(Minidialog, Move, C, NextMove), userId(UserId))
 		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove). % Progress: move to next move
+	if bel(move(Minidialog, Move, continuator))
+		then selectNextMove(Minidialog, Move).
 		
 	% ... or go to next minidialog if a minidialog has been completed (no next move has been specified for the minidialog).
 	if goal(session([])), not(bel(next(Minidialog, Move, _, _))) then nextMinidialog.
