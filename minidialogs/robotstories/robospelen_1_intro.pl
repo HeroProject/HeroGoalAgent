@@ -5,16 +5,17 @@ text(robospelen_1_intro, s1, "Ik ben blij dat je er bent!").
 next(robospelen_1_intro, s1, "true", s2t).
 
 move(robospelen_1_intro, s2t, continuator).
-next(robospelen_1_intro, s2t, [[[umVariable=beroep_van_kind, filter=green, values=['brandweerman']], [umVariable=sport_van_kind, filter=green, values=['voetbal']]], [[umVariable=sport_van_kind, filter=green, values=['honkbal']]]], s3t_tuinman).
-next(robospelen_1_intro, s2t, [[[umVariable=sport_van_kind, filter=green, values=['honkbal']]]], s3t_voetbal).
+%next(robospelen_1_intro, s2t, [[[umVariable=beroep_van_kind, filter=green, values=['brandweerman']], [umVariable=sport_van_kind, filter=green, values=['voetbal']]], [[umVariable=sport_van_kind, filter=green, values=['honkbal']]]], s3t_tuinman).
+next(robospelen_1_intro, s2t, [[[umVariable=sport_van_kind, filter=green, values=["tennis", "voetbal"]]]], s3t_tuinman).
+next(robospelen_1_intro, s2t, [[[umVariable=sport_van_kind, filter=green, values=["_any"]]]], s3t_voetbal).
 next(robospelen_1_intro, s2t, "true", s3).
 
 move(robospelen_1_intro, s3t_tuinman, say).
-text(robospelen_1_intro, s3t_tuinman, "Brandweerman en voetbal of honkbal").
+text(robospelen_1_intro, s3t_tuinman, "tennis").
 next(robospelen_1_intro, s3t_tuinman, "true", s4).
 
 move(robospelen_1_intro, s3t_voetbal, say).
-text(robospelen_1_intro, s3t_voetbal, "tennis").
+text(robospelen_1_intro, s3t_voetbal, "any").
 next(robospelen_1_intro, s3t_voetbal, "true", s4).
 
 move(robospelen_1_intro, s2, say).

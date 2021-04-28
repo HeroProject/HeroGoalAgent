@@ -90,10 +90,12 @@ getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :-
 
 %%% Dependencies %%%
 matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; matchesDepencencies(Rest), !.
+matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
 matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
 matchesDependency([]).
 
 matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! ; matchesConditionals(Rest), !.
+matchesConditional([[umVariable=Var, filter=Filter, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesConditional(T), !.
 matchesConditional([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesConditional(T), !.
 matchesConditional([]).
 
@@ -113,7 +115,7 @@ feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
 %yesno synonyms
-answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk"]).
+answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "absoluut", "zeker"]).
 answer_no_synonyms(["nee", "neen", "nah"]).
 answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
 
@@ -132,8 +134,8 @@ getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserMod
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
 
-listMatchInUserModel(Key, green, Values) :- getUserModelValue(Key, Value), member(Value, Values), !.
-listMatchInUserModel(Key, red, Values) :- getUserModelValue(Key, Value), not(member(Value, Values)), !.
+listMatchInUserModel(Key, green, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), member(Value, Values), !.
+listMatchInUserModel(Key, red, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), not(member(Value, Values)), !.
 
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!
