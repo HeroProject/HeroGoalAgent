@@ -1,8 +1,9 @@
-minidialog(robospelen_2_sport, [type=narrative, thread=robospelen, position=2]).
-dependencies(robospelen_2_sport, [[[dagdromen_sport, user_model, 0], [umVariable=sport_van_kind, filter=green, values=['sport_van_kind']]]]).
+minidialog(robospelen_2_springen, [type=chitchat, theme=sport, topic=tennis]).
+%minidialog(robospelen_2_sport, [type=narrative, thread=robospelen, position=2]).
+%dependencies(robospelen_2_sport, [[[dagdromen_sport, user_model, 0], [umVariable=sport_van_kind, filter=green, values=['sport_van_kind']]]]).
 
 move(robospelen_2_sport, s1, say).
-text(robospelen_2_sport, s1, "Sport").
+text(robospelen_2_sport, s1, "Tennis").
 %text(robospelen_2_sport, s1, "Hé, ik heb opeens een heel goed idee!").
 %next(robospelen_2_sport, s1, "true", s2).
 

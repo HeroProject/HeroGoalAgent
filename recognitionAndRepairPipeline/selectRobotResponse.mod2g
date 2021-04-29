@@ -30,8 +30,14 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 			if bel(Ans \= failure)
 				then {
 					%if the type of question was yesno, the answer (answer_yes or answer_no) is used as flag for the move transition.
-					if bel(Type=yesno, userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + setInteractantData(UserId, Key, Ans).
+					if bel(Type=yesno) then {
+						if bel(userModel(UserModel),  updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) 
+							then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel), nextCondition(Ans)) + setInteractantData(UserId, Key, Ans). 
+						
+						if bel(keyValue(Minidialog, Move, topics, Topics), topicsOfInterest(ToI), addToTopicsOfInterest(Topics, ToI, UpdatedToI), ord_subtract(UpdatedToI, ToI, AddedTopics), not(length(AddedTopics, 0)))
+							then delete(topicsOfInterest(ToI)) + insert(topicsOfInterest(UpdatedToI)) + setTopicsOfInterest(UserId, AddedTopics).
+					}
+						
 					%if the type of question was a input question, the 'success' flag is used and the user input is stored in the userModel key-value list.
 					if bel(Type=input, userModel(UserModel), updateUserModel(Key, Ans, UserModel, UpdatedUserModel)) then 
 					{
@@ -40,6 +46,9 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 						if bel(next(Minidialog, Move, Ans, _)) then insert(nextCondition(Ans)).
 						if bel(not(next(Minidialog, Move, Ans, _)), next(Minidialog, Move, "_others", _)) then insert(nextCondition("_others")).
 						if bel(not(next(Minidialog, Move, Ans, _)), not(next(Minidialog, Move, "_others", _))) then insert(nextCondition("success")).
+						
+						if bel(keyValue(Minidialog, Move, topics, Topics), topicsOfInterest(ToI), addToTopicsOfInterest(Topics, Ans, ToI, UpdatedToI), ord_subtract(UpdatedToI, ToI, AddedTopics), not(length(AddedTopics, 0))) 
+							then delete(topicsOfInterest(ToI)) + insert(topicsOfInterest(UpdatedToI)) + setTopicsOfInterest(UserId, AddedTopics).
 					}
 					
 					%for quiz questions

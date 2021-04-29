@@ -26,7 +26,7 @@ sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]
 
 %%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %sessionDesign(robotstories_test, [general_wakeup, [topic=beroep], robospelen_1_intro, dagdromen_sport, [thread=robospelen], [thread=robospelen], [topic=beroep], general_rest]).
-sessionDesign(robotstories_test, [general_wakeup, robospelen_1_intro, general_rest]).
+sessionDesign(robotstories_test, [general_wakeup, dagdromen_sport, [theme='_chitchat'], general_rest]).
 
 sessionDesign(robotstories_session_1, [general_wakeup, eerste_begroeting_secret_handshake, robospelen_1_intro, dagdromen_sport, 
 hero_kan_dromen, dagdromen_beroep, robospelen_2_sport, robospelen_3_coach, doei_secret_handshake_1, general_rest]).

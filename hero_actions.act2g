@@ -172,6 +172,14 @@ define getMoveHistory(ID) with
 	pre { true }
 	post { waitingForMemoryData('MoveHistory') }
 
+define getTopicsOfInterest(ID) with
+	pre { true }
+	post { waitingForMemoryData('TopicsOfInterest') }
+
+define setTopicsOfInterest(ID, Topics) with
+	pre { true }
+	post { waitingForEvent('TopicsOfInterestSet') }
+
 define clearHistory(ID, SessionId) with
 	pre { true }
 	post { waitingForEvent('HistoryCleared') }

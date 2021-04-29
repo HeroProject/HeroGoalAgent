@@ -8,7 +8,7 @@ use '../hero_actions' as actionspec.
 
 module handleMemoryData(Key, Value) {
 
-	if bel(Value \= 'None', Key \= 'DialogHistory', Key \= 'NarrativeHistory', waitingForMemoryData(Key), userModel(UserModel)) then {
+	if bel(Value \= 'None', Key \= 'DialogHistory', Key \= 'NarrativeHistory', Key \= 'TopicsOfInterest', waitingForMemoryData(Key), userModel(UserModel)) then {
 		% import user model data (except led data)
 		if bel(not(waitingForMemoryLed(Key)), updateUserModel(Key, Value, UserModel, NewUserModel))
 			then delete(userModel(UserModel)) + insert(userModel(NewUserModel)). 
@@ -24,16 +24,25 @@ module handleMemoryData(Key, Value) {
 	{
 		if bel(dialogHistory(History), term_string(NewHistory, Value))
 			then delete(dialogHistory(History)) + insert(dialogHistory(NewHistory)).
-		if bel(not(waitingForMemoryData('NarrativeHistory')), waitingForHistory)
+		if bel(not(waitingForMemoryData('NarrativeHistory')), not(waitingForMemoryData('TopicsOfInterest')), waitingForHistory)
 			then delete(waitingForHistory).
 	}
-	
+		
 	% import narrative history
 	if bel(Value \= 'None', Key = 'NarrativeHistory', waitingForMemoryData('NarrativeHistory')) then 
 	{
 		if bel(narrativeHistory(History))
 			then delete(narrativeHistory(History)) + insert(narrativeHistory(Value)).
-		if bel(not(waitingForMemoryData('DialogHistory')), waitingForHistory)
+		if bel(not(waitingForMemoryData('DialogHistory')), not(waitingForMemoryData('TopicsOfInterest')), waitingForHistory)
+			then delete(waitingForHistory).
+	}
+	
+	% import topics of interest
+	if bel(Value \= 'None', Key = 'TopicsOfInterest', waitingForMemoryData('TopicsOfInterest')) then 
+	{
+		if bel(topicsOfInterest(Topics), importTopicsOfInterest(Value, ToI))
+			then delete(topicsOfInterest(Topics)) + insert(topicsOfInterest(ToI)).
+		if bel(not(waitingForMemoryData('DialogHistory')), not(waitingForMemoryData('NarrativeHistory')), waitingForHistory)
 			then delete(waitingForHistory).
 	}
 	

@@ -1,7 +1,7 @@
-minidialog(robospelen_2_springen, [type=narrative, thread=robospelen, position=2]).
+minidialog(robospelen_2_springen, [type=chitchat, theme=sport, topic=voetbal]).
 
 move(robospelen_2_springen, s1, say).
-text(robospelen_2_springen, s1, "Springen").
+text(robospelen_2_springen, s1, "Voetbal").
 % text(robospelen_2_springen, s1, "Hé, ik heb opeens een heel goed idee!").
 %next(robospelen_2_springen, s1, "true", s2).
 

@@ -25,7 +25,7 @@
 	userId/1, sessionId/1,
 	continueSession/0, localVariable/2,
 	dialogHistory/1, narrativeHistory/1,
-	probes/1.
+	probes/1, topicsOfInterest/1, availableChitchats/1.
 
 % Predicates related to move execution and transition handling.
 :-dynamic currentMinidialog/1, selectedMinidialog/2, currentMove/1, currentInputModality/1, currentAttempt/1,   
@@ -106,6 +106,37 @@ extractVariablesFromConditionals([], []).
 extractVariablesFromConditional([[umVariable=Var, filter=_, values=_] | T], [Var | RestVariables])
 	:- extractVariablesFromConditional(T, RestVariables).
 extractVariablesFromConditional([], []).
+
+findSuitableChitchat(Chitchat) 
+	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findChitchatWithRandomTopic(Topics, Chitchat).
+
+findChitchatWithRandomTopic(Topics, Chitchat) :- random_select(Topic, Topics, RemainingTopics), (chitchatMatchesTopic(Topic, Chitchat), ! ; not(chitchatMatchesTopic(Topic, _)), findChitchatWithRandomTopic(RemainingTopics, Chitchat)).
+	
+chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
+			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
+chitchatMatchesTopic(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
+chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
+			not(dependencies(Chitchat, _)).
+chitchatMatchesTopic(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+			not(dependencies(Chitchat, _)).
+
+addToTopicsOfInterest([answer_yes=Topics | T], ToI, UpdatedToI) :- append(ToI, Topics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, ToIII, UpdatedToI).
+addToTopicsOfInterest([answer_no=Topics | T], ToI, UpdatedToI) :- append(ToI, Topics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, ToIII, UpdatedToI).
+addToTopicsOfInterest([answer_dontknow=Topics | T], ToI, UpdatedToI) :- append(ToI, Topics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, ToIII, UpdatedToI).
+addToTopicsOfInterest([], ToI, ToI).
+
+addToTopicsOfInterest([success=Topics | T], Ans, ToI, UpdatedToI) :- replaceAns(Topics, Ans, PTopics), append(ToI, PTopics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, Ans, ToIII, UpdatedToI).
+addToTopicsOfInterest([fail=Topics | T], Ans, ToI, UpdatedToI) :- replaceAns(Topics, Ans, PTopics), append(ToI, PTopics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, Ans, ToIII, UpdatedToI).
+addToTopicsOfInterest([], _, ToI, ToI).
+
+replaceAns(['_answer' | T], Ans, [Ans | PT]) :- replaceAns(T, Ans, PT), !.
+replaceAns([H | T], Ans, [H | PT]) :- H \= '_answer', replaceAns(T, Ans, PT).
+replaceAns([], _, []).
+
+importTopicsOfInterest("[]", []).
+importTopicsOfInterest(IToI, OToI) :- term_string(IToII, IToI), sort(IToII, OToI). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%

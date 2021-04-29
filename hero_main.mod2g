@@ -15,7 +15,7 @@ module hero_main {
 		
 		if bel(waitingForHistory, not(waitingForEvent('ClearHistory')), userId(UserId), 
 				not(waitingForMemoryData('DialogHistory')), not(waitingForMemoryData('NarrativeHistory')))
-			then getDialogHistory(UserId) + getNarrativeHistory(UserId).
+			then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId).
 	
 		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), multiSessionDesign(MultiSessionDesign),
 				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))

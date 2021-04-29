@@ -1,4 +1,5 @@
 minidialog(robospelen_1_intro, [type=narrative, thread=robospelen, position=1]).
+dependencies(robospelen_1_intro, [[[dagdromen_sport, user_model, 0], [umVariable=sport_van_kind, filter=green, values=['sport_van_kind']]]]).
 
 move(robospelen_1_intro, s1, say).
 text(robospelen_1_intro, s1, "Ik ben blij dat je er bent!").

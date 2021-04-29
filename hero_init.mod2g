@@ -11,7 +11,8 @@ module hero_init {
 	% Set loading flag, initialize move parameters, and initialize robot model.
 	if true then insert(waitingForInit,
 						start, nextCondition('true'),
-						posture('Unknown'), batteryCharge(100)).
+						posture('Unknown'), batteryCharge(100),
+						availableChitchats([])).
 	
 	% Initalize pause button
 	if bel(setPauseButton(PB)) then insert(waitForPause(PB)).
@@ -19,7 +20,12 @@ module hero_init {
 	% Initialize user model.
 	if bel(useGui(true)) then insert(waitingForGuiData('userId'), waitingForGuiData('sessionId'), waitingForGuiData('basePosture'), waitingForGuiData('first_name')).
 	if bel(useGui(false)) then initializeUserModel.
-			
+	
+	% Gather all available chitchat topics and themes
+	% minidialog(dagdromen_beroep, [type=chitchat, theme=personalia, topic=beroep]).
+	forall bel(minidialog(_, [type=chitchat, theme=Theme, topic=Topic]), availableChitchats(Chitchats), append(Chitchats, [Theme, Topic], UpdatedChitchats), sort(UpdatedChitchats, ChitchatsSet))
+		do delete(availableChitchats(Chitchats)) + insert(availableChitchats(ChitchatsSet)).
+	
 	% If first move is a question move, initialize required properties
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), getInputModalityOrder(Minidialog, Move, Order), nth0(0, Order, NewModality)) 
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).

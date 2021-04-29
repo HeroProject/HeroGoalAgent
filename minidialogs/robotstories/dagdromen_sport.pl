@@ -1,13 +1,13 @@
 move(dagdromen_sport, s1, say).
 text(dagdromen_sport, s1, "Weet je wat ik me wel eens afvraag?").
-%next(dagdromen_sport, s1, "true", s2).
+next(dagdromen_sport, s1, "true", s2).
 
 move(dagdromen_sport, s2, say).
 text(dagdromen_sport, s2, "Of ik een sportrobot zou kunnen zijn.").
 next(dagdromen_sport, s2, "true", s3).
 
 move(dagdromen_sport, s3, question).
-moveConfig(dagdromen_sport, s3, [type=yesno, context='answer_yesno']).
+moveConfig(dagdromen_sport, s3, [type=yesno, context='answer_yesno', topics=[answer_yes=['sport']]]).
 text(dagdromen_sport, s3, "Speel jij een sport?").
 next(dagdromen_sport, s3, "answer_yes", s4ja1).
 next(dagdromen_sport, s3, "answer_no", s4nee1).
@@ -15,7 +15,7 @@ next(dagdromen_sport, s3, "answer_dontknow", s4nee1).
 next(dagdromen_sport, s3, "fail", s4nee1).
 
 move(dagdromen_sport, s4ja1, question).
-moveConfig(dagdromen_sport, s4ja1, [type=input, context="answer_sports", options=['Voetbal', 'Hockey', 'Zwemmen', 'Dansen', 'Judo'], umVariable=sport_van_kind]).
+moveConfig(dagdromen_sport, s4ja1, [type=input, context="answer_sports", options=['Voetbal', 'Hockey', 'Zwemmen', 'Dansen', 'Judo'], umVariable=sport_van_kind, topics=[success=['sport', '_answer']]]).
 text(dagdromen_sport, s4ja1, "Welke sport doe je dan?").
 next(dagdromen_sport, s4ja1, "success", s4wel_sport1).
 next(dagdromen_sport, s4ja1, "fail", s4wel_sport_21).
@@ -36,7 +36,7 @@ next(dagdromen_sport, s4interesse1, "fail", s4wel_sport_21).
 
 move(dagdromen_sport, s4wel_sport1, say).
 text(dagdromen_sport, s4wel_sport1, "Wauw, %sport_van_kind%!").
-next(dagdromen_sport, s4wel_sport1, "true", s4wel_sport_21).
+%next(dagdromen_sport, s4wel_sport1, "true", s4wel_sport_21).
 
 move(dagdromen_sport, s4wel_sport_21, say).
 text(dagdromen_sport, s4wel_sport_21, "Misschien is het ook wel iets voor mij.").
