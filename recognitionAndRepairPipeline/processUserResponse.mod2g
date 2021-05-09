@@ -1,7 +1,9 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
@@ -21,15 +23,18 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 					% input questions -> expects an entity to be returned.
 					if bel(Type=input)
 						then {
-							if bel(length(Params, 1), member((_=AnsB), Params), downcase_atom(AnsB, Ans)) then {
-								if bel(Ans\='') then insert(answer(Minidialog, Move, Ans, [text=Text])).
+							if bel(length(Params, 1), member((_=Ans), Params)) then {
+								if bel(number(Ans), Intent='integer', AnsI is integer(Ans)) then insert(answer(Minidialog, Move, AnsI, [text=Text])).
+								if bel(number(Ans), Intent\='integer') then insert(answer(Minidialog, Move, Ans, [text=Text])).
+								if bel(Ans\='', not(number(Ans)), downcase_atom(Ans, AnsD)) then insert(answer(Minidialog, Move, AnsD, [text=Text])).
 								if bel(Ans='') then repair(Minidialog,Move). %Log
 							}
 							if bel(length(Params, 0)) then insert(answer(Minidialog, Move, Intent, [text=Text])).
 						}
 											
 					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type=quiz, length(Params, 1), member((_=AnsB), Params), downcase_atom(AnsB, Ans),
+					if bel(Type=quiz, length(Params, 1), member((_=AnsC), Params),
+						(number(AnsC), Intent='integer', Ans is integer(AnsC); number(AnsC), Intent\='integer', Ans is AnsC; not(number(AnsC)), downcase_atom(AnsC, Ans)),
 						keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer))
 						then {
 							if bel(Ans\='', member(Ans, CorrectAnswer))

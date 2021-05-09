@@ -1,3 +1,7 @@
+%%%% HEADER %%%%
+%% superkracht %%
+minidialog(superkracht, [type=chitchat, theme=personalia, topic=superkracht]).
+
 move(superkracht, s1, say).
 text(superkracht, s1, "Ik heb laatst trouwens ontdekt dat veel mensen wel een superheld zouden willen zijn.").
 next(superkracht, s1, "true", s2).
@@ -7,7 +11,7 @@ text(superkracht, s2, "Als je kon kiezen, wat zou je dan het liefste willen:").
 next(superkracht, s2, "true", s3).
 
 move(superkracht, s3, question).
-moveConfig(superkracht, s3, [type=input, context="superkracht_antwoorden", options=['Supersterk zijn', 'Met dieren praten', 'Gedachten lezen', 'Onzichtbaar zijn'], umVariable=superkracht]).
+moveConfig(superkracht, s3, [type=input, context="superkrachten", options=['sterk', 'dieren', 'gedachten', 'onzichtbaar'], umVariable=superkracht]).
 text(superkracht, s3, "Supersterk zijn, met dieren kunnen praten, gedachten kunnen lezen, of onzichtbaar zijn?").
 next(superkracht, s3, "sterk", s4sterk1).
 next(superkracht, s3, "dieren", s4dier1).
@@ -39,11 +43,11 @@ text(superkracht, s4dier2, "Vogels komen overal, dus die weten alles.").
 next(superkracht, s4dier2, "true", s4dier3).
 
 move(superkracht, s4dier3, say).
-text(superkracht, s4dier3, "Of even overleggen met een tijger voor ie je opeet.").
+text(superkracht, s4dier3, "Of even overleggen met een tijger voor 'ie je opeet.").
 next(superkracht, s4dier3, "true", s4dier4).
 
 move(superkracht, s4dier4, say).
-text(superkracht, s4dier4, "Of natuurlijk kunnen vragen of %first_name% net zoveel van jou houdt als jij van %first_name% ").
+text(superkracht, s4dier4, "Of natuurlijk kunnen vragen of %first_name%  net zoveel van jou houdt als jij van %first_name% !").
 
 move(superkracht, s4gedachten1, say).
 text(superkracht, s4gedachten1, "Die zou ik ook kiezen!").
@@ -61,13 +65,12 @@ move(superkracht, s4gedachten4, say).
 text(superkracht, s4gedachten4, "Maar het is wel hartstikke handig om alles en iedereen meteen te begrijpen.").
 
 move(superkracht, s4onzichtbaar1, question).
-moveConfig(superkracht, s4onzichtbaar1, [type=input, context="mensen_of_robotogen", options=['alleen voor mensen', 'ook voor robots'], umVariable=mensen_of_robotogen]).
-text(superkracht, s4onzichtbaar1, "Zou je alleen voor mensen onzichtbaar willen zijn, of ook voor robotogen?").
+moveConfig(superkracht, s4onzichtbaar1, [type=yesno, context='answer_yesno', umVariable=onzichtbaar_voor_hero]).
+text(superkracht, s4onzichtbaar1, "Zou je ook voor mij onzichtbaar willen zijn?").
 next(superkracht, s4onzichtbaar1, "fail", s4fail_mensen_of_robotogen1).
-next(superkracht, s4onzichtbaar1, "weet ik niet", s4fail_mensen_of_robotogen1).
-next(superkracht, s4onzichtbaar1, "maakt niet uit", s4fail_mensen_of_robotogen1).
-next(superkracht, s4onzichtbaar1, "mensen", s4mensen1).
-next(superkracht, s4onzichtbaar1, "robots", s4robots1).
+next(superkracht, s4onzichtbaar1, "answer_dontknow", s4fail_mensen_of_robotogen1).
+next(superkracht, s4onzichtbaar1, "answer_no", s4mensen1).
+next(superkracht, s4onzichtbaar1, "answer_yes", s4robots1).
 
 move(superkracht, s4mensen1, say).
 text(superkracht, s4mensen1, "Oké!").

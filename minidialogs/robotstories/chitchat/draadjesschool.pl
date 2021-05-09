@@ -1,3 +1,7 @@
+%%%% HEADER %%%%
+%% draadjesschool %%
+minidialog(draadjesschool, [type=chitchat, theme=verschillen_robot_mens, topic=school]).
+
 move(draadjesschool, s1, say).
 text(draadjesschool, s1, "Jij leert heel veel dingen op een mensenschool, met allemaal andere kinderen!").
 next(draadjesschool, s1, "true", s2).
@@ -16,7 +20,6 @@ next(draadjesschool, s4, "true", s5).
 
 move(draadjesschool, s5, say).
 text(draadjesschool, s5, "Zo.").
-anim(draadjesschool, s5, file, "resources/gestures/gesture_draadjesschool_s5_5.json").
 next(draadjesschool, s5, "true", s6).
 
 move(draadjesschool, s6, say).
@@ -24,11 +27,10 @@ text(draadjesschool, s6, "En dan komt alle kennis zo via een draadje mijn achter
 next(draadjesschool, s6, "true", s7).
 
 move(draadjesschool, s7, say).
-anim(draadjesschool, s7, file, "resources/gestures/gesture_draadjesschool_s7_7.json").
 next(draadjesschool, s7, "true", s8).
 
 move(draadjesschool, s8, question).
-moveConfig(draadjesschool, s8, [type=yesno, context='answer_yesno']).
+moveConfig(draadjesschool, s8, [type=yesno, context='answer_yesno', umVariable=zie_je_gaatje]).
 text(draadjesschool, s8, "Zie je het gaatje?").
 next(draadjesschool, s8, "answer_yes", s9ja1).
 next(draadjesschool, s8, "answer_no", s9nee1).
@@ -37,12 +39,10 @@ next(draadjesschool, s8, "fail", s9nee1).
 
 move(draadjesschool, s9ja1, say).
 text(draadjesschool, s9ja1, "Goed!").
-anim(draadjesschool, s9ja1, file, "resources/gestures/gesture_draadjesschool_s9ja1_8.json").
 next(draadjesschool, s9ja1, "true", s10).
 
 move(draadjesschool, s9nee1, say).
 text(draadjesschool, s9nee1, "Het zit hier!").
-anim(draadjesschool, s9nee1, file, "resources/gestures/gesture_draadjesschool_s9nee1_8.json").
 next(draadjesschool, s9nee1, "true", s10).
 
 move(draadjesschool, s10, say).
@@ -63,7 +63,6 @@ next(draadjesschool, s13, "true", s14).
 
 move(draadjesschool, s14, say).
 text(draadjesschool, s14, "En toch gaan ze soms best vroeg naar bed.").
-anim(draadjesschool, s14, file, "resources/gestures/gesture_draadjesschool_s14_14.json").
 next(draadjesschool, s14, "true", s15).
 
 move(draadjesschool, s15, question).
@@ -94,11 +93,9 @@ next(draadjesschool, s20, "true", s21).
 
 move(draadjesschool, s21, say).
 text(draadjesschool, s21, "Ik zit gewoon zo, en dan gaat mijn stroom uit").
-audio(draadjesschool, s21, file, "resources/sounds/nog_te_zoeken_uit_riedeltje.wav").
-anim(draadjesschool, s21, file, "resources/gestures/gesture_draadjesschool_s21_21.json").
+audio(draadjesschool, s21, server, "resources/sounds/nog_te_zoeken_uit_riedeltje.wav").
 next(draadjesschool, s21, "true", s22).
 
 move(draadjesschool, s22, say).
 text(draadjesschool, s22, "Maar nu ben ik aan, ik deed maar alsof.").
-anim(draadjesschool, s22, file, "resources/gestures/gesture_draadjesschool_s22_22.json").
 

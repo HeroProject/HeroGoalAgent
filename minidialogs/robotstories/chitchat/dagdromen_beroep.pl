@@ -1,3 +1,5 @@
+%%%% HEADER %%%%
+%% dagdromen_beroep %%
 minidialog(dagdromen_beroep, [type=chitchat, theme=personalia, topic=beroep]).
 
 move(dagdromen_beroep, s1, say).
@@ -29,7 +31,7 @@ text(dagdromen_beroep, s7, "Of wat ik later worden wil.").
 next(dagdromen_beroep, s7, "true", s8).
 
 move(dagdromen_beroep, s8, question).
-moveConfig(dagdromen_beroep, s8, [type=input, context="answer_beroep", options=['Dokter', 'Politie', 'Influencer', 'Voetballer', 'Leraar', 'Kunstenaar'], umVariable=beroep_van_kind]).
+moveConfig(dagdromen_beroep, s8, [type=input, context="profession", options=['Dokter', 'Politie', 'Influencer', 'Voetballer', 'Leraar', 'Kunstenaar'], umVariable=beroep_van_kind]).
 text(dagdromen_beroep, s8, "Wat wil jij later worden?").
 next(dagdromen_beroep, s8, "success", s9success1).
 next(dagdromen_beroep, s8, "fail", s9fail1).

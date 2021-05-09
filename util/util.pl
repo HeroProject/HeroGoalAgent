@@ -95,7 +95,8 @@ matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matches
 matchesDependency([]).
 
 matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! ; matchesConditionals(Rest), !.
-matchesConditional([[umVariable=Var, filter=Filter, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesConditional(T), !.
+matchesConditional([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesConditional(T), !.
+matchesConditional([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesConditional(T), !.
 matchesConditional([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesConditional(T), !.
 matchesConditional([]).
 
@@ -107,19 +108,26 @@ extractVariablesFromConditional([[umVariable=Var, filter=_, values=_] | T], [Var
 	:- extractVariablesFromConditional(T, RestVariables).
 extractVariablesFromConditional([], []).
 
-findSuitableChitchat(Chitchat) 
+findSuitableChitchat(Chitchat, topic) 
 	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
 	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findChitchatWithRandomTopic(Topics, Chitchat).
 
-findChitchatWithRandomTopic(Topics, Chitchat) :- random_select(Topic, Topics, RemainingTopics), (chitchatMatchesTopic(Topic, Chitchat), ! ; not(chitchatMatchesTopic(Topic, _)), findChitchatWithRandomTopic(RemainingTopics, Chitchat)).
-	
+findSuitableChitchat(Chitchat, theme) 
+	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findChitchatWithRandomTheme(Topics, Chitchat).
+
+findChitchatWithRandomTopic(Topics, Chitchat) :- random_select(Topic, Topics, RemainingTopics), (findRandomChitchatWithTopic(Topic, Chitchat), ! ; not(findRandomChitchatWithTopic(Topic, _)), findChitchatWithRandomTopic(RemainingTopics, Chitchat)).
+findRandomChitchatWithTopic(Topic, Chitchat) :- findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=Topic]), chitchatMatchesTopic(Topic, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
 chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
-			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
-chitchatMatchesTopic(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
 			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
 chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
 			not(dependencies(Chitchat, _)).
-chitchatMatchesTopic(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+
+findChitchatWithRandomTheme(Themes, Chitchat) :- random_select(Theme, Themes, RemainingThemes), (findRandomChitchatWithTheme(Theme, Chitchat), ! ; not(findRandomChitchatWithTheme(Theme, _)), findChitchatWithRandomTheme(RemainingThemes, Chitchat)).
+findRandomChitchatWithTheme(Theme, Chitchat) :- findall(ID, (minidialog(ID, [type=chitchat, theme=Theme, topic=_]), chitchatMatchesTheme(Theme, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
+chitchatMatchesTheme(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
+chitchatMatchesTheme(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
 			not(dependencies(Chitchat, _)).
 
 addToTopicsOfInterest([answer_yes=Topics | T], ToI, UpdatedToI) :- append(ToI, Topics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, ToIII, UpdatedToI).
@@ -135,8 +143,8 @@ replaceAns(['_answer' | T], Ans, [Ans | PT]) :- replaceAns(T, Ans, PT), !.
 replaceAns([H | T], Ans, [H | PT]) :- H \= '_answer', replaceAns(T, Ans, PT).
 replaceAns([], _, []).
 
-importTopicsOfInterest("[]", []).
-importTopicsOfInterest(IToI, OToI) :- term_string(IToII, IToI), sort(IToII, OToI). 
+importTopicsOfInterest([], []).
+importTopicsOfInterest(IToI, OToI) :- IToI \= [], term_string(IToII, IToI), sort(IToII, OToI). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%

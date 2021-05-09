@@ -2,7 +2,9 @@ use 'util/*.pl' as knowledge.
 use 'minidialogs/*.pl' as knowledge.
 use 'minidialogs/co_creation/*.pl' as knowledge.
 use 'minidialogs/hospital/*.pl' as knowledge.
-use 'minidialogs/robotstories/*.pl' as knowledge.
+use 'minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use 'minidialogs/robotstories/narrative/*.pl' as knowledge.
+use 'minidialogs/robotstories/functional/*.pl' as knowledge.
 use sessions as knowledge.
 use hero_actions as actionspec.
 use 'userModel/initializeUserModel.mod2g' as module.
@@ -23,8 +25,8 @@ module hero_init {
 	
 	% Gather all available chitchat topics and themes
 	% minidialog(dagdromen_beroep, [type=chitchat, theme=personalia, topic=beroep]).
-	forall bel(minidialog(_, [type=chitchat, theme=Theme, topic=Topic]), availableChitchats(Chitchats), append(Chitchats, [Theme, Topic], UpdatedChitchats), sort(UpdatedChitchats, ChitchatsSet))
-		do delete(availableChitchats(Chitchats)) + insert(availableChitchats(ChitchatsSet)).
+	if bel(availableChitchats(Chitchats), findall([Th, To], minidialog(_, [type=chitchat, theme=Th, topic=To]), L), flatten(L, FL), sort(FL, ChitchatsSet))
+		then delete(availableChitchats(Chitchats)) + insert(availableChitchats(ChitchatsSet)).
 	
 	% If first move is a question move, initialize required properties
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), getInputModalityOrder(Minidialog, Move, Order), nth0(0, Order, NewModality)) 

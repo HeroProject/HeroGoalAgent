@@ -1,7 +1,9 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../userModel/loadInteractantData' as module.
@@ -40,8 +42,10 @@ module nextMinidialog {
 			% Import relevant user model variables for this minidialog.
 			if true then delete(session(Session))
 				+ insert(currentMinidialog(Selected), currentMove(s1), session(Remaining))
-				+ loadInteractantData(Selected)
 				+ setMoveHistory(UserId, s1).
+			
+			% If memory is used, load interact data from memory
+			if bel(useMemory(true)) then loadInteractantData(Selected).
 			
 			% Update dialog history.
 			if bel(dialogHistory(History), updateDialogHistory(Selected, UpdatedHistory))

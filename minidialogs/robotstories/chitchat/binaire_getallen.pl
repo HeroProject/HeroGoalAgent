@@ -1,9 +1,13 @@
+%%%% HEADER %%%%
+%% binaire_getallen %%
+minidialog(binaire_getallen, [type=chitchat, theme=lievelings, topic=getal]).
+
 move(binaire_getallen, s1, say).
-text(binaire_getallen, s1, "Hee %first_name%  ik moet een robotrugnummer kiezen voor de Robospelen!").
+text(binaire_getallen, s1, "Hee %first_name% , ik moet een robotrugnummer kiezen voor de Robospelen!").
 next(binaire_getallen, s1, "true", s2).
 
 move(binaire_getallen, s2, question).
-moveConfig(binaire_getallen, s2, [type=yesno, context='answer_yesno']).
+moveConfig(binaire_getallen, s2, [type=yesno, context='answer_yesno', umVariable=heeft_geluksgetal]).
 text(binaire_getallen, s2, "Heb jij een geluksgetal?").
 next(binaire_getallen, s2, "answer_yes", s3ja1).
 next(binaire_getallen, s2, "answer_no", s3nee1).
@@ -24,7 +28,6 @@ next(binaire_getallen, s3ja2, "fail", s3fail1).
 
 move(binaire_getallen, s3nee1, say).
 text(binaire_getallen, s3nee1, "Misschien is het typisch iets voor robots om van cijfers te houden!").
-anim(binaire_getallen, s3nee1, file, "resources/gestures/gesture_binaire_getallen_s3nee1_2.json").
 next(binaire_getallen, s3nee1, "true", s3nee2).
 
 move(binaire_getallen, s3nee2, question).
@@ -42,7 +45,6 @@ next(binaire_getallen, s3011, "true", s3waarom1).
 move(binaire_getallen, s3waarom1, question).
 moveConfig(binaire_getallen, s3waarom1, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(binaire_getallen, s3waarom1, "Waarom is %robot_rugnummer% jouw geluksgetal?").
-anim(binaire_getallen, s3waarom1, file, "resources/gestures/gesture_binaire_getallen_s3waarom1_2.json").
 next(binaire_getallen, s3waarom1, "success", s3waarom2).
 next(binaire_getallen, s3waarom1, "fail", s3waarom2).
 
@@ -77,13 +79,11 @@ next(binaire_getallen, s8, "true", s9).
 move(binaire_getallen, s9, question).
 moveConfig(binaire_getallen, s9, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(binaire_getallen, s9, "Vraag jij mij eens of ik Hero heet?").
-anim(binaire_getallen, s9, file, "resources/gestures/gesture_binaire_getallen_s9_9.json").
 next(binaire_getallen, s9, "success", s10hero1).
 next(binaire_getallen, s9, "fail", s10fail1).
 
 move(binaire_getallen, s10hero1, say).
 text(binaire_getallen, s10hero1, "Ja! Ik heet Hero!").
-anim(binaire_getallen, s10hero1, file, "resources/gestures/gesture_binaire_getallen_s10hero1_9.json").
 next(binaire_getallen, s10hero1, "true", s10hero2).
 
 move(binaire_getallen, s10hero2, say).
@@ -96,7 +96,6 @@ next(binaire_getallen, s10hero3, "true", s10hero4).
 
 move(binaire_getallen, s10hero4, say).
 text(binaire_getallen, s10hero4, "En dat is zo, dus dan zeggen mijn hersens: dikke vette één, en dan zeg ik Ja!").
-anim(binaire_getallen, s10hero4, file, "resources/gestures/gesture_binaire_getallen_s10hero4_9.json").
 
 move(binaire_getallen, s10fail1, say).
 text(binaire_getallen, s10fail1, "Dat begreep ik niet helemaal, wat leuk!").

@@ -1,3 +1,8 @@
+%%%% HEADER %%%%
+%% robot_willen_zijn %%
+minidialog(robot_willen_zijn, [type=chitchat, theme=verschillen_robot_mens, topic=robot_willen_zijn]).
+dependencies(robot_willen_zijn, [[[eerste_begroeting_secret_handshake, follow_up, 2]]]).
+
 move(robot_willen_zijn, s1, say).
 text(robot_willen_zijn, s1, "Weet je, %first_name% .").
 next(robot_willen_zijn, s1, "true", s2).
@@ -15,7 +20,7 @@ text(robot_willen_zijn, s4, "En toen vroeg ik me ineens af:").
 next(robot_willen_zijn, s4, "true", s5).
 
 move(robot_willen_zijn, s5, question).
-moveConfig(robot_willen_zijn, s5, [type=yesno, context='answer_yesno']).
+moveConfig(robot_willen_zijn, s5, [type=yesno, context='answer_yesno', umVariable=robot_willen_zijn]).
 text(robot_willen_zijn, s5, "Zou jij ook wel eens een robot willen zijn?").
 next(robot_willen_zijn, s5, "answer_yes", s6ja1).
 next(robot_willen_zijn, s5, "answer_no", s6nee1).
@@ -40,7 +45,7 @@ text(robot_willen_zijn, s6weet_waarom1, "Dat vind ik heel leuk om te horen!").
 next(robot_willen_zijn, s6weet_waarom1, "true", s6weet_waarom2).
 
 move(robot_willen_zijn, s6weet_waarom2, question).
-moveConfig(robot_willen_zijn, s6weet_waarom2, [type=yesno, context='answer_yesno']).
+moveConfig(robot_willen_zijn, s6weet_waarom2, [type=yesno, context='answer_yesno', umVariable=aan_andere_robots_vertellen]).
 text(robot_willen_zijn, s6weet_waarom2, "Mag ik dat ook aan andere robots vertellen?").
 next(robot_willen_zijn, s6weet_waarom2, "answer_yes", s6vertellen1).
 next(robot_willen_zijn, s6weet_waarom2, "answer_no", s6niet_vertellen1).
@@ -52,7 +57,7 @@ text(robot_willen_zijn, s6vertellen1, "Hoera! Wacht even hoor.").
 next(robot_willen_zijn, s6vertellen1, "true", s6vertellen2).
 
 move(robot_willen_zijn, s6vertellen2, say).
-audio(robot_willen_zijn, s6vertellen2, file, "resources/sounds/nog_uit_te_zoeken_laadgeluid.wav").
+audio(robot_willen_zijn, s6vertellen2, server, "resources/sounds/nog_uit_te_zoeken_laadgeluid.wav").
 next(robot_willen_zijn, s6vertellen2, "true", s6vertellen3).
 
 move(robot_willen_zijn, s6vertellen3, say).

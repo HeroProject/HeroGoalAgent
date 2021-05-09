@@ -1,7 +1,9 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../userModel/loadInteractantData' as module.
@@ -18,25 +20,31 @@ module selectChitchatDialog(SessionElement, RemainingElements) {
 			dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
 		then insert(selectedMinidialog(Minidialog, RemainingElements)).
 	
-	% Select a new minidialog of a theme with dependencies.
-	if bel(SessionElement = [theme=Theme],
-			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)),
-			dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
 	% Select a new minidialog of a topic without dependencies.
 	if bel(SessionElement = [topic=Topic],
 			minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),
 			not(dependencies(Minidialog, _)))
 		then insert(selectedMinidialog(Minidialog, RemainingElements)).
 	
+	% Select a new minidialog of a theme with dependencies.
+	if bel(SessionElement = [theme=Theme], Theme \= '_chitchat',
+			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)),
+			dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
+		then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	
 	% Select a new minidialog of a theme without dependencies.
-	if bel(SessionElement = [theme=Theme],
+	if bel(SessionElement = [theme=Theme], Theme \= '_chitchat',
 			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)),
 			not(dependencies(Minidialog, _)))
 		then insert(selectedMinidialog(Minidialog, RemainingElements)).
 	
-	% Select a new minidialog of a theme without dependencies.
-	if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog))
+	% Select a new minidialog based with a topic from the known topics of interest.
+	if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, topic))
 		then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	
+	% Select a new minidialog based with a theme from the known topics of interest.
+	if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, theme))
+		then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	
+	% Todo: decide whether or not to insert a random topic when theme='_chitchat'
 }

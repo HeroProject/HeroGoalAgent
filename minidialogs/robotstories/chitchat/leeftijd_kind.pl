@@ -1,3 +1,7 @@
+%%%% HEADER %%%%
+%% leeftijd_kind %%
+minidialog(leeftijd_kind, [type=chitchat, theme=personalia, topic=leeftijd]).
+
 move(leeftijd_kind, s1, say).
 text(leeftijd_kind, s1, "Ik ken nog niet zo veel mensen.").
 next(leeftijd_kind, s1, "true", s2).
@@ -9,7 +13,7 @@ next(leeftijd_kind, s2, "success", s3).
 next(leeftijd_kind, s2, "fail", s3).
 
 move(leeftijd_kind, s3, say).
-text(leeftijd_kind, s3, "%leeftijd!%").
+text(leeftijd_kind, s3, "%leeftijd%!").
 next(leeftijd_kind, s3, "true", s4).
 
 move(leeftijd_kind, s4, say).

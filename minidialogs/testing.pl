@@ -54,22 +54,27 @@ next(test_party, s1, "muziek maken", s2c).
 next(test_party, s1, "fail", s2f).
 
 move(test_party, s2a, say).
+start_interaction_probe(test_party, s2a).
 text(test_party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
 next(test_party, s2a, "true", s3).
 
 move(test_party, s2b, say).
+start_interaction_probe(test_party, s2b).
 text(test_party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
 next(test_party, s2b, "true", s3).
 
 move(test_party, s2c, say).
+start_interaction_probe(test_party, s2c).
 text(test_party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
 next(test_party, s2c, "true", s3).
 
 move(test_party, s2f, say).
+start_interaction_probe(test_party, s2f).
 text(test_party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
 next(test_party, s2f, "true", s3).
 
 move(test_party, s3, branchingPoint, test_party_s1).
+stop_interaction_probe(test_party, s3).
 next(test_party, s3, "dansen", s3a).
 next(test_party, s3, "_others", s3b).
 next(test_party, s3, "fail", s3f).
@@ -472,7 +477,7 @@ leds(test_session_led_1b, s4, reset).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 8					   %%%
 %%% Note: a previous session should contain the 	   %%%
-%%% 'test_motion' minidialog		           		   %%%
+%%% 'test_motion' minidialog		           	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_session_led_2, s1, say).
 text(test_session_led_2, s1, "Ik heb je lichtshow van de vorige keer onthouden").
@@ -489,3 +494,28 @@ next(test_session_led_2, s3, "true", s4).
 move(test_session_led_2, s4, say).
 text(test_session_led_2, s4, "Dat was het.").
 leds(test_session_led_2, s4, reset).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Test getal						   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+move(test_getal, s1, question).
+moveConfig(test_getal, s1, [type=input, context="integer", options=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], umVariable=test_getal]).
+text(test_getal, s1, "Wat is jouw geluksgetal?").
+next(test_getal, s1, 0, s2_0).
+next(test_getal, s1, 1, s2_1).
+next(test_getal, s1, "_others", s2_others).
+next(test_getal, s1, "fail", s2_fail).
+
+move(test_getal, s2_0, say).
+text(test_getal, s2_0, "Oke, 0").
+
+move(test_getal, s2_1, say).
+text(test_getal, s2_1, "Oke, 1").
+
+move(test_getal, s2_others, say).
+text(test_getal, s2_others, "Oke, %test_getal%").
+
+move(test_getal, s2_fail, say).
+text(test_getal, s2_fail, "Dat ging mis.").
+

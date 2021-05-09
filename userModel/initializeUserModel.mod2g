@@ -2,7 +2,9 @@ use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
-use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -36,6 +38,6 @@ module initializeUserModel {
 		then delete(waitingForInit) + setSession(UserId, SessionId) + insert(waitingForSession).
 	
 	% Initialize history
-	if bel(continueSession, userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
-	if bel(not(continueSession), userId(UserId), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+	if bel(continueSession, userId(UserId), useMemory(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
+	if bel(not(continueSession), userId(UserId), sessionId(SessionId), useMemory(true)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
 }
