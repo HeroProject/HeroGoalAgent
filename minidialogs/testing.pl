@@ -301,12 +301,12 @@ leds(test_stop_led, s1, reset).
 %%% Test session 1					   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_first_session, s1, say).
-text(test_first_session,  s1, "Het lijkt mij leuk om over sport te praten. De sporten die ik zelf graag doe zijn dansen of voetballen met andere robots").
+text(test_first_session,  s1, "Het lijkt mij leuk om over sport te praten, %first_name%. De sporten die ik zelf graag doe zijn dansen of voetballen met andere robots").
 next(test_first_session, s1, "true", s2).
 
 move(test_first_session, s2, question).
 moveConfig(test_first_session, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=test_favo_sport, fast=yes]).
-text(test_first_session, s2, "Wat is jouw lievelings sport, %first_name%?").
+text(test_first_session, s2, "Wat is jouw lievelings sport?").
 next(test_first_session, s2, 'success', s3).
 next(test_first_session, s2, 'fail', s5f).
 

@@ -30,7 +30,7 @@ module nextMinidialog {
 		if bel(SessionElement = [topic=_] ; SessionElement = [theme=_]) then selectChitchatDialog(SessionElement, RemainingElements).
 		
 		% If no minidialog could be selected, go to the next element of the session.
-		if not(bel(selectedMinidialog(_, _))) then delete(session(Session)) + insert(session(RemainingElements)) + nextMinidialog.
+		if not(bel(selectedMinidialog(_, _))) then delete(session(Session)) + insert(session(RemainingElements)) + nextMinidialog + log(dialogHistory(noneSelected)).
 		
 		% Process the selected minidialog.
 		if bel(selectedMinidialog(Selected, Remaining), userId(UserId)) then 
@@ -49,11 +49,11 @@ module nextMinidialog {
 			
 			% Update dialog history.
 			if bel(dialogHistory(History), updateDialogHistory(Selected, UpdatedHistory))
-				then delete(dialogHistory(History)) + insert(dialogHistory(UpdatedHistory))+ setDialogHistory(UserId, Selected) + setMoveHistory(UserId, s1).
+				then delete(dialogHistory(History)) + insert(dialogHistory(UpdatedHistory))+ setDialogHistory(UserId, Selected) + setMoveHistory(UserId, s1) + log(dialogHistory(UpdatedHistory)).
 			
 			% If minidialog is part of narrative thread then update narrative history.
 			if bel(minidialog(Selected, [type=narrative, thread=Thread, position=Pos]), narrativeHistory(History), updateNarrativeHistory(Thread, UpdatedHistory))
-				then delete(narrativeHistory(History)) + insert(narrativeHistory(UpdatedHistory)) + setNarrativeHistory(UserId, Thread, Pos).
+				then delete(narrativeHistory(History)) + insert(narrativeHistory(UpdatedHistory)) + setNarrativeHistory(UserId, Thread, Pos) + log(narrativeHistory(UpdatedHistory)).
 			
 			% Clean selectedMinidialog.
 			if true then delete(selectedMinidialog(Selected, Remaining)).

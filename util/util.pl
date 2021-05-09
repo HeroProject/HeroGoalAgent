@@ -37,6 +37,8 @@
 	waitingForSayClear/0, waitingForTimer/0,
 	waitingForInit/0.
 
+:- dynamic expCondition/1.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move parameter handling.                               %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -98,6 +100,7 @@ matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! 
 matchesConditional([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesConditional(T), !.
 matchesConditional([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesConditional(T), !.
 matchesConditional([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesConditional(T), !.
+matchesConditional([[expCondition=Cond] | T]) :- expCondition(Cond), matchesConditional(T), !.
 matchesConditional([]).
 
 extractVariablesFromConditionals([Conditional | Rest], UniqueVars) 
