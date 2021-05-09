@@ -36,7 +36,16 @@ next(ruimterobots, s6, "fail", s7fail_ruimtereizen1).
 
 move(ruimterobots, s7ja_ruimtereizen1, say).
 text(ruimterobots, s7ja_ruimtereizen1, "Heel cool!").
-next(ruimterobots, s7ja_ruimtereizen1, "true", s8).
+next(ruimterobots, s7ja_ruimtereizen1, "true", s7ja_ruimtereizen2).
+
+move(ruimterobots, s7ja_ruimtereizen2, question).
+moveConfig(ruimterobots, s7ja_ruimtereizen2, [type=input, context="ruimtereis", options=['sterren', 'zon', 'maan', 'mars'], fast=yes, umVariable=ruimtelocatie]).
+text(ruimterobots, s7ja_ruimtereizen2, "En ga je dan het liefst naar de zon, de maan, Mars, of de sterren?").
+next(ruimterobots, s7ja_ruimtereizen2, "sterren", s7sterren1).
+next(ruimterobots, s7ja_ruimtereizen2, "zon", s7zon1).
+next(ruimterobots, s7ja_ruimtereizen2, "maan", s7maan1).
+next(ruimterobots, s7ja_ruimtereizen2, "mars", s7mars1).
+next(ruimterobots, s7ja_ruimtereizen2, "fail", s7fail_ruimtelocatie1).
 
 move(ruimterobots, s7fail_ruimtelocatie1, say).
 text(ruimterobots, s7fail_ruimtelocatie1, "Best moeilijk kiezen hè?").
@@ -59,10 +68,10 @@ text(ruimterobots, s7sterren2, "Dan ga je echt een hele verre reis maken!").
 next(ruimterobots, s7sterren2, "true", s7sterren3).
 
 move(ruimterobots, s7sterren3, question).
-moveConfig(ruimterobots, s7sterren3, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(ruimterobots, s7sterren3, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_sterren]).
 text(ruimterobots, s7sterren3, "Waarom wil je graag naar de sterren?").
 next(ruimterobots, s7sterren3, "success", s7got_answer_sterren1).
-next(ruimterobots, s7sterren3, "failure", s7got_no_answer_sterren1).
+next(ruimterobots, s7sterren3, "fail", s7got_no_answer_sterren1).
 
 move(ruimterobots, s7got_answer_sterren1, say).
 text(ruimterobots, s7got_answer_sterren1, "Wauw!").
@@ -133,7 +142,7 @@ text(ruimterobots, s7robonaut_bekend6, "O, ik krijg nog een berichtje van haar b
 next(ruimterobots, s7robonaut_bekend6, "true", s7robonaut_bekend7).
 
 move(ruimterobots, s7robonaut_bekend7, say).
-text(ruimterobots, s7robonaut_bekend7, "Ze doet je de groeten en wenst ons succes met de Robospelen!").
+text(ruimterobots, s7robonaut_bekend7, "Ze doet je de groeten en wenst ons succes met de robo spelen!").
 next(ruimterobots, s7robonaut_bekend7, "true", s8).
 
 move(ruimterobots, s7robonaut_onbekend1, say).
@@ -177,7 +186,7 @@ text(ruimterobots, s7robonaut_onbekend10, "Nu zijn er heel andere dingen waar we
 next(ruimterobots, s7robonaut_onbekend10, "true", s7robonaut_onbekend11).
 
 move(ruimterobots, s7robonaut_onbekend11, say).
-text(ruimterobots, s7robonaut_onbekend11, "Zoals de Robospelen.").
+text(ruimterobots, s7robonaut_onbekend11, "Zoals de robo spelen.").
 next(ruimterobots, s7robonaut_onbekend11, "true", s8).
 
 move(ruimterobots, s7zon1, say).
@@ -205,10 +214,10 @@ text(ruimterobots, s7zon6, "Ik ben heel benieuwd!").
 next(ruimterobots, s7zon6, "true", s7zon7).
 
 move(ruimterobots, s7zon7, question).
-moveConfig(ruimterobots, s7zon7, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(ruimterobots, s7zon7, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_zon]).
 text(ruimterobots, s7zon7, "Waarom zou je wel bij de zon op bezoek willen?").
 next(ruimterobots, s7zon7, "success", s7got_answer_zon1).
-next(ruimterobots, s7zon7, "failure", s7got_no_answer_zon1).
+next(ruimterobots, s7zon7, "fail", s7got_no_answer_zon1).
 
 move(ruimterobots, s7got_no_answer_zon1, say).
 text(ruimterobots, s7got_no_answer_zon1, "Ik vraag het namens Parker, dat is een robotvriendin van mij.").
@@ -303,10 +312,10 @@ text(ruimterobots, s7maan2, "Dat zegt Zebro, de maanrobot.").
 next(ruimterobots, s7maan2, "true", s7maan3).
 
 move(ruimterobots, s7maan3, question).
-moveConfig(ruimterobots, s7maan3, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(ruimterobots, s7maan3, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_maan]).
 text(ruimterobots, s7maan3, "Waarom wil je graag naar de maan?").
 next(ruimterobots, s7maan3, "success", s7got_answer_maan1).
-next(ruimterobots, s7maan3, "failure", s7ook_naar_maan1).
+next(ruimterobots, s7maan3, "fail", s7ook_naar_maan1).
 
 move(ruimterobots, s7got_answer_maan1, say).
 text(ruimterobots, s7got_answer_maan1, "Dat vindt Zebro vast heel leuk om te horen!").
@@ -397,10 +406,10 @@ text(ruimterobots, s7mars3, "Ze vraagt:").
 next(ruimterobots, s7mars3, "true", s7mars4).
 
 move(ruimterobots, s7mars4, question).
-moveConfig(ruimterobots, s7mars4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(ruimterobots, s7mars4, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_mars]).
 text(ruimterobots, s7mars4, "Waarom zou jij graag naar Mars willen?").
 next(ruimterobots, s7mars4, "success", s7got_answer_mars1).
-next(ruimterobots, s7mars4, "failure", s7got_no_answer_mars1).
+next(ruimterobots, s7mars4, "fail", s7got_no_answer_mars1).
 
 move(ruimterobots, s7got_answer_mars1, say).
 text(ruimterobots, s7got_answer_mars1, "Dat vindt Rover vast heel leuk om te horen!").
@@ -479,10 +488,10 @@ text(ruimterobots, s7nee_ruimtereizen3, "Maar ik ben wel benieuwd.").
 next(ruimterobots, s7nee_ruimtereizen3, "true", s7nee_ruimtereizen4).
 
 move(ruimterobots, s7nee_ruimtereizen4, question).
-moveConfig(ruimterobots, s7nee_ruimtereizen4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(ruimterobots, s7nee_ruimtereizen4, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_niet_ruimtereizen]).
 text(ruimterobots, s7nee_ruimtereizen4, "Waarom wil je niet op vakantie naar de ruimte?").
 next(ruimterobots, s7nee_ruimtereizen4, "success", s7got_answer_ruimtereizen1).
-next(ruimterobots, s7nee_ruimtereizen4, "failure", s7got_no_answer_ruimtereizen1).
+next(ruimterobots, s7nee_ruimtereizen4, "fail", s7got_no_answer_ruimtereizen1).
 
 move(ruimterobots, s7got_no_answer_ruimtereizen1, say).
 text(ruimterobots, s7got_no_answer_ruimtereizen1, "Ik vind het zelf heel erg spannend.").
@@ -576,29 +585,36 @@ move(ruimterobots, s7niet_hele_tijd2, say).
 text(ruimterobots, s7niet_hele_tijd2, "Gewoon soms, toevallig.").
 next(ruimterobots, s7niet_hele_tijd2, "true", s7niet_hele_tijd3).
 
-move(ruimterobots, s7niet_hele_tijd3, say).
-text(ruimterobots, s7niet_hele_tijd3, "Eigenlijk is nu al genoeg.").
-next(ruimterobots, s7niet_hele_tijd3, "true", s7niet_hele_tijd4).
+move(ruimterobots, s7niet_hele_tijd3, continuator).
+next(ruimterobots, s7niet_hele_tijd3, [[umVariable=aan_ruimterobots_denken, filter=green, values=["fail", "answer_dontknow"]], [umVariable=aan_rover_denken, filter=green, values=["fail", "answer_dontknow"]], [umVariable=aan_parker_denken, filter=green, values=["fail", "answer_dontknow"]]], s7genoeg1).
+next(ruimterobots, s7niet_hele_tijd3, [[umVariable=aan_ruimterobots_denken, filter=green, values=["answer_yes"]]], s7ruimterobots_blij1).
+next(ruimterobots, s7niet_hele_tijd3, [[umVariable=an_parker_denken, filter=green, values=["answer_yes"]]], s7parker_blij1).
+next(ruimterobots, s7niet_hele_tijd3, [[umVariable=aan_rover_denken, filter=green, values=["answer_yes"]]], s7rover_blij1).
+next(ruimterobots, s7niet_hele_tijd3, "true", s8).
 
-move(ruimterobots, s7niet_hele_tijd4, say).
-text(ruimterobots, s7niet_hele_tijd4, "Dankjewel!").
-next(ruimterobots, s7niet_hele_tijd4, "true", s7niet_hele_tijd5).
+move(ruimterobots, s7genoeg1, say).
+text(ruimterobots, s7genoeg1, "Eigenlijk is nu al genoeg.").
+next(ruimterobots, s7genoeg1, "true", s7bedankt1).
 
-move(ruimterobots, s7niet_hele_tijd5, say).
-text(ruimterobots, s7niet_hele_tijd5, "Nu heb je niet alleen mij, maar ook de ruimterobots blij gemaakt!").
-next(ruimterobots, s7niet_hele_tijd5, "true", s7niet_hele_tijd6).
+move(ruimterobots, s7ruimterobots_blij1, say).
+text(ruimterobots, s7ruimterobots_blij1, "Nu heb je niet alleen mij, maar ook de ruimterobots blij gemaakt!").
+next(ruimterobots, s7ruimterobots_blij1, "true", s7bedankt1).
 
-move(ruimterobots, s7niet_hele_tijd6, say).
-text(ruimterobots, s7niet_hele_tijd6, "Nu heb je niet alleen mij, maar ook Parker blij gemaakt!").
-next(ruimterobots, s7niet_hele_tijd6, "true", s7niet_hele_tijd7).
+move(ruimterobots, s7parker_blij1, say).
+text(ruimterobots, s7parker_blij1, "Nu heb je niet alleen mij, maar ook Parker blij gemaakt!").
+next(ruimterobots, s7parker_blij1, "true", s7bedankt1).
 
-move(ruimterobots, s7niet_hele_tijd7, say).
-text(ruimterobots, s7niet_hele_tijd7, "Nu heb je niet alleen mij, maar ook Rover blij gemaakt!").
-next(ruimterobots, s7niet_hele_tijd7, "true", s7niet_hele_tijd8).
+move(ruimterobots, s7rover_blij1, say).
+text(ruimterobots, s7rover_blij1, "Nu heb je niet alleen mij, maar ook Rover blij gemaakt!").
+next(ruimterobots, s7rover_blij1, "true", s7bedankt1).
 
-move(ruimterobots, s7niet_hele_tijd8, say).
-text(ruimterobots, s7niet_hele_tijd8, "Jij bent echt een supercoach.").
-next(ruimterobots, s7niet_hele_tijd8, "true", s8).
+move(ruimterobots, s7bedankt1, say).
+text(ruimterobots, s7bedankt1, "Dankjewel!").
+next(ruimterobots, s7bedankt1, "true", s7bedankt2).
+
+move(ruimterobots, s7bedankt2, say).
+text(ruimterobots, s7bedankt2, "Jij bent echt een supercoach.").
+next(ruimterobots, s7bedankt2, "true", s8).
 
 move(ruimterobots, s7jammer1, say).
 text(ruimterobots, s7jammer1, "Jammer, maar begrijpelijk.").

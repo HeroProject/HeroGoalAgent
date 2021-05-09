@@ -31,7 +31,7 @@ next(draadjesschool, s7, "true", s8).
 
 move(draadjesschool, s8, question).
 moveConfig(draadjesschool, s8, [type=yesno, context='answer_yesno', umVariable=zie_je_gaatje]).
-text(draadjesschool, s8, "Zie je het gaatje?").
+text(draadjesschool, s8, "Zie je het gaátje?").
 next(draadjesschool, s8, "answer_yes", s9ja1).
 next(draadjesschool, s8, "answer_no", s9nee1).
 next(draadjesschool, s8, "answer_dontknow", s9nee1).
@@ -66,7 +66,7 @@ text(draadjesschool, s14, "En toch gaan ze soms best vroeg naar bed.").
 next(draadjesschool, s14, "true", s15).
 
 move(draadjesschool, s15, question).
-moveConfig(draadjesschool, s15, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(draadjesschool, s15, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_gaan_volwassenen_slapen]).
 text(draadjesschool, s15, "Vertel me eens, waarom doen volwassenen dat?").
 next(draadjesschool, s15, "success", s16).
 next(draadjesschool, s15, "fail", s16).
@@ -93,7 +93,7 @@ next(draadjesschool, s20, "true", s21).
 
 move(draadjesschool, s21, say).
 text(draadjesschool, s21, "Ik zit gewoon zo, en dan gaat mijn stroom uit").
-audio(draadjesschool, s21, server, "resources/sounds/nog_te_zoeken_uit_riedeltje.wav").
+audio(draadjesschool, s21, file, "resources/sounds/power_down.wav").
 next(draadjesschool, s21, "true", s22).
 
 move(draadjesschool, s22, say).

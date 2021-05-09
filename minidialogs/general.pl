@@ -7,16 +7,16 @@
 %%% Wake up	    		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(general_wakeup, s1, say).
-wakeup(general_wakeup, s1).
-leds(general_wakeup, s1, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", "white", "white"]).
+start_interaction_recording(general_wakeup, s1).
 next(general_wakeup, s1, "true", s2).
 
 move(general_wakeup, s2, say).
-go_to_posture(general_wakeup, s2).
+wakeup(general_wakeup, s2).
+leds(general_wakeup, s2, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["white", "white", "white"]).
 next(general_wakeup, s2, "true", s3).
 
 move(general_wakeup, s3, say).
-start_interaction_recording(general_wakeup, s3).
+go_to_posture(general_wakeup, s3).
 next(general_wakeup, s3, "true", s4).
 
 move(general_wakeup, s4, say).

@@ -6,6 +6,7 @@
     </BehaviorDescriptions>
     <Dialogs />
     <Resources />
-    <MiniDialogs />
+    <Topics />
     <IgnoredPaths />
+    <MiniDialogs />
 </Package>

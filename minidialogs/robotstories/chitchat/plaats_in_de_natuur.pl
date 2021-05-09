@@ -44,7 +44,7 @@ text(plaats_in_de_natuur, s10, "Naar welke plek in de natuur zou jij nu het lief
 next(plaats_in_de_natuur, s10, "true", s11).
 
 move(plaats_in_de_natuur, s11, question).
-moveConfig(plaats_in_de_natuur, s11, [type=input, context="zee_bos_bergen_strand", options=['zee', 'bos', 'bergen', 'strand'], umVariable=plaats_in_de_natuur]).
+moveConfig(plaats_in_de_natuur, s11, [type=input, context="zee_bos_bergen_strand", options=['zee', 'bos', 'bergen', 'strand'], fast=yes, umVariable=plaats_in_de_natuur]).
 text(plaats_in_de_natuur, s11, "De zee, het bos, de bergen of het strand?").
 next(plaats_in_de_natuur, s11, "zee", s12zee1).
 next(plaats_in_de_natuur, s11, "bos", s12bos1).

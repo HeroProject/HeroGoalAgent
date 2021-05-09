@@ -1,7 +1,7 @@
 %%%% HEADER %%%%
 %% lievelingseten_vervolg_pizza %%
 minidialog(lievelingseten_vervolg_pizza, [type=chitchat, theme=lievelings, topic=eten]).
-dependencies(lievelingseten_vervolg_pizza, [[[mini-dialog_id, user_model, 0], umVariable=lievelingseten_met_p, filter=green, values=["pizza"]]]).
+dependencies(lievelingseten_vervolg_pizza, [[[[lievelingseten, user_model, 0], [binaire_getallen, user_model, 0]]]]).
 
 move(lievelingseten_vervolg_pizza, s1, say).
 text(lievelingseten_vervolg_pizza, s1, "Gisteren heb ik geprobeerd zelf pizza te maken.").
@@ -59,7 +59,7 @@ next(lievelingseten_vervolg_pizza, s6, "answer_dontknow", s7herinnert_ggg_niet1)
 next(lievelingseten_vervolg_pizza, s6, "fail", s7herinnert_ggg_niet1).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, continuator).
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, [[umVariable=robot_rugnummer, filter=green, values=["_any"]]], s7herinnert_ggg_met_ggg1).
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, [[[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]]], s7herinnert_ggg_met_ggg1).
 next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, "true", s7herinnert_ggg_zonder_ggg1).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_zonder_ggg1, say).
@@ -78,17 +78,17 @@ move(lievelingseten_vervolg_pizza, s7herinnert_ggg_met_ggg2, say).
 text(lievelingseten_vervolg_pizza, s7herinnert_ggg_met_ggg2, "Jouw geluksgetal is %robot_rugnummer%!").
 next(lievelingseten_vervolg_pizza, s7herinnert_ggg_met_ggg2, "true", s8).
 
-move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, continuator).
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, [[umVariable=robot_rugnummer, filter=green, values=["_any"]]], s7herinnert_ggg_niet_met_ggg1).
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, "true", s7herinnert_ggg_niet_zonder_ggg1).
+move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, continuator).
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, [[[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]]], s7herinnert_ggg_niet_met_ggg1).
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, "true", s7herinnert_ggg_niet_zonder_ggg1).
+
+move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, say).
+text(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, "Dat is ook al wel een tijdje geleden.").
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, "true", s7herinnert_ggg_niet_met_ggg2).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg2, say).
-text(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg2, "Dat is ook al wel een tijdje geleden.").
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg2, "true", s7herinnert_ggg_niet_met_ggg3).
-
-move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg3, say).
-text(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg3, "Maar ik heb in mijn Hero geheugen opgeslagen dat %robot_rugnummer% jouw geluksgetal is!").
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg3, "true", s8).
+text(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg2, "Maar ik heb in mijn Hero geheugen opgeslagen dat %robot_rugnummer% jouw geluksgetal is!").
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg2, "true", s8).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_zonder_ggg1, say).
 text(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_zonder_ggg1, "Dat vind ik logisch, want jij hebt geen geluksgetal.").
@@ -103,11 +103,11 @@ next(lievelingseten_vervolg_pizza, s8, "answer_dontknow", s9herinnert_gg_hero_ni
 next(lievelingseten_vervolg_pizza, s8, "fail", s9herinnert_gg_hero_niet1).
 
 move(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, question).
-moveConfig(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, [type=input, context="integer", options=['0', '1', '2', '3', '4'], umVariable=recall_gg_hero]).
+moveConfig(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, [type=input, context="integer", options=[0, 1, 2, 3, 4], fast=yes, umVariable=recall_gg_hero]).
 text(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, "Kan je ze opnoemen?").
 next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, "fail", s9herinnert_gg_hero_niet1).
-next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, "0", s9herinnert_gg_hero_correct1).
-next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, "1", s9herinnert_gg_hero_correct1).
+next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, 0, s9herinnert_gg_hero_correct1).
+next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, 1, s9herinnert_gg_hero_correct1).
 next(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_wel1, "_others", s9herinnert_gg_hero_incorrect1).
 
 move(lievelingseten_vervolg_pizza, s9herinnert_gg_hero_niet1, say).

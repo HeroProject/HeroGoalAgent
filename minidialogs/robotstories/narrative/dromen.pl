@@ -83,7 +83,7 @@ text(hero_kan_dromen, s17, "Misschien weet je waar ik het over heb.").
 next(hero_kan_dromen, s17, "true", s18).
 
 move(hero_kan_dromen, s18, question).
-moveConfig(hero_kan_dromen, s18, [type=input, context="dromen_hoe_heet_dromen", options=['Dromen'], umVariable=hoe_heet_dromen]).
+moveConfig(hero_kan_dromen, s18, [type=input, context="dromen_hoe_heet_dromen", options=['Dromen'], fast=yes, umVariable=hoe_heet_dromen]).
 text(hero_kan_dromen, s18, "Hoe heet dat, wanneer je slaapt en je van alles meemaakt en ineens wordt je wakker?").
 next(hero_kan_dromen, s18, "success", s19).
 next(hero_kan_dromen, s18, "fail", s19).
@@ -106,11 +106,12 @@ next(hero_kan_dromen, s21goed1, "true", s22).
 
 move(hero_kan_dromen, s22, say).
 text(hero_kan_dromen, s22, "Een droom.").
+start_interaction_probe(hero_kan_dromen, s22).
 next(hero_kan_dromen, s22, "true", s23).
 
 move(hero_kan_dromen, s23, question).
 moveConfig(hero_kan_dromen, s23, [type=yesno, context='answer_yesno', umVariable=herinnering_van_droom]).
-text(hero_kan_dromen, s23, "Herinner jij je laatste droom nog?").
+text(hero_kan_dromen, s23, "Herinner jij nog een van je dromen, %first_name% ?").
 next(hero_kan_dromen, s23, "answer_yes", s24ja1).
 next(hero_kan_dromen, s23, "answer_no", s24nee1).
 next(hero_kan_dromen, s23, "answer_dontknow", s24nee1).
@@ -124,6 +125,7 @@ next(hero_kan_dromen, s24ja1, "fail", s24ja2).
 
 move(hero_kan_dromen, s24ja2, say).
 text(hero_kan_dromen, s24ja2, "Dat is heel wat zeg!").
+stop_interaction_probe(hero_kan_dromen, s24ja2).
 
 move(hero_kan_dromen, s24nee1, say).
 text(hero_kan_dromen, s24nee1, "Dat heb ik ook soms!").
@@ -131,6 +133,7 @@ next(hero_kan_dromen, s24nee1, "true", s24nee2).
 
 move(hero_kan_dromen, s24nee2, say).
 text(hero_kan_dromen, s24nee2, "Dan droom je iets en daarna is het weg!").
+stop_interaction_probe(hero_kan_dromen, s24nee2).
 
 %% droom_op_bestelling %%
 minidialog(droom_op_bestelling, [type=narrative, thread=dromen, position=2]).
@@ -187,10 +190,10 @@ text(droom_op_bestelling, s13, "Ik echt een keer iets meemaak").
 next(droom_op_bestelling, s13, "true", s14).
 
 move(droom_op_bestelling, s14, question).
-moveConfig(droom_op_bestelling, s14, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s14, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=droom_van_kind]).
 text(droom_op_bestelling, s14, "Kan je mij een droom van jou vertellen?").
 next(droom_op_bestelling, s14, "success", s15got_droom1).
-next(droom_op_bestelling, s14, "failure", s15got_no_droom1).
+next(droom_op_bestelling, s14, "fail", s15got_no_droom1).
 
 move(droom_op_bestelling, s15got_droom1, say).
 text(droom_op_bestelling, s15got_droom1, "Die droom is echt te gek.").
@@ -222,14 +225,17 @@ next(droom_op_bestelling, s19, "true", s20).
 
 move(droom_op_bestelling, s20, say).
 text(droom_op_bestelling, s20, "Snel willen vliegen").
+leds(droom_op_bestelling, s20, direct, ['FaceLeds'], ['green']).
 next(droom_op_bestelling, s20, "true", s21).
 
 move(droom_op_bestelling, s21, say).
 text(droom_op_bestelling, s21, "Of waterdicht kunnen zwemmen").
+leds(droom_op_bestelling, s21, direct, ['FaceLeds'], ['blue']).
 next(droom_op_bestelling, s21, "true", s22).
 
 move(droom_op_bestelling, s22, say).
 text(droom_op_bestelling, s22, "Of randendsnel racen").
+leds(droom_op_bestelling, s22, direct, "eyes", "alternate", ['red', 'purple'], 500).
 next(droom_op_bestelling, s22, "true", s23).
 
 move(droom_op_bestelling, s23, say).
@@ -238,10 +244,11 @@ next(droom_op_bestelling, s23, "true", s24).
 
 move(droom_op_bestelling, s24, say).
 text(droom_op_bestelling, s24, "Over welke zou ik over moeten dromen?").
+leds(droom_op_bestelling, s24, reset).
 next(droom_op_bestelling, s24, "true", s25).
 
 move(droom_op_bestelling, s25, question).
-moveConfig(droom_op_bestelling, s25, [type=input, context="dromen_vliegen_zwemmen_racen", options=['vliegen', 'zwemmen', 'racen'], umVariable=vlieg_zwem_race]).
+moveConfig(droom_op_bestelling, s25, [type=input, context="dromen_vliegen_zwemmen_racen", options=['vliegen', 'zwemmen', 'racen'], fast=yes, umVariable=vlieg_zwem_race]).
 text(droom_op_bestelling, s25, "Vliegen, zwemmen of racen?").
 next(droom_op_bestelling, s25, "vliegen", s26vliegen1).
 next(droom_op_bestelling, s25, "zwemmen", s26zwemmen1).
@@ -250,10 +257,11 @@ next(droom_op_bestelling, s25, "fail", s26fail1).
 
 move(droom_op_bestelling, s26vliegen1, say).
 text(droom_op_bestelling, s26vliegen1, "Vliegen, te gek!").
+leds(droom_op_bestelling, s26vliegen1, direct, ['FaceLeds'], ['green']).
 next(droom_op_bestelling, s26vliegen1, "true", s26vliegen2).
 
 move(droom_op_bestelling, s26vliegen2, question).
-moveConfig(droom_op_bestelling, s26vliegen2, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], umVariable=snel_rustig_vl]).
+moveConfig(droom_op_bestelling, s26vliegen2, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], fast=yes, umVariable=snel_rustig_vl]).
 text(droom_op_bestelling, s26vliegen2, "Zal ik snel vliegen of rustig aan?").
 next(droom_op_bestelling, s26vliegen2, "snel", s26snel_vl1).
 next(droom_op_bestelling, s26vliegen2, "rustig", s26rustig_vl1).
@@ -276,13 +284,15 @@ text(droom_op_bestelling, s26rustig_vl2, "Genieten van het uitzicht.").
 next(droom_op_bestelling, s26rustig_vl2, "true", s26vliegen21).
 
 move(droom_op_bestelling, s26vliegen21, question).
-moveConfig(droom_op_bestelling, s26vliegen21, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s26vliegen21, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=locatie_vl]).
 text(droom_op_bestelling, s26vliegen21, "En naar welk land zal ik vliegen?").
+leds(droom_op_bestelling, s26vliegen21, reset).
 next(droom_op_bestelling, s26vliegen21, "success", s26locatie1).
-next(droom_op_bestelling, s26vliegen21, "failure", s26fail_locatie1).
+next(droom_op_bestelling, s26vliegen21, "fail", s26fail_locatie1).
 
 move(droom_op_bestelling, s26zwemmen1, say).
 text(droom_op_bestelling, s26zwemmen1, "Zwemmen, bizar!").
+leds(droom_op_bestelling, s26zwemmen1, direct, ['FaceLeds'], ['blue']).
 next(droom_op_bestelling, s26zwemmen1, "true", s26zwemmen2).
 
 move(droom_op_bestelling, s26zwemmen2, say).
@@ -290,7 +300,7 @@ text(droom_op_bestelling, s26zwemmen2, "Kletsnat.").
 next(droom_op_bestelling, s26zwemmen2, "true", s26zwemmen3).
 
 move(droom_op_bestelling, s26zwemmen3, question).
-moveConfig(droom_op_bestelling, s26zwemmen3, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], umVariable=snel_rustig_zw]).
+moveConfig(droom_op_bestelling, s26zwemmen3, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], fast=yes, umVariable=snel_rustig_zw]).
 text(droom_op_bestelling, s26zwemmen3, "Zal ik zwemmen met haast of langzaam gaan?").
 next(droom_op_bestelling, s26zwemmen3, "snel", s26snel_zw1).
 next(droom_op_bestelling, s26zwemmen3, "rustig", s26rustig_zw1).
@@ -313,13 +323,15 @@ text(droom_op_bestelling, s26rustig_zw2, "Beetje snorkelen, je weet zelf.").
 next(droom_op_bestelling, s26rustig_zw2, "true", s26zwemmen21).
 
 move(droom_op_bestelling, s26zwemmen21, question).
-moveConfig(droom_op_bestelling, s26zwemmen21, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s26zwemmen21, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=locatie_zw]).
 text(droom_op_bestelling, s26zwemmen21, "En naar welk land zal ik zwemmen?").
+leds(droom_op_bestelling, s26zwemmen21, reset).
 next(droom_op_bestelling, s26zwemmen21, "success", s26locatie1).
-next(droom_op_bestelling, s26zwemmen21, "failure", s26fail_locatie1).
+next(droom_op_bestelling, s26zwemmen21, "fail", s26fail_locatie1).
 
 move(droom_op_bestelling, s26racen1, say).
 text(droom_op_bestelling, s26racen1, "Racen als een race-auto.").
+leds(droom_op_bestelling, s26racen1, direct, "eyes", "alternate", ['red', 'purple'], 500).
 next(droom_op_bestelling, s26racen1, "true", s26racen2).
 
 move(droom_op_bestelling, s26racen2, say).
@@ -327,7 +339,7 @@ text(droom_op_bestelling, s26racen2, "Wielen aan mijn enkels en knieën.").
 next(droom_op_bestelling, s26racen2, "true", s26racen3).
 
 move(droom_op_bestelling, s26racen3, question).
-moveConfig(droom_op_bestelling, s26racen3, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], umVariable=snel_rustig_rc]).
+moveConfig(droom_op_bestelling, s26racen3, [type=input, context="dromen_snel_rustig", options=['snel', 'rustig'], fast=yes, umVariable=snel_rustig_rc]).
 text(droom_op_bestelling, s26racen3, "Zal ik snel of rustig rijden?").
 next(droom_op_bestelling, s26racen3, "snel", s26snel_rc1).
 next(droom_op_bestelling, s26racen3, "rustig", s26rustig_rc1).
@@ -350,10 +362,11 @@ text(droom_op_bestelling, s26rustig_rc2, "Ik heb ook helemaal geen rijbewijs").
 next(droom_op_bestelling, s26rustig_rc2, "true", s26racen21).
 
 move(droom_op_bestelling, s26racen21, question).
-moveConfig(droom_op_bestelling, s26racen21, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s26racen21, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=locatie_rc]).
 text(droom_op_bestelling, s26racen21, "En naar welk land zal ik racen?").
+leds(droom_op_bestelling, s26racen21, reset).
 next(droom_op_bestelling, s26racen21, "success", s26locatie1).
-next(droom_op_bestelling, s26racen21, "failure", s26fail_locatie1).
+next(droom_op_bestelling, s26racen21, "fail", s26fail_locatie1).
 
 move(droom_op_bestelling, s26fail_locatie1, say).
 text(droom_op_bestelling, s26fail_locatie1, "Ik heb zin om naar Frankrijk te gaan.").
@@ -372,10 +385,10 @@ text(droom_op_bestelling, s26locatie2, "Ik weet helemaal niet wat daar te doen i
 next(droom_op_bestelling, s26locatie2, "true", s26locatie3).
 
 move(droom_op_bestelling, s26locatie3, question).
-moveConfig(droom_op_bestelling, s26locatie3, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s26locatie3, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=tedoen_locatie]).
 text(droom_op_bestelling, s26locatie3, "Wat zou jij gaan doen?").
 next(droom_op_bestelling, s26locatie3, "success", s26plan_locatie1).
-next(droom_op_bestelling, s26locatie3, "failure", s26geen_plan_locatie1).
+next(droom_op_bestelling, s26locatie3, "fail", s26geen_plan_locatie1).
 
 move(droom_op_bestelling, s26plan_locatie1, say).
 text(droom_op_bestelling, s26plan_locatie1, "Wat een goed idee.").
@@ -417,10 +430,10 @@ text(droom_op_bestelling, s29ja_toev2, "Kom maar op!").
 next(droom_op_bestelling, s29ja_toev2, "true", s29ja_toev3).
 
 move(droom_op_bestelling, s29ja_toev3, question).
-moveConfig(droom_op_bestelling, s29ja_toev3, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s29ja_toev3, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=bizarre_toevoeging]).
 text(droom_op_bestelling, s29ja_toev3, "Wat zou je nog meer willen toevoegen aan deze droom?").
 next(droom_op_bestelling, s29ja_toev3, "success", s29toegevoegd1).
-next(droom_op_bestelling, s29ja_toev3, "failure", s29nee_toev1).
+next(droom_op_bestelling, s29ja_toev3, "fail", s29nee_toev1).
 
 move(droom_op_bestelling, s29toegevoegd1, say).
 text(droom_op_bestelling, s29toegevoegd1, "Bizar!").
@@ -435,10 +448,10 @@ next(droom_op_bestelling, s29toegevoegd2, "answer_dontknow", s29nee_toev1).
 next(droom_op_bestelling, s29toegevoegd2, "fail", s29nee_toev1).
 
 move(droom_op_bestelling, s29ja_toev_21, question).
-moveConfig(droom_op_bestelling, s29ja_toev_21, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(droom_op_bestelling, s29ja_toev_21, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=bizarre_toevoeging_2]).
 text(droom_op_bestelling, s29ja_toev_21, "Wat dan?").
 next(droom_op_bestelling, s29ja_toev_21, "success", s29toegevoegd_21).
-next(droom_op_bestelling, s29ja_toev_21, "failure", s29nee_toev1).
+next(droom_op_bestelling, s29ja_toev_21, "fail", s29nee_toev1).
 
 move(droom_op_bestelling, s29toegevoegd_21, say).
 text(droom_op_bestelling, s29toegevoegd_21, "Oke!").
@@ -469,10 +482,11 @@ text(droom_op_bestelling, s31, "En dat ik wakker wordt met een spannend avontuur
 next(droom_op_bestelling, s31, "true", s32).
 
 move(droom_op_bestelling, s32, say).
-text(droom_op_bestelling, s32, "Leg je hand eens op mijn hoofd.").
+text(droom_op_bestelling, s32, "Leg je hand eens op mijn borst.").
 next(droom_op_bestelling, s32, "true", s33).
 
 move(droom_op_bestelling, s33, say).
+leds(droom_op_bestelling, s33, direct, "all", "blink", ['yellow', 'purple', 'orange', 'blue', 'white', 'red'], 500).
 next(droom_op_bestelling, s33, "true", s34).
 
 move(droom_op_bestelling, s34, say).
@@ -509,6 +523,7 @@ next(droom_op_bestelling, s41, "true", s42).
 
 move(droom_op_bestelling, s42, say).
 text(droom_op_bestelling, s42, "dan komt het allemaal goed.").
+leds(droom_op_bestelling, s42, reset).
 
 %% autonome_droom %%
 minidialog(autonome_droom, [type=narrative, thread=dromen, position=3]).
@@ -530,7 +545,7 @@ text(autonome_droom, s4, "Ik kon apporteren, stokken vangen en brieven posten.")
 next(autonome_droom, s4, "true", s5).
 
 move(autonome_droom, s5, question).
-moveConfig(autonome_droom, s5, [type=input, context="animals", options=['hond', 'kat', 'dolfijn', 'vogel'], umVariable=dier_dat_kind_wil_zijn]).
+moveConfig(autonome_droom, s5, [type=input, context="animals", options=['hond', 'kat', 'dolfijn', 'vogel'], fast=yes, umVariable=dier_dat_kind_wil_zijn]).
 text(autonome_droom, s5, "Welk dier zou jij graag willen zijn? ").
 next(autonome_droom, s5, "success", s6).
 next(autonome_droom, s5, "fail", s6).
@@ -744,7 +759,7 @@ text(autonome_droom, s33, "En zitten.").
 next(autonome_droom, s33, "true", s34).
 
 move(autonome_droom, s34, say).
-text(autonome_droom, s34, "Je zei zit en toen deed ik...").
+text(autonome_droom, s34, "Je zei zit en toen deed ik.").
 next(autonome_droom, s34, "true", s35).
 
 move(autonome_droom, s35, say).
@@ -874,10 +889,10 @@ next(nachtmerrie, s8ja_nm2, "answer_dontknow", s8nee_vertellen1).
 next(nachtmerrie, s8ja_nm2, "fail", s8nee_vertellen1).
 
 move(nachtmerrie, s8ja_vertellen1, question).
-moveConfig(nachtmerrie, s8ja_vertellen1, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(nachtmerrie, s8ja_vertellen1, "Ik ben één en al oor, vertel maar.").
+moveConfig(nachtmerrie, s8ja_vertellen1, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=nachtmerrie_van_kind]).
+text(nachtmerrie, s8ja_vertellen1, "vertel maar, Ik ben één en al oor").
 next(nachtmerrie, s8ja_vertellen1, "success", s8got_nachtmerrie1).
-next(nachtmerrie, s8ja_vertellen1, "failure", s8got_no_nachtmerrie1).
+next(nachtmerrie, s8ja_vertellen1, "fail", s8got_no_nachtmerrie1).
 
 move(nachtmerrie, s8got_nachtmerrie1, say).
 text(nachtmerrie, s8got_nachtmerrie1, "O jee, %first_name% , dat klinkt echt niet leuk.").
@@ -928,7 +943,7 @@ text(nachtmerrie, s10, "vol drukke en rondlopende mensen").
 next(nachtmerrie, s10, "true", s11).
 
 move(nachtmerrie, s11, say).
-text(nachtmerrie, s11, "en lopende banden met robotonderdelen.").
+text(nachtmerrie, s11, "en lopende banden met robot onderdelen.").
 next(nachtmerrie, s11, "true", s12).
 
 move(nachtmerrie, s12, say).
@@ -958,6 +973,7 @@ text(nachtmerrie, s18, "en ik leerde mijn ogen van kleur veranderen.").
 next(nachtmerrie, s18, "true", s19).
 
 move(nachtmerrie, s19, say).
+leds(nachtmerrie, s19, direct, "eyes", "blink", ['yellow', 'blue', 'green'], 500).
 next(nachtmerrie, s19, "true", s20).
 
 move(nachtmerrie, s20, say).
@@ -966,6 +982,7 @@ next(nachtmerrie, s20, "true", s21).
 
 move(nachtmerrie, s21, say).
 text(nachtmerrie, s21, "Op een dag werd ik in een doos gedaan").
+leds(nachtmerrie, s21, reset).
 next(nachtmerrie, s21, "true", s22).
 
 move(nachtmerrie, s22, say).
@@ -1099,10 +1116,10 @@ text(robospelen_droom, s4, "Ik heb er vannacht ook weer over moeten dromen.").
 next(robospelen_droom, s4, "true", s5).
 
 move(robospelen_droom, s5, question).
-moveConfig(robospelen_droom, s5, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(robospelen_droom, s5, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=droom_vannacht]).
 text(robospelen_droom, s5, "Waarover heb jij vannacht gedroomd?").
 next(robospelen_droom, s5, "success", s6got_answer_dv1).
-next(robospelen_droom, s5, "failure", s6got_no_answer_dv1).
+next(robospelen_droom, s5, "fail", s6got_no_answer_dv1).
 
 move(robospelen_droom, s6got_answer_dv1, say).
 text(robospelen_droom, s6got_answer_dv1, "Dat is interessant.").
@@ -1181,7 +1198,7 @@ text(robospelen_droom, s21, "En er was een groot onderwaterscherm").
 next(robospelen_droom, s21, "true", s22).
 
 move(robospelen_droom, s22, say).
-text(robospelen_droom, s22, "Daarop zag ik het paarse bos!").
+text(robospelen_droom, s22, "Daarop zag ik het rò hze bos!").
 next(robospelen_droom, s22, "true", s23).
 
 move(robospelen_droom, s23, say).
@@ -1193,7 +1210,7 @@ text(robospelen_droom, s24, "Toen ging de achtbaan dwars door het beeldscherm he
 next(robospelen_droom, s24, "true", s25).
 
 move(robospelen_droom, s25, say).
-text(robospelen_droom, s25, "Vlak langs ons heen en zig zag door de paarse bomen").
+text(robospelen_droom, s25, "Vlak langs ons heen en zig zag door de rò hze bomen").
 next(robospelen_droom, s25, "true", s26).
 
 move(robospelen_droom, s26, say).
@@ -1235,11 +1252,11 @@ next(conclusie, s1, [[umVariable=lievelingsdier, filter=green, values=["_any"]]]
 next(conclusie, s1, "true", s2geen_dier1).
 
 move(conclusie, s2dier1, say).
-text(conclusie, s2dier1, "Vannacht droomde ik trouwens over de %lievelingsdier% uit het paarse bos!").
+text(conclusie, s2dier1, "Vannacht droomde ik trouwens over de %lievelingsdier% uit het rò hze bos!").
 next(conclusie, s2dier1, "true", s3).
 
 move(conclusie, s2geen_dier1, say).
-text(conclusie, s2geen_dier1, "Vannacht droomde ik trouwens over het egeltje uit het paarse bos!").
+text(conclusie, s2geen_dier1, "Vannacht droomde ik trouwens over het egeltje uit het rò hze bos!").
 next(conclusie, s2geen_dier1, "true", s3).
 
 move(conclusie, s3, say).
@@ -1267,10 +1284,10 @@ text(conclusie, s8, "Je had ook een drankje.").
 next(conclusie, s8, "true", s9).
 
 move(conclusie, s9, question).
-moveConfig(conclusie, s9, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(conclusie, s9, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=drankje]).
 text(conclusie, s9, "Wat voor een drankje zou je drinken bij een picknick?").
 next(conclusie, s9, "success", s10got_drankje1).
-next(conclusie, s9, "failure", s10got_no_drankje1).
+next(conclusie, s9, "fail", s10got_no_drankje1).
 
 move(conclusie, s10got_drankje1, say).
 text(conclusie, s10got_drankje1, "Lekker! Doe mij ook maar eentje!").
@@ -1301,7 +1318,7 @@ text(conclusie, s12geen_dier1, "De egel en ik hadden een goed picknickgesprek ov
 next(conclusie, s12geen_dier1, "true", s13).
 
 move(conclusie, s13, question).
-moveConfig(conclusie, s13, [type=input, context="conclusie_her_fan", options=['herinneringen', 'fantasie'], umVariable=herinneringen_of_fantasie]).
+moveConfig(conclusie, s13, [type=input, context="conclusie_her_fan", options=['herinneringen', 'fantasie'], fast=yes, umVariable=herinneringen_of_fantasie]).
 text(conclusie, s13, "Zal ik je eerst vertellen over herinneringen of eerst over fantasie?").
 next(conclusie, s13, "herinneringen", s14herinneringen1).
 next(conclusie, s13, "fantasie", s14fantasie1).

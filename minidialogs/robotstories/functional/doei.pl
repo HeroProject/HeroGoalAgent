@@ -1,4 +1,72 @@
 %%%% HEADER %%%%
+%% doei_1 %%
+minidialog(doei_1, [type=functional, function=goodbye]).
+
+move(doei_1, s1, say).
+text(doei_1, s1, "Ik vond het leuk om kennis met je te maken, %first_name% ").
+next(doei_1, s1, "true", s2).
+
+move(doei_1, s2, question).
+moveConfig(doei_1, s2, [type=yesno, context='answer_yesno']).
+text(doei_1, s2, "Vond jij het ook leuk").
+next(doei_1, s2, "answer_yes", s3ja1).
+next(doei_1, s2, "answer_no", s3nee1).
+next(doei_1, s2, "answer_dontknow", s3nee1).
+next(doei_1, s2, "fail", s3fail1).
+
+move(doei_1, s3ja1, say).
+text(doei_1, s3ja1, "Fijn om te horen!").
+next(doei_1, s3ja1, "true", s4).
+
+move(doei_1, s3nee1, say).
+text(doei_1, s3nee1, "Oh, dan zal ik de volgende keer wat beter mijn best doen.").
+next(doei_1, s3nee1, "true", s4).
+
+move(doei_1, s3fail1, say).
+text(doei_1, s3fail1, "Mooi").
+next(doei_1, s3fail1, "true", s4).
+
+move(doei_1, s4, say).
+start_interaction_probe(doei_1, s4).
+next(doei_1, s4, "true", s5).
+
+move(doei_1, s5, continuator).
+next(doei_1, s5, [[expCondition=memory]], s6memory1).
+next(doei_1, s5, [[expCondition=control]], s6control1).
+next(doei_1, s5, "true", s7).
+
+move(doei_1, s6memory1, say).
+text(doei_1, s6memory1, "Misschien kun je me de volgende keer over een droom vertellen.").
+next(doei_1, s6memory1, "true", s6memory2).
+
+move(doei_1, s6memory2, say).
+text(doei_1, s6memory2, "Als het je lukt om er eentje te onthouden.").
+next(doei_1, s6memory2, "true", s6memory3).
+
+move(doei_1, s6memory3, say).
+text(doei_1, s6memory3, "En als ik het durf, dan ga ik me inschrijven voor de robo spelen").
+next(doei_1, s6memory3, "true", s7).
+
+move(doei_1, s6control1, say).
+text(doei_1, s6control1, "Ben benieuwd waar we het de volgende keer over gaan hebben.").
+next(doei_1, s6control1, "true", s7).
+
+move(doei_1, s7, say).
+text(doei_1, s7, "Dan is het nu echt tijd om doei te zeggen.").
+next(doei_1, s7, "true", s8).
+
+move(doei_1, s8, say).
+text(doei_1, s8, "Doei %first_name% , tot snel!").
+next(doei_1, s8, "true", s9).
+
+move(doei_1, s9, say).
+stop_interaction_probe(doei_1, s9).
+next(doei_1, s9, "true", s10).
+
+move(doei_1, s10, say).
+audio(doei_1, s10, id, handshake_sound).
+anim(doei_1, s10, id, handshake_motion).
+
 %% doei_was_het_leuk %%
 minidialog(doei_was_het_leuk, [type=functional, function=goodbye]).
 dependencies(doei_was_het_leuk, [[[eerste_begroeting_secret_handshake, follow_up, 0]]]).

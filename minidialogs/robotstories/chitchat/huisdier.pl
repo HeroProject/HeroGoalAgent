@@ -27,35 +27,34 @@ text(huisdier, s3ja1, "Leuk!").
 next(huisdier, s3ja1, "true", s3ja2).
 
 move(huisdier, s3ja2, question).
-moveConfig(huisdier, s3ja2, [type=input, context="integer", options=['1', '2', 'meer dan 2'], umVariable=hoeveel_huisdieren]).
+moveConfig(huisdier, s3ja2, [type=input, context="integer", options=[1, '2', 'meer dan 2', 0], fast=yes, umVariable=hoeveel_huisdieren]).
 text(huisdier, s3ja2, "Hoeveel huisdieren heb je?").
-next(huisdier, s3ja2, "0", s301).
-next(huisdier, s3ja2, "1", s311).
-next(huisdier, s3ja2, "_others", s32+1).
+next(huisdier, s3ja2, 0, s301).
+next(huisdier, s3ja2, 1, s311).
+next(huisdier, s3ja2, "_others", s32_of_meer1).
 next(huisdier, s3ja2, "fail", s3hero_wil_hond1).
-next(huisdier, s3ja2, "answer_dontknow", s3hero_wil_hond1).
 
 move(huisdier, s301, say).
 text(huisdier, s301, "Ik heb ook nul huisdieren.").
 next(huisdier, s301, "true", s3hero_wil_hond1).
 
-move(huisdier, s32+1, say).
-text(huisdier, s32+1, "Wow!").
-next(huisdier, s32+1, "true", s32+2).
+move(huisdier, s32_of_meer1, say).
+text(huisdier, s32_of_meer1, "Wow!").
+next(huisdier, s32_of_meer1, "true", s32_of_meer2).
 
-move(huisdier, s32+2, question).
-moveConfig(huisdier, s32+2, [type=yesno, context='answer_yesno', umVariable=ook_hond]).
-text(huisdier, s32+2, "Zit daar ook een hond tussen?").
-next(huisdier, s32+2, "answer_yes", s3ja_o_h1).
-next(huisdier, s32+2, "answer_no", s3nee_o_h1).
-next(huisdier, s32+2, "fail", s3nee_o_h1).
-next(huisdier, s32+2, "answer_dontknow", s3nee_o_h1).
+move(huisdier, s32_of_meer2, question).
+moveConfig(huisdier, s32_of_meer2, [type=yesno, context='answer_yesno', umVariable=ook_hond]).
+text(huisdier, s32_of_meer2, "Zit daar ook een hond tussen?").
+next(huisdier, s32_of_meer2, "answer_yes", s3ja_o_h1).
+next(huisdier, s32_of_meer2, "answer_no", s3nee_o_h1).
+next(huisdier, s32_of_meer2, "fail", s3nee_o_h1).
+next(huisdier, s32_of_meer2, "answer_dontknow", s3nee_o_h1).
 
 move(huisdier, s3ja_o_h1, question).
-moveConfig(huisdier, s3ja_o_h1, [type=input, context="integer", options=['1', '2', 'meer dan 2'], umVariable=hoeveelheid_honden]).
+moveConfig(huisdier, s3ja_o_h1, [type=input, context="integer", options=[1, '2', 'meer dan 2', 0], fast=yes, umVariable=hoeveelheid_honden]).
 text(huisdier, s3ja_o_h1, "Hoeveel honden heb je?").
-next(huisdier, s3ja_o_h1, "1", s3hond1).
-next(huisdier, s3ja_o_h1, "0", s3nee_o_h1).
+next(huisdier, s3ja_o_h1, 1, s3hond1).
+next(huisdier, s3ja_o_h1, 0, s3nee_o_h1).
 next(huisdier, s3ja_o_h1, "fail", s3nee_o_h1).
 next(huisdier, s3ja_o_h1, "_others", s3meer_honden1).
 
@@ -76,19 +75,19 @@ text(huisdier, s3meer_honden4, "Ik ben zelf natuurlijk ook niet zo groot.").
 next(huisdier, s3meer_honden4, "true", s3meer_honden5).
 
 move(huisdier, s3meer_honden5, question).
-moveConfig(huisdier, s3meer_honden5, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(huisdier, s3meer_honden5, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=naam_huisdier]).
 text(huisdier, s3meer_honden5, "Hoe heet jouw kleinste hond?").
 next(huisdier, s3meer_honden5, "true", s3leuke_naam1).
 
 move(huisdier, s3nee_o_h1, question).
-moveConfig(huisdier, s3nee_o_h1, [type=input, context="animals", options=['kat', 'konijn', 'cavia', 'een ander dier'], umVariable=soort_huisdier]).
+moveConfig(huisdier, s3nee_o_h1, [type=input, context="animals", options=['kat', 'konijn', 'cavia', 'een ander dier'], fast=yes, umVariable=soort_huisdier]).
 text(huisdier, s3nee_o_h1, "Wat voor andere dieren heb je dan?").
 next(huisdier, s3nee_o_h1, "_others", s3ander_dier1).
 next(huisdier, s3nee_o_h1, "fail", s3hero_wil_hond1).
 next(huisdier, s3nee_o_h1, "answer_dontknow", s3hero_wil_hond1).
 
 move(huisdier, s311, question).
-moveConfig(huisdier, s311, [type=input, context="animals", options=['kat', 'hond', 'cavia', 'een ander dier'], umVariable=soort_huisdier]).
+moveConfig(huisdier, s311, [type=input, context="animals", options=['kat', 'hond', 'cavia', 'een ander dier'], fast=yes, umVariable=soort_huisdier]).
 text(huisdier, s311, "En wat voor soort dier heb je?").
 next(huisdier, s311, "hond", s3hond1).
 next(huisdier, s311, "_others", s3ander_dier1).
@@ -116,10 +115,10 @@ text(huisdier, s3ander_dier2, "Een %soort_huisdier% lijkt me ook een leuk huisdi
 next(huisdier, s3ander_dier2, "true", s3naam_dier1).
 
 move(huisdier, s3naam_dier1, question).
-moveConfig(huisdier, s3naam_dier1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(huisdier, s3naam_dier1, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=naam_huisdier]).
 text(huisdier, s3naam_dier1, "Hoe heet je %soort_huisdier%?").
 next(huisdier, s3naam_dier1, "success", s3leuke_naam1).
-next(huisdier, s3naam_dier1, "failure", s3got_no_answer_naam1).
+next(huisdier, s3naam_dier1, "fail", s3got_no_answer_naam1).
 
 move(huisdier, s3got_no_answer_naam1, say).
 text(huisdier, s3got_no_answer_naam1, "Geeft niks").

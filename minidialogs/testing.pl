@@ -146,6 +146,22 @@ text(test_color2, s2incor, "Helaas. Ik wou dat ik %test_color2_s1% was, maar ik 
 move(test_color2, s2f, say).
 text(test_color2, s2f, "Zal ik het maar verklappen? Ik ben grijs met wit.").
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% beroep 2 - Testing quiz question	                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+move(test_beroep, s1, question).
+moveConfig(test_beroep, s1, [type=input, context="professions", options=['Dokter', 'Politieagent', 'Influencer', 'Voetballer', 'Leraar', 'Kunstenaar'], fast=yes, umVariable=test_beroep]).
+text(test_beroep, s1, "Wat wil jij later worden?").
+next(test_beroep, s1, "success", s2success1).
+next(test_beroep, s1, "fail", s2fail1).
+
+move(test_beroep, s2success1, say).
+text(test_beroep, s2success1, "%test_beroep%, facinerend!").
+
+move(test_beroep, s2fail1, say).
+text(test_beroep, s2fail1, "Dat ging mis.").
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Color 2 - Testing open question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

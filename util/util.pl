@@ -92,8 +92,10 @@ getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :-
 
 %%% Dependencies %%%
 matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; matchesDepencencies(Rest), !.
-matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
 matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesDependency(T), !.
+matchesDependency([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesDependency(T), !.
+matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
 matchesDependency([]).
 
 matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! ; matchesConditionals(Rest), !.
@@ -157,7 +159,7 @@ feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
 %yesno synonyms
-answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "absoluut", "zeker"]).
+answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "absoluut", "zeker", "klopt"]).
 answer_no_synonyms(["nee", "neen", "nah"]).
 answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
 

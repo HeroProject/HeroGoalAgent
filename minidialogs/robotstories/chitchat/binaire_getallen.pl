@@ -3,7 +3,7 @@
 minidialog(binaire_getallen, [type=chitchat, theme=lievelings, topic=getal]).
 
 move(binaire_getallen, s1, say).
-text(binaire_getallen, s1, "Hee %first_name% , ik moet een robotrugnummer kiezen voor de Robospelen!").
+text(binaire_getallen, s1, "Hee %first_name% , ik moet een robotrugnummer kiezen voor de robo spelen!").
 next(binaire_getallen, s1, "true", s2).
 
 move(binaire_getallen, s2, question).
@@ -19,10 +19,10 @@ text(binaire_getallen, s3ja1, "Cool.").
 next(binaire_getallen, s3ja1, "true", s3ja2).
 
 move(binaire_getallen, s3ja2, question).
-moveConfig(binaire_getallen, s3ja2, [type=input, context="integer", options=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], umVariable=robot_rugnummer]).
+moveConfig(binaire_getallen, s3ja2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fast=yes, umVariable=robot_rugnummer]).
 text(binaire_getallen, s3ja2, "Wat is jouw geluksgetal?").
-next(binaire_getallen, s3ja2, "0", s3011).
-next(binaire_getallen, s3ja2, "1", s3011).
+next(binaire_getallen, s3ja2, 0, s3011).
+next(binaire_getallen, s3ja2, 1, s3011).
 next(binaire_getallen, s3ja2, "_others", s3waarom1).
 next(binaire_getallen, s3ja2, "fail", s3fail1).
 
@@ -31,20 +31,20 @@ text(binaire_getallen, s3nee1, "Misschien is het typisch iets voor robots om van
 next(binaire_getallen, s3nee1, "true", s3nee2).
 
 move(binaire_getallen, s3nee2, question).
-moveConfig(binaire_getallen, s3nee2, [type=input, context="integer", options=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], umVariable=robot_rugnummer]).
-text(binaire_getallen, s3nee2, "Welk rugnummer zal ik nemen voor de robospelen?").
-next(binaire_getallen, s3nee2, "0", s3011).
-next(binaire_getallen, s3nee2, "1", s3011).
+moveConfig(binaire_getallen, s3nee2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fast=yes, umVariable=robot_rugnummer]).
+text(binaire_getallen, s3nee2, "Welk rugnummer zal ik dan nemen voor de robo spelen?").
+next(binaire_getallen, s3nee2, 0, s3011).
+next(binaire_getallen, s3nee2, 1, s3011).
 next(binaire_getallen, s3nee2, "_others", s3waarom1).
 next(binaire_getallen, s3nee2, "fail", s3fail1).
 
 move(binaire_getallen, s3011, say).
-text(binaire_getallen, s3011, "Wat leuk! Dat is ook één van mijn geluksgetallen!").
+text(binaire_getallen, s3011, "Wat leuk! Dat is één van mijn geluksgetallen!").
 next(binaire_getallen, s3011, "true", s3waarom1).
 
 move(binaire_getallen, s3waarom1, question).
-moveConfig(binaire_getallen, s3waarom1, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(binaire_getallen, s3waarom1, "Waarom is %robot_rugnummer% jouw geluksgetal?").
+moveConfig(binaire_getallen, s3waarom1, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=geluksgetal_reden]).
+text(binaire_getallen, s3waarom1, "Wat vind je zo leuk aan %robot_rugnummer%?").
 next(binaire_getallen, s3waarom1, "success", s3waarom2).
 next(binaire_getallen, s3waarom1, "fail", s3waarom2).
 
@@ -77,7 +77,7 @@ text(binaire_getallen, s8, "Of eigenlijk, nul is nee, één is ja.").
 next(binaire_getallen, s8, "true", s9).
 
 move(binaire_getallen, s9, question).
-moveConfig(binaire_getallen, s9, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(binaire_getallen, s9, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=vraag_heros_naam]).
 text(binaire_getallen, s9, "Vraag jij mij eens of ik Hero heet?").
 next(binaire_getallen, s9, "success", s10hero1).
 next(binaire_getallen, s9, "fail", s10fail1).

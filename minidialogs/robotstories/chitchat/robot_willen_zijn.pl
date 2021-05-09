@@ -32,7 +32,7 @@ text(robot_willen_zijn, s6ja1, "Bizar!").
 next(robot_willen_zijn, s6ja1, "true", s6ja2).
 
 move(robot_willen_zijn, s6ja2, question).
-moveConfig(robot_willen_zijn, s6ja2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(robot_willen_zijn, s6ja2, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_robot_zijn]).
 text(robot_willen_zijn, s6ja2, "Waarom zou je een robot willen zijn?").
 next(robot_willen_zijn, s6ja2, "success", s6weet_waarom1).
 next(robot_willen_zijn, s6ja2, "fail", s6niet_waarom1).
@@ -57,7 +57,7 @@ text(robot_willen_zijn, s6vertellen1, "Hoera! Wacht even hoor.").
 next(robot_willen_zijn, s6vertellen1, "true", s6vertellen2).
 
 move(robot_willen_zijn, s6vertellen2, say).
-audio(robot_willen_zijn, s6vertellen2, server, "resources/sounds/nog_uit_te_zoeken_laadgeluid.wav").
+audio(robot_willen_zijn, s6vertellen2, file, "resources/sounds/send_message.wav").
 next(robot_willen_zijn, s6vertellen2, "true", s6vertellen3).
 
 move(robot_willen_zijn, s6vertellen3, say).

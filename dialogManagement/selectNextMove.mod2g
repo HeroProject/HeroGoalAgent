@@ -15,6 +15,9 @@ module selectNextMove(Minidialog, Move) {
 	if bel(next(Minidialog, Move, Conditionals, NextMove), is_list(Conditionals), matchesConditionals(Conditionals), userId(UserId))
 		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove).
 	
+	if bel(next(Minidialog, Move, [[expCondition=Cond] | []], NextMove), expCondition(Cond), userId(UserId))
+		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove).
+	
 	if bel(next(Minidialog, Move, Conditional, NextMove), not(is_list(Conditional)), userId(UserId))
 		then insert(currentMove(NextMove)) + setMoveHistory(UserId, NextMove).
 	

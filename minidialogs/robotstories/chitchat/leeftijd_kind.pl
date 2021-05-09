@@ -7,7 +7,7 @@ text(leeftijd_kind, s1, "Ik ken nog niet zo veel mensen.").
 next(leeftijd_kind, s1, "true", s2).
 
 move(leeftijd_kind, s2, question).
-moveConfig(leeftijd_kind, s2, [type=input, context="integer", options=['6', '7', '8', '9', '10', '11', '12'], umVariable=leeftijd]).
+moveConfig(leeftijd_kind, s2, [type=input, context="integer", options=[6, 7, 8, 9, 10, 11, 12], fast=yes, umVariable=leeftijd]).
 text(leeftijd_kind, s2, "Hoe oud ben jij?").
 next(leeftijd_kind, s2, "success", s3).
 next(leeftijd_kind, s2, "fail", s3).
@@ -25,7 +25,7 @@ text(leeftijd_kind, s5, "Ik ben voor een robot nog heel jong.").
 next(leeftijd_kind, s5, "true", s6).
 
 move(leeftijd_kind, s6, say).
-text(leeftijd_kind, s6, "Omgerekend naar mensenjaren ben ik denk ik...").
+text(leeftijd_kind, s6, "Omgerekend naar mensenjaren ben ik denk ik.").
 next(leeftijd_kind, s6, "true", s7).
 
 move(leeftijd_kind, s7, branchingPoint, leeftijd).

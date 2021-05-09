@@ -31,7 +31,7 @@ text(dagdromen_beroep, s7, "Of wat ik later worden wil.").
 next(dagdromen_beroep, s7, "true", s8).
 
 move(dagdromen_beroep, s8, question).
-moveConfig(dagdromen_beroep, s8, [type=input, context="profession", options=['Dokter', 'Politie', 'Influencer', 'Voetballer', 'Leraar', 'Kunstenaar'], umVariable=beroep_van_kind]).
+moveConfig(dagdromen_beroep, s8, [type=input, context="profession", options=['Dokter', 'Politieagent', 'Influencer', 'Voetballer', 'Leraar', 'Kunstenaar'], fast=yes, topics=[success=['_answer']], umVariable=beroep_van_kind]).
 text(dagdromen_beroep, s8, "Wat wil jij later worden?").
 next(dagdromen_beroep, s8, "success", s9success1).
 next(dagdromen_beroep, s8, "fail", s9fail1).
@@ -41,11 +41,11 @@ text(dagdromen_beroep, s9success1, "Facinerend!").
 next(dagdromen_beroep, s9success1, "true", s9success2).
 
 move(dagdromen_beroep, s9success2, question).
-moveConfig(dagdromen_beroep, s9success2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(dagdromen_beroep, s9success2, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=beroep_van_kind_waarom]).
 text(dagdromen_beroep, s9success2, "Wat lijkt je zo leuk om %beroep_van_kind% te worden?").
 
 move(dagdromen_beroep, s9fail1, question).
-moveConfig(dagdromen_beroep, s9fail1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(dagdromen_beroep, s9fail1, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=beroep_van_kind_onbekend]).
 text(dagdromen_beroep, s9fail1, "Dat beroep ken ik niet. Wat moet je dan doen?").
 next(dagdromen_beroep, s9fail1, "success", s9fail2).
 next(dagdromen_beroep, s9fail1, "fail", s9fail2).

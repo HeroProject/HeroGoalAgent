@@ -7,18 +7,17 @@ text(lievelingskleur, s1, "he %first_name% !").
 next(lievelingskleur, s1, "true", s2).
 
 move(lievelingskleur, s2, question).
-moveConfig(lievelingskleur, s2, [type=input, context="color", options=['rood', 'geel', 'blauw', 'groen'], umVariable=lievelingskleur]).
+moveConfig(lievelingskleur, s2, [type=input, context="color", options=['rood', 'geel', 'blauw', 'groen', 'roze', 'oranje', 'paars'], fast=yes, umVariable=lievelingskleur]).
 text(lievelingskleur, s2, "Wat is eigenlijk jouw lievelingskleur?").
 next(lievelingskleur, s2, "rood", s3rood1).
 next(lievelingskleur, s2, "oranje", s3oranje1).
 next(lievelingskleur, s2, "geel", s3geel1).
 next(lievelingskleur, s2, "blauw", s3blauw1).
-next(lievelingskleur, s2, "paarse", s3paarse1).
+next(lievelingskleur, s2, "roze", s3roze1).
 next(lievelingskleur, s2, "zwart", s3zwart1).
 next(lievelingskleur, s2, "wit", s3wit1).
 next(lievelingskleur, s2, "_others", s3rest1).
 next(lievelingskleur, s2, "fail", s3fail_kleur1).
-next(lievelingskleur, s2, "answer_dontknow", s3fail_kleur1).
 
 move(lievelingskleur, s3rood1, say).
 text(lievelingskleur, s3rood1, "Ik hou ook van rood!").
@@ -92,28 +91,28 @@ move(lievelingskleur, s3blauw5, say).
 text(lievelingskleur, s3blauw5, "Lichtblauw!").
 next(lievelingskleur, s3blauw5, "true", s3eind1).
 
-move(lievelingskleur, s3paarse1, say).
-text(lievelingskleur, s3paarse1, "paarse vind ik nou echt een bizar mooie kleur.").
-next(lievelingskleur, s3paarse1, "true", s3paarse2).
+move(lievelingskleur, s3roze1, say).
+text(lievelingskleur, s3roze1, "rò hze vind ik nou echt een bizar mooie kleur.").
+next(lievelingskleur, s3roze1, "true", s3roze2).
 
-move(lievelingskleur, s3paarse2, say).
-text(lievelingskleur, s3paarse2, "Ik weet een leuk raadsel.").
-next(lievelingskleur, s3paarse2, "true", s3paarse3).
+move(lievelingskleur, s3roze2, say).
+text(lievelingskleur, s3roze2, "Ik weet een leuk raadsel.").
+next(lievelingskleur, s3roze2, "true", s3roze3).
 
-move(lievelingskleur, s3paarse3, say).
-text(lievelingskleur, s3paarse3, "Wat is paarse en chagrijnig?").
-next(lievelingskleur, s3paarse3, "true", s3paarse4).
+move(lievelingskleur, s3roze3, say).
+text(lievelingskleur, s3roze3, "Wat is rò hze en chagrijnig?").
+next(lievelingskleur, s3roze3, "true", s3roze4).
 
-move(lievelingskleur, s3paarse4, say).
-text(lievelingskleur, s3paarse4, "Een fram boos!").
-next(lievelingskleur, s3paarse4, "true", s3eind1).
+move(lievelingskleur, s3roze4, say).
+text(lievelingskleur, s3roze4, "Een fram boos!").
+next(lievelingskleur, s3roze4, "true", s3eind1).
 
 move(lievelingskleur, s3zwart1, say).
 text(lievelingskleur, s3zwart1, "Zwart!").
 next(lievelingskleur, s3zwart1, "true", s3zwart2).
 
 move(lievelingskleur, s3zwart2, say).
-text(lievelingskleur, s3zwart2, "Dat is leuk. Ik ben ook een beetje zwart.").
+text(lievelingskleur, s3zwart2, "Dat is leuk.").
 next(lievelingskleur, s3zwart2, "true", s3zwart3).
 
 move(lievelingskleur, s3zwart3, say).
@@ -177,7 +176,7 @@ text(lievelingskleur, s3fail_kleur3, "Als dat kon.").
 next(lievelingskleur, s3fail_kleur3, "true", s3fail_kleur4).
 
 move(lievelingskleur, s3fail_kleur4, say).
-text(lievelingskleur, s3fail_kleur4, "Maar...").
+text(lievelingskleur, s3fail_kleur4, "Maar.").
 next(lievelingskleur, s3fail_kleur4, "true", s3mop1).
 
 move(lievelingskleur, s3mop1, say).
@@ -216,7 +215,7 @@ text(lievelingskleur, s3grappig2, "Hoera!").
 next(lievelingskleur, s3grappig2, "true", s3grappig3).
 
 move(lievelingskleur, s3grappig3, say).
-text(lievelingskleur, s3grappig3, "Misschien is er wel een ronde bij de Robospelen").
+text(lievelingskleur, s3grappig3, "Misschien is er wel een ronde bij de robo spelen").
 next(lievelingskleur, s3grappig3, "true", s3grappig4).
 
 move(lievelingskleur, s3grappig4, say).
@@ -251,10 +250,10 @@ next(lievelingskleur, s3vertel1, "answer_dontknow", s3geen_grap1).
 next(lievelingskleur, s3vertel1, "fail", s3geen_grap1).
 
 move(lievelingskleur, s3grap1, question).
-moveConfig(lievelingskleur, s3grap1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+moveConfig(lievelingskleur, s3grap1, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=grap]).
 text(lievelingskleur, s3grap1, "Vertel!").
 next(lievelingskleur, s3grap1, "success", s3goeie_grap1).
-next(lievelingskleur, s3grap1, "failure", s3geen_grap1).
+next(lievelingskleur, s3grap1, "fail", s3geen_grap1).
 
 move(lievelingskleur, s3goeie_grap1, say).
 text(lievelingskleur, s3goeie_grap1, "Hahahahaha").
@@ -277,5 +276,5 @@ text(lievelingskleur, s3geen_grap2, "Ik zal er wel later een paar opzoeken op he
 next(lievelingskleur, s3geen_grap2, "true", s3robo1).
 
 move(lievelingskleur, s3robo1, say).
-text(lievelingskleur, s3robo1, "Voor het geval de robospelen een moppenronde heeft!").
+text(lievelingskleur, s3robo1, "Voor het geval de robo spelen een moppenronde heeft!").
 

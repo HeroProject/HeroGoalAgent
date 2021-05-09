@@ -11,7 +11,7 @@ text(superkracht, s2, "Als je kon kiezen, wat zou je dan het liefste willen:").
 next(superkracht, s2, "true", s3).
 
 move(superkracht, s3, question).
-moveConfig(superkracht, s3, [type=input, context="superkrachten", options=['sterk', 'dieren', 'gedachten', 'onzichtbaar'], umVariable=superkracht]).
+moveConfig(superkracht, s3, [type=input, context="superkrachten", options=['sterk', 'dieren', 'gedachten', 'onzichtbaar'], fast=yes, umVariable=superkracht]).
 text(superkracht, s3, "Supersterk zijn, met dieren kunnen praten, gedachten kunnen lezen, of onzichtbaar zijn?").
 next(superkracht, s3, "sterk", s4sterk1).
 next(superkracht, s3, "dieren", s4dier1).
@@ -24,7 +24,7 @@ text(superkracht, s4fail1, "Ik vind het ook moeilijk, maar ik zou toch wel het l
 next(superkracht, s4fail1, "true", s4fail2).
 
 move(superkracht, s4fail2, say).
-text(superkracht, s4fail2, "Als jij onzichtbaar was, wat zou je dan het liefst willen...").
+text(superkracht, s4fail2, "Als jij onzichtbaar was, wat zou je dan het liefst willen.").
 next(superkracht, s4fail2, "true", s4onzichtbaar1).
 
 move(superkracht, s4sterk1, say).
@@ -44,10 +44,9 @@ next(superkracht, s4dier2, "true", s4dier3).
 
 move(superkracht, s4dier3, say).
 text(superkracht, s4dier3, "Of even overleggen met een tijger voor 'ie je opeet.").
-next(superkracht, s4dier3, "true", s4dier4).
 
-move(superkracht, s4dier4, say).
-text(superkracht, s4dier4, "Of natuurlijk kunnen vragen of %first_name%  net zoveel van jou houdt als jij van %first_name% !").
+move(superkracht, s4huisdier1, say).
+text(superkracht, s4huisdier1, "Of natuurlijk kunnen vragen of jouw huisdier net zoveel van jou houdt").
 
 move(superkracht, s4gedachten1, say).
 text(superkracht, s4gedachten1, "Die zou ik ook kiezen!").
@@ -77,7 +76,7 @@ text(superkracht, s4mensen1, "Oké!").
 next(superkracht, s4mensen1, "true", s4mensen2).
 
 move(superkracht, s4mensen2, say).
-text(superkracht, s4mensen2, "Met mijn paarse ogen kan ik je dan nog steeds zien, maar verder kun je helemaal onzichtbaar worden!").
+text(superkracht, s4mensen2, "Met mijn rò hze ogen kan ik je dan nog steeds zien, maar verder kun je helemaal onzichtbaar worden!").
 
 move(superkracht, s4robots1, say).
 text(superkracht, s4robots1, "Oké cool!").
