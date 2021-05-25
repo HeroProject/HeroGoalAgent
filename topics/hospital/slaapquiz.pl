@@ -179,7 +179,7 @@ text(routine,  s1i1, "Alles wat je elke avond doet voordat je gaat slapen noemen
 next(routine,  s1i1, "true",  s1i2).
 
 state(routine, s1i2, say).
-text(routine,  s1i2, "Ik poets bijvoorbeeld altijd eerst mijn tanden, dan ga ik plassen en lees ik een boekje.").
+text(routine,  s1i2, "Ik poets bij voorbeeld altijd eerst mijn tanden, dan ga ik plassen en lees ik een boekje.").
 next(routine,  s1i2, "true",  s1q).
 
 state(routine, s1q, question).
@@ -307,12 +307,7 @@ next(pauze1a,  s3, "true",  s4).
 
 state(pauze1a, s4, say).
 prepare_sound_anim(pauze1a, s4).
-stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).
-
-% TODO: record applause, cheer, and snore
-% Kun je misschien voor mij applaudisseren? Doe maar in 3, 2, 1. Goed gedaan!
-% En kun je ook juichen, alsof je net een spelletje gewonnen hebt? Doe maar in 3, 2, 1. Super!
-% En als laatste: kun je eens laten horen hoe jij snurkt? Doe maar in 3, 2, 1. Haha, dat is grappig!
+stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).	
 
 state(pauze1b, s1, say).
 text(pauze1b,  s1, "Goed gedaan! Ik ben ook op zoek naar iemand die juicht, alsof je net een spelletje gewonnen hebt.").
@@ -431,7 +426,7 @@ next(piekeren,  s1q, 'answer_dontknow', s1f).
 next(piekeren,  s1q, 'fail', s1f).
 
 state(piekeren, s1y, say).
-text(piekeren,  s1y, "Wat leuk!").
+text(piekeren,  s1y, "Wat fijn!").
 next(piekeren,  s1y, "true", s2).
 
 state(piekeren, s1n, say).
@@ -533,27 +528,27 @@ next(bewegen,  s1q, 'fail', s1n).
 
 state(bewegen, s1y, say).
 text(bewegen,  s1y, "Wat goed, ga daar vooral mee door! Ik beweeg ook graag.").
-next(bewegen,  s1y, "true", s1i3).
+next(bewegen,  s1y, "true", s1i4).
 
 state(bewegen, s1n, say).
 text(bewegen,  s1n, "Ik beweeg graag.").
-next(bewegen,  s1n, "true", s1i3).
-
-state(bewegen, s1i3, say).
-text(bewegen,  s1i3, "Ik doe aan robot voetbal.").
-next(bewegen,  s1i3, "true", s1i4).
+next(bewegen,  s1n, "true", s1i4).
 
 state(bewegen, s1i4, say).
-audio(bewegen, s1i4, id, sound_cheer).
-%anim(bewegen,  s1i4, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
+text(bewegen,  s1i4, "Ik doe aan robot voetbal.").
 next(bewegen,  s1i4, "true", s1i5).
 
 state(bewegen, s1i5, say).
-text(bewegen,  s1i5, "Het is fijn om te bewegen.").
+audio(bewegen, s1i5, id, sound_cheer).
+%anim(bewegen,  s1i5, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 next(bewegen,  s1i5, "true", s1i6).
 
 state(bewegen, s1i6, say).
-text(bewegen,  s1i6, "Dan ben je 's avonds moe en kan je beter slapen.").
+text(bewegen,  s1i6, "Het is fijn om te bewegen.").
+next(bewegen,  s1i6, "true", s1i7).
+
+state(bewegen, s1i7, say).
+text(bewegen,  s1i7, "Dan ben je 's avonds moe en kan je beter slapen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Eten/drinken                                           %%%
