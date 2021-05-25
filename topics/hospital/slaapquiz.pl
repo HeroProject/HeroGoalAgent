@@ -222,7 +222,7 @@ state(routine, s3y, say).
 text(routine,  s3y, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, en een boekje lezen.").
 next(routine,  s3y, "true", s3yq).
 
-state(routine, s3yq, question).
+state(routine, s3yq, question). % TODO: actual images?
 stateConfig(routine, s3yq, [type=sorter, inputModality=[tablet=1], options=['pyjama'='https://i.pinimg.com/originals/3c/f8/34/3cf8347b5f1108562937acfbb2738140.jpg', 'poetsen'='https://i.pinimg.com/originals/e4/9b/f5/e49bf527682f10088fd1b051475783cb.jpg', 'lezen'='https://i.pinimg.com/474x/3f/ec/dc/3fecdc2f5560ec8a940c08d78ad6ee88.jpg']]).
 text(routine,  s3yq, "Kun jij de plaatjes op volgorde aanklikken zoals jij ze doet voordat je gaat slapen? Je hoeft niet alle plaatjes aan te klikken als sommige dingen niet bij jouw routine horen.").
 next(routine,  s3yq, "true", s3yr).
@@ -322,12 +322,12 @@ text(pauze1,  s5, "Haha, we kunnen allebei goed snurken; laten we verder gaan.")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 state(slaapkamer, s1, say).
-text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!").
+text(slaapkamer,  s1, "Ik heb een hele fijne slaapkamer, kijk maar eens op de tè blèet!"). % TODO: actual image
 image(slaapkamer, s1i, "https://horecatrends.com/wordpress/wp-content/uploads/Robot-Mario-test-het-bed-ht.jpg").
 next(slaapkamer,  s1, "true",  s1i1).
 
 state(slaapkamer, s1i1, say).
-text(slaapkamer,  s1i1, "Dit is mijn kamer. Ik heb veel robot knuffels en een heel zacht bed.").
+text(slaapkamer,  s1i1, "Dit is mijn kamer. Ik heb veel robot knuffels en een heel zacht bed."). % TODO: actual image
 image(slaapkamer, s1i1, "https://horecatrends.com/wordpress/wp-content/uploads/Robot-Mario-test-het-bed-ht.jpg").
 next(slaapkamer,  s1i1, "true",  s1q).
 
@@ -362,7 +362,7 @@ state(slaapkamer, s2i, say).
 text(slaapkamer,  s2i, "Je kunt zo op de tè blèet kiezen uit drie plaatjes: op het eerste plaatje zie je een kamer die helemaal donker is, op het tweede plaatje een kamer die helemaal licht is, en op het derde plaatje een kamer die donker is met een nachtlampje.").
 next(slaapkamer,  s2i, "true",  s2q).
 
-state(slaapkamer, s2q, question). % afbeeldingen: donker, licht, donker met nachtlampje
+state(slaapkamer, s2q, question). % afbeeldingen: donker, licht, donker met nachtlampje (TODO: actual images)
 stateConfig(slaapkamer, s2q, [type=quiz, inputModality=[tablet=1], context='answer_sleep', options=['<img class="w-25" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">', '<img class="w-25" src="https://i.pinimg.com/originals/f4/98/d6/f498d616a68c7690f66a0e413ca11939.jpg">', '<img class="w-25" src="https://media.s-bol.com/xkwQvq9Vz1K9/550x550.jpg">'], correctAnswer=['<img class="w-25" src="https://mrantisnurk.nl/wp-content/uploads/2019/11/Slaapkamer_verduisteren.jpg">']]).
 text(slaapkamer,  s2q, "Welke kamer lijkt het meest op die van jou?").
 next(slaapkamer,  s2q, 'correct', s2d).
@@ -471,8 +471,8 @@ next(pauze2,  s4, "true",  s5).
 
 state(pauze2, s5, say).
 text(pauze2,  s5, "Goed gedaan!").
-audio(pauze2, s4, file, "resources/sounds/applaus.wav"). % TODO: co-created applause?
-%anim(pauze2,  s4, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
+audio(pauze2, s5, file, "resources/sounds/applaus.wav"). % TODO: co-created applause?
+%anim(pauze2,  s5, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 next(pauze2,  s5, "true",  s6).
 
 state(pauze2, s6, say).
@@ -572,7 +572,7 @@ state(etendrinken, s2yi, say).
 text(etendrinken,  s2yi, "Op de tè blèet zie je zo allerlei soorten eten en drinken, zoals cola, energy drink, warme melk, en chocola.").
 next(etendrinken,  s2yi, "true", s2yq).
 
-state(etendrinken, s2yq, question).
+state(etendrinken, s2yq, question). % TODO: actual images
 stateConfig(etendrinken, s2yq, [type=sorter, inputModality=[tablet=1], options=['cola'='https://spng.subpng.com/20191208/ul/transparent-beverage-can-diet-soda-logo-font-cola-cola5e396ebbabb864.8670916515808222037034.jpg', 'energy'='https://mpng.subpng.com/20190429/arl/kisspng-red-bull-x-fighters-red-bull-energy-drink-rbregcan-ieee-sb-university-of-patras-5cc6d9c9dc3831.611955141556535753902.jpg', 'chocola'='https://mpng.subpng.com/20200926/br/transparent-chocolate-bar-5f6fb02a625932.7410209016011551144028.jpg']]).
 text(etendrinken,  s2yq, "Kun jij het eten en drinken aanklikken waarvan jij denkt dat je deze beter niet kunt nemen voordat je gaat slapen?").
 next(etendrinken,  s2yq, 'answer_yes', s2yr).
@@ -628,12 +628,12 @@ text(afsluiting,  s1f, "Fijn dat we zo veel te weten zijn gekomen over hoe jij s
 next(afsluiting,  s1f, "true", s1i2).
 
 state(afsluiting, s1i2, say).
-text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tè blèet. Kijk je mee?").
+text(afsluiting,  s1i2, "Ik zal het nog kort samenvatten en laten zien op de tè blèet. Kijk je mee?"). % TODO: actual image
 image(afsluiting, s1i2, "https://www.elsevier.com/__data/assets/image/0008/822977/iStock-540400568-credit-Michail_Petrov-96-1200x600.jpg").
 next(afsluiting,  s1i2, "true", s1i3).
 
 state(afsluiting, s1i3, say).
-text(afsluiting,  s1i3, "Handig hè, alle tips in één plaatje?").
+text(afsluiting,  s1i3, "Handig hè, alle tips in één plaatje?"). % TODO: actual image
 image(afsluiting, s1i3, "https://www.elsevier.com/__data/assets/image/0008/822977/iStock-540400568-credit-Michail_Petrov-96-1200x600.jpg").
 next(afsluiting,  s1i3, "true", s1i4).
 
