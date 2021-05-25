@@ -217,7 +217,6 @@ next(routine,  s2yy, "true", s3y).
 
 state(routine, s2yn, say).
 text(routine,  s2yn, "Dat is niet erg.").
-next(routine,  s2yn, "true", s4).
 
 state(routine, s3y, say).
 text(routine,  s3y, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, en een boekje lezen.").
@@ -235,7 +234,6 @@ next(routine,  s3yr, "true", s3yt).
 state(routine, s3yt, say).
 text(routine,  s3yt, "Ga vooral door met een routine voordat je gaat slapen.").
 leds(routine,  s3yt, direct, ['FaceLeds', 'ChestLeds'], ['orange', 'orange']).
-next(routine,  s3yt, "true", s4).
 
 %%% NO BRANCH %%%
 state(routine, s1n1, say).
@@ -260,7 +258,6 @@ next(routine,  s2ny, "true", s3n).
 
 state(routine, s2nn, say).
 text(routine,  s2nn, "Oke.").
-next(routine,  s2nn, "true", s4).
 
 state(routine, s3n, say).
 text(routine,  s3n, "Op de tè blèet zie je zo allemaal dingen die je kunt doen voordat je gaat slapen, zoals pyjama aandoen, tanden poetsen, en een boekje lezen.").
@@ -289,18 +286,36 @@ next(routine,  s3nt2, "true", s3nt3).
 
 state(routine, s3nt3, say).
 text(routine,  s3nt3, "Als je dat een paar avonden doet, zal je merken dat het makkelijker wordt om in slaap te vallen.").
-next(routine,  s3nt3, "true", s4).
-
-%%% COMMON END %%%
-state(routine, s4, say).
-text(routine,  s4, "Laten we verder praten over de slaapkamer.").
-leds(routine,  s4, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Pauze co-creating                                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% TODO
+state(pauze1, s1, say).
+leds(pauze1,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
+text(pauze1,  s1, "Zo, we hebben de eerste twee onderwerpen gehad; laten we even pauze houden.").
+next(pauze1,  s1, "true",  s2).
+
+state(pauze1, s2, say).
+text(pauze1,  s2, "Misschien dat je mij wilt helpen om wat geluiden te maken, die kan ik straks namelijk goed gebruiken bij mijn uitleg; ga maar even staan!").
+next(pauze1,  s2, "true",  s3).
+
+% TODO: record applause, cheer, and snore
+% Kun je misschien voor mij applaudisseren? Doe maar in 3, 2, 1. Goed gedaan!
+% En kun je ook juichen, alsof je net een spelletje gewonnen hebt? Doe maar in 3, 2, 1. Super!
+% En als laatste: kun je eens laten horen hoe jij snurkt? Doe maar in 3, 2, 1. Haha, dat is grappig!
+
+state(pauze1, s3, say).
+text(pauze1,  s3, "Ik kan ook goed snurken, hoor maar!").
+next(pauze1,  s3, "true",  s4).
+
+state(pauze1, s4, say).
+audio(pauze1, s4, file, "resources/sounds/tiger2.wav"). % TODO: actual sound
+%anim(pauze1,  s4, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
+next(pauze1,  s4, "true",  s5).
+
+state(pauze1, s5, say).
+text(pauze1,  s5, "Haha, we kunnen allebei goed snurken; laten we verder gaan.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Slaapkamer comfortabel                                 %%%
@@ -335,8 +350,8 @@ text(slaapkamer,  s1i3, "Ik ben heel goed in gordijnen dicht doen, kijk maar.").
 next(slaapkamer,  s1i3, "true",  s1i4).
 
 state(slaapkamer, s1i4, say).
-audio(slaapkamer, s1i4, file, 'resources/sounds/racecar.wav'). % TODO: actual (curtains)
-anim(slaapkamer,  s1i4, file, "resources/gestures/racecar.xml"). % TODO: actual (curtains)
+audio(slaapkamer, s1i4, file, "resources/sounds/racecar.wav"). % TODO: actual (closing curtains)
+anim(slaapkamer,  s1i4, file, "resources/gestures/racecar.xml"). % TODO: actual (closing curtains)
 next(slaapkamer,  s1i4, "true",  s2).
 
 state(slaapkamer, s2, say).
@@ -371,7 +386,7 @@ text(slaapkamer,  s2i2, "Die slaapstofjes helpen je lichaam om beter te slapen."
 next(slaapkamer,  s2i2, "true",  s2i3).
 
 state(slaapkamer, s2i3, say).
-audio(slaapkamer, s2i3, file, 'resources/sounds/tiger2.wav'). % TODO: actual
+audio(slaapkamer, s2i3, file, "resources/sounds/tiger2.wav"). % TODO: co-created snore?
 %anim(slaapkamer,  s2i3, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -380,7 +395,6 @@ audio(slaapkamer, s2i3, file, 'resources/sounds/tiger2.wav'). % TODO: actual
 
 state(piekeren, s1, say).
 text(piekeren,  s1, "Oke, volgende vraag.").
-leds(piekeren,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(piekeren,  s1, "true",  s1q).
 
 state(piekeren, s1q, question).
@@ -437,7 +451,32 @@ text(piekeren,  s2t2, "Weet pappa of mamma dat? Misschien dat je het ook tegen d
 %%% Pauze dansen                                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% TODO
+state(pauze2, s1, say).
+leds(pauze2,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
+text(pauze2,  s1, "Zo poeh, wat hebben we al een hoop besproken, en wat doe je goed mee!").
+next(pauze2,  s1, "true",  s2).
+
+state(pauze2, s2, say).
+text(pauze2,  s2, "Laten we voor nog een korte pauze houden voordat we naar de laatste twee onderwerpen gaan; zullen we even bewegen?").
+next(pauze2,  s2, "true",  s3).
+
+state(pauze2, s3, say).
+text(pauze2,  s3, "Ik zal een muziekje laten horen, en daar op dansen; doe je met mij mee? Ga maar staan!").
+next(pauze2,  s3, "true",  s4).
+
+state(pauze2, s4, say).
+audio(pauze2, s4, file, "resources/sounds/disco.wav"). % TODO: actual dance
+anim(pauze2,  s4, file, "resources/gestures/katrol.xml"). % TODO: actual dance
+next(pauze2,  s4, "true",  s5).
+
+state(pauze2, s5, say).
+text(pauze2,  s5, "Goed gedaan!").
+audio(pauze2, s4, file, "resources/sounds/applaus.wav"). % TODO: co-created applause?
+%anim(pauze2,  s4, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
+next(pauze2,  s5, "true",  s6).
+
+state(pauze2, s6, say).
+text(pauze2,  s6, "Nu kunnen we weer verder gaan.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Bewegen                                                %%%
@@ -445,7 +484,6 @@ text(piekeren,  s2t2, "Weet pappa of mamma dat? Misschien dat je het ook tegen d
 
 state(bewegen, s1, say).
 text(bewegen,  s1, "We hebben nu vooral dingen besproken die te maken hebben met naar bed gaan, je slaapkamer en slapen.").
-leds(bewegen,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(bewegen,  s1, "true",  s1i1).
 
 state(bewegen, s1i1, say).
@@ -481,7 +519,7 @@ text(bewegen,  s1i3, "Ik doe aan robot voetbal.").
 next(bewegen,  s1i3, "true", s1i4).
 
 state(bewegen, s1i4, say).
-audio(bewegen, s1i4, file, 'resources/sounds/applaus.wav').
+audio(bewegen, s1i4, file, "resources/sounds/elephant.wav"). % TODO: co-created cheer?
 %anim(bewegen,  s1i4, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 next(bewegen,  s1i4, "true", s1i5).
 
@@ -498,7 +536,6 @@ text(bewegen,  s1i6, "Dan ben je 's avonds moe en kan je beter slapen.").
 
 state(etendrinken, s1, say).
 text(etendrinken,  s1, "Ook eten en drinken kunnen invloed hebben op je slaap.").
-leds(etendrinken,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(etendrinken,  s1, "true",  s1q).
 
 state(etendrinken, s1q, question).
@@ -564,7 +601,6 @@ text(etendrinken,  s2i3, "Wat je wel kan eten is bij voorbeeld een banaan, daar 
 
 state(afsluiting, s1, say).
 text(afsluiting,  s1, "Nou, volgens mij hebben we nu alles wel zo'n beetje besproken").
-leds(afsluiting,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 next(afsluiting,  s1, "true",  s1i1).
 
 state(afsluiting, s1i1, say).
