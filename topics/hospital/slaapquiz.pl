@@ -11,7 +11,7 @@ text(intro,  s1, "Hallo, ik ben Hero.").
 next(intro,  s1, "true",  s1q).
 
 state(intro, s1q, say).
-stateConfig(intro, s1q, [waitTimer=3000]).
+stateConfig(intro, s1q, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(intro,  s1q, "Hoe heet jij?").
 next(intro,  s1q, "true", s1r).
 
