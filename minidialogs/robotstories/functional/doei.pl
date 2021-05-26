@@ -1,4 +1,62 @@
 %%%% HEADER %%%%
+%% doei_2 %%
+minidialog(doei_2, [type=functional, function=goodbye]).
+
+move(doei_2, s1, say).
+start_interaction_probe(doei_2, s1).
+next(doei_2, s1, "true", s2).
+
+move(doei_2, s2, continuator).
+next(doei_2, s2, [[expCondition=memory]], s3memory1).
+next(doei_2, s2, [[expCondition=control]], s3control1).
+next(doei_2, s2, "true", s4).
+
+move(doei_2, s3memory1, say).
+text(doei_2, s3memory1, "We zijn bijna weer door onze tijd heen voor vandaag, %first_name% ").
+next(doei_2, s3memory1, "true", s3memory2).
+
+move(doei_2, s3memory2, say).
+text(doei_2, s3memory2, "Fijn dat we vandaag weer konden kletsen.").
+next(doei_2, s3memory2, "true", s3memory3).
+
+move(doei_2, s3memory3, say).
+text(doei_2, s3memory3, "De volgende keer gaan we goed oefenen voor de robo spelen").
+next(doei_2, s3memory3, "true", s3memory4).
+
+move(doei_2, s3memory4, say).
+text(doei_2, s3memory4, "En als het gelukt is, zal ik je van alles over mijn droom vertellen.").
+next(doei_2, s3memory4, "true", s4).
+
+move(doei_2, s3control1, say).
+text(doei_2, s3control1, "We zijn bijna door onze tijd heen.").
+next(doei_2, s3control1, "true", s3control2).
+
+move(doei_2, s3control2, say).
+text(doei_2, s3control2, "Het was leuk om met jou te kletsen.").
+next(doei_2, s3control2, "true", s4).
+
+move(doei_2, s4, say).
+text(doei_2, s4, "Maar nog even over vandaag.").
+stop_interaction_probe(doei_2, s4).
+next(doei_2, s4, "true", s5).
+
+move(doei_2, s5, question).
+moveConfig(doei_2, s5, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(doei_2, s5, "Wat vond je het leukste van ons gesprek vandaag?").
+next(doei_2, s5, "success", s6).
+next(doei_2, s5, "fail", s6).
+
+move(doei_2, s6, say).
+text(doei_2, s6, "Dat was ook leuk!").
+next(doei_2, s6, "true", s7).
+
+move(doei_2, s7, say).
+text(doei_2, s7, "Dan is het nu echt tijd om doei te zeggen.").
+next(doei_2, s7, "true", s8).
+
+move(doei_2, s8, say).
+text(doei_2, s8, "Doei %first_name% , tot snel!").
+
 %% doei_1 %%
 minidialog(doei_1, [type=functional, function=goodbye]).
 

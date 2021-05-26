@@ -272,12 +272,15 @@ go_to_posture(test_posture, s2, "Stand", 30).
 %%% Record and Play Motion 			  	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_motion, s1, say).
-text(test_motion, s1, "Je kunt nu een beweging maken met mijn armen").
-set_stiffness(test_motion, s1, ['RArm', 'LArm'], 0).
-next(test_motion, s1, "true", s2).
+set_stiffness(test_motion, s1, ['LArm', 'RArm'], 0).
+next(test_motion, s1, "true", s2a).
+
+move(test_motion, s2a, say).
+text(test_motion, s2a, "3, 2, 1.").
+next(test_motion, s2a, "true", s2).
 
 move(test_motion, s2, say).
-record_motion(test_motion, s2, ['RArm', 'LArm'], 6000).
+record_motion(test_motion, s2, ['LArm', 'RArm'], 4000).
 moveConfig(test_motion, s2, [umVariable=test_motion]).
 next(test_motion, s2, "true", s3).
 

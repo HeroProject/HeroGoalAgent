@@ -6,37 +6,51 @@ move(begroeting_leuke_dag_gehad, s1, say).
 text(begroeting_leuke_dag_gehad, s1, "Hallo %first_name% !").
 next(begroeting_leuke_dag_gehad, s1, "true", s2).
 
-move(begroeting_leuke_dag_gehad, s2, say).
-text(begroeting_leuke_dag_gehad, s2, "Leuk je weer te zien!").
-next(begroeting_leuke_dag_gehad, s2, "true", s3).
+move(begroeting_leuke_dag_gehad, s2, continuator).
+next(begroeting_leuke_dag_gehad, s2, [[expCondition=memory]], s3memory1).
+next(begroeting_leuke_dag_gehad, s2, [[expCondition=control]], s3control1).
+next(begroeting_leuke_dag_gehad, s2, "true", s4).
 
-move(begroeting_leuke_dag_gehad, s3, question).
-moveConfig(begroeting_leuke_dag_gehad, s3, [type=yesno, context='answer_yesno', umVariable=leuke_dag_vandaag]).
-text(begroeting_leuke_dag_gehad, s3, "Had je een leuke dag vandaag?").
-next(begroeting_leuke_dag_gehad, s3, "answer_yes", s4ja1).
-next(begroeting_leuke_dag_gehad, s3, "answer_no", s4nee1).
-next(begroeting_leuke_dag_gehad, s3, "answer_dontknow", s4nee1).
-next(begroeting_leuke_dag_gehad, s3, "fail", s4nee1).
+move(begroeting_leuke_dag_gehad, s3control1, say).
+anim(begroeting_leuke_dag_gehad, s3control1, file, "resources/gestures/wave1.json").
+next(begroeting_leuke_dag_gehad, s3control1, "true", s4).
 
-move(begroeting_leuke_dag_gehad, s4ja1, say).
-text(begroeting_leuke_dag_gehad, s4ja1, "Gelukkig!").
-next(begroeting_leuke_dag_gehad, s4ja1, "true", s4ja2).
+move(begroeting_leuke_dag_gehad, s3memory1, say).
+audio(begroeting_leuke_dag_gehad, s3memory1, id, handshake_sound).
+anim(begroeting_leuke_dag_gehad, s3memory1, id, handshake_motion).
+next(begroeting_leuke_dag_gehad, s3memory1, "true", s4).
 
-move(begroeting_leuke_dag_gehad, s4ja2, question).
-moveConfig(begroeting_leuke_dag_gehad, s4ja2, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=gedaan_vandaag]).
-text(begroeting_leuke_dag_gehad, s4ja2, "Wat heb je dan gedaan?").
-next(begroeting_leuke_dag_gehad, s4ja2, "success", s4ja3).
-next(begroeting_leuke_dag_gehad, s4ja2, "fail", s4ja3).
+move(begroeting_leuke_dag_gehad, s4, say).
+text(begroeting_leuke_dag_gehad, s4, "Leuk je weer te zien!").
+next(begroeting_leuke_dag_gehad, s4, "true", s5).
 
-move(begroeting_leuke_dag_gehad, s4ja3, say).
-text(begroeting_leuke_dag_gehad, s4ja3, "Dat klinkt goed.").
+move(begroeting_leuke_dag_gehad, s5, question).
+moveConfig(begroeting_leuke_dag_gehad, s5, [type=yesno, context='answer_yesno', umVariable=leuke_dag_vandaag]).
+text(begroeting_leuke_dag_gehad, s5, "Had je een leuke dag vandaag?").
+next(begroeting_leuke_dag_gehad, s5, "answer_yes", s6ja1).
+next(begroeting_leuke_dag_gehad, s5, "answer_no", s6nee1).
+next(begroeting_leuke_dag_gehad, s5, "answer_dontknow", s6nee1).
+next(begroeting_leuke_dag_gehad, s5, "fail", s6nee1).
 
-move(begroeting_leuke_dag_gehad, s4nee1, say).
-text(begroeting_leuke_dag_gehad, s4nee1, "Oh, dat is jammer!").
-next(begroeting_leuke_dag_gehad, s4nee1, "true", s4nee2).
+move(begroeting_leuke_dag_gehad, s6ja1, say).
+text(begroeting_leuke_dag_gehad, s6ja1, "Gelukkig!").
+next(begroeting_leuke_dag_gehad, s6ja1, "true", s6ja2).
 
-move(begroeting_leuke_dag_gehad, s4nee2, say).
-text(begroeting_leuke_dag_gehad, s4nee2, "Laten we het dan snel over iets leuks hebben.").
+move(begroeting_leuke_dag_gehad, s6ja2, question).
+moveConfig(begroeting_leuke_dag_gehad, s6ja2, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=gedaan_vandaag]).
+text(begroeting_leuke_dag_gehad, s6ja2, "Wat heb je dan gedaan?").
+next(begroeting_leuke_dag_gehad, s6ja2, "success", s6ja3).
+next(begroeting_leuke_dag_gehad, s6ja2, "fail", s6ja3).
+
+move(begroeting_leuke_dag_gehad, s6ja3, say).
+text(begroeting_leuke_dag_gehad, s6ja3, "Dat klinkt goed.").
+
+move(begroeting_leuke_dag_gehad, s6nee1, say).
+text(begroeting_leuke_dag_gehad, s6nee1, "Oh, dat is jammer!").
+next(begroeting_leuke_dag_gehad, s6nee1, "true", s6nee2).
+
+move(begroeting_leuke_dag_gehad, s6nee2, say).
+text(begroeting_leuke_dag_gehad, s6nee2, "Laten we het dan snel over iets leuks hebben.").
 
 %% eerste_begroeting %%
 minidialog(eerste_begroeting, [type=functional, function=greeting]).

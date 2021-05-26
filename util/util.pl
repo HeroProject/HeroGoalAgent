@@ -95,23 +95,17 @@ matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; m
 matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesDependency(T), !.
-matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
+matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
 matchesDependency([]).
 
-matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), ! ; matchesConditionals(Rest), !.
-matchesConditional([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesConditional(T), !.
-matchesConditional([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesConditional(T), !.
-matchesConditional([[umVariable=Var, filter=Filter, values=Values] | T]) :- listMatchInUserModel(Var, Filter, Values), matchesConditional(T), !.
-matchesConditional([[expCondition=Cond] | T]) :- expCondition(Cond), matchesConditional(T), !.
-matchesConditional([]).
+matchesConditionals([Conditional | Rest]) :- matchesConditional(Conditional), matchesConditionals(Rest), !.
+matchesConditionals([]).
+matchesConditional([umVariable=Var, filter=green, values=["_any"]]) :- getUserModelValue(Var, _).
+matchesConditional([umVariable=Var, filter=red, values=["_any"]]) :- not(getUserModelValue(Var, _)).
+matchesConditional([umVariable=Var, filter=Filter, values=Values]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values).
+matchesConditional([expCondition=Cond]) :- expCondition(Cond).
 
-extractVariablesFromConditionals([Conditional | Rest], UniqueVars) 
-	:- extractVariablesFromConditional(Conditional, Vars), extractVariablesFromConditionals(Rest, VarsRest),
-       append(Vars, VarsRest, VarsTotal), sort(VarsTotal, UniqueVars).
-extractVariablesFromConditionals([], []).
-extractVariablesFromConditional([[umVariable=Var, filter=_, values=_] | T], [Var | RestVariables])
-	:- extractVariablesFromConditional(T, RestVariables).
-extractVariablesFromConditional([], []).
+extractVariablesFromConditionals(Conditionals, Vars) :- findall(Var, (flatten(Conditionals, FConds), member((umVariable=Var), FConds)), Vars).
 
 findSuitableChitchat(Chitchat, topic) 
 	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
@@ -174,12 +168,13 @@ updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue)
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel, !.
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
-getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
+%getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
 
-listMatchInUserModel(Key, green, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), member(Value, Values), !.
-listMatchInUserModel(Key, red, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), not(member(Value, Values)), !.
+listMatchInUserModel(Key, green, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), (member(Value, Values) ; atom_string(Value, ValueS), member(ValueS, Values)), !.
+listMatchInUserModel(Key, red, RValues) :- valueListFromKeyList(RValues, Values), getUserModelValue(Key, Value), not(member(Value, Values)), atom_string(Value, ValueS), not(member(ValueS, Values)), !.
+
 
 % Text string processing (replacing all mentioned keys with their (presumably) stored values.
 % If you're using variables in text strings, make sure there always is a value for these variables in answers!

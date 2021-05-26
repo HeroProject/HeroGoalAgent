@@ -93,7 +93,13 @@ module performDialogMove(Minidialog, Move) {
 	%%%% AUDIO %%%%
 	% Prepare co-creation of audio
 	if bel(prepare_sound_anim(Minidialog, Move), keyListValues(Minidialog, Move, [umVariable, option1, option2, recordTime], [ID, Option1, Option2, RT]), session(Session))
-		then delete(session(Session)) + insert(session([co_sound | Session]), waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
+		then 
+		{
+			if true then delete(session(Session)) + insert(waitingForSoundAnim(ID), animOption(ID, 1, Option1), animOption(ID, 2, Option2), soundConfig(ID, RT)).
+			
+			if bel(keyValue(Minidialog, Move, continue_with, Continue)) then insert(session([co_sound, Continue | Session])).
+			if not(bel(keyValue(Minidialog, Move, continue_with, _))) then insert(session([co_sound | Session])).
+		}
 	
 	% Save result of audio co-creation
 	if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then

@@ -34,7 +34,12 @@ module loadInteractantData(Minidialog) {
 			forall bel(insert_minidialog(Minidialog, Move, NestedMinidialog), keyValue(Minidialog, Move, loadUserModel, "true"))
 				do loadInteractantData(NestedMinidialog).
 			
+			% Load variables for conditionals
 			forall bel(next(Minidialog, _, Conditionals, _), extractVariablesFromConditionals(Conditionals, Keys))
+				do loadInteractantDataHelper(Keys).
+			
+			%Load variables for dependencies
+			forall bel(dependencies(Minidialog, Conditionals), extractVariablesFromConditionals(Conditionals, Keys))
 				do loadInteractantDataHelper(Keys).
 		}
 }

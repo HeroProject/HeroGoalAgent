@@ -93,7 +93,7 @@ text(co_sound,  smaken2, "Maak je geluid in 3, 2, 1.").
 next(co_sound,  smaken2, "true",  smaken3).
 
 move(co_sound, smaken3, audioInput).
-next(co_zoo_lion, smaken3, "true", smaken4).
+next(co_sound, smaken3, "true", smaken4).
 
 move(co_sound, smaken4, say).
 text(co_sound,  smaken4, "Gaaf zeg! Dat kan ik zo goed gebruiken.").
