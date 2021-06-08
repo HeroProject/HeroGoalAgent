@@ -2,7 +2,6 @@
 %%% 		        GENERAL TOPICS                     %%%
 %%%   Collection of general conversational topics for Hero %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:-dynamic display/3. % currently unused browser action
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Wake up	    		                           %%%

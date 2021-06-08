@@ -68,9 +68,9 @@ module performStateActions(T, S) {
 	if bel(image(T, S, I), img(I, Img), html(Img, Html)) 
 		then renderPage(Html).
 	% Clear the page otherwise
-	if bel(text(T, S, _), not(display(T, S, _)), not(image(T, S, _)), 
-			not(keyValue(T, S, type, _)), html('',Html))
-		then renderPage(Html).
+	%if bel(text(T, S, _), not(display(T, S, _)), not(image(T, S, _)), 
+	%		not(keyValue(T, S, type, _)), html('',Html))
+	%	then renderPage(Html).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					CO-CREATION					%%
