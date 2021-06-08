@@ -467,7 +467,7 @@ text(pauze2,  s1, "Zo poeh, wat hebben we al een hoop besproken, en wat doe je g
 next(pauze2,  s1, _, s2).
 
 state(pauze2, s2, say).
-text(pauze2,  s2, "Laten we voor nog een korte pauze houden voordat we naar de laatste twee onderwerpen gaan; zullen we even bewegen?").
+text(pauze2,  s2, "Laten we nog een korte pauze houden voordat we naar de laatste twee onderwerpen gaan; zullen we even bewegen?").
 next(pauze2,  s2, _, s3).
 
 state(pauze2, s3, say).
@@ -476,7 +476,7 @@ next(pauze2,  s3, _, s4).
 
 state(pauze2, s4, say).
 audio(pauze2, s4, file, "resources/sounds/disco.wav"). % TODO: actual dance
-anim(pauze2,  s4, file, "resources/gestures/katrol.xml"). % TODO: actual dance
+%anim(pauze2,  s4, file, "resources/gestures/katrol.xml"). % TODO: actual dance
 next(pauze2,  s4, _, s5).
 
 state(pauze2, s5, say).
