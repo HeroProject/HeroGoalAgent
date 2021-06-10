@@ -1,0 +1,30 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
+use loadDependencyMetadataHelper as module.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+order=linearall.
+
+module loadDependencyMetadata(Session) {
+	if bel(nth0(0, Session, SessionItem, RestOfSession), length(RestOfSession, L))
+		then {
+			if bel(SessionItem = [theme=Theme], findall(ID, (minidialog(ID, [type=chitchat, theme=Theme, topic=_])), Minidialogs))
+				then loadDependencyMetadataHelper(Minidialogs).
+			
+			if bel(SessionItem = [topic=Topic], findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=Topic])), Minidialogs))
+				then loadDependencyMetadataHelper(Minidialogs).
+				
+			if bel(SessionItem = [thread=Thread], findall(ID, (minidialog(ID, [type=narrative, thread=Thread, position=_])), Minidialogs))
+				then loadDependencyMetadataHelper(Minidialogs).
+						
+			if bel(L \= 0) then loadDependencyMetadata(RestOfSession).
+			
+			if bel(L = 0, waitingForMetadata) then delete(waitingForMetadata).
+		}
+}

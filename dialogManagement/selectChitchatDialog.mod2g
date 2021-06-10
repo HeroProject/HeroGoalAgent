@@ -6,14 +6,12 @@ use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
 use '../minidialogs/robotstories/functional/*.pl' as knowledge.
 use '../minidialogs/hospital/*.pl' as knowledge.
 use '../sessions' as knowledge.
-use '../userModel/loadInteractantData' as module.
 use '../hero_actions' as actionspec.
 
 order=linear.
 
 module selectChitchatDialog(SessionElement, RemainingElements) {
 
-	
 	% Select a new minidialog of a topic with depedencies.
 	if bel(SessionElement = [topic=Topic],
 			minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),

@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_session_sound_1a, test_session_sound_1b, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 
 % Multi session
@@ -25,23 +25,21 @@ sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
 %%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_test, [general_wakeup, lievelingsdier, general_rest]).
+sessionDesign(robotstories_test, [general_wakeup, general_rest]).
 %sessionDesign(robotstories_test1, [general_wakeup, dagdromen_sport, general_rest]).
 %sessionDesign(robotstories_test2, [general_wakeup, [theme='_chitchat'], general_rest]).
 
 sessionDesign(robotstories_memory_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_touch, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, [thread=robospelen], [thread=robospelen], secret_handshake_maken, doei_1, general_rest]).
 sessionDesign(robotstories_memory_2, [general_wakeup, begroeting_leuke_dag_gehad, [thread=robospelen], lievelingsdier, [thread=dromen], [thread=robospelen], [thread=robospelen], draadjesschool, [thread=robospelen], doei_2, general_rest]).
-sessionDesign(robotstories_memory_3, [general_wakeup, [theme=lievelings], robospelen_7_oefenopdracht, [theme=personalia], [thread=dromen], [theme=verschillen_robot_mens], robospelen_8_moeilijk, general_rest]).
-sessionDesign(robotstories_memory_4, [general_wakeup, robospelen_9_vuur, [theme=natuur], [thread=dromen], [thread=youtubefilmpjes], robospelen_10_gebreken, general_rest]).
-sessionDesign(robotstories_memory_5, [general_wakeup, [thread=youtubefilmpjes], robospelen_11_bijna, [thread=dromen], [theme=personalia], robospelen_12_peptalk, general_rest]).
-sessionDesign(robotstories_memory_6, [general_wakeup, robospelen_13_tweede, [theme=personalia], [thread=dromen], [theme='_chitchat'], robospelen_14_bedankt, general_rest]).
+sessionDesign(robotstories_memory_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, [theme=dier], lievelingseten, [thread=robospelen], lievelingskleur, doei_3, general_rest]).
+sessionDesign(robotstories_memory_4, [general_wakeup, begroeting_4, [topic=eten], [thread=robospelen], robotkleren, [thread=dromen], youtubefilmpjes, [thread=robospelen], doei_4, general_rest]).
+sessionDesign(robotstories_memory_5, [general_wakeup, begroeting_5, [thread=robospelen], [theme=youtubefilmpjes], [thread=dromen], robot_willen_zijn, [thread=robospelen], doei_5, general_rest]).
 
 sessionDesign(robotstories_control_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_touch, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, robospelen_2_springen, robospelen_3_coach, secret_handshake_maken, doei_1, general_rest]).
 sessionDesign(robotstories_control_2, [general_wakeup, begroeting_leuke_dag_gehad, robospelen_4_ingeschreven, lievelingsdier, droom_op_bestelling, robospelen_5_info, robospelen_6_gedachtelezen, draadjesschool, robospelen_7_info_vervolg, doei_2, general_rest]).
-sessionDesign(robotstories_control_3, [general_wakeup, [theme=lievelings], robospelen_7_oefenopdracht, [theme=personalia], [thread=dromen], [theme=verschillen_robot_mens], robospelen_8_moeilijk, general_rest]).
-sessionDesign(robotstories_control_4, [general_wakeup, robospelen_9_vuur, [theme=natuur], [thread=dromen], [thread=youtubefilmpjes], robospelen_10_gebreken, general_rest]).
-sessionDesign(robotstories_control_5, [general_wakeup, [thread=youtubefilmpjes], robospelen_11_bijna, [thread=dromen], [theme=personalia], robospelen_12_peptalk, general_rest]).
-sessionDesign(robotstories_control_6, [general_wakeup, robospelen_13_tweede, [theme=personalia], [thread=dromen], [theme='_chitchat'], robospelen_14_bedankt, general_rest]).
+sessionDesign(robotstories_control_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, lievelingsdier_control, lievelingseten, robospelen_8_oefenopdracht, lievelingskleur, doei_3, general_rest]).
+sessionDesign(robotstories_control_4, [general_wakeup, begroeting_4, plaats_in_de_natuur, robospelen_9_bijna, robotkleren, robospelen_droom, youtubefilmpjes, robospelen_10_peptalk, doei_4, general_rest]).
+sessionDesign(robotstories_control_5, [general_wakeup, begroeting_5, robospelen_11_tweede, superkracht, dromen_conclusie, robot_willen_zijn, robospelen_12_bedankt, doei_5, general_rest]).
 
 %%%%%%%%%%%%%% Co-creation user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Experimental condition
@@ -89,19 +87,19 @@ sessionDesign(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_re
 useGui(false).
 % When GUI is used this userId and these localVariables are ignored.
 % When no GUI is uses, these variables need to be specified.
-setContinueSession(false).
+setContinueSession(true).
 setBasePosture('Stand').
 
 % Experimental settings
-setUserId('999'). % user id
-setSessionId(1). % session id
-useMemory(false). % condition
+setUserId('40'). % user id
+setSessionId(3). % session id
+useMemory(true). % condition
 
 
-%multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5, robotstories_memory_6]).
-multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5, robotstories_control_6]).
+multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5]).
+%multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5]).
 
-addLocalVariable(first_name, ""). % name empty for condition 'false'
+addLocalVariable(first_name, "Soraya"). % name empty for condition 'false'
 % Record the interaction
 recordInteractionActive(true).
 

@@ -272,7 +272,7 @@ go_to_posture(test_posture, s2, "Stand", 30).
 %%% Record and Play Motion 			  	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_motion, s1, say).
-set_stiffness(test_motion, s1, ['LArm', 'RArm'], 0).
+set_stiffness(test_motion, s1, ['RArm'], 0).
 next(test_motion, s1, "true", s2a).
 
 move(test_motion, s2a, say).
@@ -280,7 +280,7 @@ text(test_motion, s2a, "3, 2, 1.").
 next(test_motion, s2a, "true", s2).
 
 move(test_motion, s2, say).
-record_motion(test_motion, s2, ['LArm', 'RArm'], 4000).
+record_motion(test_motion, s2, ['RArm'], 3000).
 moveConfig(test_motion, s2, [umVariable=test_motion]).
 next(test_motion, s2, "true", s3).
 
@@ -537,4 +537,16 @@ text(test_getal, s2_others, "Oke, %test_getal%").
 
 move(test_getal, s2_fail, say).
 text(test_getal, s2_fail, "Dat ging mis.").
+
+%%% Show feet %%%
+move(test_feet, s1, say).
+text(test_feet, s1, "Kijk, mijn voeten zijn nu groen en rood").
+leds(test_feet, s1, direct, ["LeftFootLeds", "RightFootLeds"], ["red", "green"]).
+moveConfig(test_feet, s1, [next='RightBumperPressed']).
+next(test_feet, s1, "true", s2).
+
+move(test_feet, s2, say).
+text(test_feet, s2, "Dat was het.").
+leds(test_feet, s2, reset).
+%% 
 

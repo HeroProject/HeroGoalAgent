@@ -85,6 +85,7 @@ text(plaats_in_de_natuur, s12zee26, "Maar ik kan wel het geluid van de zee afspe
 next(plaats_in_de_natuur, s12zee26, "true", s12zee27).
 
 move(plaats_in_de_natuur, s12zee27, say).
+audio(plaats_in_de_natuur, s12zee27, file, "resources/sounds/nog_te_vinden_geluid_van_golven.wav").
 
 move(plaats_in_de_natuur, s12bos1, say).
 text(plaats_in_de_natuur, s12bos1, "Ik ga ook graag naar het bos!").

@@ -3,7 +3,7 @@
 minidialog(binaire_getallen, [type=chitchat, theme=lievelings, topic=getal]).
 
 move(binaire_getallen, s1, say).
-text(binaire_getallen, s1, "Hee %first_name% , ik moet een robotrugnummer kiezen voor de robo spelen!").
+text(binaire_getallen, s1, "Hee %first_name% , ik moet een robot rugnummer kiezen voor de robo spelen!").
 next(binaire_getallen, s1, "true", s2).
 
 move(binaire_getallen, s2, question).
@@ -19,7 +19,7 @@ text(binaire_getallen, s3ja1, "Cool.").
 next(binaire_getallen, s3ja1, "true", s3ja2).
 
 move(binaire_getallen, s3ja2, question).
-moveConfig(binaire_getallen, s3ja2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fast=yes, umVariable=robot_rugnummer]).
+moveConfig(binaire_getallen, s3ja2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], umVariable=robot_rugnummer]).
 text(binaire_getallen, s3ja2, "Wat is jouw geluksgetal?").
 next(binaire_getallen, s3ja2, 0, s3011).
 next(binaire_getallen, s3ja2, 1, s3011).
@@ -31,7 +31,7 @@ text(binaire_getallen, s3nee1, "Misschien is het typisch iets voor robots om van
 next(binaire_getallen, s3nee1, "true", s3nee2).
 
 move(binaire_getallen, s3nee2, question).
-moveConfig(binaire_getallen, s3nee2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], fast=yes, umVariable=robot_rugnummer]).
+moveConfig(binaire_getallen, s3nee2, [type=input, context="integer", options=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], umVariable=robot_rugnummer]).
 text(binaire_getallen, s3nee2, "Welk rugnummer zal ik dan nemen voor de robo spelen?").
 next(binaire_getallen, s3nee2, 0, s3011).
 next(binaire_getallen, s3nee2, 1, s3011).
@@ -57,7 +57,7 @@ text(binaire_getallen, s3fail1, "Laten we gaan voor %robot_rugnummer% als rugnum
 next(binaire_getallen, s3fail1, "true", s4).
 
 move(binaire_getallen, s4, say).
-text(binaire_getallen, s4, "Ik heb er dus twee: nul en één.").
+text(binaire_getallen, s4, "Ik heb dus twee geluksgetallen: nul en één.").
 next(binaire_getallen, s4, "true", s5).
 
 move(binaire_getallen, s5, say).
@@ -76,51 +76,6 @@ move(binaire_getallen, s8, say).
 text(binaire_getallen, s8, "Of eigenlijk, nul is nee, één is ja.").
 next(binaire_getallen, s8, "true", s9).
 
-move(binaire_getallen, s9, question).
-moveConfig(binaire_getallen, s9, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=vraag_heros_naam]).
-text(binaire_getallen, s9, "Vraag jij mij eens of ik Hero heet?").
-next(binaire_getallen, s9, "success", s10hero1).
-next(binaire_getallen, s9, "fail", s10fail1).
-
-move(binaire_getallen, s10hero1, say).
-text(binaire_getallen, s10hero1, "Ja! Ik heet Hero!").
-next(binaire_getallen, s10hero1, "true", s10hero2).
-
-move(binaire_getallen, s10hero2, say).
-text(binaire_getallen, s10hero2, "Toen je dat net vroeg, stroomden je woorden zo, floep, mijn oren in, en daar werden ze heel veel nullen en enen achter elkaar.").
-next(binaire_getallen, s10hero2, "true", s10hero3).
-
-move(binaire_getallen, s10hero3, say).
-text(binaire_getallen, s10hero3, "En die cijfers vragen dan aan de cijfers in mijn hersens: heet jij Hero?").
-next(binaire_getallen, s10hero3, "true", s10hero4).
-
-move(binaire_getallen, s10hero4, say).
-text(binaire_getallen, s10hero4, "En dat is zo, dus dan zeggen mijn hersens: dikke vette één, en dan zeg ik Ja!").
-
-move(binaire_getallen, s10fail1, say).
-text(binaire_getallen, s10fail1, "Dat begreep ik niet helemaal, wat leuk!").
-next(binaire_getallen, s10fail1, "true", s10fail2).
-
-move(binaire_getallen, s10fail2, say).
-text(binaire_getallen, s10fail2, "Als jij iets tegen mij zegt, stromen je woorden zo, floep, mijn oren in.").
-next(binaire_getallen, s10fail2, "true", s10fail3).
-
-move(binaire_getallen, s10fail3, say).
-text(binaire_getallen, s10fail3, "Daar worden ze heel veel nullen en enen achter elkaar.").
-next(binaire_getallen, s10fail3, "true", s10fail4).
-
-move(binaire_getallen, s10fail4, say).
-text(binaire_getallen, s10fail4, "En die cijfers vragen aan mijn hersens of ik snap wat je zegt.").
-next(binaire_getallen, s10fail4, "true", s10fail5).
-
-move(binaire_getallen, s10fail5, say).
-text(binaire_getallen, s10fail5, "En als dat niet zo is, zeggen mijn hersens, nul!").
-next(binaire_getallen, s10fail5, "true", s10fail6).
-
-move(binaire_getallen, s10fail6, say).
-text(binaire_getallen, s10fail6, "En dan weet ik dat ik nog heel veel van jou te leren heb.").
-next(binaire_getallen, s10fail6, "true", s10fail7).
-
-move(binaire_getallen, s10fail7, say).
-text(binaire_getallen, s10fail7, "Daarom is nul een van mijn lievelingsgetallen!").
+move(binaire_getallen, s9, say).
+text(binaire_getallen, s9, "Dat was een leuk robot feitje").
 

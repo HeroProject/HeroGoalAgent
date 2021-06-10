@@ -21,7 +21,9 @@ module hero_main {
 	
 		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), multiSessionDesign(MultiSessionDesign),
 				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))
-			then delete(waitingForSession) + insert(session(Session)) + adopt(session([])) + nextMinidialog.
+			then delete(waitingForSession) + insert(session(Session), waitingForMetadata) + loadDependencyMetadata(Session).
+		
+		if bel(session(_), not(waitingForMetadata), memoryTasksCompleted) then adopt(session([])) + nextMinidialog.
 	}
 	
 	% Execute the move actions

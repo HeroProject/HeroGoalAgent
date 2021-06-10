@@ -20,7 +20,7 @@
 % Predicates for memory processing
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
-	waitingForSession/0, waitingForHistory/0,
+	waitingForSession/0, waitingForMetadata/0, waitingForHistory/0,
 	waitingForGuiData/1,
 	userId/1, sessionId/1,
 	continueSession/0, localVariable/2,
@@ -106,6 +106,12 @@ matchesConditional([umVariable=Var, filter=Filter, values=Values]) :- Values\=["
 matchesConditional([expCondition=Cond]) :- expCondition(Cond).
 
 extractVariablesFromConditionals(Conditionals, Vars) :- findall(Var, (flatten(Conditionals, FConds), member((umVariable=Var), FConds)), Vars).
+extractValuesFromConditionals(Conditionals, Values) :-
+    findall(Value, (flatten(Conditionals, FConds), member((values=Value), FConds)), ValuesUF), flatten(ValuesUF, ValuesUS), sort(ValuesUS, Values).
+
+%extractVariablesFromValuesInConditionals(Conditionals, Vars) :-
+    %findall(Value, (flatten(Conditionals, FConds), member((values=Value), FConds)), Values),
+    %findall(Var, (flatten(Values, FValues), (   member(Var, FValues), getUserModelValue(Var, _); member(VarS, FValues), atom_string(Var, VarS), getUserModelValue(Var, _))), VarsUS), sort(VarsUS, Vars).
 
 findSuitableChitchat(Chitchat, topic) 
 	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
@@ -222,8 +228,10 @@ odd_elements([_, X| L], [X | R]) :- odd_elements(L, R), !.
 
 % Create list of values from a list of keys of user model entries
 valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- getUserModelValue(Hkey, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
+valueListFromKeyList([Hkey | Tkey], [Hvalue | Tvalue]) :- atom_string(HkeyA, Hkey), getUserModelValue(HkeyA, Hvalue), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList([Hkey | Tkey], [Hkey | Tvalue]) :- not(getUserModelValue(Hkey, _)), valueListFromKeyList(Tkey, Tvalue), !.
 valueListFromKeyList(Key, List) :- getUserModelValue(Key, List), !.
+valueListFromKeyList(Key, List) :- atom_string(KeyA, Key), getUserModelValue(KeyA, List), !.
 valueListFromKeyList([], []).
 
 %Parse led animation (a nested list) to a string to store in memory
@@ -268,8 +276,8 @@ interaction_probe_id(Count, ID) :- atom_string(Count, SCount), userId(UserId), a
 %%% Move completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Ready for action
-readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)), not(audio(Minidialog, Move, id, _)).
-readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)), audio(Minidialog, Move, id, ID), getUserModelValue(ID, _).
+readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)), not(audio(Minidialog, Move, id, _)), memoryTasksCompleted.
+readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)), audio(Minidialog, Move, id, ID), getUserModelValue(ID, _), memoryTasksCompleted.
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
 eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).

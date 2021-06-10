@@ -38,8 +38,8 @@ module loadInteractantData(Minidialog) {
 			forall bel(next(Minidialog, _, Conditionals, _), extractVariablesFromConditionals(Conditionals, Keys))
 				do loadInteractantDataHelper(Keys).
 			
-			%Load variables for dependencies
-			forall bel(dependencies(Minidialog, Conditionals), extractVariablesFromConditionals(Conditionals, Keys))
+			% Load values from conditionals because they can be potential variables
+			forall bel(next(Minidialog, _, Conditionals, _), extractValuesFromConditionals(Conditionals, Keys))
 				do loadInteractantDataHelper(Keys).
 		}
 }

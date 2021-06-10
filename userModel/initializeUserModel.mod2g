@@ -40,4 +40,5 @@ module initializeUserModel {
 	% Initialize history
 	if bel(continueSession, userId(UserId), useMemory(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
 	if bel(not(continueSession), userId(UserId), sessionId(SessionId), useMemory(true)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+	
 }

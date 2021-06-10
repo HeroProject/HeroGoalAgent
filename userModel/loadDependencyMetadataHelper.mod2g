@@ -1,0 +1,23 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
+use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
+use '../minidialogs/robotstories/functional/*.pl' as knowledge.
+use loadInteractantDataHelper as module.
+use '../sessions' as knowledge.
+use '../hero_actions' as actionspec.
+
+order=linearall.
+
+module loadDependencyMetadataHelper(Minidialogs) {
+	if bel(nth0(0, Minidialogs, Minidialog, RestOfMinidialogs), length(RestOfMinidialogs, L))
+		then {
+			%Load variables for dependencies
+			forall bel(dependencies(Minidialog, Conditionals), extractVariablesFromConditionals(Conditionals, Keys))
+				do loadInteractantDataHelper(Keys).
+			
+			if bel(L \= 0) then loadDependencyMetadataHelper(RestOfMinidialogs).
+		}
+}
