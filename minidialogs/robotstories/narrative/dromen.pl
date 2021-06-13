@@ -864,100 +864,157 @@ move(robospelen_droom, s9, say).
 text(robospelen_droom, s9, "Ik zat in een achtbaan.").
 next(robospelen_droom, s9, "true", s10).
 
-move(robospelen_droom, s10, say).
-text(robospelen_droom, s10, "Het karretje van de achtbaan had een stuur en achter het stuur zat jij").
-next(robospelen_droom, s10, "true", s11).
+move(robospelen_droom, s10, continuator).
+next(robospelen_droom, s10, [[expCondition=memory]], s11memory1).
+next(robospelen_droom, s10, [[expCondition=control]], s11control1).
+next(robospelen_droom, s10, "true", s12).
 
-move(robospelen_droom, s11, say).
-text(robospelen_droom, s11, "Er was een grote splitsing in de achtbaan en je stuurde naar links").
-next(robospelen_droom, s11, "true", s12).
+move(robospelen_droom, s11memory1, say).
+text(robospelen_droom, s11memory1, "De achtbaan was helemaal %lievelingskleur%, jouw lievelingskleur").
+next(robospelen_droom, s11memory1, "true", s12).
+
+move(robospelen_droom, s11control1, say).
+text(robospelen_droom, s11control1, "De achtbaan was helemaal geel.").
+next(robospelen_droom, s11control1, "true", s12).
 
 move(robospelen_droom, s12, say).
-text(robospelen_droom, s12, "Toen reden langs een beeldscherm waarop onze ontmoeting te zien was").
+text(robospelen_droom, s12, "Het karretje van de achtbaan had een stuur en achter het stuur zat jij").
 next(robospelen_droom, s12, "true", s13).
 
 move(robospelen_droom, s13, say).
-text(robospelen_droom, s13, "Wat een fijne herinnering was dat zeg, toen kenden we elkaar nog helemaal niet zo goed als nu!").
+text(robospelen_droom, s13, "Er was een grote splitsing in de achtbaan en je stuurde naar links").
 next(robospelen_droom, s13, "true", s14).
 
 move(robospelen_droom, s14, say).
-text(robospelen_droom, s14, "Jij zat tegenover me").
+text(robospelen_droom, s14, "Toen reden langs een beeldscherm waarop onze ontmoeting te zien was").
 next(robospelen_droom, s14, "true", s15).
 
 move(robospelen_droom, s15, say).
-text(robospelen_droom, s15, "En ik stond hier").
+text(robospelen_droom, s15, "Wat een fijne herinnering was dat zeg, toen kenden we elkaar nog helemaal niet zo goed als nu!").
 next(robospelen_droom, s15, "true", s16).
 
 move(robospelen_droom, s16, say).
-text(robospelen_droom, s16, "Eigenlijk precies zoals nu behalve terug in de tijd").
+text(robospelen_droom, s16, "Jij zat tegenover me").
 next(robospelen_droom, s16, "true", s17).
 
 move(robospelen_droom, s17, say).
-text(robospelen_droom, s17, "En in mijn droom had jij een bizar hoedje op").
+text(robospelen_droom, s17, "En ik stond hier").
 next(robospelen_droom, s17, "true", s18).
 
 move(robospelen_droom, s18, say).
-text(robospelen_droom, s18, "Daarna ging de achtbaan recht omlaag!").
+text(robospelen_droom, s18, "Eigenlijk precies zoals nu behalve terug in de tijd").
 next(robospelen_droom, s18, "true", s19).
 
 move(robospelen_droom, s19, say).
-text(robospelen_droom, s19, "Door het water").
+text(robospelen_droom, s19, "En in mijn droom had jij een bizar hoedje op").
 next(robospelen_droom, s19, "true", s20).
 
-move(robospelen_droom, s20, say).
-text(robospelen_droom, s20, "Het was een droom dus ik werd niet nat en ik liep niet vast").
-next(robospelen_droom, s20, "true", s21).
+move(robospelen_droom, s20, continuator).
+next(robospelen_droom, s20, [[expCondition=memory]], s21memory1).
+next(robospelen_droom, s20, [[expCondition=control]], s21control1).
+next(robospelen_droom, s20, "true", s22).
 
-move(robospelen_droom, s21, say).
-text(robospelen_droom, s21, "En er was een groot onderwaterscherm").
-next(robospelen_droom, s21, "true", s22).
+move(robospelen_droom, s21memory1, say).
+text(robospelen_droom, s21memory1, "Je vertelde me dat je later %beroep_van_kind% wilde worden.").
+next(robospelen_droom, s21memory1, "true", s22).
 
-move(robospelen_droom, s22, say).
-text(robospelen_droom, s22, "Daarop zag ik het rò hze bos!").
-next(robospelen_droom, s22, "true", s23).
+move(robospelen_droom, s21control1, say).
+text(robospelen_droom, s21control1, "En we keken elkaar aan.").
+next(robospelen_droom, s21control1, "true", s22).
 
-move(robospelen_droom, s23, say).
-text(robospelen_droom, s23, "We liepen samen over het pad").
-next(robospelen_droom, s23, "true", s24).
+move(robospelen_droom, s22, continuator).
+next(robospelen_droom, s22, [[umVariable=vlieg_zwem_race, filter=green, values=["vliegen"]], [expCondition=memory]], s23memory_vliegen1).
+next(robospelen_droom, s22, [[umVariable=vlieg_zwem_race, filter=green, values=["vliegen"]], [expCondition=memory]], s23memory_zwemmen1).
+next(robospelen_droom, s22, [[umVariable=vlieg_zwem_race, filter=green, values=["vliegen"]], [expCondition=memory]], s23memory_racen1).
+next(robospelen_droom, s22, [[expCondition=control]], s23control1).
+next(robospelen_droom, s22, "true", s24).
+
+move(robospelen_droom, s23memory_vliegen1, say).
+text(robospelen_droom, s23memory_vliegen1, "Daarna ging de achtbaan recht omhoog").
+next(robospelen_droom, s23memory_vliegen1, "true", s23memory_vliegen2).
+
+move(robospelen_droom, s23memory_zwemmen1, say).
+text(robospelen_droom, s23memory_zwemmen1, "Daarna ging de achtbaan recht omlaag!").
+next(robospelen_droom, s23memory_zwemmen1, "true", s23memory_zwemmen2).
+
+move(robospelen_droom, s23memory_racen1, say).
+text(robospelen_droom, s23memory_racen1, "Daarna ging de achtbaan recht omlaag!").
+next(robospelen_droom, s23memory_racen1, "true", s23memory_racen2).
+
+move(robospelen_droom, s23memory_vliegen2, say).
+text(robospelen_droom, s23memory_vliegen2, "En vlogen we zo, zoals je een tijdje geleden koos, door de lucht.").
+next(robospelen_droom, s23memory_vliegen2, "true", s24).
+
+move(robospelen_droom, s23memory_zwemmen2, say).
+text(robospelen_droom, s23memory_zwemmen2, "En plonsten we in het water om, zoals je een tijdje geleden koos, te gaan zwemmen.").
+next(robospelen_droom, s23memory_zwemmen2, "true", s24).
+
+move(robospelen_droom, s23memory_racen2, say).
+text(robospelen_droom, s23memory_racen2, "En scheurden we zo, zoals je een tijdje geleden koos, de race baan op.").
+next(robospelen_droom, s23memory_racen2, "true", s24).
+
+move(robospelen_droom, s23control1, say).
+text(robospelen_droom, s23control1, "Daarna ging de achtbaan recht omlaag!").
+next(robospelen_droom, s23control1, "true", s23control2).
+
+move(robospelen_droom, s23control2, say).
+text(robospelen_droom, s23control2, "Door het water").
+next(robospelen_droom, s23control2, "true", s24).
 
 move(robospelen_droom, s24, say).
-text(robospelen_droom, s24, "Toen ging de achtbaan dwars door het beeldscherm heen").
+text(robospelen_droom, s24, "Het was een droom dus ik liep niet vast").
 next(robospelen_droom, s24, "true", s25).
 
 move(robospelen_droom, s25, say).
-text(robospelen_droom, s25, "Vlak langs ons heen en zig zag door de rò hze bomen").
+text(robospelen_droom, s25, "En er was weer een groot scherm").
 next(robospelen_droom, s25, "true", s26).
 
 move(robospelen_droom, s26, say).
-text(robospelen_droom, s26, "Naar het laatste beeldscherm").
+text(robospelen_droom, s26, "Daarop zag ik het rò hze bos!").
 next(robospelen_droom, s26, "true", s27).
 
 move(robospelen_droom, s27, say).
-text(robospelen_droom, s27, "Maar dat is geen herinnering!").
+text(robospelen_droom, s27, "We liepen samen over het pad").
 next(robospelen_droom, s27, "true", s28).
 
 move(robospelen_droom, s28, say).
-text(robospelen_droom, s28, "Dat ben ik in de toekomst, op de Robospelen!").
+text(robospelen_droom, s28, "Toen ging de achtbaan dwars door het beeldscherm heen").
 next(robospelen_droom, s28, "true", s29).
 
 move(robospelen_droom, s29, say).
-text(robospelen_droom, s29, "Het is bizar").
+text(robospelen_droom, s29, "Vlak langs ons heen en zig zag door de rò hze bomen").
 next(robospelen_droom, s29, "true", s30).
 
 move(robospelen_droom, s30, say).
-text(robospelen_droom, s30, "Ik sta daar klaar voor de eerste ronde").
+text(robospelen_droom, s30, "Naar het laatste beeldscherm").
 next(robospelen_droom, s30, "true", s31).
 
 move(robospelen_droom, s31, say).
-text(robospelen_droom, s31, "En ik kijk mijn tegenstanders aan").
+text(robospelen_droom, s31, "Maar dat is geen herinnering!").
 next(robospelen_droom, s31, "true", s32).
 
 move(robospelen_droom, s32, say).
-text(robospelen_droom, s32, "En toen klonk de grote afteller").
+text(robospelen_droom, s32, "Dat ben ik in de toekomst, op de Robospelen!").
 next(robospelen_droom, s32, "true", s33).
 
 move(robospelen_droom, s33, say).
-text(robospelen_droom, s33, "Vlak voordat de Robospelen echt begonnen was de droom voorbij").
+text(robospelen_droom, s33, "Het is bizar").
+next(robospelen_droom, s33, "true", s34).
+
+move(robospelen_droom, s34, say).
+text(robospelen_droom, s34, "Ik sta daar klaar voor de eerste ronde").
+next(robospelen_droom, s34, "true", s35).
+
+move(robospelen_droom, s35, say).
+text(robospelen_droom, s35, "En ik kijk mijn tegenstanders aan").
+next(robospelen_droom, s35, "true", s36).
+
+move(robospelen_droom, s36, say).
+text(robospelen_droom, s36, "En toen klonk de grote afteller").
+next(robospelen_droom, s36, "true", s37).
+
+move(robospelen_droom, s37, say).
+text(robospelen_droom, s37, "Vlak voordat de Robospelen echt begonnen was de droom voorbij").
 
 %% dromen_conclusie %%
 minidialog(dromen_conclusie, [type=narrative, thread=dromen, position=5]).

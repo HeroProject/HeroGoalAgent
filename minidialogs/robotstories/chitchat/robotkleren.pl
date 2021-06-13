@@ -98,7 +98,7 @@ move(robotkleren, s11niets8, question).
 moveConfig(robotkleren, s11niets8, [type=input, context="color", options=['rood', 'geel', 'blauw', 'groen'], fast=yes, umVariable=kleur_kledingstuk]).
 text(robotkleren, s11niets8, "Welke kleur zou je dan kiezen?").
 next(robotkleren, s11niets8, "fail", s11fail_kleur1).
-next(robotkleren, s11niets8, "success", s11kleur_gekozen1).
+next(robotkleren, s11niets8, "success", s11flitsend1).
 
 move(robotkleren, s11badjas1, say).
 text(robotkleren, s11badjas1, "Een badjas lijkt me super handig.").
@@ -106,13 +106,13 @@ next(robotkleren, s11badjas1, "true", s11badjas2).
 
 move(robotkleren, s11badjas2, say).
 text(robotkleren, s11badjas2, "Die kan ik op de robo spelen tussen de wedstrijden door aan!").
-next(robotkleren, s11badjas2, "true", s12).
+next(robotkleren, s11badjas2, "true", s11badjas3).
 
-move(robotkleren, s11niets9, question).
-moveConfig(robotkleren, s11niets9, [type=input, context="color", options=['rood', 'geel', 'blauw', 'groen'], fast=yes, umVariable=kleur_kledingstuk]).
-text(robotkleren, s11niets9, "Welke kleur badjas zou jij voor mij kiezen?").
-next(robotkleren, s11niets9, "fail", s11fail_kleur1).
-next(robotkleren, s11niets9, "success", s11kleur_gekozen_badjas1).
+move(robotkleren, s11badjas3, question).
+moveConfig(robotkleren, s11badjas3, [type=input, context="color", options=['rood', 'geel', 'blauw', 'groen'], fast=yes, umVariable=kleur_kledingstuk]).
+text(robotkleren, s11badjas3, "Welke kleur badjas zou jij voor mij kiezen?").
+next(robotkleren, s11badjas3, "fail", s11fail_kleur1).
+next(robotkleren, s11badjas3, "success", s11kleur_gekozen_badjas1).
 
 move(robotkleren, s11een_kledingstuk1, say).
 text(robotkleren, s11een_kledingstuk1, "Een %kledingstuk%!").
@@ -144,21 +144,28 @@ move(robotkleren, s11kleur_gekozen_badjas1, say).
 text(robotkleren, s11kleur_gekozen_badjas1, "Bizar, een badjas, en dan ook nog eens %kleur_kledingstuk%!").
 next(robotkleren, s11kleur_gekozen_badjas1, "true", s11flitsend1).
 
-move(robotkleren, s11flitsend1, say).
-text(robotkleren, s11flitsend1, "Dat zou me denk ik heel flitsend staan!").
-next(robotkleren, s11flitsend1, "true", s11flitsend2).
+move(robotkleren, s11flitsend1, question).
+moveConfig(robotkleren, s11flitsend1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(robotkleren, s11flitsend1, "Wat vind je daar zo leuk aan?").
+next(robotkleren, s11flitsend1, "success", s11flitsend2).
+next(robotkleren, s11flitsend1, "fail", s11flitsend2).
 
-move(robotkleren, s11flitsend2, continuator).
-next(robotkleren, s11flitsend2, [[umVariable=lievelingskleur, filter=green, values=["kleur_kledingstuk"]]], s11ook_lievelingskleur1).
-next(robotkleren, s11flitsend2, "true", s12).
+move(robotkleren, s11flitsend2, say).
+text(robotkleren, s11flitsend2, "Dat denk ik ook. Het zou me denk ik heel flitsend staan!").
+next(robotkleren, s11flitsend2, "true", s11flitsend3).
+
+move(robotkleren, s11flitsend3, continuator).
+next(robotkleren, s11flitsend3, [[umVariable=lievelingskleur, filter=green, values=["kleur_kledingstuk"]], [expCondition=memory]], s11ook_lievelingskleur1).
+next(robotkleren, s11flitsend3, [[umVariable=lievelingskleur, filter=red, values=["kleur_kledingstuk"]], [expCondition=memory]], s11andere_lievelingskleur1).
+next(robotkleren, s11flitsend3, "true", s12).
 
 move(robotkleren, s11ook_lievelingskleur1, question).
 moveConfig(robotkleren, s11ook_lievelingskleur1, [type=yesno, context='answer_yesno', umVariable=gelijke_kleuren]).
-text(robotkleren, s11ook_lievelingskleur1, "he, is %kleur_kledingstuk% niet jouw lievelingskleur?").
+text(robotkleren, s11ook_lievelingskleur1, "he, %kleur_kledingstuk% is toch jouw lievelingskleur?").
 next(robotkleren, s11ook_lievelingskleur1, "answer_yes", s11gelijk1).
-next(robotkleren, s11ook_lievelingskleur1, "answer_no", s11ongelijk1).
 next(robotkleren, s11ook_lievelingskleur1, "answer_dontknow", s11fail_gelijk1).
 next(robotkleren, s11ook_lievelingskleur1, "fail", s11fail_gelijk1).
+next(robotkleren, s11ook_lievelingskleur1, "answer_no", s11fail_gelijk1).
 
 move(robotkleren, s11fail_gelijk1, say).
 text(robotkleren, s11fail_gelijk1, "Ik vind ook meer dan één kleur mooi.").
@@ -176,13 +183,17 @@ move(robotkleren, s11gelijk2, say).
 text(robotkleren, s11gelijk2, "Wat lief dat ik jouw lievelingskleur aan mag!").
 next(robotkleren, s11gelijk2, "true", s12).
 
-move(robotkleren, s11ongelijk1, say).
-text(robotkleren, s11ongelijk1, "O, dan heb ik dat verkeerd onthouden!").
-next(robotkleren, s11ongelijk1, "true", s11ongelijk2).
+move(robotkleren, s11andere_lievelingskleur1, say).
+text(robotkleren, s11andere_lievelingskleur1, "%lievelingskleur% is jouw lievelingskleur, maar nu koos je voor %kleur_kledingstuk%").
+next(robotkleren, s11andere_lievelingskleur1, "true", s11andere_lievelingskleur2).
 
-move(robotkleren, s11ongelijk2, say).
-text(robotkleren, s11ongelijk2, "Maar %kleur_kledingstuk% vind ik supermooi, dus dankjewel!").
-next(robotkleren, s11ongelijk2, "true", s12).
+move(robotkleren, s11andere_lievelingskleur2, say).
+text(robotkleren, s11andere_lievelingskleur2, "Cool!").
+next(robotkleren, s11andere_lievelingskleur2, "true", s11andere_lievelingskleur3).
+
+move(robotkleren, s11andere_lievelingskleur3, say).
+text(robotkleren, s11andere_lievelingskleur3, "Ik vind ook meer dan één kleur mooi.").
+next(robotkleren, s11andere_lievelingskleur3, "true", s12).
 
 move(robotkleren, s12, say).
 text(robotkleren, s12, "Misschien kun je later wel robotkleren gaan ontwerpen!").

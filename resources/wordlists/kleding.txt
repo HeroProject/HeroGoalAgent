@@ -1,91 +1,81 @@
-trui
-sweater
-hoodie
-vest
-t-shirt
-shirt
-overhemd
-bloes
-blouse
-netjes
-jas
-jack
-broek
-jeans
-rok
-stropdas
-superheldenpak
-jurk
-legging
-colbert
-laarzen
-schoenen
-sokken
-onderbroek
-string
-slip
-boxer
-hemd
-beha
-kousen
-maillot
-riem
-sjaal
-strik
-vlinder
-beenwarmers
-muts
-hoed
-pet
-helm
-handschoenen
-wanten
-badjas
-zwembroek
-bikini
-slippers
-robotpak
-beha‎
-beschermende kleding‎
-handschoen‎
-jas‎
-kinderkleding‎
-militaire kleding‎
-nachtkleding‎
-pak‎
-religieuze kleding‎
-rok‎
-schoeisel‎
-sok‎
-uniform‎
-vest‎
-werkkleding‎
-avondkleding
-avondjurk
-basque
-boa
-borstrok
-broekrok
-cocktailjurk
-crinoline
-falie
-infula
-kousenband
-lendendoek
-maatkleding
-mantelpak
-ordekleding
-stadskledij
-trouwkleding
-vintagekleding
-vlieger
-kulzak
-kilt
-kimono
-sombrero
-tulband
-fez
-yếm
-boerka
-poncho
-trouwjurk
+"trui", "trui"
+"sweater", "sweater"
+"hoodie", "hoodie"
+"vest", "vest"
+"shirt", "shirt", "t-shirt"
+"overhemd", "overhemd"
+"bloes", "bloes", "blouse"
+"netjes", "netjes"
+"jas", "jas"
+"jack", "jack"
+"broek", "broek"
+"jeans", "jeans"
+"rok", "rok", "rokje"
+"stropdas", "stropdas"
+"superheldenpak", "superheldenpak"
+"jurk", "jurk"
+"legging", "legging"
+"colbert", "colbert"
+"laarzen", "laarzen", "laars"
+"schoenen", "schoenen", "schoen"
+"sokken", "sokken", "sok"
+"onderbroek", "onderbroek"
+"string", "string"
+"slip", "slip"
+"boxer", "boxer"
+"hemd", "hemd"
+"beha", "beha"
+"kousen", "kousen"
+"maillot", "maillot"
+"riem", "riem"
+"strik", "strik"
+"vlinder", "vlinder"
+"das", "das"
+"vlinderdas", "vlinderdas"
+"bowtie", "bowtie"
+"beenwarmers", "beenwarmers"
+"muts", "muts"
+"hoed", "hoed"
+"pet", "pet"
+"helm", "helm"
+"handschoenen", "handschoenen"
+"wanten", "wanten"
+"badjas", "badjas"
+"zwembroek", "zwembroek"
+"bikini", "bikini"
+"slipper", "slipper"
+"robotpak", "robotpak", "niets", "niks"
+"slippers", "slippers"
+"nachtkleding", "nachtkleding"
+"pyjama", "pyjama"
+"pak", "pak"
+"uniform", "uniform"
+"werkkleding", "werkkleding"
+"avondkleding", "avondkleding"
+"avondjurk", "avondjurk"
+"basque", "basque"
+"boa", "boa"
+"borstrok", "borstrok"
+"broekrok", "broekrok"
+"cocktailjurk", "cocktailjurk"
+"crinoline", "crinoline"
+"falie", "falie"
+"infula", "infula"
+"kousenband", "kousenband"
+"ledendoek", "ledendoek"
+"maatkleding", "maatkleding"
+"mantelpak", "mantelpak"
+"ordekleding", "ordekleding"
+"stadskledij", "stadskledij"
+"trouwkleding", "trouwkleding"
+"trouwjurk", "trouwjurk"
+"trouwpak", "trouwpak"
+"vintagekleding", "vintagekleding"
+"vlieger", "vlieger"
+"kulzak", "kulzak"
+"kimono", "kimono"
+"sombrero", "sombrero"
+"tulband", "tulband"
+"fez", "fez"
+"boerka", "boerka"
+"poncho", "poncho"

@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_sound, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 
 % Multi session
@@ -25,7 +25,7 @@ sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
 %%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_test, [general_wakeup, general_rest]).
+sessionDesign(robotstories_test, [general_wakeup, robospelen_10_peptalk, general_rest]).
 %sessionDesign(robotstories_test1, [general_wakeup, dagdromen_sport, general_rest]).
 %sessionDesign(robotstories_test2, [general_wakeup, [theme='_chitchat'], general_rest]).
 
@@ -74,7 +74,7 @@ sessionDesign(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_re
 
 % Robotstories
 %multiSessionDesign([robotstories_1, robotstories_2, robotstories_3, robotstories_4, robotstories_5, robotstories_6]).
-%multiSessionDesign([robotstories_test, robotstories_test]).
+%multiSessionDesign([robotstories_test, robotstories_test, robotstories_test, robotstories_test, robotstories_test]).
 %multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5, robotstories_memory_6]).
 %multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5, robotstories_control_6]).
 
@@ -87,21 +87,21 @@ sessionDesign(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_re
 useGui(false).
 % When GUI is used this userId and these localVariables are ignored.
 % When no GUI is uses, these variables need to be specified.
-setContinueSession(true).
+setContinueSession(false).
 setBasePosture('Stand').
 
 % Experimental settings
-setUserId('40'). % user id
-setSessionId(3). % session id
+setUserId('998'). % user id
+setSessionId(4). % session id
 useMemory(true). % condition
 
 
 multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5]).
 %multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5]).
 
-addLocalVariable(first_name, "Soraya"). % name empty for condition 'false'
+addLocalVariable(first_name, "Elvira"). % name empty for condition 'false'
 % Record the interaction
-recordInteractionActive(true).
+recordInteractionActive(false).
 
 % Button to pause and resume the robot during the interaction
 setPauseButton('MiddleTactilTouched').

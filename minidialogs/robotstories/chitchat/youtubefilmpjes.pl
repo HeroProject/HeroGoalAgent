@@ -63,11 +63,11 @@ text(youtubefilmpjes, s3got_answer_hoezo5, "En toch kan ik dingen die dieren ook
 next(youtubefilmpjes, s3got_answer_hoezo5, "true", s4).
 
 move(youtubefilmpjes, s3nee1, say).
-text(youtubefilmpjes, s3nee1, "O!").
+text(youtubefilmpjes, s3nee1, "Oke, helemaal prima.").
 next(youtubefilmpjes, s3nee1, "true", s3nee2).
 
 move(youtubefilmpjes, s3nee2, say).
-text(youtubefilmpjes, s3nee2, "Ik wel").
+text(youtubefilmpjes, s3nee2, "Ik vind het zelf erg leuk om filmpjes op Youtube te kijken").
 next(youtubefilmpjes, s3nee2, "true", s3nee3).
 
 move(youtubefilmpjes, s3nee3, say).
@@ -104,12 +104,18 @@ text(youtubefilmpjes, s8, "Welke zou jij het eerste kijken?").
 next(youtubefilmpjes, s8, "success", s9).
 next(youtubefilmpjes, s8, "fail", s9).
 
-move(youtubefilmpjes, s9, say).
-text(youtubefilmpjes, s9, "Oké, te gek!").
-next(youtubefilmpjes, s9, "true", s10).
+move(youtubefilmpjes, s9, question).
+moveConfig(youtubefilmpjes, s9, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(youtubefilmpjes, s9, "Waarom lijkt die jouw het leukste?").
+next(youtubefilmpjes, s9, "success", s10).
+next(youtubefilmpjes, s9, "fail", s10).
 
 move(youtubefilmpjes, s10, say).
-text(youtubefilmpjes, s10, "Dan ga ik die vanavond kijken als ik klaar ben met trainen!").
+text(youtubefilmpjes, s10, "Oké, te gek!").
+next(youtubefilmpjes, s10, "true", s11).
+
+move(youtubefilmpjes, s11, say).
+text(youtubefilmpjes, s11, "Dan ga ik die vanavond kijken als ik klaar ben met trainen!").
 
 %% youtubefilmpjes_jungle %%
 minidialog(youtubefilmpjes_jungle, [type=chitchat, theme=youtubefilmpjes, topic=jungle]).
@@ -668,9 +674,11 @@ text(youtubefilmpjes_zee, s22transformers4, "Die vouwen hun armen en benen op en
 next(youtubefilmpjes_zee, s22transformers4, "true", s22transformers5).
 
 move(youtubefilmpjes_zee, s22transformers5, say).
+text(youtubefilmpjes_zee, s22transformers5, "Supercool!").
 next(youtubefilmpjes_zee, s22transformers5, "true", s22transformers6).
 
 move(youtubefilmpjes_zee, s22transformers6, say).
+text(youtubefilmpjes_zee, s22transformers6, "Eigenlijk was de octopus ook een soort transformer").
 next(youtubefilmpjes_zee, s22transformers6, "true", s23).
 
 move(youtubefilmpjes_zee, s23, say).

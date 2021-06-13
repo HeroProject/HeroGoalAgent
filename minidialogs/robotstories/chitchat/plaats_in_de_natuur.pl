@@ -1,46 +1,45 @@
 %%%% HEADER %%%%
 %% plaats_in_de_natuur %%
 minidialog(plaats_in_de_natuur, [type=chitchat, theme=natuur, topic=plaats]).
-dependencies(plaats_in_de_natuur, [[[robospelen_4_ingeschreven, follow_up, 0]]]).
 
 move(plaats_in_de_natuur, s1, say).
-text(plaats_in_de_natuur, s1, "Trouwens").
+start_interaction_probe(plaats_in_de_natuur, s1).
 next(plaats_in_de_natuur, s1, "true", s2).
 
 move(plaats_in_de_natuur, s2, say).
-text(plaats_in_de_natuur, s2, "Toen ik je vertelde dat ik naar Rusland ga via mijn draadje").
+text(plaats_in_de_natuur, s2, "Trouwens").
 next(plaats_in_de_natuur, s2, "true", s3).
 
 move(plaats_in_de_natuur, s3, say).
-text(plaats_in_de_natuur, s3, "toen vroeg ik me ineens af waar mensen naartoe zouden gaan").
+text(plaats_in_de_natuur, s3, "Weet je wat ik heb gelezen.").
 next(plaats_in_de_natuur, s3, "true", s4).
 
 move(plaats_in_de_natuur, s4, say).
-text(plaats_in_de_natuur, s4, "als ze draadjes hadden.").
+text(plaats_in_de_natuur, s4, "Blijkbaar worden mensen vrolijk van de natuur.").
 next(plaats_in_de_natuur, s4, "true", s5).
 
 move(plaats_in_de_natuur, s5, say).
-text(plaats_in_de_natuur, s5, "Mensen worden heel vrolijk van de natuur, heb ik gelezen.").
+text(plaats_in_de_natuur, s5, "Van zwemmen in de zee").
 next(plaats_in_de_natuur, s5, "true", s6).
 
 move(plaats_in_de_natuur, s6, say).
-text(plaats_in_de_natuur, s6, "Van varen over of zwemmen in de zee").
+text(plaats_in_de_natuur, s6, "of een boswandeling maken").
 next(plaats_in_de_natuur, s6, "true", s7).
 
 move(plaats_in_de_natuur, s7, say).
-text(plaats_in_de_natuur, s7, "of een boswandeling maken").
+text(plaats_in_de_natuur, s7, "of in de bergen klimmen").
 next(plaats_in_de_natuur, s7, "true", s8).
 
 move(plaats_in_de_natuur, s8, say).
-text(plaats_in_de_natuur, s8, "of in de bergen klimmen").
+text(plaats_in_de_natuur, s8, "of luieren op het strand.").
 next(plaats_in_de_natuur, s8, "true", s9).
 
 move(plaats_in_de_natuur, s9, say).
-text(plaats_in_de_natuur, s9, "of luieren op het strand.").
+text(plaats_in_de_natuur, s9, "Naar welke plek in de natuur zou jij nu het liefste willen gaan").
 next(plaats_in_de_natuur, s9, "true", s10).
 
 move(plaats_in_de_natuur, s10, say).
-text(plaats_in_de_natuur, s10, "Naar welke plek in de natuur zou jij nu het liefste willen gaan").
+stop_interaction_probe(plaats_in_de_natuur, s10).
 next(plaats_in_de_natuur, s10, "true", s11).
 
 move(plaats_in_de_natuur, s11, question).
@@ -85,7 +84,7 @@ text(plaats_in_de_natuur, s12zee26, "Maar ik kan wel het geluid van de zee afspe
 next(plaats_in_de_natuur, s12zee26, "true", s12zee27).
 
 move(plaats_in_de_natuur, s12zee27, say).
-audio(plaats_in_de_natuur, s12zee27, file, "resources/sounds/nog_te_vinden_geluid_van_golven.wav").
+audio(plaats_in_de_natuur, s12zee27, file, "resources/sounds/waves.wav").
 
 move(plaats_in_de_natuur, s12bos1, say).
 text(plaats_in_de_natuur, s12bos1, "Ik ga ook graag naar het bos!").

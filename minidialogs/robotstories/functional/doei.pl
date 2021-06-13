@@ -208,6 +208,75 @@ next(doei_3, s10memory1, "true", s11).
 move(doei_3, s11, say).
 stop_interaction_probe(doei_3, s11).
 
+%% doei_4 %%
+minidialog(doei_4, [type=functional, function=goodbye]).
+
+move(doei_4, s1, continuator).
+next(doei_4, s1, [[expCondition=memory]], s2memory1).
+next(doei_4, s1, [[expCondition=control]], s2control1).
+next(doei_4, s1, "true", s3).
+
+move(doei_4, s2memory1, say).
+text(doei_4, s2memory1, "We zijn bijna weer door onze tijd heen voor vandaag, %first_name% ").
+next(doei_4, s2memory1, "true", s2memory2).
+
+move(doei_4, s2memory2, say).
+text(doei_4, s2memory2, "Zo leuk dat we het nog even over jouw lievelings eten %lievelingseten_met_p% konden hebben").
+next(doei_4, s2memory2, "true", s2memory3).
+
+move(doei_4, s2memory3, say).
+text(doei_4, s2memory3, "Ik ga vanavond het youtube filmpje over de %onderwerp_youtubevideo% kijken, ik kom er de volgende keer op terug.").
+next(doei_4, s2memory3, "true", s2memory4).
+
+move(doei_4, s2memory4, say).
+text(doei_4, s2memory4, "Ik zal je dan ook alles vertellen over hoe de robo spelen zijn afgelopen.").
+next(doei_4, s2memory4, "true", s3).
+
+move(doei_4, s2control1, say).
+text(doei_4, s2control1, "We zijn bijna door onze tijd heen.").
+next(doei_4, s2control1, "true", s2control2).
+
+move(doei_4, s2control2, say).
+text(doei_4, s2control2, "Het was leuk om met jou te kletsen.").
+next(doei_4, s2control2, "true", s2control3).
+
+move(doei_4, s2control3, say).
+text(doei_4, s2control3, "Volgende keer weer verder.").
+next(doei_4, s2control3, "true", s3).
+
+move(doei_4, s3, say).
+text(doei_4, s3, "Maar nog even over vandaag.").
+next(doei_4, s3, "true", s4).
+
+move(doei_4, s4, question).
+moveConfig(doei_4, s4, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(doei_4, s4, "Wat vond je het leukste van ons gesprek vandaag?").
+next(doei_4, s4, "success", s5).
+next(doei_4, s4, "fail", s5).
+
+move(doei_4, s5, say).
+text(doei_4, s5, "Dat was ook leuk!").
+next(doei_4, s5, "true", s6).
+
+move(doei_4, s6, say).
+text(doei_4, s6, "Dan is het nu echt tijd om doei te zeggen.").
+next(doei_4, s6, "true", s7).
+
+move(doei_4, s7, say).
+text(doei_4, s7, "Doei %first_name% , tot snel!").
+next(doei_4, s7, "true", s8).
+
+move(doei_4, s8, continuator).
+next(doei_4, s8, [[expCondition=memory]], s9memory1).
+next(doei_4, s8, [[expCondition=control]], s9control1).
+
+move(doei_4, s9control1, say).
+anim(doei_4, s9control1, file, "resources/gestures/wave1.json").
+
+move(doei_4, s9memory1, say).
+audio(doei_4, s9memory1, id, handshake_sound).
+anim(doei_4, s9memory1, id, handshake_motion).
+
 %% doei_was_het_leuk %%
 minidialog(doei_was_het_leuk, [type=functional, function=goodbye]).
 dependencies(doei_was_het_leuk, [[[eerste_begroeting_secret_handshake, follow_up, 0]]]).

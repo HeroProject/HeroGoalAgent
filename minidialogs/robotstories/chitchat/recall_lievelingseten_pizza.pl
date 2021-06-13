@@ -59,7 +59,7 @@ next(lievelingseten_vervolg_pizza, s6, "answer_dontknow", s7herinnert_ggg_niet1)
 next(lievelingseten_vervolg_pizza, s6, "fail", s7herinnert_ggg_niet1).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, continuator).
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, [[[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]]], s7herinnert_ggg_met_ggg1).
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, [[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]], s7herinnert_ggg_met_ggg1).
 next(lievelingseten_vervolg_pizza, s7herinnert_ggg_wel1, "true", s7herinnert_ggg_zonder_ggg1).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_zonder_ggg1, say).
@@ -79,7 +79,7 @@ text(lievelingseten_vervolg_pizza, s7herinnert_ggg_met_ggg2, "Jouw geluksgetal i
 next(lievelingseten_vervolg_pizza, s7herinnert_ggg_met_ggg2, "true", s8).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, continuator).
-next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, [[[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]]], s7herinnert_ggg_niet_met_ggg1).
+next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, [[umVariable=heeft_geluksgetal, filter=green, values=["answer_yes"]], [umVariable=robot_rugnummer, filter=green, values=["_any"]]], s7herinnert_ggg_niet_met_ggg1).
 next(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet1, "true", s7herinnert_ggg_niet_zonder_ggg1).
 
 move(lievelingseten_vervolg_pizza, s7herinnert_ggg_niet_met_ggg1, say).
