@@ -7,6 +7,7 @@ use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use '../util/logging' as module.
 use repair as module.
+order=linearall.
 
 module processUserResponse(T, S, Intent, Text, Params) {
 	if bel(keyValue(T, S, type, Type), currentAttempt(CurrentAttempt))
@@ -99,8 +100,10 @@ module processUserResponse(T, S, Intent, Text, Params) {
 						then {
 							if bel(member(Ans, CorrectAnswer))
 								then insert(answer(T, S, correct, [entity=Ans, text=Text])).
-							if not(bel(member(Ans, CorrectAnswer)))
+							if not(bel(answer(T, S, correct, _)))
 								then insert(answer(T, S, incorrect, [entity=Ans, text=Text])).
+							if bel(Intent='answer_character', character(Old))
+								then delete(character(Old)) + insert(character(Ans)).
 						}
 						
 					if not(bel(answer(T,S, _, _)))
