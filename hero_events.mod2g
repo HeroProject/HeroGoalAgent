@@ -139,7 +139,8 @@ module hero_events {
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, answer_sort, Text, []).
 			if bel(not(keyValue(T, S, type, yesno)), keyListValues(T, S, [context, options], [Intent, Options]), string_match_word_list(Text, Options, Ans))
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Ans]).
-			if bel(keyValue(T, S, type, quiz), keyListValues(T, S, [context], [Intent]), Intent='answer_character')
+			if bel(keyValue(T, S, type, quiz), keyListValues(T, S, [context], [Intent]), 
+					((Intent='answer_character');(Intent='answer_sleep');(Intent='answer_room')))
 				then stopListening + delete(waitingForDetection) + processUserResponse(T, S, Intent, Text, [answer=Text]).
 		}
 							
