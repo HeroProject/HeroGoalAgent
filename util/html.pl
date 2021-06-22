@@ -79,7 +79,7 @@ html(Main,Html) :- header(H), main(MT), format(atom(M),MT,[Main]), footer(F),
 text('<h1>~a</h1>').
 text(Content,Html) :- text(T), format(atom(Html),T,[Content]).
 
-img('<img class="img-fluid mh-100" src="~a">').
+img('<img class="img-fluid" style="max-height:80vh" src="~a">').
 img(Src,Html) :-  number(Src), character(C), character_images(C,L), nth1(Src,L,Img), img(I), format(atom(Html),I,[Img]).
 img(Src,Html) :- img(I), format(atom(Html),I,[Src]).
 
