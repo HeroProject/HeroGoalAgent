@@ -83,7 +83,7 @@ save_motion(co_motion, sdownload8robot, option, 1).
 %%% Maken						   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 state(co_motion, smaken1, say).
-text(co_motion,  smaken1, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
+text(co_motion,  smaken1, "Als je klaar bent om te beginnen, kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(co_motion,  smaken1, direct, ["RightFootLeds"], ["groen"]).
 stateConfig(co_motion, smaken1, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
 next(co_motion,  smaken1, "true",  smaken2).
