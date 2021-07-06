@@ -256,7 +256,7 @@ set_stiffness(test_motion, s1, ['RArm', 'LArm'], 0).
 next(test_motion, s1, "true", s2).
 
 state(test_motion, s2, say).
-record_motion(test_motion, s2, ['RArm', 'LArm'], 6000).
+record_motion(test_motion, s2, ['RArm', 'LArm'], 3000).
 stateConfig(test_motion, s2, [umVariable=test_motion]).
 next(test_motion, s2, "true", s3).
 

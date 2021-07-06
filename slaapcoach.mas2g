@@ -1,7 +1,7 @@
 use 'cbsr-eis-connector.jar' as environment with
 		server='localhost',
-		flowkey='slaapquiz-cxyr-a7a3ba745055.json',
-		flowagent='slaapquiz-cxyr',
+		flowkey='dialogflowagent.json',
+		flowagent='mikeagent-dsvpjs',
 		flowlang='nl-NL'.
 
 define hero as agent {

@@ -321,7 +321,7 @@ next(pauze1a,  s3, _, s4).
 
 state(pauze1a, s4, say).
 prepare_sound_anim(pauze1a, s4).
-stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).	
+stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus2.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).	
 
 state(pauze1b, s1, say).
 text(pauze1b,  s1, "Goed gedaan! Ik ben ook op zoek naar iemand die juicht, alsof je net een spelletje gewonnen hebt.").
@@ -329,27 +329,34 @@ next(pauze1b,  s1, _, s2).
 
 state(pauze1b, s2, say).
 prepare_sound_anim(pauze1b, s2).
-stateConfig(pauze1b, s2, [umVariable=sound_cheer, option1='resources/sounds/lion1.wav', option2='resources/sounds/lion2.wav', recordTime=3000]). % TODO: sounds
+stateConfig(pauze1b, s2, [umVariable=sound_cheer, option1='resources/sounds/victory1.wav', option2='resources/sounds/victory2.wav', recordTime=3000]).
 
 state(pauze1c, s1, say).
-text(pauze1c,  s1, "Super! Als laatste ben ik op zoek naar een goed snurk geluid.").
+text(pauze1c,  s1, "Super! Als laatste wil ik wel eens horen hoe goed jij kan snurken.").
 next(pauze1c,  s1, _, s2).
 
 state(pauze1c, s2, say).
-prepare_sound_anim(pauze1c, s2).
-stateConfig(pauze1c, s2, [umVariable=sound_snore, option1='resources/sounds/tiger1.wav', option2='resources/sounds/tiger2.wav', recordTime=3000]). % TODO: sounds
+text(pauze1c, s2, "Maak een snurk geluid in 3, 2, 1.").
+next(pauze1c, s2, _, s3).
 
-state(pauze1d, s1, say).
-text(pauze1d,  s1, "Ik kan ook goed snurken, hoor maar!").
-next(pauze1d,  s1, _, s2).
+state(pauze1c, s3, audioInput).
+stateConfig(pauze1c, s3, [recordTime=3000, umVariable=sound_snore]).
+next(pauze1c, s3, _, s4).
 
-state(pauze1d, s2, say).
-audio(pauze1d, s2, file, "resources/sounds/tiger2.wav"). % TODO: actual sound
-%anim(pauze1d,  s2, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
-next(pauze1d,  s2, _, s3).
+state(pauze1c, s4, say).
+text(pauze1c,  s4, "Geweldig!").
+next(pauze1c,  s4, _, s5).
 
-state(pauze1d, s3, say).
-text(pauze1d,  s3, "Haha, we kunnen allebei goed snurken; laten we verder gaan.").
+state(pauze1c, s5, say).
+text(pauze1c,  s5, "Ik kan ook goed snurken, hoor maar!").
+next(pauze1c,  s5, _, s6).
+
+state(pauze1c, s6, say).
+audio(pauze1c, s6, file, "resources/sounds/snore2.wav").
+next(pauze1c,  s6, _, s7).
+
+state(pauze1c, s7, say).
+text(pauze1c,  s7, "Haha, we kunnen allebei goed snurken; laten we verder gaan.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Slaapkamer comfortabel                                 %%%
@@ -382,8 +389,8 @@ text(slaapkamer,  s1i3, "Ik ben heel goed in gordijnen dicht doen, kijk maar.").
 next(slaapkamer,  s1i3, _, s1i4).
 
 state(slaapkamer, s1i4, say).
-audio(slaapkamer, s1i4, file, "resources/sounds/racecar.wav"). % TODO: actual (closing curtains)
-%anim(slaapkamer,  s1i4, file, "resources/gestures/racecar.xml"). % TODO: actual (closing curtains)
+audio(slaapkamer, s1i4, file, "resources/sounds/curtains.wav").
+anim(slaapkamer,  s1i4, file, "resources/gestures/curtains.json").
 next(slaapkamer,  s1i4, _, s2).
 
 state(slaapkamer, s2, say).
@@ -420,7 +427,6 @@ next(slaapkamer,  s2i2, _, s2i3).
 
 state(slaapkamer, s2i3, say).
 audio(slaapkamer, s2i3, id, sound_snore).
-%anim(slaapkamer,  s2i3, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Piekeren                                               %%%
@@ -496,14 +502,12 @@ text(pauze2,  s3, "Ik zal een muziekje laten horen, en daar op dansen; doe je me
 next(pauze2,  s3, _, s4).
 
 state(pauze2, s4, say).
-audio(pauze2, s4, file, "resources/sounds/disco.wav"). % TODO: actual dance
-%anim(pauze2,  s4, file, "resources/gestures/katrol.xml"). % TODO: actual dance
+anim(pauze2, s4, onRobot, "disco/behavior_1").
 next(pauze2,  s4, _, s5).
 
 state(pauze2, s5, say).
 text(pauze2,  s5, "Goed gedaan!").
 audio(pauze2, s5, id, sound_applause).
-%anim(pauze2,  s5, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
 next(pauze2,  s5, _, s6).
 
 state(pauze2, s6, say).
@@ -549,7 +553,7 @@ next(bewegen,  s1i4, _, s1i5).
 
 state(bewegen, s1i5, say).
 audio(bewegen, s1i5, id, sound_cheer).
-%anim(bewegen,  s1i5, file, "resources/gestures/racecar.xml"). % TODO: anim needed?
+anim(bewegen,  s1i5, file, "resources/gestures/arms_in_air.json").
 next(bewegen,  s1i5, _, s1i6).
 
 state(bewegen, s1i6, say).
