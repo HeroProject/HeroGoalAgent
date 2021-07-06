@@ -100,6 +100,6 @@ sortItem(Id=Src,Html) :- number(Src), character(C), character_images(C,L), nth1(
 				sortItem(T), format(atom(Html),T,[Id,Img]).
 sortItem(Id=Src,Html) :- sortItem(T), format(atom(Html),T,[Id,Src]).
 
-sortItems([],Final,Html) :- format(atom(Html),'<div class="row row-cols-1 row-cols-md-4">~a</div>',[Final]).
+sortItems([],Final,Html) :- format(atom(Html),'<div class="row row-cols-1 row-cols-md-4" style="max-height:70vh">~a</div>',[Final]).
 sortItems([Curr|Rest],Tmp,Html) :- sortItem(Curr,B), atom_concat(Tmp,B,New), sortItems(Rest,New,Html).
 sortItems(ContentList,Html) :- sortItems(ContentList,'',Html).
