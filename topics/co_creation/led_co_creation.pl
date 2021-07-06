@@ -113,17 +113,9 @@ next(co_led_creation, s3, "inkleuren", s4no).
 next(co_led_creation, s3, "fail", s5animknip).
 
 %%% Create - No Animation				   %%%
-state(co_led_creation, s3no, say).
-text(co_led_creation, s3no, "Prima. Dan hoeven we nu alleen nog de kleuren te kiezen.").
-next(co_led_creation, s3no, "true", s4no).
-
-state(co_led_creation, s3d, say).
-text(co_led_creation, s3d, "Laten we dit keer alleen de kleuren kiezen.").
-next(co_led_creation, s3d, "true", s4no).
-
 state(co_led_creation, s4no, question).
 stateConfig(co_led_creation, s4no, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='groen']).
-text(co_led_creation, s4no, "Welke kleur moeten de ogen krijgen?").
+text(co_led_creation, s4no, "Welke kleur moeten mijn ogen krijgen?").
 next(co_led_creation, s4no, 'success', s4nos).
 next(co_led_creation, s4no, 'fail', s4nof).
 
@@ -137,7 +129,7 @@ next(co_led_creation, s4nof, "true", s5no).
 
 state(co_led_creation, s5no, question).
 stateConfig(co_led_creation, s5no, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='paars']).
-text(co_led_creation, s5no, "Welke kleur moet de buik krijgen?").
+text(co_led_creation, s5no, "Welke kleur moet mijn buik krijgen?").
 next(co_led_creation, s5no, 'success', s5nos).
 next(co_led_creation, s5no, 'fail', s5nof).
 
@@ -151,7 +143,7 @@ next(co_led_creation, s5nof, "true", s6no).
 
 state(co_led_creation, s6no, question).
 stateConfig(co_led_creation, s6no, [type=input, context='answer_color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='oranje']).
-text(co_led_creation, s6no, "Welke kleur moeten de voeten krijgen?").
+text(co_led_creation, s6no, "Welke kleur moeten mijn voeten krijgen?").
 next(co_led_creation, s6no, 'success', s6nos).
 next(co_led_creation, s6no, 'fail', s6nof).
 
