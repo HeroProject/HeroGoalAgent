@@ -71,10 +71,9 @@ character_images(c4,[
 bg('<div class="vh-100 vw-100">~a</div>').
 header('<nav class="navbar mb-1"><div class="navbar-brand listening_icon"></div></nav>').
 main('<main class="container-fluid text-center">~a</main>').
-footer('<footer class="fixed-bottom"><p class="lead bg-light mb-0 text-center speech_text" style="min-height:2rem"></p></footer>').
 
-html(Main,Html) :- header(H), main(MT), format(atom(M),MT,[Main]), footer(F),
-	atom_concat(H,M,HM), atom_concat(HM,F,SubHtml), bg(BG), format(atom(Html),BG,[SubHtml]).
+html(Main,Html) :- header(H), main(MT), format(atom(M),MT,[Main]), atom_concat(H,M,HM), 
+			bg(BG), format(atom(Html),BG,[HM]).
 
 text('<h1>~a</h1>').
 text(Content,Html) :- text(T), format(atom(Html),T,[Content]).
