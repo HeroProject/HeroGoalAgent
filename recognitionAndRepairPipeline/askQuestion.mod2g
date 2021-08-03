@@ -37,7 +37,7 @@ module askQuestion(T, S) {
 					if bel(keyValue(T, S, type, yesno), text(T, S, Txt), text(Txt, HTxt),  
 							buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
 						then renderPage(Html) + insert(waitingForAnswer).
-					if bel(keyListValues(T, S, [type, options], [quiz, List]), text(T, S, Txt), text(Txt, HTxt), 
+					if bel(keyListValues(T, S, [type, options, question], [quiz, List, Txt]), text(Txt, HTxt), 
 							buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
 						then renderPage(Html) + insert(waitingForAnswer).
 					if bel(keyListValues(T, S, [type, options], [input, List]), buttons(List, B), html(B, Html))

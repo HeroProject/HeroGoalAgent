@@ -205,8 +205,10 @@ module hero_events {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	% Question
-	if bel(currentTopic(T), currentState(S), state(T, S, question), eventsCompleted, not(waitingForAnswer), not(answer(T, S, _, _)))
-		then askQuestion(T, S).
+	if bel(currentTopic(T), currentState(S), state(T, S, question), not(waitingForAnswer), not(answer(T, S, _, _))) then {
+		if bel(currentInputModality(speech), eventsCompleted) then askQuestion(T, S).
+		if not(bel(currentInputModality(speech))) then askQuestion(T, S).
+	}
 		
 	% Audiorecording
 	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted,
