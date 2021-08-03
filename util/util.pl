@@ -205,7 +205,7 @@ keyValue(_, _, inputModality, [speech=2, /*feet=2,*/ tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, false).
 % Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 85).
+keyValue(_, _, speechSpeed, 95).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	feet=3000, 
 				speechopenend=12000,
