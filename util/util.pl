@@ -57,7 +57,7 @@ feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 %yesno synonyms
 answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk"]).
 answer_no_synonyms(["nee", "neen", "nah"]).
-answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
+answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee", "soms"]).
 
 string_match_word_list(S, L, DS) :- downcase_atom(S, DS), maplist(downcase_atom, L, DL), member(DS, DL), !.
 string_match_word_list(S, L, R) :- split_string(S," ",", ", SL), maplist(downcase_atom, SL, DSL), maplist(downcase_atom, L, DL), any_list_match(DSL, DL, R), !.

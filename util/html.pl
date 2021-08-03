@@ -85,7 +85,7 @@ img(Src,Html) :- img(I), format(atom(Html),I,[Src]).
 img64('<img style="width:18rem" data-value="o~d" src="data:image/jpeg;base64,~a">').
 img64(Src,Index,Html) :- img64(I), format(atom(Html),I,[Index,Src]).
 
-button('<button class="btn btn-light btn-lg" style="font-size:2rem">~a</button>').
+button('<button class="btn btn-light btn-lg m-3" style="font-size:2rem">~a</button>').
 button(Content,Html) :- number(Content), character(C), character_images(C,L), nth1(Content,L,Img), img64(Img,Content,ImgHtml), 
 				button(B), format(atom(Html),B,[ImgHtml]).
 button(Content,Html) :- button(B), format(atom(Html),B,[Content]).

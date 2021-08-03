@@ -327,6 +327,7 @@ prepare_sound_anim(pauze1a, s4).
 stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus2.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).	
 
 state(pauze1b, s1, say).
+display(pauze1b, s1, "").
 text(pauze1b,  s1, "Goed gedaan! Ik ben ook op zoek naar iemand die juicht, alsof je net een spelletje gewonnen hebt.").
 next(pauze1b,  s1, _, s2).
 
@@ -335,6 +336,7 @@ prepare_sound_anim(pauze1b, s2).
 stateConfig(pauze1b, s2, [umVariable=sound_cheer, option1='resources/sounds/victory1.wav', option2='resources/sounds/victory2.wav', recordTime=3000]).
 
 state(pauze1c, s1, say).
+display(pauze1c, s1, "").
 text(pauze1c,  s1, "Super! Als laatste wil ik wel eens horen hoe goed jij kan snurken.").
 next(pauze1c,  s1, _, s2).
 

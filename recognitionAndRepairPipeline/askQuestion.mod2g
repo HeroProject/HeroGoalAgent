@@ -40,6 +40,8 @@ module askQuestion(T, S) {
 					if bel(keyListValues(T, S, [type, options], [quiz, List]), text(T, S, Txt), text(Txt, HTxt), 
 							buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
 						then renderPage(Html) + insert(waitingForAnswer).
+					if bel(keyListValues(T, S, [type, options], [input, List]), buttons(List, B), html(B, Html))
+						then renderPage(Html) + insert(waitingForAnswer).
 					if bel(keyListValues(T, S, [type, options], [sorter, List]), sortItems(List, Items), html(Items, Html))
 						then renderPage(Html) + insert(waitingForAnswer).
 				}
