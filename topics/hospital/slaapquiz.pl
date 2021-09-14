@@ -236,59 +236,49 @@ text(routine,  s3nt3, "Als je dat een paar avonden doet, merk je misschien dat h
 %%% Pauze co-creating                                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-state(pauze1a, s1, say).
-leds(pauze1a,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
-text(pauze1a,  s1, "Zo, we hebben de eerste twee onderwerpen gehad; laten we even pauze houden.").
-next(pauze1a,  s1, _, s2).
+state(pauze1, s1, say).
+leds(pauze1,  s1, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
+text(pauze1,  s1, "Zo, we hebben de eerste twee onderwerpen gehad; laten we even pauze houden.").
+next(pauze1,  s1, _, s2).
 
-state(pauze1a, s2, say).
-text(pauze1a,  s2, "Misschien dat je mij wilt helpen om wat geluiden te maken, die kan ik straks namelijk goed gebruiken bij mijn uitleg; ga maar even staan!").
-next(pauze1a,  s2, _, s3).
+state(pauze1, s2, say).
+text(pauze1,  s2, "Misschien dat je mij wilt helpen om wat geluiden te maken, die kan ik straks namelijk goed gebruiken bij mijn uitleg; ga maar even staan!").
+next(pauze1,  s2, _, s3).
 
-state(pauze1a, s3, say).
-text(pauze1a,  s3, "Ik ben op zoek naar een goed applaus.").
-next(pauze1a,  s3, _, s4).
+state(pauze1, s3, say).
+text(pauze1,  s3, "Kun je misschien voor mij applaudisseren? Doe maar in 3, 2, 1.").
+next(pauze1,  s3, _, s3r).
 
-state(pauze1a, s4, say).
-prepare_sound_anim(pauze1a, s4).
-stateConfig(pauze1a, s4, [umVariable=sound_applause, option1='resources/sounds/applaus2.wav', option2='resources/sounds/applaus.wav', recordTime=3000]).	
+state(pauze1, s3r, audioInput).
+stateConfig(pauze1, s3r, [recordTime=3000, umVariable=sound_applause]).
+next(pauze1, s3r, _, s4).
 
-state(pauze1b, s1, say).
-display(pauze1b, s1, "").
-text(pauze1b,  s1, "Goed gedaan! Ik ben ook op zoek naar iemand die juicht, alsof je net een spelletje gewonnen hebt.").
-next(pauze1b,  s1, _, s2).
+state(pauze1, s4, say).
+text(pauze1,  s4, "Goed gedaan! En kun je ook juichen, alsof je net een spelletje gewonnen hebt? Doe maar in 3, 2, 1.").
+next(pauze1,  s4, _, s4r).
 
-state(pauze1b, s2, say).
-prepare_sound_anim(pauze1b, s2).
-stateConfig(pauze1b, s2, [umVariable=sound_cheer, option1='resources/sounds/victory1.wav', option2='resources/sounds/victory2.wav', recordTime=3000]).
+state(pauze1, s4r, audioInput).
+stateConfig(pauze1, s4r, [recordTime=3000, umVariable=sound_cheer]).
+next(pauze1, s4r, _, s5).
 
-state(pauze1c, s1, say).
-display(pauze1c, s1, "").
-text(pauze1c,  s1, "Super! Als laatste wil ik wel eens horen hoe goed jij kan snurken.").
-next(pauze1c,  s1, _, s2).
+state(pauze1, s5, say).
+text(pauze1,  s5, "Super! En als laatste, kun je eens laten horen hoe jij snurkt? Doe maar in 3, 2, 1.").
+next(pauze1,  s5, _, s5r).
 
-state(pauze1c, s2, say).
-text(pauze1c, s2, "Maak een snurk geluid in 3, 2, 1.").
-next(pauze1c, s2, _, s3).
+state(pauze1, s5r, audioInput).
+stateConfig(pauze1, s5r, [recordTime=3000, umVariable=sound_snore]).
+next(pauze1, s5r, _, s6).
 
-state(pauze1c, s3, audioInput).
-stateConfig(pauze1c, s3, [recordTime=3000, umVariable=sound_snore]).
-next(pauze1c, s3, _, s4).
+state(pauze1, s6, say).
+text(pauze1,  s6, "Haha, dat is grappig. Ik kan ook goed snurken, hoor maar!").
+next(pauze1,  s6, _, s6s).
 
-state(pauze1c, s4, say).
-text(pauze1c,  s4, "Geweldig!").
-next(pauze1c,  s4, _, s5).
+state(pauze1, s6s, say).
+audio(pauze1, s6s, file, "resources/sounds/snore2.wav").
+next(pauze1,  s6s, _, s7).
 
-state(pauze1c, s5, say).
-text(pauze1c,  s5, "Ik kan ook goed snurken, hoor maar!").
-next(pauze1c,  s5, _, s6).
-
-state(pauze1c, s6, say).
-audio(pauze1c, s6, file, "resources/sounds/snore2.wav").
-next(pauze1c,  s6, _, s7).
-
-state(pauze1c, s7, say).
-text(pauze1c,  s7, "Haha, we kunnen allebei goed snurken; laten we verder gaan.").
+state(pauze1, s7, say).
+text(pauze1,  s7, "Haha, we kunnen allebei goed snurken; laten we verder gaan.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Slaapkamer comfortabel                                 %%%
