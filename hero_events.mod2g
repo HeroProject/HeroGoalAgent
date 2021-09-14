@@ -86,8 +86,8 @@ module hero_events {
 	}
 	
 	%Audio recording percepts
-	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID), userId(UserId), userModel(UserModel), updateUserModel(ID, FileName, UserModel, NewUserModel))
-		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel), audioRecording(ID)) + setInteractantData(UserId, ID, FileName).
+	forall percept(audioRecording(FileName)), bel(waitingForAudioFile(ID))
+		do delete(waitingForAudioFile(ID)) + insert(audioRecording(ID, FileName)).
 	
 	%Emotion detection percepts
 	forall percept(emotionDetected(Emotion)), bel(currentTopic(T), currentState(S), waitingForEmotion)
@@ -213,11 +213,11 @@ module hero_events {
 	% Audiorecording
 	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted,
 			keyListValues(T, S, [recordTime, umVariable], [RT, ID]), not(waitingForSoundAnim(_)),
-			not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+			not(waitingForAudioFile(ID)), not(audioRecording(ID, _)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	if bel(currentTopic(T), currentState(S), state(T, S, audioInput), eventsCompleted, waitingForSoundAnim(ID),
-			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID)), Time is RT/1000)
+			soundConfig(ID, RT), not(waitingForAudioFile(ID)), not(audioRecording(ID, _)), Time is RT/1000)
 		then enableRecording + startListening(Time) + insert(waitingForAudioFile(ID)).
 	
 	% Emotion

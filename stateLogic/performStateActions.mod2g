@@ -23,8 +23,8 @@ module performStateActions(T, S) {
 	% Led there be light.
 	if bel(leds(T, S, direct, Leds, Colors), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
 	if bel(leds(T, S, direct, Leds, AnimType, Colors, Speed)) then startLedAnimation(Leds, AnimType, Colors, Speed).
-	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
-	if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
+	%if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
+	%if bel(leds(T, S, id, ID), getUserModelValue(ID, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
 	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, colorSelect, Colors, _])) then setLedColor(Leds, Colors).
 	if bel(leds(T, S, option, OptionNumber), waitingForLedAnim(ID), animOption(ID, OptionNumber, [Leds, AnimType, Colors, Speed]), AnimType \= colorSelect) then startLedAnimation(Leds, AnimType, Colors, Speed).
 	if bel(leds(T, S, reset)) then stopLedAnimation.
@@ -32,12 +32,12 @@ module performStateActions(T, S) {
 	% Play motions.
 	if bel(anim(T, S, onRobot, Anim)) then gesture(Anim).
 	if bel(anim(T, S, file, Anim)) then playMotion(Anim).
-	if bel(anim(T, S, id, ID), getUserModelValue(ID, Recording)) then playMotion(Recording).
+	%if bel(anim(T, S, id, ID), getUserModelValue(ID, Recording)) then playMotion(Recording).
 	if bel(anim(T, S, option, OptionNumber), waitingForMotionAnim(ID), animOption(ID, OptionNumber, Motion)) then playMotion(Motion).
 	
 	% Play audio.
 	if bel(audio(T, S, file, A)) then playAudio(A).
-	if bel(audio(T, S, id, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
+	if bel(audio(T, S, id, ID), audioRecording(ID, AudioID)) then playAudio(AudioID).
 	if bel(audio(T, S, option, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
 	
 	% Wake up and rest.

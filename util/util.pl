@@ -7,7 +7,7 @@
 	waitingForMotionRecording/1,
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
-	audioRecording/1,
+	audioRecording/2,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
 	basePosture/1.

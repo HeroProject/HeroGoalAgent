@@ -21,7 +21,6 @@ module performStateTransition(T, S, C) {
 	
 	% Cleanup: answers have been stored and processed. Temporary placeholder can be removed.
 	if bel(answer(T, S, Ans, Data)) then delete(answer(T, S, Ans, Data)).
-	forall bel(audioRecording(ID)) do delete(audioRecording(ID)).
 	
 	% Cleanup: Remove current, completed state and reset state tracking parameters to their default values.
 	if bel(currentState(S), started)
