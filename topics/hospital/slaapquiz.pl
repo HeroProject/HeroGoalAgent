@@ -51,7 +51,7 @@ next(intro,  s3i7, _, s4i).
 
 state(intro, s4i, say).
 text(intro,  s4i, "Laten we beginnen.").
-leds(intro,  s4i, direct, ["RightFootLeds"], ["wit"]).
+leds(intro,  s4i, direct, ['FaceLeds', 'ChestLeds'], ['white', 'white']).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Algemeen                                               %%%
@@ -436,7 +436,7 @@ text(bewegen,  s1i2, "Eén van die dingen is bij voorbeeld bewegen, zoals we net
 next(bewegen,  s1i2, _, s1i3).
 
 state(bewegen, s1i3, say).
-text(bewegen,  s1i3, "Bij bewegen kun je denken aan bij voorbeeld sporten, buiten spelen of fietsen.").
+text(bewegen,  s1i3, "Bij bewegen kun je denken aan bij voorbeeld sporten, buitenspelen of fietsen.").
 next(bewegen,  s1i3, _, s1q).
 
 state(bewegen, s1q, question).
