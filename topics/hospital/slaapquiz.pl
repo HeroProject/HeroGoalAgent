@@ -279,7 +279,7 @@ next(slaapkamer,  s2q, 'correct', s2d).
 next(slaapkamer,  s2q, _, s2l).
 
 state(slaapkamer, s2d, say).
-text(slaapkamer,  s2d, "Heel goed! Ik had zelf vroeger een nachtlampje, maar mijn nachtlampje was niet te fel. Dat is belangrijk, want in een donkere kamer kun je beter slapen.").
+text(slaapkamer,  s2d, "In een donkere kamer kun je beter slapen.").
 display(slaapkamer, s2d, "").
 next(slaapkamer,  s2d, _, s2i1).
 
@@ -382,6 +382,7 @@ next(piekeren,  s2q, _, s2f).
 
 state(piekeren, s2n, say).
 text(piekeren,  s2n, "Dat is fijn! Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
+next(piekeren,  s2n, _, s2t1).
 
 state(piekeren, s2y, say).
 text(piekeren,  s2y, "Wat balen. Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
@@ -389,6 +390,7 @@ next(piekeren,  s2y, _, s2t1).
 
 state(piekeren, s2f, say).
 text(piekeren,  s2f, "Het helpt mij als ik er overdag aan denk of er met iemand over praat, dan lukt het me beter om er 's avonds niet aan te denken.").
+next(piekeren,  s2f, _, s2t1).
 
 state(piekeren, s2t1, say).
 text(piekeren,  s2t1, "Als dat ook niet helpt, kun je misschien eens proberen om een ontspanningsoefening te doen. Ik heb er eentje uitgeprint op papier. Deze oefening helpt mij heel erg als ik mij zorgen maak. Neem de oefening maar mee, dan kun je die thuis met pappa of mamma uitproberen. Ik hoop dat het jou net zo helpt als dat het mij helpt.").
