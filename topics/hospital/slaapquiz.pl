@@ -421,6 +421,7 @@ next(pauze2,  s4, _, s5).
 state(pauze2, s5, say).
 text(pauze2,  s5, "Goed gedaan!").
 audio(pauze2, s5, id, sound_applause).
+anim(pauze2,  s5, file, "resources/gestures/arms_in_air.json").
 next(pauze2,  s5, _, s6).
 
 state(pauze2, s6, say).
