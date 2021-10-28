@@ -55,7 +55,7 @@ session(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2,
 session(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 
 %%%%%%%%%%%%%% Interactieve slaapquiz %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
-session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, slaapkamer, pauze, piekeren, bewegen, etendrinken, afsluiting, general_rest]).
+session(slaapquiz, [general_wakeup, intro, algemeen, activiteiten, routine, pauze1, slaapkamer, piekeren, pauze2, bewegen, etendrinken, afsluiting, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Settings			                           %%%
