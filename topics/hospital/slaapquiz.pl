@@ -414,7 +414,8 @@ text(pauze2,  s3, "Ik zal een muziekje laten horen, en daar op dansen; doe je me
 next(pauze2,  s3, _, s4).
 
 state(pauze2, s4, say).
-anim(pauze2, s4, onRobot, "disco/behavior_1").
+audio(pauze2, s4, file, "resources/sounds/tiktok1.wav").
+anim(pauze2,  s4, file, "resources/gestures/tiktok1.json").
 next(pauze2,  s4, _, s5).
 
 state(pauze2, s5, say).
