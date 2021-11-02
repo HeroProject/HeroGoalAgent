@@ -66,7 +66,7 @@ useGui(false).
 % When no GUI is used, these variables need to be specified.
 setUserId('999').
 setSessionId(1).
-setBasePosture('Stand').
+setBasePosture('Sit').
 addLocalVariable(first_name, "Samuel").
 
 % Button to pause and resume the robot during the interaction
