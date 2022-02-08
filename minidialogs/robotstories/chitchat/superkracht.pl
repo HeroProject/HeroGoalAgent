@@ -31,45 +31,74 @@ move(superkracht, s4sterk1, say).
 text(superkracht, s4sterk1, "Cool!").
 next(superkracht, s4sterk1, "true", s4sterk2).
 
-move(superkracht, s4sterk2, say).
-text(superkracht, s4sterk2, "Wel uitkijken als je je veters strikt, die trek je makkelijk per ongeluk kapot!").
+move(superkracht, s4sterk2, question).
+moveConfig(superkracht, s4sterk2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(superkracht, s4sterk2, "Waarom zou je sterk willen zijn?").
+next(superkracht, s4sterk2, "success", s4sterk3).
+next(superkracht, s4sterk2, "fail", s4sterk3).
+
+move(superkracht, s4sterk3, say).
+text(superkracht, s4sterk3, "Wel uitkijken als je je veters strikt, die trek je makkelijk per ongeluk kapot!").
 
 move(superkracht, s4dier1, say).
-text(superkracht, s4dier1, "Handig! Lekker het gekwetter van vogels afluisteren.").
+text(superkracht, s4dier1, "Handig!").
 next(superkracht, s4dier1, "true", s4dier2).
 
-move(superkracht, s4dier2, say).
-text(superkracht, s4dier2, "Vogels komen overal, dus die weten alles.").
-next(superkracht, s4dier2, "true", s4dier3).
+move(superkracht, s4dier2, question).
+moveConfig(superkracht, s4dier2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(superkracht, s4dier2, "Waarom zou je met dieren willen praten?").
+next(superkracht, s4dier2, "success", s4dier3).
+next(superkracht, s4dier2, "fail", s4dier3).
 
 move(superkracht, s4dier3, say).
-text(superkracht, s4dier3, "Of even overleggen met een tijger voor 'ie je opeet.").
+text(superkracht, s4dier3, "Lekker het gekwetter van vogels afluisteren.").
+next(superkracht, s4dier3, "true", s4dier4).
 
-move(superkracht, s4huisdier1, say).
-text(superkracht, s4huisdier1, "Of natuurlijk kunnen vragen of jouw huisdier net zoveel van jou houdt").
+move(superkracht, s4dier4, say).
+text(superkracht, s4dier4, "Vogels komen overal, dus die weten alles.").
+next(superkracht, s4dier4, "true", s4dier5).
+
+move(superkracht, s4dier5, say).
+text(superkracht, s4dier5, "Of even overleggen met een tijger voor 'ie je opeet.").
 
 move(superkracht, s4gedachten1, say).
 text(superkracht, s4gedachten1, "Die zou ik ook kiezen!").
 next(superkracht, s4gedachten1, "true", s4gedachten2).
 
-move(superkracht, s4gedachten2, say).
-text(superkracht, s4gedachten2, "Al zou ik het wel jammer vinden dat dan niks meer een verrassing is.").
-next(superkracht, s4gedachten2, "true", s4gedachten3).
+move(superkracht, s4gedachten2, question).
+moveConfig(superkracht, s4gedachten2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(superkracht, s4gedachten2, "Waarom zou je gedachten willen lezen?").
+next(superkracht, s4gedachten2, "success", s4gedachten3).
+next(superkracht, s4gedachten2, "fail", s4gedachten3).
 
 move(superkracht, s4gedachten3, say).
-text(superkracht, s4gedachten3, "Zoals cadeautjes, daarvan weet je dan allang wat erin zit.").
+text(superkracht, s4gedachten3, "Al zou ik het wel jammer vinden dat dan niks meer een verrassing is.").
 next(superkracht, s4gedachten3, "true", s4gedachten4).
 
 move(superkracht, s4gedachten4, say).
-text(superkracht, s4gedachten4, "Maar het is wel hartstikke handig om alles en iedereen meteen te begrijpen.").
+text(superkracht, s4gedachten4, "Zoals cadeautjes, daarvan weet je dan allang wat erin zit.").
+next(superkracht, s4gedachten4, "true", s4gedachten5).
 
-move(superkracht, s4onzichtbaar1, question).
-moveConfig(superkracht, s4onzichtbaar1, [type=yesno, context='answer_yesno', umVariable=onzichtbaar_voor_hero]).
-text(superkracht, s4onzichtbaar1, "Zou je ook voor mij onzichtbaar willen zijn?").
-next(superkracht, s4onzichtbaar1, "fail", s4fail_mensen_of_robotogen1).
-next(superkracht, s4onzichtbaar1, "answer_dontknow", s4fail_mensen_of_robotogen1).
-next(superkracht, s4onzichtbaar1, "answer_no", s4mensen1).
-next(superkracht, s4onzichtbaar1, "answer_yes", s4robots1).
+move(superkracht, s4gedachten5, say).
+text(superkracht, s4gedachten5, "Maar het is wel hartstikke handig om alles en iedereen meteen te begrijpen.").
+
+move(superkracht, s4onzichtbaar1, say).
+text(superkracht, s4onzichtbaar1, "Leuk!").
+next(superkracht, s4onzichtbaar1, "true", s4onzichtbaar2).
+
+move(superkracht, s4onzichtbaar2, question).
+moveConfig(superkracht, s4onzichtbaar2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(superkracht, s4onzichtbaar2, "Waarom zou je onzichtbaar willen zijn?").
+next(superkracht, s4onzichtbaar2, "success", s4onzichtbaar3).
+next(superkracht, s4onzichtbaar2, "fail", s4onzichtbaar3).
+
+move(superkracht, s4onzichtbaar3, question).
+moveConfig(superkracht, s4onzichtbaar3, [type=yesno, context='answer_yesno', umVariable=onzichtbaar_voor_hero]).
+text(superkracht, s4onzichtbaar3, "Zou je ook voor mij onzichtbaar willen zijn?").
+next(superkracht, s4onzichtbaar3, "fail", s4fail_mensen_of_robotogen1).
+next(superkracht, s4onzichtbaar3, "answer_dontknow", s4fail_mensen_of_robotogen1).
+next(superkracht, s4onzichtbaar3, "answer_no", s4mensen1).
+next(superkracht, s4onzichtbaar3, "answer_yes", s4robots1).
 
 move(superkracht, s4mensen1, say).
 text(superkracht, s4mensen1, "Oké!").

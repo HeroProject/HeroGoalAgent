@@ -195,7 +195,7 @@ text(lievelingseten_vervolg_pizza, s5, "Ik heb opgeslagen dat jouw lievelings et
 next(lievelingseten_vervolg_pizza, s5, "true", s6).
 
 move(lievelingseten_vervolg_pizza, s6, say).
-text(lievelingseten_vervolg_pizza, s6, "Gisteren heb ik geprobeerd zelf pizza te maken.").
+text(lievelingseten_vervolg_pizza, s6, "Gisteren heb ik voor het eerst zelf pizza geprobeerd te maken.").
 next(lievelingseten_vervolg_pizza, s6, "true", s7).
 
 move(lievelingseten_vervolg_pizza, s7, say).
@@ -211,12 +211,12 @@ stop_interaction_probe(lievelingseten_vervolg_pizza, s9).
 next(lievelingseten_vervolg_pizza, s9, "true", s10).
 
 move(lievelingseten_vervolg_pizza, s10, question).
-moveConfig(lievelingseten_vervolg_pizza, s10, [type=yesno, context='answer_yesno']).
-text(lievelingseten_vervolg_pizza, s10, "Hebben jullie thuis wel eens zelf pizza gemaakt?").
+moveConfig(lievelingseten_vervolg_pizza, s10, [type=yesno, context='answer_yesno', umVariable=lievelingseten_met_p_gemaakt]).
+text(lievelingseten_vervolg_pizza, s10, "Heb jij wel eens zelf pizza gemaakt?").
 next(lievelingseten_vervolg_pizza, s10, "answer_yes", s11pizza_wel_gemaakt1).
 next(lievelingseten_vervolg_pizza, s10, "answer_no", s11pizza_niet_gemaakt1).
 next(lievelingseten_vervolg_pizza, s10, "answer_dontknow", s11pizza_niet_gemaakt1).
-next(lievelingseten_vervolg_pizza, s10, "fail", s11pizza_eerste_fail1).
+next(lievelingseten_vervolg_pizza, s10, "fail", s11pizza_niet_gemaakt1).
 
 move(lievelingseten_vervolg_pizza, s11pizza_wel_gemaakt1, question).
 moveConfig(lievelingseten_vervolg_pizza, s11pizza_wel_gemaakt1, [type=yesno, context='answer_yesno']).

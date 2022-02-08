@@ -494,12 +494,12 @@ text(robospelen_4_ingeschreven, s26, "En dat vind ik spannend!").
 minidialog(robospelen_5_info, [type=narrative, thread=robospelen, position=5]).
 
 move(robospelen_5_info, s1, say).
-text(robospelen_5_info, s1, "Ik heb een idee!").
+text(robospelen_5_info, s1, "Ik heb een idee, %first_name%!").
 next(robospelen_5_info, s1, "true", s2).
 
 move(robospelen_5_info, s2, question).
 moveConfig(robospelen_5_info, s2, [type=yesno, context='answer_yesno', umVariable=vertellen_over_rs]).
-text(robospelen_5_info, s2, "Zal ik eens vertellen hoe die robo spelen er eigenlijk uitzien?").
+text(robospelen_5_info, s2, "Zal ik eens wat vertellen over de Robo spelen?").
 next(robospelen_5_info, s2, "answer_yes", s3ja_vertellen1).
 next(robospelen_5_info, s2, "answer_no", s3nee_vertellen1).
 next(robospelen_5_info, s2, "answer_dontknow", s3nee_vertellen1).
@@ -594,14 +594,18 @@ next(robospelen_5_info, s20, "true", s21).
 
 move(robospelen_5_info, s21, say).
 text(robospelen_5_info, s21, "maar we moeten ons wel goed voorbereiden.").
-next(robospelen_5_info, s21, "true", s22).
+next(robospelen_5_info, s21, "true", s21b).
+
+move(robospelen_5_info, s21b, say).
+text(robospelen_5_info, s21b, "Ik ben daarom zo blij dat jij mijn coach bent").
+next(robospelen_5_info, s21b, "true", s22).
 
 move(robospelen_5_info, s22, continuator).
 next(robospelen_5_info, s22, [[expCondition=memory]], s23memory1).
 next(robospelen_5_info, s22, [[expCondition=control]], s23control1).
 
 move(robospelen_5_info, s23memory1, say).
-text(robospelen_5_info, s23memory1, "verblaffen, dansen, en gedachtenlezen").
+text(robospelen_5_info, s23memory1, "ver blaffen, dansen, en gedachtenlezen").
 next(robospelen_5_info, s23memory1, "true", s23memory2).
 
 move(robospelen_5_info, s23memory2, question).
@@ -611,7 +615,8 @@ next(robospelen_5_info, s23memory2, "success", s23memory3).
 next(robospelen_5_info, s23memory2, "fail", s23memory3).
 
 move(robospelen_5_info, s23memory3, say).
-text(robospelen_5_info, s23memory3, "Top keuze. Laten we dan gelijk gaan oefenen met %leukste_onderdeel%").
+%text(robospelen_5_info, s23memory3, "Top keuze. Laten we dan gelijk gaan oefenen met %leukste_onderdeel%").
+text(robospelen_5_info, s23memory3, "Top keuze.").
 
 move(robospelen_5_info, s23control1, say).
 text(robospelen_5_info, s23control1, "Laten we oefenen met gedachtenlezen.").
@@ -823,9 +828,32 @@ text(robospelen_6_dansen, s6, "Goed gedaan!").
 minidialog(robospelen_6_verblaffen, [type=narrative, thread=robospelen, position=6]).
 dependencies(robospelen_6_verblaffen, [[[robospelen_5_info, user_model, 0], [umVariable=leukste_onderdeel, filter=green, values=["verblaffen"]]]]).
 
+%move(robospelen_6_verblaffen, s1, say).
+%text(robospelen_6_verblaffen, s1, "Oke").
+%next(robospelen_6_verblaffen, s1, "true", s2).
+
 move(robospelen_6_verblaffen, s1, say).
-text(robospelen_6_verblaffen, s1, "Oke").
-next(robospelen_6_verblaffen, s1, "true", s2).
+text(robospelen_6_verblaffen, s1, "Vanavond is %leukste_onderdeel% het eerste onderdeel van de Robo Spelen.").
+next(robospelen_6_verblaffen, s1, "true", s1b).
+
+move(robospelen_6_verblaffen, s1b, say).
+text(robospelen_6_verblaffen, s1b, "Maar ik heb nog niet geoefend.").
+next(robospelen_6_verblaffen, s1b, "true", s1c).
+
+move(robospelen_6_verblaffen, s1c, question).
+moveConfig(robospelen_6_verblaffen, s1c, [type=yesno, context='answer_yesno']).
+text(robospelen_6_verblaffen, s1c, "Wil jij mij helpen").
+next(robospelen_6_verblaffen, s1c, "answer_yes", s1dyes).
+next(robospelen_6_verblaffen, s1c, "answer_no", s1dno).
+next(robospelen_6_verblaffen, s1c, "answer_dontknow", s1dno).
+next(robospelen_6_verblaffen, s1c, "fail", s1dno).
+
+move(robospelen_6_verblaffen, s1dyes, say).
+text(robospelen_6_verblaffen, s1dyes, "Super %first_name%, dankjewel. Laten we beginnen.").
+next(robospelen_6_verblaffen, s1dyes, "true", s2).
+
+move(robospelen_6_verblaffen, s1dno, say).
+text(robospelen_6_verblaffen, s1dno, "Prima, dan doe ik het straks. Laten we verder gaan met ons gesprek.").
 
 move(robospelen_6_verblaffen, s2, say).
 text(robospelen_6_verblaffen, s2, "Wat we nodig hebben is een goed blaf geluid").
@@ -1825,7 +1853,7 @@ next(robospelen_9_bijna, s18, "true", s19).
 
 move(robospelen_9_bijna, s19, question).
 moveConfig(robospelen_9_bijna, s19, [type=input, context="robospelen_meedoen_winnen", options=['meedoen', 'winnen'], fast=yes, umVariable=meedoen_of_winnen]).
-text(robospelen_9_bijna, s19, "Moet ie gaan over meedoen of winnen?").
+text(robospelen_9_bijna, s19, "Moet ie gaan over meedoen of winnen? Mag jij kiezen.").
 next(robospelen_9_bijna, s19, "meedoen", s20meedoen1).
 next(robospelen_9_bijna, s19, "winnen", s20winnen1).
 next(robospelen_9_bijna, s19, "fail", s20fail_mw1).
@@ -2129,439 +2157,393 @@ stop_interaction_probe(robospelen_10_peptalk, s31).
 minidialog(robospelen_11_tweede, [type=narrative, thread=robospelen, position=11]).
 
 move(robospelen_11_tweede, s1, say).
-text(robospelen_11_tweede, s1, "De robo spelen zitten erop!").
+text(robospelen_11_tweede, s1, "Hee %first_name% , tijd om het eindelijk over de robo spelen te hebben.").
 next(robospelen_11_tweede, s1, "true", s2).
 
-move(robospelen_11_tweede, s2, say).
-text(robospelen_11_tweede, s2, "Meteen toen ik thuis kwam ben ik in slaap gevallen.").
-next(robospelen_11_tweede, s2, "true", s3).
+move(robospelen_11_tweede, s2, continuator).
+next(robospelen_11_tweede, s2, [[expCondition=memory]], s3memory1).
+next(robospelen_11_tweede, s2, "true", s4).
 
-move(robospelen_11_tweede, s3, say).
-text(robospelen_11_tweede, s3, "Ik heb geslapen als een roos, gesnurkt als een oude brommer.").
-next(robospelen_11_tweede, s3, "true", s4).
+move(robospelen_11_tweede, s3memory1, say).
+text(robospelen_11_tweede, s3memory1, "Zoals ik vorige keer zei, heb ik afgelopen week gestreden voor wat ik waard was.").
+next(robospelen_11_tweede, s3memory1, "true", s3memory2).
 
-move(robospelen_11_tweede, s4, continuator).
-next(robospelen_11_tweede, s4, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [umVariable=ongezonde_dingen_bergen, filter=green, values=["_any"]]], s5dier_ongezond1).
-next(robospelen_11_tweede, s4, "true", s5default1).
+move(robospelen_11_tweede, s3memory2, say).
+text(robospelen_11_tweede, s3memory2, "Ik heb veel aan onze yell en je bemoedigende woorden gehad. Dank daarvoor").
+next(robospelen_11_tweede, s3memory2, "true", s4).
 
-move(robospelen_11_tweede, s5dier_ongezond1, say).
-text(robospelen_11_tweede, s5dier_ongezond1, "Gedroomd over een %lievelingsdier%.").
-next(robospelen_11_tweede, s5dier_ongezond1, "true", s5dier_ongezond2).
+move(robospelen_11_tweede, s4, say).
+text(robospelen_11_tweede, s4, "De robo spelen zitten erop!").
+next(robospelen_11_tweede, s4, "true", s5).
 
-move(robospelen_11_tweede, s5dier_ongezond2, say).
-text(robospelen_11_tweede, s5dier_ongezond2, "Gedroomd over jou en een hele berg %ongezonde_dingen_bergen%.").
-next(robospelen_11_tweede, s5dier_ongezond2, "true", s6).
+move(robospelen_11_tweede, s5, say).
+text(robospelen_11_tweede, s5, "Ik heb geslapen als een roos, gesnurkt als een oude brommer.").
+start_interaction_probe(robospelen_11_tweede, s5).
+next(robospelen_11_tweede, s5, "true", s6).
 
-move(robospelen_11_tweede, s5default1, say).
-text(robospelen_11_tweede, s5default1, "Gedroomd over jou op een wolk die leek op een grote geruite finish vlag").
-next(robospelen_11_tweede, s5default1, "true", s6).
+move(robospelen_11_tweede, s6, continuator).
+next(robospelen_11_tweede, s6, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [umVariable=lievelingseten_met_p, filter=green, values=["_any"]], [expCondition=memory]], s7dier_ongezond1).
+next(robospelen_11_tweede, s6, "true", s7default1).
 
-move(robospelen_11_tweede, s6, say).
-text(robospelen_11_tweede, s6, "En ik heb je gemist").
-next(robospelen_11_tweede, s6, "true", s7).
+move(robospelen_11_tweede, s7dier_ongezond1, say).
+text(robospelen_11_tweede, s7dier_ongezond1, "Gedroomd over een %lievelingsdier%, jouw lievelingsdier.").
+next(robospelen_11_tweede, s7dier_ongezond1, "true", s7dier_ongezond2).
 
-move(robospelen_11_tweede, s7, say).
-text(robospelen_11_tweede, s7, "Maar jij wilt natuurlijk weten of ik heb gewonnen of niet!").
-next(robospelen_11_tweede, s7, "true", s8).
+move(robospelen_11_tweede, s7dier_ongezond2, say).
+text(robospelen_11_tweede, s7dier_ongezond2, "Gedroomd over jou en een hele berg %lievelingseten_met_p%. Ik weet namelijk dat je dat erg lekker vind").
+next(robospelen_11_tweede, s7dier_ongezond2, "true", s8).
+
+move(robospelen_11_tweede, s7default1, say).
+text(robospelen_11_tweede, s7default1, "Gedroomd over jou op een wolk die leek op een grote geruite finish vlag").
+next(robospelen_11_tweede, s7default1, "true", s8).
 
 move(robospelen_11_tweede, s8, say).
-text(robospelen_11_tweede, s8, "Ik zal het je vertellen").
+text(robospelen_11_tweede, s8, "En ik heb je gemist").
+stop_interaction_probe(robospelen_11_tweede, s8).
 next(robospelen_11_tweede, s8, "true", s9).
 
 move(robospelen_11_tweede, s9, say).
-text(robospelen_11_tweede, s9, "Ik.").
+text(robospelen_11_tweede, s9, "Maar jij wilt natuurlijk weten of ik heb gewonnen of niet!").
 next(robospelen_11_tweede, s9, "true", s10).
 
 move(robospelen_11_tweede, s10, say).
-text(robospelen_11_tweede, s10, "Hero.").
+text(robospelen_11_tweede, s10, "Ik zal het je vertellen").
 next(robospelen_11_tweede, s10, "true", s11).
 
 move(robospelen_11_tweede, s11, say).
-text(robospelen_11_tweede, s11, "Deelnemer aan de robo spelen.").
+text(robospelen_11_tweede, s11, "Ik.").
 next(robospelen_11_tweede, s11, "true", s12).
 
 move(robospelen_11_tweede, s12, say).
-text(robospelen_11_tweede, s12, "Ben geëindigt op de.").
+text(robospelen_11_tweede, s12, "Hero.").
 next(robospelen_11_tweede, s12, "true", s13).
 
 move(robospelen_11_tweede, s13, say).
-audio(robospelen_11_tweede, s13, file, "resources/sounds/drum_roll.wav").
+text(robospelen_11_tweede, s13, "Deelnemer aan de robo spelen.").
 next(robospelen_11_tweede, s13, "true", s14).
 
 move(robospelen_11_tweede, s14, say).
-text(robospelen_11_tweede, s14, "Tweede plaats!!!").
+text(robospelen_11_tweede, s14, "Ben geëindigt op de.").
 next(robospelen_11_tweede, s14, "true", s15).
 
 move(robospelen_11_tweede, s15, say).
-audio(robospelen_11_tweede, s15, file, "resources/sounds/applaus.wav").
+audio(robospelen_11_tweede, s15, file, "resources/sounds/drum_roll.wav").
 next(robospelen_11_tweede, s15, "true", s16).
 
 move(robospelen_11_tweede, s16, say).
-text(robospelen_11_tweede, s16, "Danku danku!").
+text(robospelen_11_tweede, s16, "Tweede plaats!!!").
 next(robospelen_11_tweede, s16, "true", s17).
 
 move(robospelen_11_tweede, s17, say).
-text(robospelen_11_tweede, s17, "Ik ben heel erg blij!").
+audio(robospelen_11_tweede, s17, file, "resources/sounds/applaus.wav").
 next(robospelen_11_tweede, s17, "true", s18).
 
 move(robospelen_11_tweede, s18, say).
-text(robospelen_11_tweede, s18, "Misschien had ik de eerste plaats wel kunnen halen").
+text(robospelen_11_tweede, s18, "Danku danku!").
 next(robospelen_11_tweede, s18, "true", s19).
 
 move(robospelen_11_tweede, s19, say).
-text(robospelen_11_tweede, s19, "Maar eigenlijk wint elk jaar dezelfde Robot.").
+text(robospelen_11_tweede, s19, "Ik ben heel erg blij!").
 next(robospelen_11_tweede, s19, "true", s20).
 
 move(robospelen_11_tweede, s20, say).
-text(robospelen_11_tweede, s20, "De naam van die Robot is Echo.").
+text(robospelen_11_tweede, s20, "Misschien had ik de eerste plaats wel kunnen halen").
 next(robospelen_11_tweede, s20, "true", s21).
 
 move(robospelen_11_tweede, s21, say).
-text(robospelen_11_tweede, s21, "Hij is strak geprogrammeerd en twijfelt nooit aan zichzelf.").
+text(robospelen_11_tweede, s21, "Maar eigenlijk wint elk jaar dezelfde Robot.").
 next(robospelen_11_tweede, s21, "true", s22).
 
 move(robospelen_11_tweede, s22, say).
-text(robospelen_11_tweede, s22, "Hij heeft de beste methode ontwikkeld.").
+text(robospelen_11_tweede, s22, "De naam van die Robot is, Echo.").
 next(robospelen_11_tweede, s22, "true", s23).
 
 move(robospelen_11_tweede, s23, say).
-text(robospelen_11_tweede, s23, "is volautomatisch en werkt perfect.").
+text(robospelen_11_tweede, s23, "Hij is strak geprogrammeerd en twijfelt nooit aan zichzelf.").
 next(robospelen_11_tweede, s23, "true", s24).
 
 move(robospelen_11_tweede, s24, say).
-text(robospelen_11_tweede, s24, "Echo doet altijd hetzelfde.").
+text(robospelen_11_tweede, s24, "is nergens bang voor.").
 next(robospelen_11_tweede, s24, "true", s25).
 
 move(robospelen_11_tweede, s25, say).
-text(robospelen_11_tweede, s25, "twijfelt nooit").
+text(robospelen_11_tweede, s25, "Eigenlijk is Echo de perfecte Robot").
 next(robospelen_11_tweede, s25, "true", s26).
 
 move(robospelen_11_tweede, s26, say).
-text(robospelen_11_tweede, s26, "is nergens bang voor.").
+text(robospelen_11_tweede, s26, "Maar ik vind hem een beetje saai").
 next(robospelen_11_tweede, s26, "true", s27).
 
 move(robospelen_11_tweede, s27, say).
-text(robospelen_11_tweede, s27, "Eigenlijk is Echo de perfecte Robot").
+text(robospelen_11_tweede, s27, "omdat hij altijd hetzelfde doet.").
 next(robospelen_11_tweede, s27, "true", s28).
 
 move(robospelen_11_tweede, s28, say).
-text(robospelen_11_tweede, s28, "Maar ik vind hem een beetje saai").
+text(robospelen_11_tweede, s28, "Gaap!").
 next(robospelen_11_tweede, s28, "true", s29).
 
-move(robospelen_11_tweede, s29, say).
-text(robospelen_11_tweede, s29, "omdat hij altijd hetzelfde doet.").
-next(robospelen_11_tweede, s29, "true", s30).
+move(robospelen_11_tweede, s29, question).
+moveConfig(robospelen_11_tweede, s29, [type=yesno, context='answer_yesno', umVariable=vertellen_robospelen]).
+text(robospelen_11_tweede, s29, "Zal ik eens vertellen hoe de robo spelen gegaan zijn?").
+next(robospelen_11_tweede, s29, "answer_yes", s30ja_vertellen1).
+next(robospelen_11_tweede, s29, "answer_no", s30nee_vertellen1).
+next(robospelen_11_tweede, s29, "fail", s30nee_vertellen1).
+next(robospelen_11_tweede, s29, "answer_dontknow", s30nee_vertellen1).
 
-move(robospelen_11_tweede, s30, say).
-text(robospelen_11_tweede, s30, "Echo is een perfecte Robot die saai is.").
-next(robospelen_11_tweede, s30, "true", s31).
+move(robospelen_11_tweede, s30ja_vertellen1, say).
+text(robospelen_11_tweede, s30ja_vertellen1, "Oké, daar gaan we!").
+next(robospelen_11_tweede, s30ja_vertellen1, "true", s31).
+
+move(robospelen_11_tweede, s30nee_vertellen1, say).
+text(robospelen_11_tweede, s30nee_vertellen1, "Sorry, ik kan het niet voor me houden!").
+next(robospelen_11_tweede, s30nee_vertellen1, "true", s30nee_vertellen2).
+
+move(robospelen_11_tweede, s30nee_vertellen2, say).
+text(robospelen_11_tweede, s30nee_vertellen2, "Ik wil het toch heel graag vertellen!").
+next(robospelen_11_tweede, s30nee_vertellen2, "true", s30nee_vertellen3).
+
+move(robospelen_11_tweede, s30nee_vertellen3, say).
+text(robospelen_11_tweede, s30nee_vertellen3, "Als je het echt niet wilt horen kun je je oren dichtdoen").
+next(robospelen_11_tweede, s30nee_vertellen3, "true", s31).
 
 move(robospelen_11_tweede, s31, say).
-text(robospelen_11_tweede, s31, "Gaap!").
+text(robospelen_11_tweede, s31, "De voorrondes gingen eigenlijk vanzelf.").
 next(robospelen_11_tweede, s31, "true", s32).
 
-move(robospelen_11_tweede, s32, question).
-moveConfig(robospelen_11_tweede, s32, [type=yesno, context='answer_yesno', umVariable=vertellen_robospelen]).
-text(robospelen_11_tweede, s32, "Zal ik eens vertellen hoe de robo spelen gegaan zijn?").
-next(robospelen_11_tweede, s32, "answer_yes", s33ja_vertellen1).
-next(robospelen_11_tweede, s32, "answer_no", s33nee_vertellen1).
-next(robospelen_11_tweede, s32, "fail", s33nee_vertellen1).
-next(robospelen_11_tweede, s32, "answer_dontknow", s33nee_vertellen1).
+move(robospelen_11_tweede, s32, continuator).
+next(robospelen_11_tweede, s32, [[expCondition=memory], [umVariable=leukste_onderdeel, filter=green, values=["_any"]]], s33memory1).
+next(robospelen_11_tweede, s32, "true", s33control1).
 
-move(robospelen_11_tweede, s33ja_vertellen1, say).
-text(robospelen_11_tweede, s33ja_vertellen1, "Oké, daar gaan we!").
-next(robospelen_11_tweede, s33ja_vertellen1, "true", s34).
+move(robospelen_11_tweede, s33memory1, say).
+text(robospelen_11_tweede, s33memory1, "Ik was aan het %leukste_onderdeel% en het ging super!").
+next(robospelen_11_tweede, s33memory1, "true", s33memory2).
 
-move(robospelen_11_tweede, s33nee_vertellen1, say).
-text(robospelen_11_tweede, s33nee_vertellen1, "Sorry, ik kan het niet voor me houden!").
-next(robospelen_11_tweede, s33nee_vertellen1, "true", s33nee_vertellen2).
+move(robospelen_11_tweede, s33memory2, say).
+text(robospelen_11_tweede, s33memory2, "Vast omdat wij dat samen hebben geoefend").
+next(robospelen_11_tweede, s33memory2, "true", s34).
 
-move(robospelen_11_tweede, s33nee_vertellen2, say).
-text(robospelen_11_tweede, s33nee_vertellen2, "Ik wil het toch heel graag vertellen!").
-next(robospelen_11_tweede, s33nee_vertellen2, "true", s33nee_vertellen3).
-
-move(robospelen_11_tweede, s33nee_vertellen3, say).
-text(robospelen_11_tweede, s33nee_vertellen3, "Als je het echt niet wilt horen kun je je oren dichtdoen").
-next(robospelen_11_tweede, s33nee_vertellen3, "true", s34).
+move(robospelen_11_tweede, s33control1, say).
+text(robospelen_11_tweede, s33control1, "En dat ging super.").
+next(robospelen_11_tweede, s33control1, "true", s34).
 
 move(robospelen_11_tweede, s34, say).
-text(robospelen_11_tweede, s34, "De voorrondes gingen eigenlijk vanzelf.").
+text(robospelen_11_tweede, s34, "Uiteindelijk konden er drie Robots door naar het rò hze Bos").
 next(robospelen_11_tweede, s34, "true", s35).
 
 move(robospelen_11_tweede, s35, say).
-text(robospelen_11_tweede, s35, "Ik was aan het %leukste_onderdeel% en het ging super!").
+text(robospelen_11_tweede, s35, "Echo, Juno en ik.").
 next(robospelen_11_tweede, s35, "true", s36).
 
 move(robospelen_11_tweede, s36, say).
-text(robospelen_11_tweede, s36, "Vast omdat wij dat samen hebben geoefend").
+text(robospelen_11_tweede, s36, "Daar moesten wij rò hzeboswachten").
 next(robospelen_11_tweede, s36, "true", s37).
 
 move(robospelen_11_tweede, s37, say).
-text(robospelen_11_tweede, s37, "Uiteindelijk konden er drie Robots door naar het rò hze Bos").
+text(robospelen_11_tweede, s37, "brandjes blussen, mensen redden uit het water en afdrogen.").
 next(robospelen_11_tweede, s37, "true", s38).
 
 move(robospelen_11_tweede, s38, say).
-text(robospelen_11_tweede, s38, "Echo, Juno en ik.").
+text(robospelen_11_tweede, s38, "We moesten van opdracht naar opdracht rennen").
 next(robospelen_11_tweede, s38, "true", s39).
 
 move(robospelen_11_tweede, s39, say).
-text(robospelen_11_tweede, s39, "Daar moesten wij rò hzeboswachten").
+text(robospelen_11_tweede, s39, "langs rò hze beekjes en over rò hze heuvels.").
 next(robospelen_11_tweede, s39, "true", s40).
 
 move(robospelen_11_tweede, s40, say).
-text(robospelen_11_tweede, s40, "brandjes blussen, mensen redden uit het water en afdrogen.").
+text(robospelen_11_tweede, s40, "Juno viel al heel snel af.").
 next(robospelen_11_tweede, s40, "true", s41).
 
 move(robospelen_11_tweede, s41, say).
-text(robospelen_11_tweede, s41, "We moesten zelfs een rò hze kat uit een rò hze boom redden.").
+text(robospelen_11_tweede, s41, "Toen we de rò hze kat uit de rò hze boom moesten redden bleef Juno lekker in de boom zitten samen met de kat.").
 next(robospelen_11_tweede, s41, "true", s42).
 
 move(robospelen_11_tweede, s42, say).
-text(robospelen_11_tweede, s42, "We moesten van opdracht naar opdracht rennen").
+text(robospelen_11_tweede, s42, "Ik begrijp dat wel.").
 next(robospelen_11_tweede, s42, "true", s43).
 
 move(robospelen_11_tweede, s43, say).
-text(robospelen_11_tweede, s43, "langs rò hze beekjes en over rò hze heuvels.").
+text(robospelen_11_tweede, s43, "Het is heel verleidelijk om in een boom te klimmen en zon er zien onder gaan.").
 next(robospelen_11_tweede, s43, "true", s44).
 
 move(robospelen_11_tweede, s44, say).
-text(robospelen_11_tweede, s44, "Juno viel al heel snel af.").
+text(robospelen_11_tweede, s44, "Maar dat deed ik niet.").
 next(robospelen_11_tweede, s44, "true", s45).
 
 move(robospelen_11_tweede, s45, say).
-text(robospelen_11_tweede, s45, "Toen we de rò hze kat uit de rò hze boom moesten redden bleef Juno lekker in de boom zitten samen met de kat.").
+text(robospelen_11_tweede, s45, "Echo en ik waren even goed in alle opdrachten!").
 next(robospelen_11_tweede, s45, "true", s46).
 
 move(robospelen_11_tweede, s46, say).
-text(robospelen_11_tweede, s46, "Ze vond het fijn om zo hoog in de lucht te zijn.").
+text(robospelen_11_tweede, s46, "Voor de laatste opdracht renden Echo en ik zij aan zij door het rò hze bos").
 next(robospelen_11_tweede, s46, "true", s47).
 
 move(robospelen_11_tweede, s47, say).
-text(robospelen_11_tweede, s47, "Lekker veel frisse lucht.").
+text(robospelen_11_tweede, s47, "recht op de uitgang af").
 next(robospelen_11_tweede, s47, "true", s48).
 
 move(robospelen_11_tweede, s48, say).
-text(robospelen_11_tweede, s48, "Ik begrijp dat wel.").
+text(robospelen_11_tweede, s48, "Echo volgde een vlot vleermuisje.").
 next(robospelen_11_tweede, s48, "true", s49).
 
-move(robospelen_11_tweede, s49, say).
-text(robospelen_11_tweede, s49, "Het is heel verleidelijk om in een boom te klimmen en er lang te blijven zitten.").
-next(robospelen_11_tweede, s49, "true", s50).
+move(robospelen_11_tweede, s49, continuator).
+next(robospelen_11_tweede, s49, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [expCondition=memory]], s50dier1).
+next(robospelen_11_tweede, s49, "true", s50geen_dier1).
 
-move(robospelen_11_tweede, s50, say).
-text(robospelen_11_tweede, s50, "Totdat de rò hze zon ondergaat.").
-next(robospelen_11_tweede, s50, "true", s51).
+move(robospelen_11_tweede, s50dier1, say).
+text(robospelen_11_tweede, s50dier1, "En ik rende natuurlijk achter een %lievelingsdier% aan").
+next(robospelen_11_tweede, s50dier1, "true", s51).
+
+move(robospelen_11_tweede, s50geen_dier1, say).
+text(robospelen_11_tweede, s50geen_dier1, "En ik rende achter een egeltje aan").
+next(robospelen_11_tweede, s50geen_dier1, "true", s51).
 
 move(robospelen_11_tweede, s51, say).
-text(robospelen_11_tweede, s51, "Maar dat deed ik niet.").
+text(robospelen_11_tweede, s51, "Echo en het vleermuisje haalden ons heel snel in.").
 next(robospelen_11_tweede, s51, "true", s52).
 
 move(robospelen_11_tweede, s52, say).
-text(robospelen_11_tweede, s52, "Echo en ik waren even goed in alle opdrachten!").
+text(robospelen_11_tweede, s52, "Ineens dacht ik:").
 next(robospelen_11_tweede, s52, "true", s53).
 
 move(robospelen_11_tweede, s53, say).
-text(robospelen_11_tweede, s53, "Voor de laatste opdracht renden Echo en ik zij aan zij door het rò hze bos").
+text(robospelen_11_tweede, s53, "ik wil hier nog helemaal niet weg.").
 next(robospelen_11_tweede, s53, "true", s54).
 
 move(robospelen_11_tweede, s54, say).
-text(robospelen_11_tweede, s54, "recht op de uitgang af").
+text(robospelen_11_tweede, s54, "Dan moet ik weer een jaar wachten op het rò hze bos").
 next(robospelen_11_tweede, s54, "true", s55).
 
 move(robospelen_11_tweede, s55, say).
-text(robospelen_11_tweede, s55, "Echo volgde een vlot vleermuisje.").
+text(robospelen_11_tweede, s55, "Ik stopte met rennen").
 next(robospelen_11_tweede, s55, "true", s56).
 
-move(robospelen_11_tweede, s56, continuator).
-next(robospelen_11_tweede, s56, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s57dier1).
-next(robospelen_11_tweede, s56, "true", s57geen_dier1).
+move(robospelen_11_tweede, s56, say).
+text(robospelen_11_tweede, s56, "en ik bleef nog heel lang in het bos met Juno en de kat").
+next(robospelen_11_tweede, s56, "true", s57).
 
-move(robospelen_11_tweede, s57dier1, say).
-text(robospelen_11_tweede, s57dier1, "En ik rende natuurlijk achter een %lievelingsdier% aan").
-next(robospelen_11_tweede, s57dier1, "true", s58).
+move(robospelen_11_tweede, s57, continuator).
+next(robospelen_11_tweede, s57, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [expCondition=memory]], s58dier1).
+next(robospelen_11_tweede, s57, "true", s58geen_dier1).
 
-move(robospelen_11_tweede, s57geen_dier1, say).
-text(robospelen_11_tweede, s57geen_dier1, "En ik rende achter een egeltje aan").
-next(robospelen_11_tweede, s57geen_dier1, "true", s58).
+move(robospelen_11_tweede, s58dier1, say).
+text(robospelen_11_tweede, s58dier1, "En de %lievelingsdier%").
+next(robospelen_11_tweede, s58dier1, "true", s59).
 
-move(robospelen_11_tweede, s58, say).
-text(robospelen_11_tweede, s58, "Echo en het vleermuisje haalden ons heel snel in.").
-next(robospelen_11_tweede, s58, "true", s59).
+move(robospelen_11_tweede, s58geen_dier1, say).
+text(robospelen_11_tweede, s58geen_dier1, "en het egeltje.").
+next(robospelen_11_tweede, s58geen_dier1, "true", s59).
 
 move(robospelen_11_tweede, s59, say).
-text(robospelen_11_tweede, s59, "Ineens dacht ik:").
+text(robospelen_11_tweede, s59, "We hielden een picknick,").
 next(robospelen_11_tweede, s59, "true", s60).
 
 move(robospelen_11_tweede, s60, say).
-text(robospelen_11_tweede, s60, "ik wil hier nog helemaal niet weg.").
+text(robospelen_11_tweede, s60, "en zwommen in een rò hze meer!").
 next(robospelen_11_tweede, s60, "true", s61).
 
 move(robospelen_11_tweede, s61, say).
-text(robospelen_11_tweede, s61, "Dan moet ik weer een jaar wachten op het rò hze bos").
+text(robospelen_11_tweede, s61, "Het rò hze bos is de enige plek waar robots kunnen zwemmen").
 next(robospelen_11_tweede, s61, "true", s62).
 
 move(robospelen_11_tweede, s62, say).
-text(robospelen_11_tweede, s62, "en ik ken het bos nog niet goed genoeg.").
+text(robospelen_11_tweede, s62, "Omdat het water niet echt water is").
 next(robospelen_11_tweede, s62, "true", s63).
 
 move(robospelen_11_tweede, s63, say).
-text(robospelen_11_tweede, s63, "Ik stopte met rennen").
+text(robospelen_11_tweede, s63, "Het was heel leuk").
 next(robospelen_11_tweede, s63, "true", s64).
 
 move(robospelen_11_tweede, s64, say).
-text(robospelen_11_tweede, s64, "en ik bleef nog heel lang in het bos met Juno en de kat").
+text(robospelen_11_tweede, s64, "Juno werd derde").
 next(robospelen_11_tweede, s64, "true", s65).
 
-move(robospelen_11_tweede, s65, continuator).
-next(robospelen_11_tweede, s65, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s66dier1).
-next(robospelen_11_tweede, s65, "true", s66geen_dier1).
+move(robospelen_11_tweede, s65, say).
+text(robospelen_11_tweede, s65, "Ik werd tweede").
+next(robospelen_11_tweede, s65, "true", s66).
 
-move(robospelen_11_tweede, s66dier1, say).
-text(robospelen_11_tweede, s66dier1, "En mijn %lievelingsdier%").
-next(robospelen_11_tweede, s66dier1, "true", s67).
-
-move(robospelen_11_tweede, s66geen_dier1, say).
-text(robospelen_11_tweede, s66geen_dier1, "en het egeltje.").
-next(robospelen_11_tweede, s66geen_dier1, "true", s67).
+move(robospelen_11_tweede, s66, say).
+text(robospelen_11_tweede, s66, "en Echo werd, precies zoals vorig jaar en het jaar daarvoor, eerste.").
+next(robospelen_11_tweede, s66, "true", s67).
 
 move(robospelen_11_tweede, s67, say).
-text(robospelen_11_tweede, s67, "We hielden een picknick,").
+text(robospelen_11_tweede, s67, "Kampioen van de robo spelen.").
 next(robospelen_11_tweede, s67, "true", s68).
 
 move(robospelen_11_tweede, s68, say).
-text(robospelen_11_tweede, s68, "klommen in bomen").
+text(robospelen_11_tweede, s68, "Ik vraag me af hoeveel hij van het rò hze bos opgeslagen heeft in zijn database.").
 next(robospelen_11_tweede, s68, "true", s69).
 
 move(robospelen_11_tweede, s69, say).
-text(robospelen_11_tweede, s69, "en zwommen in een rò hze meer!").
+text(robospelen_11_tweede, s69, "Vast genoeg dat hij er niet meer nieuwsgierig naar is").
 next(robospelen_11_tweede, s69, "true", s70).
 
 move(robospelen_11_tweede, s70, say).
-text(robospelen_11_tweede, s70, "Het rò hze bos is de enige plek waar robots kunnen zwemmen").
+text(robospelen_11_tweede, s70, "Of misschien zit nieuwsgierigheid niet in zijn code geprogrammeerd").
 next(robospelen_11_tweede, s70, "true", s71).
 
 move(robospelen_11_tweede, s71, say).
-text(robospelen_11_tweede, s71, "Omdat het water niet echt water is").
+text(robospelen_11_tweede, s71, "Ik ben blij dat dat bij mij wel zo is").
 next(robospelen_11_tweede, s71, "true", s72).
 
 move(robospelen_11_tweede, s72, say).
-text(robospelen_11_tweede, s72, "Ik wilde zoveel mogelijk herinneringen maken").
+text(robospelen_11_tweede, s72, "Misschien had ik kunnen winnen").
 next(robospelen_11_tweede, s72, "true", s73).
 
 move(robospelen_11_tweede, s73, say).
-text(robospelen_11_tweede, s73, "zodat ik het hele jaar lang over het rò hze bos dromen kan.").
+text(robospelen_11_tweede, s73, "Maar dan had ik harden dan Echo moeten rennen").
 next(robospelen_11_tweede, s73, "true", s74).
 
 move(robospelen_11_tweede, s74, say).
-text(robospelen_11_tweede, s74, "Het was heel leuk").
+text(robospelen_11_tweede, s74, "En dan had ik niet kunnen picknicken of zwemmen").
 next(robospelen_11_tweede, s74, "true", s75).
 
 move(robospelen_11_tweede, s75, say).
-text(robospelen_11_tweede, s75, "Zo leuk dat ik dacht").
+text(robospelen_11_tweede, s75, "En misschien was dat wel leuker dan winnen.").
 next(robospelen_11_tweede, s75, "true", s76).
 
 move(robospelen_11_tweede, s76, say).
-text(robospelen_11_tweede, s76, "Misschien was de uitgang een valsstrik").
+text(robospelen_11_tweede, s76, "Eigenlijk is het wel zielig voor Echo dat hij niet met ons mee kon feesten in het rò hze bos").
 next(robospelen_11_tweede, s76, "true", s77).
 
 move(robospelen_11_tweede, s77, say).
-text(robospelen_11_tweede, s77, "En moest ik inderdaad blijven om te winnen!").
+text(robospelen_11_tweede, s77, "Het is gek, %first_name% ").
 next(robospelen_11_tweede, s77, "true", s78).
 
 move(robospelen_11_tweede, s78, say).
-text(robospelen_11_tweede, s78, "Maar dat was niet zo").
+text(robospelen_11_tweede, s78, "Ik ben een beetje jaloers op Echo, maar ik heb ook een beetje medelijden met hem.").
 next(robospelen_11_tweede, s78, "true", s79).
 
-move(robospelen_11_tweede, s79, say).
-text(robospelen_11_tweede, s79, "Juno werd derde").
-next(robospelen_11_tweede, s79, "true", s80).
+move(robospelen_11_tweede, s79, question).
+moveConfig(robospelen_11_tweede, s79, [type=yesno, context='answer_yesno', umVariable=snap_de_mixed_feelings]).
+text(robospelen_11_tweede, s79, "Snap je dat?").
+next(robospelen_11_tweede, s79, "answer_yes", s80snap_het1).
+next(robospelen_11_tweede, s79, "answer_no", s80snap_het_niet1).
+next(robospelen_11_tweede, s79, "fail", s80snap_het_niet1).
+next(robospelen_11_tweede, s79, "answer_dontknow", s80snap_het_niet1).
 
-move(robospelen_11_tweede, s80, say).
-text(robospelen_11_tweede, s80, "Ik werd tweede").
-next(robospelen_11_tweede, s80, "true", s81).
+move(robospelen_11_tweede, s80snap_het1, say).
+text(robospelen_11_tweede, s80snap_het1, "Fijn!").
+next(robospelen_11_tweede, s80snap_het1, "true", s80snap_het2).
+
+move(robospelen_11_tweede, s80snap_het2, say).
+text(robospelen_11_tweede, s80snap_het2, "Dan ben ik niet alleen").
+next(robospelen_11_tweede, s80snap_het2, "true", s81).
+
+move(robospelen_11_tweede, s80snap_het_niet1, say).
+text(robospelen_11_tweede, s80snap_het_niet1, "Ik snap het zelf ook niet zo goed").
+next(robospelen_11_tweede, s80snap_het_niet1, "true", s80snap_het_niet2).
+
+move(robospelen_11_tweede, s80snap_het_niet2, say).
+text(robospelen_11_tweede, s80snap_het_niet2, "Allemaal gevoelens die ik nooit eerder heb gehad!").
+next(robospelen_11_tweede, s80snap_het_niet2, "true", s81).
 
 move(robospelen_11_tweede, s81, say).
-text(robospelen_11_tweede, s81, "en Echo werd, precies zoals vorig jaar en het jaar daarvoor, eerste.").
+text(robospelen_11_tweede, s81, "Al met al ben ik heel tevreden, %first_name% ").
 next(robospelen_11_tweede, s81, "true", s82).
 
 move(robospelen_11_tweede, s82, say).
-text(robospelen_11_tweede, s82, "Kampioen van de robo spelen.").
-next(robospelen_11_tweede, s82, "true", s83).
-
-move(robospelen_11_tweede, s83, say).
-text(robospelen_11_tweede, s83, "Ik vraag me af hoeveel hij van het rò hze bos opgeslagen heeft in zijn database.").
-next(robospelen_11_tweede, s83, "true", s84).
-
-move(robospelen_11_tweede, s84, say).
-text(robospelen_11_tweede, s84, "Vast genoeg dat hij er niet meer nieuwsgierig naar is").
-next(robospelen_11_tweede, s84, "true", s85).
-
-move(robospelen_11_tweede, s85, say).
-text(robospelen_11_tweede, s85, "Of misschien zit nieuwsgierigheid niet in zijn code geprogrammeerd").
-next(robospelen_11_tweede, s85, "true", s86).
-
-move(robospelen_11_tweede, s86, say).
-text(robospelen_11_tweede, s86, "Ik ben blij dat dat bij mij wel zo is").
-next(robospelen_11_tweede, s86, "true", s87).
-
-move(robospelen_11_tweede, s87, say).
-text(robospelen_11_tweede, s87, "Misschien had ik kunnen winnen").
-next(robospelen_11_tweede, s87, "true", s88).
-
-move(robospelen_11_tweede, s88, say).
-text(robospelen_11_tweede, s88, "Maar dan had ik harden dan Echo moeten rennen").
-next(robospelen_11_tweede, s88, "true", s89).
-
-move(robospelen_11_tweede, s89, say).
-text(robospelen_11_tweede, s89, "En dan had ik niet kunnen picknicken of zwemmen").
-next(robospelen_11_tweede, s89, "true", s90).
-
-move(robospelen_11_tweede, s90, say).
-text(robospelen_11_tweede, s90, "En misschien was dat wel leuker dan winnen.").
-next(robospelen_11_tweede, s90, "true", s91).
-
-move(robospelen_11_tweede, s91, say).
-text(robospelen_11_tweede, s91, "Eigenlijk is het wel zielig voor Echo dat hij niet met ons mee kon feesten in het rò hze bos").
-next(robospelen_11_tweede, s91, "true", s92).
-
-move(robospelen_11_tweede, s92, say).
-text(robospelen_11_tweede, s92, "Het is gek, %first_name% ").
-next(robospelen_11_tweede, s92, "true", s93).
-
-move(robospelen_11_tweede, s93, say).
-text(robospelen_11_tweede, s93, "Ik ben een beetje jaloers op Echo, maar ik heb ook een beetje medelijden met hem.").
-next(robospelen_11_tweede, s93, "true", s94).
-
-move(robospelen_11_tweede, s94, question).
-moveConfig(robospelen_11_tweede, s94, [type=yesno, context='answer_yesno', umVariable=snap_de_mixed_feelings]).
-text(robospelen_11_tweede, s94, "Snap je dat?").
-next(robospelen_11_tweede, s94, "answer_yes", s95snap_het1).
-next(robospelen_11_tweede, s94, "answer_no", s95snap_het_niet1).
-next(robospelen_11_tweede, s94, "fail", s95snap_het_niet1).
-next(robospelen_11_tweede, s94, "answer_dontknow", s95snap_het_niet1).
-
-move(robospelen_11_tweede, s95snap_het1, say).
-text(robospelen_11_tweede, s95snap_het1, "Fijn!").
-next(robospelen_11_tweede, s95snap_het1, "true", s95snap_het2).
-
-move(robospelen_11_tweede, s95snap_het2, say).
-text(robospelen_11_tweede, s95snap_het2, "Dan ben ik niet alleen").
-next(robospelen_11_tweede, s95snap_het2, "true", s96).
-
-move(robospelen_11_tweede, s95snap_het_niet1, say).
-text(robospelen_11_tweede, s95snap_het_niet1, "Ik snap het zelf ook niet zo goed").
-next(robospelen_11_tweede, s95snap_het_niet1, "true", s95snap_het_niet2).
-
-move(robospelen_11_tweede, s95snap_het_niet2, say).
-text(robospelen_11_tweede, s95snap_het_niet2, "Allemaal gevoelens die ik nooit eerder heb gehad!").
-next(robospelen_11_tweede, s95snap_het_niet2, "true", s96).
-
-move(robospelen_11_tweede, s96, say).
-text(robospelen_11_tweede, s96, "Al met al ben ik heel tevreden, %first_name% ").
-next(robospelen_11_tweede, s96, "true", s97).
-
-move(robospelen_11_tweede, s97, say).
-text(robospelen_11_tweede, s97, "Zonder jou was ik nooit zo ver gekomen!").
+text(robospelen_11_tweede, s82, "Zonder jou was ik nooit zo ver gekomen!").
 
 %% robospelen_12_bedankt %%
 minidialog(robospelen_12_bedankt, [type=narrative, thread=robospelen, position=12]).
@@ -2582,102 +2564,90 @@ move(robospelen_12_bedankt, s4, say).
 text(robospelen_12_bedankt, s4, "maar ik ben door jou meer op een mens gaan lijken.").
 next(robospelen_12_bedankt, s4, "true", s5).
 
-move(robospelen_12_bedankt, s5, say).
-text(robospelen_12_bedankt, s5, "Een mens met herinneringen, fantasie en dromen.").
-next(robospelen_12_bedankt, s5, "true", s6).
+move(robospelen_12_bedankt, s5, continuator).
+next(robospelen_12_bedankt, s5, [[expCondition=memory]], s6memory1).
+next(robospelen_12_bedankt, s5, "true", s7).
 
-move(robospelen_12_bedankt, s6, say).
-text(robospelen_12_bedankt, s6, "Dat vind ik eigenlijk leuker. ").
-next(robospelen_12_bedankt, s6, "true", s7).
+move(robospelen_12_bedankt, s6memory1, say).
+text(robospelen_12_bedankt, s6memory1, "Een mens met herinneringen, fantasie en dromen.").
+next(robospelen_12_bedankt, s6memory1, "true", s7).
 
 move(robospelen_12_bedankt, s7, say).
-text(robospelen_12_bedankt, s7, "Ik hoop dat jij ook vindt dat je een beetje meer op een Robot bent gaan lijken door mij.").
+text(robospelen_12_bedankt, s7, "Dat vind ik eigenlijk leuker. ").
 next(robospelen_12_bedankt, s7, "true", s8).
 
 move(robospelen_12_bedankt, s8, say).
-text(robospelen_12_bedankt, s8, "Nu ik niet meer hoef te trainen voor de robo spelen heb ik veel vrije tijd.").
+text(robospelen_12_bedankt, s8, "Ik hoop dat jij ook vindt dat je een beetje meer op een Robot bent gaan lijken door mij.").
 next(robospelen_12_bedankt, s8, "true", s9).
 
 move(robospelen_12_bedankt, s9, say).
-text(robospelen_12_bedankt, s9, "Sinds de robo spelen heb ik met Lego gespeeld").
+text(robospelen_12_bedankt, s9, "Wist je dat Hero een Engels woord is dat held betekend?").
 next(robospelen_12_bedankt, s9, "true", s10).
 
 move(robospelen_12_bedankt, s10, say).
-text(robospelen_12_bedankt, s10, "en ik heb getuinierd").
+text(robospelen_12_bedankt, s10, "Ik dacht: ken ik eigenlijk zelf een hero?").
 next(robospelen_12_bedankt, s10, "true", s11).
 
-move(robospelen_12_bedankt, s11, continuator).
-next(robospelen_12_bedankt, s11, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s12dier1).
-next(robospelen_12_bedankt, s11, "true", s13).
+move(robospelen_12_bedankt, s11, say).
+text(robospelen_12_bedankt, s11, "Een held?").
+next(robospelen_12_bedankt, s11, "true", s12).
 
-move(robospelen_12_bedankt, s12dier1, say).
-text(robospelen_12_bedankt, s12dier1, "En ik denk erover na om ook een %soort_huisdier% te adopteren").
-next(robospelen_12_bedankt, s12dier1, "true", s13).
+move(robospelen_12_bedankt, s12, say).
+text(robospelen_12_bedankt, s12, "Ik moest meteen aan jou denken.").
+next(robospelen_12_bedankt, s12, "true", s13).
 
 move(robospelen_12_bedankt, s13, say).
-text(robospelen_12_bedankt, s13, "Laatst leerde ik voor de grap een heel Engels woordenboek van buiten.").
+text(robospelen_12_bedankt, s13, "Eigenlijk ben jij mijn hero!").
 next(robospelen_12_bedankt, s13, "true", s14).
 
 move(robospelen_12_bedankt, s14, say).
-text(robospelen_12_bedankt, s14, "Daar stond het woordje Hero ook in").
+text(robospelen_12_bedankt, s14, "Zonder jou was dit allemaal nooit gelukt.").
 next(robospelen_12_bedankt, s14, "true", s15).
 
 move(robospelen_12_bedankt, s15, say).
-text(robospelen_12_bedankt, s15, "met daarbij de Nederlandse betekenis van dat woord.").
+text(robospelen_12_bedankt, s15, "Ik ken nog niet zoveel mensen").
 next(robospelen_12_bedankt, s15, "true", s16).
 
-move(robospelen_12_bedankt, s16, say).
-text(robospelen_12_bedankt, s16, "Hero betekent eigenlijk held.").
-next(robospelen_12_bedankt, s16, "true", s17).
+move(robospelen_12_bedankt, s16, continuator).
+next(robospelen_12_bedankt, s16, [[expCondition=memory]], s17memory1).
+next(robospelen_12_bedankt, s16, "true", s18).
 
-move(robospelen_12_bedankt, s17, say).
-text(robospelen_12_bedankt, s17, "Ik dacht: ken ik eigenlijk zelf een hero?").
-next(robospelen_12_bedankt, s17, "true", s18).
+move(robospelen_12_bedankt, s17memory1, say).
+text(robospelen_12_bedankt, s17memory1, "Maar ik sla de mensen die ik ken goed op in mijn database zodat ik ze nooit zal vergeten.").
+next(robospelen_12_bedankt, s17memory1, "true", s17memory2).
+
+move(robospelen_12_bedankt, s17memory2, say).
+text(robospelen_12_bedankt, s17memory2, "In dat stukje geheugen is bijvoorbeeld een plekje voor Mike").
+next(robospelen_12_bedankt, s17memory2, "true", s17memory3).
+
+move(robospelen_12_bedankt, s17memory3, say).
+text(robospelen_12_bedankt, s17memory3, "Maar ook voor jou!").
+next(robospelen_12_bedankt, s17memory3, "true", s17memory4).
+
+move(robospelen_12_bedankt, s17memory4, say).
+text(robospelen_12_bedankt, s17memory4, "Op die manier kan ik altijd over jou dromen.").
+next(robospelen_12_bedankt, s17memory4, "true", s18).
 
 move(robospelen_12_bedankt, s18, say).
-text(robospelen_12_bedankt, s18, "Een held?").
+text(robospelen_12_bedankt, s18, "Bedankt voor alle leuke avonturen en voor je hulp bij de robo spelen!").
 next(robospelen_12_bedankt, s18, "true", s19).
 
-move(robospelen_12_bedankt, s19, say).
-text(robospelen_12_bedankt, s19, "Ik moest meteen aan jou denken.").
-next(robospelen_12_bedankt, s19, "true", s20).
+move(robospelen_12_bedankt, s19, continuator).
+next(robospelen_12_bedankt, s19, [[expCondition=memory]], s20memory1).
+next(robospelen_12_bedankt, s19, "true", s21).
 
-move(robospelen_12_bedankt, s20, say).
-text(robospelen_12_bedankt, s20, "Eigenlijk ben jij mijn hero!").
-next(robospelen_12_bedankt, s20, "true", s21).
+move(robospelen_12_bedankt, s20memory1, say).
+text(robospelen_12_bedankt, s20memory1, "Zonder jou als coach zou ik het niet gedaan kunnen hebben.").
+next(robospelen_12_bedankt, s20memory1, "true", s20memory2).
+
+move(robospelen_12_bedankt, s20memory2, say).
+text(robospelen_12_bedankt, s20memory2, "Bedankt dat je dat wilde zijn.").
+next(robospelen_12_bedankt, s20memory2, "true", s20memory3).
+
+move(robospelen_12_bedankt, s20memory3, say).
+text(robospelen_12_bedankt, s20memory3, "Je was een fantastische coach").
+next(robospelen_12_bedankt, s20memory3, "true", s21).
 
 move(robospelen_12_bedankt, s21, say).
-text(robospelen_12_bedankt, s21, "Zonder jou was dit allemaal nooit gelukt.").
-next(robospelen_12_bedankt, s21, "true", s22).
-
-move(robospelen_12_bedankt, s22, say).
-text(robospelen_12_bedankt, s22, "Ik ken nog niet zoveel mensen").
-next(robospelen_12_bedankt, s22, "true", s23).
-
-move(robospelen_12_bedankt, s23, say).
-text(robospelen_12_bedankt, s23, "Maar ik sla de mensen die ik ken goed op in mijn database zodat ik ze nooit zal vergeten.").
-next(robospelen_12_bedankt, s23, "true", s24).
-
-move(robospelen_12_bedankt, s24, say).
-text(robospelen_12_bedankt, s24, "In dat stukje geheugen is bijvoorbeeld een plekje voor Mike").
-next(robospelen_12_bedankt, s24, "true", s25).
-
-move(robospelen_12_bedankt, s25, say).
-text(robospelen_12_bedankt, s25, "Maar ook voor jou!").
-next(robospelen_12_bedankt, s25, "true", s26).
-
-move(robospelen_12_bedankt, s26, say).
-text(robospelen_12_bedankt, s26, "Op die manier kan ik altijd over jou dromen.").
-next(robospelen_12_bedankt, s26, "true", s27).
-
-move(robospelen_12_bedankt, s27, say).
-text(robospelen_12_bedankt, s27, "Bedankt voor alle leuke avonturen en voor je hulp bij de robo spelen!").
-next(robospelen_12_bedankt, s27, "true", s28).
-
-move(robospelen_12_bedankt, s28, say).
-text(robospelen_12_bedankt, s28, "Je was een fantastische coach").
-next(robospelen_12_bedankt, s28, "true", s29).
-
-move(robospelen_12_bedankt, s29, say).
-text(robospelen_12_bedankt, s29, "en ik denk dat je een bizarre Robot zou zijn geweest.").
+text(robospelen_12_bedankt, s21, "en ik denk dat je een bizarre Robot zou zijn geweest.").
 

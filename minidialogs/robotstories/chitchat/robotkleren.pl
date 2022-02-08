@@ -39,7 +39,7 @@ text(robotkleren, s9, "Als jij mocht kiezen").
 next(robotkleren, s9, "true", s10).
 
 move(robotkleren, s10, question).
-moveConfig(robotkleren, s10, [type=input, context="clothing", options=['badjas', 'robotpak', 't-shirt', 'rok', 'trui'], fast=yes, umVariable=kledingstuk]).
+moveConfig(robotkleren, s10, [type=input, context="clothing", options=['badjas', 'robotpak', 't-shirt', 'jurk', 'trui'], fast=yes, umVariable=kledingstuk]).
 text(robotkleren, s10, "Wat zou je mij aan trekken, een t-shirt, of een rok, of misschien iets heel anders?").
 next(robotkleren, s10, "robotpak", s11niets1).
 next(robotkleren, s10, "badjas", s11badjas1).

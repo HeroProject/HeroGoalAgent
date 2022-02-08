@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_sound, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 
 % Multi session
@@ -61,12 +61,18 @@ sessionDesign(hospital_1, [general_wakeup, ho1_greeting, ho1_tutorial_speech, ho
 sessionDesign(hospital_2, [general_wakeup, ho2_greeting, ho2_tutorial, ho2_tutorial_2, ho2_story_selection, ho2_goodbye, general_rest]).
 sessionDesign(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_rest]).
 
+%%%%%%%%%%%%%% Demos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sessionDesign(demo_1, [general_wakeup, robospelen_5_info, general_rest]).
+sessionDesign(demo_2, [general_wakeup, robospelen_6_verblaffen, general_rest]).
+sessionDesign(demo_3, [general_wakeup, lievelingseten, general_rest]).
+sessionDesign(demo_4, [general_wakeup, lievelingseten_vervolg_pasta, general_rest]).
+sessionDesign(demo_5, [general_wakeup, secret_handshake_maken, demo_doei_1, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Test suite
-%multiSessionDesign([testing_short]).
+multiSessionDesign([testing_short]).
 %multiSessionDesign([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
 
 % Hospital study
@@ -87,19 +93,19 @@ sessionDesign(hospital_3, [general_wakeup, ho3_greeting, ho3_goodbye, general_re
 useGui(false).
 % When GUI is used this userId and these localVariables are ignored.
 % When no GUI is uses, these variables need to be specified.
-setContinueSession(false).
+setContinueSession(true).
 setBasePosture('Stand').
 
 % Experimental settings
-setUserId('998'). % user id
-setSessionId(4). % session id
+setUserId('999'). % user id
+setSessionId(3). % session id
 useMemory(true). % condition
 
-
-multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5]).
+%multiSessionDesign([demo_1, demo_2, demo_3, demo_4, demo_5]).
+%multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5]).
 %multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5]).
 
-addLocalVariable(first_name, "Elvira"). % name empty for condition 'false'
+addLocalVariable(first_name, "Mike"). % name empty for condition 'false'
 % Record the interaction
 recordInteractionActive(false).
 

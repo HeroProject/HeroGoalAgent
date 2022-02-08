@@ -30,7 +30,7 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_color, s1, question).
-moveConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
+moveConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
 defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).

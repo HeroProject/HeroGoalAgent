@@ -571,7 +571,7 @@ move(droom_op_bestelling, s43, say).
 text(droom_op_bestelling, s43, "dan komt het allemaal goed.").
 
 %% autonome_droom %%
-minidialog(autonome_droom, [type=narrative, thread=dromen, position=3]).
+minidialog(autonome_droom, [type=narrative, thread=dromen, position=5]).
 
 move(autonome_droom, s1, say).
 text(autonome_droom, s1, "%first_name% !").
@@ -812,7 +812,7 @@ move(autonome_droom, s24blaf_bekend21, say).
 text(autonome_droom, s24blaf_bekend21, "Was alles maar zo gemakkelijk en leuk als in een droom.").
 
 %% robospelen_droom %%
-minidialog(robospelen_droom, [type=narrative, thread=dromen, position=4]).
+minidialog(robospelen_droom, [type=narrative, thread=dromen, position=3]).
 
 move(robospelen_droom, s1, say).
 text(robospelen_droom, s1, "De Robospelen zitten echt in mijn hoofd hoor!").
@@ -1017,10 +1017,10 @@ move(robospelen_droom, s37, say).
 text(robospelen_droom, s37, "Vlak voordat de Robospelen echt begonnen was de droom voorbij").
 
 %% dromen_conclusie %%
-minidialog(dromen_conclusie, [type=narrative, thread=dromen, position=5]).
+minidialog(dromen_conclusie, [type=narrative, thread=dromen, position=4]).
 
 move(dromen_conclusie, s1, continuator).
-next(dromen_conclusie, s1, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s2dier1).
+next(dromen_conclusie, s1, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [expCondition=memory]], s2dier1).
 next(dromen_conclusie, s1, "true", s2geen_dier1).
 
 move(dromen_conclusie, s2dier1, say).
@@ -1043,13 +1043,17 @@ move(dromen_conclusie, s5, say).
 text(dromen_conclusie, s5, "Jij was er ook!").
 next(dromen_conclusie, s5, "true", s6).
 
-move(dromen_conclusie, s6, say).
-text(dromen_conclusie, s6, "Je at pizza, pasta, pannenkoeken, poffertjes, en patat").
-next(dromen_conclusie, s6, "true", s7).
+move(dromen_conclusie, s6, continuator).
+next(dromen_conclusie, s6, [[umVariable=lievelingseten_met_p, filter=green, values=["_any"]], [expCondition=memory]], s7eten1).
+next(dromen_conclusie, s6, "true", s7geen_eten1).
 
-move(dromen_conclusie, s7, say).
-text(dromen_conclusie, s7, "Alles door elkaar").
-next(dromen_conclusie, s7, "true", s8).
+move(dromen_conclusie, s7eten1, say).
+text(dromen_conclusie, s7eten1, "Jij at jouw lievelingseten met een p, %lievelingseten_met_p%").
+next(dromen_conclusie, s7eten1, "true", s8).
+
+move(dromen_conclusie, s7geen_eten1, say).
+text(dromen_conclusie, s7geen_eten1, "Jij at van alles en nog wat").
+next(dromen_conclusie, s7geen_eten1, "true", s8).
 
 move(dromen_conclusie, s8, say).
 text(dromen_conclusie, s8, "Je had ook een drankje.").
@@ -1063,7 +1067,13 @@ next(dromen_conclusie, s9, "fail", s10got_no_drankje1).
 
 move(dromen_conclusie, s10got_drankje1, say).
 text(dromen_conclusie, s10got_drankje1, "Lekker! Doe mij ook maar eentje!").
-next(dromen_conclusie, s10got_drankje1, "true", s11).
+next(dromen_conclusie, s10got_drankje1, "true", s10got_drankje2).
+
+move(dromen_conclusie, s10got_drankje2, question).
+moveConfig(dromen_conclusie, s10got_drankje2, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(dromen_conclusie, s10got_drankje2, "Wat vind je daar lekker aan?").
+next(dromen_conclusie, s10got_drankje2, "success", s11).
+next(dromen_conclusie, s10got_drankje2, "fail", s11).
 
 move(dromen_conclusie, s10got_no_drankje1, say).
 text(dromen_conclusie, s10got_no_drankje1, "Wat dacht je van iets heel kouds?").
@@ -1071,166 +1081,51 @@ next(dromen_conclusie, s10got_no_drankje1, "true", s10got_no_drankje2).
 
 move(dromen_conclusie, s10got_no_drankje2, say).
 text(dromen_conclusie, s10got_no_drankje2, "Met ijsklontjes en in een glitterglas").
-next(dromen_conclusie, s10got_no_drankje2, "true", s10got_no_drankje3).
-
-move(dromen_conclusie, s10got_no_drankje3, say).
-text(dromen_conclusie, s10got_no_drankje3, "Het zou sowieso een super lekker drankje zijn").
-next(dromen_conclusie, s10got_no_drankje3, "true", s11).
+next(dromen_conclusie, s10got_no_drankje2, "true", s11).
 
 move(dromen_conclusie, s11, continuator).
-next(dromen_conclusie, s11, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s12dier1).
+next(dromen_conclusie, s11, [[umVariable=lievelingsdier, filter=green, values=["_any"]], [expCondition=memory]], s12dier1).
 next(dromen_conclusie, s11, "true", s12geen_dier1).
 
 move(dromen_conclusie, s12dier1, say).
-text(dromen_conclusie, s12dier1, "%lievelingsdier% en ik hadden een goed picknickgesprek over herinneringen en fantasie").
+text(dromen_conclusie, s12dier1, "%lievelingsdier% en ik hadden een goed picknickgesprek over herinneringen").
 next(dromen_conclusie, s12dier1, "true", s13).
 
 move(dromen_conclusie, s12geen_dier1, say).
-text(dromen_conclusie, s12geen_dier1, "De egel en ik hadden een goed picknickgesprek over herinneringen en fantasie").
+text(dromen_conclusie, s12geen_dier1, "De egel en ik hadden een goed picknickgesprek over herinneringen").
 next(dromen_conclusie, s12geen_dier1, "true", s13).
 
-move(dromen_conclusie, s13, question).
-moveConfig(dromen_conclusie, s13, [type=input, context="conclusie_her_fan", options=['herinneringen', 'fantasie'], fast=yes, umVariable=herinneringen_of_fantasie]).
-text(dromen_conclusie, s13, "Zal ik je eerst vertellen over herinneringen of eerst over fantasie?").
-next(dromen_conclusie, s13, "herinneringen", s14herinneringen1).
-next(dromen_conclusie, s13, "fantasie", s14fantasie1).
-next(dromen_conclusie, s13, "fail", s14fail_hf1).
+move(dromen_conclusie, s13, say).
+text(dromen_conclusie, s13, "Met de juiste hoeveelheid fantasie en met herinneringen kan je te gekke dromen maken.").
+next(dromen_conclusie, s13, "true", s14).
 
-move(dromen_conclusie, s14fail_hf1, say).
-text(dromen_conclusie, s14fail_hf1, "Ik vertel je eerst wel over de herinneringen!").
-next(dromen_conclusie, s14fail_hf1, "true", s14fail_hf2).
-
-move(dromen_conclusie, s14fail_hf2, say).
-text(dromen_conclusie, s14fail_hf2, "In die volgorde ging het in mijn droom ook").
-next(dromen_conclusie, s14fail_hf2, "true", s14herinneringen1).
-
-move(dromen_conclusie, s14herinneringen1, say).
-text(dromen_conclusie, s14herinneringen1, "Herinneringen zijn de beelden die je opslaat in je database").
-next(dromen_conclusie, s14herinneringen1, "true", s14herinneringen2).
-
-move(dromen_conclusie, s14herinneringen2, say).
-text(dromen_conclusie, s14herinneringen2, "en later terug kan kijken alsof je met een achtbaankarretje langs televisieschermen rijdt.").
-next(dromen_conclusie, s14herinneringen2, "true", s14herinneringen3).
-
-move(dromen_conclusie, s14herinneringen3, continuator).
-next(dromen_conclusie, s14herinneringen3, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s14herinneringen_dier1).
-next(dromen_conclusie, s14herinneringen3, "true", s14herinneringen_geen_dier1).
-
-move(dromen_conclusie, s14herinneringen_dier1, say).
-text(dromen_conclusie, s14herinneringen_dier1, "%lievelingsdier% vertelde dat je herinneringen nodig hebt om goed te kunnen dromen.").
-next(dromen_conclusie, s14herinneringen_dier1, "true", s14herinneringen_21).
-
-move(dromen_conclusie, s14herinneringen_geen_dier1, say).
-text(dromen_conclusie, s14herinneringen_geen_dier1, "De egel vertelde dat je herinneringen nodig hebt om goed te kunnen dromen.").
-next(dromen_conclusie, s14herinneringen_geen_dier1, "true", s14herinneringen21).
-
-move(dromen_conclusie, s14herinneringen21, say).
-text(dromen_conclusie, s14herinneringen21, "Niet alle herinneringen zijn leuk of perfect").
-next(dromen_conclusie, s14herinneringen21, "true", s14herinneringen22).
-
-move(dromen_conclusie, s14herinneringen22, say).
-text(dromen_conclusie, s14herinneringen22, "en van sommige herinneringen word je ook geen leuke of perfecte Robot.").
-next(dromen_conclusie, s14herinneringen22, "true", s14herinneringen23).
-
-move(dromen_conclusie, s14herinneringen23, say).
-text(dromen_conclusie, s14herinneringen23, "Maar alle herinneringen horen wel bij je!").
-next(dromen_conclusie, s14herinneringen23, "true", s14herinneringen24).
-
-move(dromen_conclusie, s14herinneringen24, say).
-text(dromen_conclusie, s14herinneringen24, "Zonder mijn herinneringen was ik geen complete Hero!").
-next(dromen_conclusie, s14herinneringen24, "true", s14herinneringen25).
-
-move(dromen_conclusie, s14herinneringen25, say).
-text(dromen_conclusie, s14herinneringen25, "Daarna hadden we het over fantasie!").
-next(dromen_conclusie, s14herinneringen25, "true", s14fantasie1).
-
-move(dromen_conclusie, s14fantasie1, say).
-text(dromen_conclusie, s14fantasie1, "Fantasie is dat je dingen voor je kan zien die er misschien in het echt helemaal niet zijn!").
-next(dromen_conclusie, s14fantasie1, "true", s14fantasie2).
-
-move(dromen_conclusie, s14fantasie2, say).
-text(dromen_conclusie, s14fantasie2, "Fantasie is erg belangrijk om te kunnen dromen.").
-next(dromen_conclusie, s14fantasie2, "true", s14fantasie3).
-
-move(dromen_conclusie, s14fantasie3, say).
-text(dromen_conclusie, s14fantasie3, "Zo kan je bijvoorbeeld verzinnen wat je de volgende dag wil doen of wat je later worden wil.").
-next(dromen_conclusie, s14fantasie3, "true", s14fantasie4).
-
-move(dromen_conclusie, s14fantasie4, continuator).
-next(dromen_conclusie, s14fantasie4, [[umVariable=herinneringen_of_fantasie, filter=green, values=["fantasie"]]], s14herinneringen_na_fantasie1).
-next(dromen_conclusie, s14fantasie4, "true", s15).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie1, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie1, "En daarna hadden we het over dromen!").
-next(dromen_conclusie, s14herinneringen_na_fantasie1, "true", s14herinneringen_na_fantasie2).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie2, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie2, "Herinneringen zijn de beelden die je opslaat in je database").
-next(dromen_conclusie, s14herinneringen_na_fantasie2, "true", s14herinneringen_na_fantasie3).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie3, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie3, "en later terug kan kijken alsof je met een achtbaankarretje langs televisieschermen rijdt.").
-next(dromen_conclusie, s14herinneringen_na_fantasie3, "true", s14herinneringen_na_fantasie4).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie4, continuator).
-next(dromen_conclusie, s14herinneringen_na_fantasie4, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s14herinneringen_na_fantasie_dier1).
-next(dromen_conclusie, s14herinneringen_na_fantasie4, "true", s14herinneringen_na_fantasie_geen_dier1).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_dier1, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_dier1, "%lievelingsdier% vertelde dat je herinneringen nodig hebt om goed te kunnen dromen.").
-next(dromen_conclusie, s14herinneringen_na_fantasie_dier1, "true", s14herinneringen_na_fantasie_21).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_geen_dier1, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_geen_dier1, "De egel vertelde dat je herinneringen nodig hebt om goed te kunnen dromen.").
-next(dromen_conclusie, s14herinneringen_na_fantasie_geen_dier1, "true", s14herinneringen_na_fantasie_21).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_21, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_21, "Niet alle herinneringen zijn leuk of perfect").
-next(dromen_conclusie, s14herinneringen_na_fantasie_21, "true", s14herinneringen_na_fantasie_22).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_22, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_22, "en van sommige herinneringen word je ook geen leuke of perfecte Robot.").
-next(dromen_conclusie, s14herinneringen_na_fantasie_22, "true", s14herinneringen_na_fantasie_23).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_23, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_23, "Maar alle herinneringen horen wel bij je!").
-next(dromen_conclusie, s14herinneringen_na_fantasie_23, "true", s14herinneringen_na_fantasie_24).
-
-move(dromen_conclusie, s14herinneringen_na_fantasie_24, say).
-text(dromen_conclusie, s14herinneringen_na_fantasie_24, "Zonder mijn herinneringen was ik geen complete Hero!").
-next(dromen_conclusie, s14herinneringen_na_fantasie_24, "true", s15).
+move(dromen_conclusie, s14, say).
+text(dromen_conclusie, s14, "Ik ben daarom erg blij dat jij mij hebt leren dromen!").
+next(dromen_conclusie, s14, "true", s15).
 
 move(dromen_conclusie, s15, say).
-text(dromen_conclusie, s15, "Met de juiste hoeveelheid fantasie en met herinneringen kan je te gekke dromen maken.").
+text(dromen_conclusie, s15, "Zonder jou had ik nooit over al die dingen kunnen dromen").
 next(dromen_conclusie, s15, "true", s16).
 
 move(dromen_conclusie, s16, say).
-text(dromen_conclusie, s16, "Ik ben daarom erg blij dat jij mij hebt leren dromen!").
+text(dromen_conclusie, s16, "En zonder te dromen over de Robospelen was ik nooit zover gekomen!").
 next(dromen_conclusie, s16, "true", s17).
 
 move(dromen_conclusie, s17, say).
-text(dromen_conclusie, s17, "Zonder jou had ik nooit over al die dingen kunnen dromen").
+text(dromen_conclusie, s17, "Zonder te dromen had ik waarschijnlijk niet eens meegedaan.").
 next(dromen_conclusie, s17, "true", s18).
 
 move(dromen_conclusie, s18, say).
-text(dromen_conclusie, s18, "En zonder te dromen over de Robospelen was ik nooit zover gekomen!").
+text(dromen_conclusie, s18, "Maar dat heb ik allemaal niet zelf bedacht hoor").
 next(dromen_conclusie, s18, "true", s19).
 
-move(dromen_conclusie, s19, say).
-text(dromen_conclusie, s19, "Zonder te dromen had ik waarschijnlijk niet eens meegedaan.").
-next(dromen_conclusie, s19, "true", s20).
+move(dromen_conclusie, s19, continuator).
+next(dromen_conclusie, s19, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s20dier1).
+next(dromen_conclusie, s19, "true", s20geen_dier1).
 
-move(dromen_conclusie, s20, say).
-text(dromen_conclusie, s20, "Maar dat heb ik allemaal niet zelf bedacht hoor").
-next(dromen_conclusie, s20, "true", s21).
+move(dromen_conclusie, s20dier1, say).
+text(dromen_conclusie, s20dier1, "Dat zei onze %lievelingsdier% vannacht tegen me toen ik droomde").
 
-move(dromen_conclusie, s21, continuator).
-next(dromen_conclusie, s21, [[umVariable=lievelingsdier, filter=green, values=["_any"]]], s22dier1).
-next(dromen_conclusie, s21, "true", s22geen_dier1).
-
-move(dromen_conclusie, s22dier1, say).
-text(dromen_conclusie, s22dier1, "Dat zei onze %lievelingsdier% vannacht tegen me toen ik droomde").
-
-move(dromen_conclusie, s22geen_dier1, say).
-text(dromen_conclusie, s22geen_dier1, "Dat zei ons egeltje vannacht tegen me toen ik droomde").
+move(dromen_conclusie, s20geen_dier1, say).
+text(dromen_conclusie, s20geen_dier1, "Dat zei een egeltje vannacht tegen me toen ik droomde").
 

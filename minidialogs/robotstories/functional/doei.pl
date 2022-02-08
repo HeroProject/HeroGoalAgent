@@ -277,6 +277,111 @@ move(doei_4, s9memory1, say).
 audio(doei_4, s9memory1, id, handshake_sound).
 anim(doei_4, s9memory1, id, handshake_motion).
 
+%% doei_5 %%
+minidialog(doei_5, [type=functional, function=goodbye]).
+
+move(doei_5, s1, say).
+text(doei_5, s1, "Zo %first_name% , nu zijn we echt bijna bij het einde gekomen.").
+next(doei_5, s1, "true", s2).
+
+move(doei_5, s2, say).
+text(doei_5, s2, "Dit is voorlopig de laatste keer dat we elkaar spreken").
+next(doei_5, s2, "true", s3).
+
+move(doei_5, s3, say).
+text(doei_5, s3, "Ik wil je graag bedanken voor onze fijne gesprekken").
+start_interaction_probe(doei_5, s3).
+next(doei_5, s3, "true", s4).
+
+move(doei_5, s4, continuator).
+next(doei_5, s4, [[expCondition=memory]], s5memory1).
+next(doei_5, s4, [[expCondition=control]], s5control1).
+next(doei_5, s4, "true", s6).
+
+move(doei_5, s5memory1, say).
+text(doei_5, s5memory1, "Ik wens je veel success op school en met je missie om %beroep_van_kind% te worden.").
+next(doei_5, s5memory1, "true", s5memory2).
+
+move(doei_5, s5memory2, say).
+text(doei_5, s5memory2, "Wie weet dat de volgende keer dat je me ziet dat ik een %kledingstuk% in het %kleur_kledingstuk% draag").
+next(doei_5, s5memory2, "true", s5memory3).
+
+move(doei_5, s5memory3, say).
+text(doei_5, s5memory3, "En dat we samen %lievelingseten_met_p% kunnen eten. Jij de mensen variant en ik de robot variant.").
+next(doei_5, s5memory3, "true", s5memory4).
+
+move(doei_5, s5memory4, say).
+stop_interaction_probe(doei_5, s5memory4).
+next(doei_5, s5memory4, "true", s6).
+
+move(doei_5, s5control1, say).
+text(doei_5, s5control1, "Ik wens je veel success op school.").
+next(doei_5, s5control1, "true", s5control2).
+
+move(doei_5, s5control2, say).
+text(doei_5, s5control2, "Wie weet komen we elkaar nog eens tegen.").
+next(doei_5, s5control2, "true", s5control3).
+
+move(doei_5, s5control3, say).
+text(doei_5, s5control3, "En ik wens je ook een fijne zomer toe!").
+next(doei_5, s5control3, "true", s5control4).
+
+move(doei_5, s5control4, say).
+stop_interaction_probe(doei_5, s5control4).
+next(doei_5, s5control4, "true", s6).
+
+move(doei_5, s6, question).
+moveConfig(doei_5, s6, [type=yesno, context='answer_yesno']).
+text(doei_5, s6, "Wil je nog wat tegen mij zeggen?").
+next(doei_5, s6, "answer_yes", s7ja1).
+next(doei_5, s6, "answer_no", s7nee1).
+next(doei_5, s6, "answer_dontknow", s7nee1).
+next(doei_5, s6, "fail", s7nee1).
+
+move(doei_5, s7ja1, question).
+moveConfig(doei_5, s7ja1, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(doei_5, s7ja1, "Vertel maar, ik luister.").
+next(doei_5, s7ja1, "success", s7ja2).
+next(doei_5, s7ja1, "fail", s7ja2).
+
+move(doei_5, s7ja2, say).
+text(doei_5, s7ja2, "Wat fijn om van je te horen, %first_name% ").
+next(doei_5, s7ja2, "true", s8).
+
+move(doei_5, s7nee1, say).
+text(doei_5, s7nee1, "Helemaal prima.").
+next(doei_5, s7nee1, "true", s8).
+
+move(doei_5, s8, say).
+text(doei_5, s8, "Dan is het nu echt tijd om doei te zeggen.").
+next(doei_5, s8, "true", s9).
+
+move(doei_5, s9, continuator).
+next(doei_5, s9, [[expCondition=memory]], s10memory1).
+next(doei_5, s9, [[expCondition=control]], s10control1).
+next(doei_5, s9, "true", s11).
+
+move(doei_5, s10control1, say).
+text(doei_5, s10control1, "Dan is dit de laatste keer dat ik naar je zwaai.").
+anim(doei_5, s10control1, file, "resources/gestures/wave1.json").
+next(doei_5, s10control1, "true", s11).
+
+move(doei_5, s10memory1, say).
+text(doei_5, s10memory1, "Dan is dit de laatste keer dat we onze geheimde handdruk kunnden doen.").
+next(doei_5, s10memory1, "true", s10memory2).
+
+move(doei_5, s10memory2, say).
+audio(doei_5, s10memory2, id, handshake_sound).
+anim(doei_5, s10memory2, id, handshake_motion).
+next(doei_5, s10memory2, "true", s11).
+
+move(doei_5, s11, say).
+text(doei_5, s11, "Doei %first_name% ").
+next(doei_5, s11, "true", s12).
+
+move(doei_5, s12, say).
+text(doei_5, s12, "Het ga je goed!").
+
 %% doei_was_het_leuk %%
 minidialog(doei_was_het_leuk, [type=functional, function=goodbye]).
 dependencies(doei_was_het_leuk, [[[eerste_begroeting_secret_handshake, follow_up, 0]]]).
@@ -363,4 +468,56 @@ next(doei_slaaphouding, s2, "true", s3).
 
 move(doei_slaaphouding, s3, say).
 text(doei_slaaphouding, s3, "Slaap lekker op je %slaaphouding_kind%").
+
+%% demo_doei_1 %%
+minidialog(demo_doei_1, [type=functional, function=goodbye]).
+
+move(demo_doei_1, s1, say).
+text(demo_doei_1, s1, "Ik vond het leuk om kennis met je te maken, %first_name% ").
+next(demo_doei_1, s1, "true", s2).
+
+move(demo_doei_1, s2, question).
+moveConfig(demo_doei_1, s2, [type=yesno, context='answer_yesno']).
+text(demo_doei_1, s2, "Vond jij het ook leuk").
+next(demo_doei_1, s2, "answer_yes", s3ja1).
+next(demo_doei_1, s2, "answer_no", s3nee1).
+next(demo_doei_1, s2, "answer_dontknow", s3nee1).
+next(demo_doei_1, s2, "fail", s3fail1).
+
+move(demo_doei_1, s3ja1, say).
+text(demo_doei_1, s3ja1, "Fijn om te horen!").
+next(demo_doei_1, s3ja1, "true", s5).
+
+move(demo_doei_1, s3nee1, say).
+text(demo_doei_1, s3nee1, "Oh, dan zal ik de volgende keer wat beter mijn best doen.").
+next(demo_doei_1, s3nee1, "true", s5).
+
+move(demo_doei_1, s3fail1, say).
+text(demo_doei_1, s3fail1, "Mooi").
+next(demo_doei_1, s3fail1, "true", s5).
+
+move(demo_doei_1, s5, continuator).
+next(demo_doei_1, s5, [[expCondition=memory]], s6memory1).
+next(demo_doei_1, s5, [[expCondition=control]], s6control1).
+next(demo_doei_1, s5, "true", s7).
+
+move(demo_doei_1, s6memory1, say).
+text(demo_doei_1, s6memory1, "Misschien kun je me de volgende keer helpen met het %leukste_onderdeel% onderdeel van de Robo spelen.").
+next(demo_doei_1, s6memory1, "true", s7).
+
+move(demo_doei_1, s6control1, say).
+text(demo_doei_1, s6control1, "Ben benieuwd waar we het de volgende keer over gaan hebben.").
+next(demo_doei_1, s6control1, "true", s7).
+
+move(demo_doei_1, s7, say).
+text(demo_doei_1, s7, "Dan is het nu echt tijd om doei te zeggen.").
+next(demo_doei_1, s7, "true", s8).
+
+move(demo_doei_1, s8, say).
+text(demo_doei_1, s8, "Doei %first_name% , tot snel!").
+next(demo_doei_1, s8, "true", s10).
+
+move(demo_doei_1, s10, say).
+audio(demo_doei_1, s10, id, handshake_sound).
+anim(demo_doei_1, s10, id, handshake_motion).
 

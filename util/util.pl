@@ -159,7 +159,7 @@ feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
 %yesno synonyms
-answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "absoluut", "zeker", "klopt"]).
+answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "tuurlijk", "absoluut", "zeker", "klopt"]).
 answer_no_synonyms(["nee", "neen", "nah"]).
 answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
 
