@@ -55,10 +55,10 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 						then print("Error: no answer was found although it was expected") + log(noAnswerError(Minidialog, Move, Intent, Params)).
 				}
 				
-			if bel(currentInputModality(touch))
+			if bel(currentInputModality(feet))
 				then {
 			
-					if true then delete(waitingForAnswer) + canceltimer(Move) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=touch, currentAttempt=CurrentAttempt]).
+					if true then delete(waitingForAnswer) + canceltimer(Move) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=feet, currentAttempt=CurrentAttempt]).
 					
 					if bel(Type=yesno)
 						then insert(answer(Minidialog, Move, Intent, [text=Intent])).
@@ -79,6 +79,35 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 					
 					if bel(Type \= yesno, Intent = 'answer_no')
 						then repair(Minidialog,Move).
+				}
+			
+			if bel(currentInputModality(tablet))
+				then {
+					if true then delete(waitingForAnswer) 
+						+ logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=tablet, currentAttempt=CurrentAttempt]).
+									
+					% yesno questions -> answer_yes or answer_no are the expected answers.	
+					if bel(Type = yesno, tablet_yesno(Ans, Intent)) then insert(answer(Minidialog, Move, Ans, [text=Text])).
+						
+					% input questions -> expects an entity to be returned.
+					if bel(Type = input, downcase_atom(Intent, Ans)) then insert(answer(Minidialog, Move, Ans, [text=Text])).
+						
+					%if bel(Type = sorter) then insert(answer(Minidialog, Move, Intent, [text=Text])).
+					
+					% quiz questions -> checks whether the answer is correct or not.
+					if bel(Type = quiz, downcase_atom(Intent, Ans), keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer))
+						then {
+							if bel(member(Ans, CorrectAnswer))
+								then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
+							if not(bel(answer(Minidialog, Move, correct, _)))
+								then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
+							%if bel(Intent='answer_character', character(Old))
+								%then delete(character(Old)) + insert(character(Ans)).
+						}
+						
+					if not(bel(answer(Minidialog, Move, _, _)))
+						then print("Error: no answer was found although it was expected") 
+							+ log(noAnswerError(Minidialog, Move, Intent, Params)).
 				}
 		}
 }

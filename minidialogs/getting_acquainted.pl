@@ -64,48 +64,48 @@ move(ga_prac_speech, s6, say).
 leds(ga_prac_speech, s6, direct, ["FaceLeds"], ["white"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Touch tutorial    		                           %%%
+%%% feet tutorial    		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-move(ga_prac_touch, s1, say).
-text(ga_prac_touch,  s1, "Soms heb ik een beetje moeite om mensen te verstaan.").
-next(ga_prac_touch,  s1, "true",  s2).
+move(ga_prac_feet, s1, say).
+text(ga_prac_feet,  s1, "Soms heb ik een beetje moeite om mensen te verstaan.").
+next(ga_prac_feet,  s1, "true",  s2).
 
-move(ga_prac_touch, s2, say).
-text(ga_prac_touch,  s2, "Dan kun je antwoord geven door op mijn grijze tenen te drukken.").
-next(ga_prac_touch,  s2, "true",  s3).
+move(ga_prac_feet, s2, say).
+text(ga_prac_feet,  s2, "Dan kun je antwoord geven door op mijn grijze tenen te drukken.").
+next(ga_prac_feet,  s2, "true",  s3).
 
-move(ga_prac_touch, s3, say).
-text(ga_prac_touch,  s3, "Dat zijn namelijk knopjes.").
-next(ga_prac_touch,  s3, "true",  s4).
+move(ga_prac_feet, s3, say).
+text(ga_prac_feet,  s3, "Dat zijn namelijk knopjes.").
+next(ga_prac_feet,  s3, "true",  s4).
 
-move(ga_prac_touch, s4, say).
-text(ga_prac_touch,  s4, "Er is een ja knop en een nee knop. \pau=400\ ").
-next(ga_prac_touch,  s4, "true",  s5).
+move(ga_prac_feet, s4, say).
+text(ga_prac_feet,  s4, "Er is een ja knop en een nee knop. \pau=400\ ").
+next(ga_prac_feet,  s4, "true",  s5).
 
-move(ga_prac_touch, s5, say).
-text(ga_prac_touch,  s5, "Bij sommige vragen zal ik je wat opties geven. Je kunt dan op de ja knop drukken als je jouw antwoord hoort.").
-next(ga_prac_touch,  s5, "true",  s6).
+move(ga_prac_feet, s5, say).
+text(ga_prac_feet,  s5, "Bij sommige vragen zal ik je wat opties geven. Je kunt dan op de ja knop drukken als je jouw antwoord hoort.").
+next(ga_prac_feet,  s5, "true",  s6).
 
-move(ga_prac_touch, s6, say).
-text(ga_prac_touch,  s6, "Laten we dat oefenen. \pau=400\ ").
-next(ga_prac_touch,  s6, "true",  s7).
+move(ga_prac_feet, s6, say).
+text(ga_prac_feet,  s6, "Laten we dat oefenen. \pau=400\ ").
+next(ga_prac_feet,  s6, "true",  s7).
 
-move(ga_prac_touch, s7, question).
-moveConfig(ga_prac_touch, s7, [type=quiz, context='answer_color', options=['rood', 'licht blauw', 'donker grijs', 'groen'], 
-	correctAnswer=['donker grijs'], inputModality=[touch=3]]).
-text(ga_prac_touch, s7, "Welke kleur hebben mijn schouders? Druk op de ja knop als je het antwoord hoort.").
-next(ga_prac_touch, s7, 'correct', s8cor).
-next(ga_prac_touch, s7, 'incorrect', s8incor).
-next(ga_prac_touch, s7, 'fail', s8f).
+move(ga_prac_feet, s7, question).
+moveConfig(ga_prac_feet, s7, [type=quiz, context='answer_color', options=['rood', 'licht blauw', 'donker grijs', 'groen'], 
+	correctAnswer=['donker grijs'], inputModality=[feet=3]]).
+text(ga_prac_feet, s7, "Welke kleur hebben mijn schouders? Druk op de ja knop als je het antwoord hoort.").
+next(ga_prac_feet, s7, 'correct', s8cor).
+next(ga_prac_feet, s7, 'incorrect', s8incor).
+next(ga_prac_feet, s7, 'fail', s8f).
 
-move(ga_prac_touch, s8cor, say).
-text(ga_prac_touch, s8cor, "Jazeker! Ze zijn inderdaad donker grijs").
+move(ga_prac_feet, s8cor, say).
+text(ga_prac_feet, s8cor, "Jazeker! Ze zijn inderdaad donker grijs").
 
-move(ga_prac_touch, s8incor, say).
-text(ga_prac_touch, s8incor, "Helaas. Ik wou dat ik die kleur had, maar mijn schouders zijn donker grijs.").
+move(ga_prac_feet, s8incor, say).
+text(ga_prac_feet, s8incor, "Helaas. Ik wou dat ik die kleur had, maar mijn schouders zijn donker grijs.").
 
-move(ga_prac_touch, s8f, say).
-text(ga_prac_touch, s8f, "Mijn schouders zijn donker grijs. Vergeet niet de knopjes goed in te drukken de volgende keer.").
+move(ga_prac_feet, s8f, say).
+text(ga_prac_feet, s8f, "Mijn schouders zijn donker grijs. Vergeet niet de knopjes goed in te drukken de volgende keer.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Bridge to conversation	                           %%%

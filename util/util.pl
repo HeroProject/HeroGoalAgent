@@ -3,13 +3,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Predicates for event percept processing. 
 :-dynamic answer/4, % answer(Minidialog, Move, Answer, [Details]) keeps track of answers to questions.
-	event/1,  % NAO events (started/done for saying, gesturing, and events for touch, etc.)  
+	event/1,  % NAO events (started/done for saying, gesturing, and events for button presses, etc.)  
 	waitingForMotionRecording/1,
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
 	animOption/3,
-	basePosture/1.
+	basePosture/1,
+	tabletUse/1.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
@@ -154,7 +155,7 @@ importTopicsOfInterest(IToI, OToI) :- IToI \= [], term_string(IToII, IToI), sort
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Useful definitions                                     %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Right bumper means yes and left bumper means no (used if current move is yes/no question with touch response).
+% Right bumper means yes and left bumper means no (used if current move is yes/no question with feet response).
 feetBumperEventAnswer('answer_yes') :- event('RightBumperPressed').
 feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 
@@ -162,6 +163,9 @@ feetBumperEventAnswer('answer_no') :- event('LeftBumperPressed').
 answer_yes_synonyms(["ja", "jazeker", "jawel", "oké", "oke", "ok", "prima", "goed", "natuurlijk", "tuurlijk", "absoluut", "zeker", "klopt"]).
 answer_no_synonyms(["nee", "neen", "nah"]).
 answer_dontknow_synonyms(["twijfel", "heb ik niet", "weet ik niet", "geen idee"]).
+
+tablet_yesno(answer_yes, "Ja").
+tablet_yesno(answer_no, "Nee").
 
 string_match_word_list(Move, L, DS) :- downcase_atom(Move, DS), maplist(downcase_atom, L, DL), member(DS, DL), !.
 string_match_word_list(Move, L, R) :- split_string(Move," ",", ", SL), maplist(downcase_atom, SL, DSL), maplist(downcase_atom, L, DL), any_list_match(DSL, DL, R), !.
@@ -204,7 +208,7 @@ getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Min
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
 
-getMaxAnswerTime(Minidialog, Move, touch, _, _, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), member((touch=MaxAnswerTime), Times), !.
+getMaxAnswerTime(Minidialog, Move, Modality, _, _, MaxAnswerTime) :- Modality \= speech, keyValue(Minidialog, Move, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !.
 getMaxAnswerTime(Minidialog, Move, speech, openend, _, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !.
 getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), Attempt = 1, 
 								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
@@ -321,14 +325,16 @@ completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % override config param for specific move by using key-label in key-value list associated with that move.
 
-% Order for input modalities and respective maximum number of attempts. Available modalities are speech and touch.
-keyValue(_, _, inputModality, [speech=2, touch=2]).
+% Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
+keyValue(_, _, inputModality, [speech=2, feet=2]).
+%keyValue(_, _, inputModality, [speech=2, tablet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
 keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
-keyValue(_, _, maxAnswerTime, [	touch=3000, 
+keyValue(_, _, maxAnswerTime, [	feet=3000,
+				tablet=5000, 
 				speechopenend=12000,
 				speechyesnofirst=3500, 
 				speechyesnononinitial=3500, 
@@ -337,5 +343,6 @@ keyValue(_, _, maxAnswerTime, [	touch=3000,
 				speechquizfirst=5000,
 				speechquiznoninitial=3500]).						 
 % Default responses of robot to an input modality switch.
-keyValue(_, _, modalitySwitchResponse, [speechtouch='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
-					touchspeech='Je mag je antwoord nu hardop tegen mij zeggen.']).
+keyValue(_, _, modalitySwitchResponse, [toFeet='Sorry, ik kan het even niet verstaan. Je kunt nu mijn voeten gebruiken.',
+					toSpeech='Je mag je antwoord nu hardop tegen mij zeggen.',
+					toTablet='Je kunt nu mijn tablet gebruiken om je antwoord door te geven.']).

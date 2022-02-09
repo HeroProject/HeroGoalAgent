@@ -33,6 +33,7 @@ module hero_init {
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 	
 	% Show a default (empty) page on any connected browser
+	if bel(setTabletUse(TabletUse)) then insert(tabletUse(TabletUse)).
 	if bel(html('',Html)) then renderPage(Html).
 	
 	% Initialize probe counter

@@ -127,12 +127,11 @@ module hero_events {
 				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, answer_no, Text, []).
 			if bel(keyValue(Minidialog, Move, type, yesno), answer_dontknow_synonyms(Dontknow), string_match_word_list(Text, Dontknow, _))
 				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, answer_dontknow, Text, []).
-			
 			if bel(not(keyValue(Minidialog, Move, type, yesno)), keyListValues(Minidialog, Move, [context, options, fast], [Intent, Options, yes]), string_match_word_list(Text, Options, Ans))
 				then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, Intent, Text, [answer=Ans]).
 		}
 										
-	% User responded on the tablet. -Vincent
+	% User responded on the tablet (for useTablet=always).
 	if percept(answer(Text)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForDetection,
 									keyValue(Minidialog, Move, context, Intent), downcase_atom(Text, DT))
 		then stopListening + delete(waitingForDetection) + processUserResponse(Minidialog, Move, Intent, Text, [answer=DT]).
@@ -150,15 +149,19 @@ module hero_events {
 			if bel(keyValue(Minidialog, Move, type, openend)) then processUserResponse(Minidialog, Move, any, '', []).
 		}
 	
-	%%% TOUCH %%%
+	%%% FEET %%%
 	% An answer has been selected. Retrieve answer.
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), waitingForAnswer, feetBumperEventAnswer(Intent))
 		then processUserResponse(Minidialog, Move, Intent, '', []).
 	
 	% No answer has been selected. Try a repair action.
-	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), timeout(Move), waitingForAnswer, currentInputModality(touch))
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), timeout(Move), waitingForAnswer, currentInputModality(feet))
 		then repair(Minidialog, Move).
-		
+	
+	%%% TABLET %%%
+	if percept(answer(Text)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForAnswer)
+		then processUserResponse(Minidialog, Move, Text, Text, []).
+	
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 
 	if bel(event('IntentDetectionDone'), currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, audioInput))

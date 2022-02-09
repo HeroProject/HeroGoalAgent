@@ -65,26 +65,28 @@ module performDialogMove(Minidialog, Move) {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	% Show text.
-	if bel(display(Minidialog, Move, Txt), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1)) 
+	if bel((tabletUse(always), display(Minidialog, Move, Txt); display(Minidialog, Move, Txt, always)), text(Txt, HTxt), html(HTxt, Html), currentAttempt(1))
 		then renderPage(Html).
-	if bel(display_raw(Minidialog, Move, Txt), html(Txt, Html), currentAttempt(1)) 
-		then renderPage(Html).
-	% Show image.
-	if bel(image(Minidialog, Move, I), img(I, Img), html(Img, Html), currentAttempt(1)) 
-		then renderPage(Html).
-	% Show questions
-	if bel(text(Minidialog, Move, Txt), keyValue(Minidialog, Move, type, yesno), text(Txt, HTxt)) then {
-		%if bel(currentAttempt(1), html(HTxt, Html))
-		%	then renderPage(Html).
-		if bel(/*currentAttempt(N), N>1,*/ buttons(['Ja', 'Nee'], B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+		
+	% Show answer options of question
+	if bel(tabletUse(always), display(Minidialog, Move, Txt), keyListValues(Minidialog, Move, [type], [yesno]), text(Txt, HTxt)) then {
+		if bel(tablet_yesno(answer_yes, Yes), tablet_yesno(answer_no, No), buttons([Yes, No], Buttons), atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
 			then renderPage(Html).
 	}
-	if bel(text(Minidialog, Move, Txt), keyListValues(Minidialog, Move, [type, options], [quiz, List]), text(Txt, HTxt)) then {
-		%if bel(currentAttempt(1), html(HTxt, Html))
-		%	then renderPage(Html).
-		if bel(/*currentAttempt(N), N>1,*/ buttons(List, B), atom_concat(HTxt, B, TandB), html(TandB, Html))
+	
+	if bel(tabletUse(always), display(Minidialog, Move, Txt), keyListValues(Minidialog, Move, [type, options], [input, List]), text(Txt, HTxt)) then {
+		if bel(buttons(List, Buttons), atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
 			then renderPage(Html).
 	}
+	
+	% Show image
+	if bel(image(Minidialog, Move, I), img(I, Img), html(Img, Html)) 
+		then renderPage(Html).
+	
+	% Clear the page otherwise
+	if bel(text(Minidialog, Move, _), not(display(Minidialog, Move, _)), not(image(Minidialog, Move, _)), 
+			not(keyValue(Minidialog, Move, type, _)), html('',Html))
+		then renderPage(Html).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					CO-CREATION					%%

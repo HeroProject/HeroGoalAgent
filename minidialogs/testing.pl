@@ -30,8 +30,8 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_color, s1, question).
-moveConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, touch=2], fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
-defaultAnswer="rood", modalitySwitchResponse=[speechtouch='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
+moveConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, feet=2], fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
+defaultAnswer="rood", modalitySwitchResponse=[toFeet='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
 next(test_color, s1, 'fail', s2f).
@@ -315,6 +315,19 @@ text(test_motion_file, s3, "Heel leuk.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_stop_led, s1, say).
 leds(test_stop_led, s1, reset).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% test tablet					           %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+move(test_tablet, s1, say).
+text(test_tablet, s1, "Hallo ik zeg nu dit").
+display(test_tablet, s1, "Maar ik laat dit nu zien op de tablet", always).
+next(test_tablet, s1, "true", s2).
+
+move(test_tablet, s2, say).
+text(test_tablet, s2, "En nu zeg ik wat anders").
+display(test_tablet, s2, "En dit laat ik alleen zien in de always modus").
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 1					   %%%

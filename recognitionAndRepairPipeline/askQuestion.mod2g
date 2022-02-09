@@ -12,26 +12,53 @@ use '../util/logging' as module.
 module askQuestion(Minidialog, Move) {
 	if bel(currentAttempt(CurrentAttempt))
 		then {
-			% Start listening (with timeout by starting timer) and set waitingForAnswer flag.
+			% SPEECH %
+			% Start listening and set waitingForAnswer flag.
 			% when events have been completed (and we're not already waiting for an answer).
 			% the first attempt has a different default waiting time than the noninitial attempts.
 			if bel(currentInputModality(speech), keyListValues(Minidialog, Move, [type, context], [Type, Context]),
 					getMaxAnswerTime(Minidialog, Move, speech, Type, CurrentAttempt, MaxAnswerTime), Time is MaxAnswerTime/1000)
 				then startListening(Time, Context) + insert(waitingForAnswer).
 			
-			if bel(currentInputModality(touch), getMaxAnswerTime(Minidialog, Move, touch, _, _, MaxAnswerTime))
+			% FEET %
+			if bel(currentInputModality(feet), getMaxAnswerTime(Minidialog, Move, feet, _, _, MaxAnswerTime))
 				then {
-					% Start timer for question move with touch response and set waitingForAnswer flag.
+					% Start timer for question move with feet response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).
 					if bel(keyValue(Minidialog, Move, type, yesno))
 						then starttimer(Move,MaxAnswerTime,MaxAnswerTime) + insert(waitingForAnswer)
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
-					% Cycle through multiple choice options, start timer for question move with touch response and set waitingForAnswer flag.
+					% Cycle through multiple choice options, start timer for question move with feet response and set waitingForAnswer flag.
 					% when events have been completed (and we're not already waiting for an answer).	
 					if bel(keyListValues(Minidialog, Move, [type, options], [Type, Values]), Type \= yesno,
 							mcCounter(C), nth0(C, Values, Value), atom_string(Value, String))
 						then say(String) + starttimer(Move, MaxAnswerTime, MaxAnswerTime) + insert(waitingForAnswer)
 						+ setLedColor(['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
 				}
-		}
+			
+			% TABLET %
+			if bel(currentInputModality(tablet), getMaxAnswerTime(Minidialog, Move, tablet, _, _, MaxAnswerTime))
+				then {	
+					% Display question on tablet (use display/3 or display/4 or if none use regular text/3 clause).
+					if bel((display(Minidialog, Move, Txt) ; display(Minidialog, Move, Txt, _);  
+					not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, Txt)),
+					text(Txt, HTxt)) then {
+							% yesno: button for yes and no on screen.
+							if bel(keyValue(Minidialog, Move, type, yesno), tablet_yesno(answer_yes, Yes), tablet_yesno(answer_no, No), buttons([Yes, No], Buttons),
+							atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
+								then renderPage(Html) + insert(waitingForAnswer).
+							
+							% input and quiz: show button for all the options.
+							if bel(keyValue(Minidialog, Move, options, List), buttons(List, Buttons), 
+							atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
+									then renderPage(Html) + insert(waitingForAnswer).
+							
+							%if bel(keyListValues(Minidialog, Move, [type, options], [sorter, List]), sortItems(List, Items), html(Items, Html))
+								%then renderPage(Html) + insert(waitingForAnswer).
+							
+							% If there is a time limit set timer.
+							if bel(MaxAnswerTime /= 0) then starttimer(Move,MaxAnswerTime,MaxAnswerTime). 
+					}
+				}
+			}			
 }

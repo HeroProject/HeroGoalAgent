@@ -37,7 +37,7 @@ module repair(Minidialog, Move) {
 						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 			}
 
-			if bel(currentInputModality(touch), keyValue(Minidialog, Move, type, Type), getMaxAnswerAttempts(Minidialog, Move, touch, MaxAnswerAttempts), started)
+			if bel(currentInputModality(feet), keyValue(Minidialog, Move, type, Type), getMaxAnswerAttempts(Minidialog, Move, feet, MaxAnswerAttempts), started)
 				then {
 					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
@@ -50,7 +50,7 @@ module repair(Minidialog, Move) {
 						 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 									% If there are other input modalities left, switch modalities.
 									if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-										then modalitySwitch(Minidialog, Move, touch, NewModality).
+										then modalitySwitch(Minidialog, Move, feet, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
@@ -68,10 +68,10 @@ module repair(Minidialog, Move) {
 								 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 											% If there are other input modalities left, switch modalities.
 											if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-												then modalitySwitch(Minidialog, Move, touch, NewModality).
+												then modalitySwitch(Minidialog, Move, feet, NewModality).
 										}
 							
-									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(touch), started)
+									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(feet), started)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
 								}
