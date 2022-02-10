@@ -13,6 +13,8 @@ use modalitySwitch as module.
 module repair(Minidialog, Move) {
 	if bel(getInputModalityOrder(Minidialog, Move, Order), modalityCounter(ModCount), currentAttempt(CurrentAttempt), started)
 		then {
+		
+			% SPEECH %
 			if bel(currentInputModality(speech), getMaxAnswerAttempts(Minidialog, Move, speech, MaxAnswerAttempts))
 				then {
 					%If the number of attempts are reached.
@@ -24,7 +26,7 @@ module repair(Minidialog, Move) {
 								
 							% If there are other input modalities left and the user is not entiteled to an addtional attempt: switch modalities.
 							if bel(NModalities \= NewModCount, not(additionalAttempt(Minidialog, Move)), nth0(NewModCount, Order, NewModality))	
-								then modalitySwitch(Minidialog, Move, speech, NewModality).
+								then modalitySwitch(Minidialog, Move, NewModality).
 							
 							%If the user is entiteled to an addtional attempt: give extra attempt 
 							if bel(additionalAttempt(Minidialog, Move), NextAttempt is CurrentAttempt + 1)
@@ -37,12 +39,14 @@ module repair(Minidialog, Move) {
 						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + insert(start, currentAttempt(NextAttempt)).
 			}
 
+			% FEET %
 			if bel(currentInputModality(feet), keyValue(Minidialog, Move, type, Type), getMaxAnswerAttempts(Minidialog, Move, feet, MaxAnswerAttempts), started)
 				then {
 					if true then setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
 					
 					if bel(Type = yesno)
 						then {
+							%If the number of attempts are reached.
 							if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 								then {
 									% If there are no other input modalities, this question failed.
@@ -50,7 +54,7 @@ module repair(Minidialog, Move) {
 						 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 									% If there are other input modalities left, switch modalities.
 									if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-										then modalitySwitch(Minidialog, Move, feet, NewModality).
+										then modalitySwitch(Minidialog, Move, NewModality).
 								}
 							if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1)
 								then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
@@ -61,6 +65,7 @@ module repair(Minidialog, Move) {
 						then {						
 							if bel(CountNew >= NOptions)
 								then {
+									%If the number of attempts are reached.
 									if bel(started, CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
 										then {
 											% If there are no other input modalities, this question failed.
@@ -68,9 +73,10 @@ module repair(Minidialog, Move) {
 								 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
 											% If there are other input modalities left, switch modalities.
 											if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
-												then modalitySwitch(Minidialog, Move, feet, NewModality).
+												then modalitySwitch(Minidialog, Move, NewModality).
 										}
-							
+									
+									%If the number of attempts are not reached, the user will get a next feet recognition attempt.
 									if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, currentInputModality(feet), started)
 										then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt), mcCounter(Count)) + 
 											insert(start, currentAttempt(NextAttempt), mcCounter(0)).
@@ -78,6 +84,26 @@ module repair(Minidialog, Move) {
 							if bel(CountNew < NOptions)
 								then delete(mcCounter(Count), waitingForAnswer) + insert(mcCounter(CountNew)).
 						}
+				}
+			
+			% TABLET %
+			if bel(currentInputModality(tablet), getMaxAnswerAttempts(Minidialog, Move, tablet, MaxAnswerAttempts), started)
+				then {
+					%If the number of attempts are reached.
+					if bel(CurrentAttempt >= MaxAnswerAttempts, length(Order, NModalities), NewModCount is ModCount + 1)
+						then {
+							% If there are no other input modalities, this question failed.
+							if bel(NModalities = NewModCount)
+				 				then delete(waitingForAnswer) + insert(answer(Minidialog, Move, failure, [])).
+							% If there are other input modalities left, switch modalities.
+							if bel(NModalities \= NewModCount, nth0(NewModCount, Order, NewModality))	
+								then modalitySwitch(Minidialog, Move, NewModality).
+						}
+					
+					%If the number of attempts are not reached, the user will get a next tablet recognition attempt.
+					if bel(CurrentAttempt < MaxAnswerAttempts, NextAttempt is CurrentAttempt + 1, started)
+						then delete(started, waitingForAnswer, currentAttempt(CurrentAttempt)) + 
+							insert(start, currentAttempt(NextAttempt)).
 				}
 		}
 }

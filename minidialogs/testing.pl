@@ -30,8 +30,8 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_color, s1, question).
-moveConfig(test_color, s1, [type=input, context='answer_color', inputModality=[speech=1, feet=2], fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], 
-defaultAnswer="rood", modalitySwitchResponse=[toFeet='Sorry, ik kon je even niet verstaan. Ik zal nu wat opties opnoemen']]).
+moveConfig(test_color, s1, [type=input, context='answer_color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'],
+defaultAnswer='rood']).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
 next(test_color, s1, 'fail', s2f).
@@ -320,14 +320,32 @@ leds(test_stop_led, s1, reset).
 %%% test tablet					           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_tablet, s1, say).
-text(test_tablet, s1, "Hallo ik zeg nu dit").
-display(test_tablet, s1, "Maar ik laat dit nu zien op de tablet", always).
-next(test_tablet, s1, "true", s2).
+text(test_tablet, s1, "Hoi echt en alleen op tablet in alwasy modus").
+next(test_tablet, s1, "true", s4).
 
 move(test_tablet, s2, say).
-text(test_tablet, s2, "En nu zeg ik wat anders").
-display(test_tablet, s2, "En dit laat ik alleen zien in de always modus").
+text(test_tablet, s2, "Hoi echt en een ander bericht op de tablet in always of explicit modus").
+display(test_tablet, s2, "Een ander bericht").
+next(test_tablet, s2, "true", s3).
 
+move(test_tablet, s3, say).
+text(test_tablet, s3, "Hoi echt en altijd op tablet").
+display(test_tablet, s3, "Mij zie je altijd", always).
+next(test_tablet, s3, "true", s4).
+
+move(test_tablet, s4, question).
+moveConfig(test_tablet, s4, [type=input, context='answer_color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'],
+defaultAnswer='rood']).
+display(test_tablet, s4, "2 Wat is jouw lievelingskleur?").
+text(test_tablet, s4, "Wat is jouw lievelingskleur?").
+next(test_tablet, s4, 'success', s5).
+next(test_tablet, s4, 'fail', s5f).
+
+move(test_tablet, s5, say).
+text(test_tablet, s5, "Ik vind %test_tablet_s4% ook heel mooi!").
+
+move(test_tablet, s5f, say).
+text(test_tablet, s5f, "Mijn levelingskleur is %test_tablet_s4%.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test session 1					   %%%

@@ -57,7 +57,7 @@ module askQuestion(Minidialog, Move) {
 								%then renderPage(Html) + insert(waitingForAnswer).
 							
 							% If there is a time limit set timer.
-							if bel(MaxAnswerTime /= 0) then starttimer(Move,MaxAnswerTime,MaxAnswerTime). 
+							if bel(MaxAnswerTime \= 0) then starttimer(Move,MaxAnswerTime,MaxAnswerTime). 
 					}
 				}
 			}			

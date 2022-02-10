@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_tablet, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 
 % Multi session
@@ -95,11 +95,11 @@ useGui(false).
 % When no GUI is uses, these variables need to be specified.
 setContinueSession(true).
 setBasePosture('Stand').
-setTabletUse(repair).
+setTabletUse(explicit). %can be repair, explicit, or always
 
 % Experimental settings
 setUserId('999'). % user id
-setSessionId(3). % session id
+setSessionId(1). % session id
 useMemory(true). % condition
 
 %multiSessionDesign([demo_1, demo_2, demo_3, demo_4, demo_5]).

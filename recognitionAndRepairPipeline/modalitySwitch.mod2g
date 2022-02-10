@@ -10,10 +10,10 @@ use '../hero_actions' as actionspec.
 
 order=linearall.
 
-module modalitySwitch(Minidialog, Move, From, To) {
-	if bel(getModalitySwitchResponse(Minidialog, Move, From, To, Response)) then say(Response).
+module modalitySwitch(Minidialog, Move, NewModality) {
+	if bel(getModalitySwitchResponse(Minidialog, Move, NewModality, Response)) then say(Response).
 	
-	if bel(modalityCounter(ModCount), currentAttempt(CurrentAttempt), NewModCount is ModCount + 1) 
-		then delete(currentInputModality(From), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started) 
-			+ insert(start, currentInputModality(To), modalityCounter(NewModCount), currentAttempt(1)).
+	if bel(modalityCounter(ModCount), currentInputModality(OldModality), currentAttempt(CurrentAttempt), NewModCount is ModCount + 1) 
+		then delete(currentInputModality(OldModality), modalityCounter(ModCount), currentAttempt(CurrentAttempt), waitingForAnswer, started) 
+			+ insert(start, currentInputModality(NewModality), modalityCounter(NewModCount), currentAttempt(1)).
 }

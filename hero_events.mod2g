@@ -85,7 +85,7 @@ module hero_events {
 	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
-		if bel(currentMinidialog(Minidialog), currentMove(Move)) then log(eventFailSafe(Minidialog, Move)).
+		%if bel(currentMinidialog(Minidialog), currentMove(Move)) then log(eventFailSafe(Minidialog, Move)).
 	}
 	
 	%Audio recording percepts
@@ -93,8 +93,8 @@ module hero_events {
 		do delete(waitingForAudioFile(ID), userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, FileName).
 	
 	%Emotion detection percepts
-	forall percept(emotionDetected(Emotion)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForEmotion)
-		do insert(emotion(Minidialog, Move, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
+	%forall percept(emotionDetected(Emotion)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForEmotion)
+		%do insert(emotion(Minidialog, Move, Emotion)) + delete(waitingForEmotion) + log(Emotion) + stopWatching.
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Recognition and Repair            %%%
@@ -161,6 +161,9 @@ module hero_events {
 	%%% TABLET %%%
 	if percept(answer(Text)), bel(currentMinidialog(Minidialog), currentMove(Move), waitingForAnswer)
 		then processUserResponse(Minidialog, Move, Text, Text, []).
+	
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), timeout(Move), waitingForAnswer, currentInputModality(tablet))
+		then repair(Minidialog, Move).
 	
 	%%% AUDIO RECORDING %%%
 	% When timeout occurs while waiting for audio the audio recording is completed. Stop listening (and waiting for audio input). 

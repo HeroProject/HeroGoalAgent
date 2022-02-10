@@ -40,6 +40,6 @@ module hero_init {
 	if bel(recordInteractionActive(true)) then insert(probes(0)).
 	
 	% Set experimantal condition
-	if bel(useMemory(true)) then insert(expCondition(memory)) + log(expCondition(memory)).
-	if bel(useMemory(false)) then insert(expCondition(control)) + log(expCondition(control)).
+	if bel(useMemory(true)) then insert(expCondition(memory)).
+	if bel(useMemory(false)) then insert(expCondition(control)).
 }

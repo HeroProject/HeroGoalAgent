@@ -21,10 +21,10 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 				then {
 					%The next condition is given the 'fail'  flag.
 					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
-						then insert(nextCondition('fail')) + logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+						then insert(nextCondition('fail')) /*+ logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt])*/.
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
-					if bel(Type=_, keyValue(Minidialog, Move, defaultAnswer, DefaultAns), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
+					if bel(keyValue(Minidialog, Move, defaultAnswer, DefaultAns), userModel(UserModel), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, DefaultAns).	
 				}
 			
