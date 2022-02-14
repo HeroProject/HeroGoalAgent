@@ -47,14 +47,14 @@ moveConfig(ho3_greeting, s8graafmachine, [loadUserModel="true"]).
 %%% Koelkast		 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho3_koelkast, s1, say).
-text(ho3_koelkast,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
+text(ho3_koelkast,  s1, "Als je klaar bent om te beginnen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_koelkast,  s1, direct, ["RightFootLeds"], ["groen"]).
 moveConfig(ho3_koelkast, s1, [next='RightBumperPressed']).
 next(ho3_koelkast,  s1, "true",  s2).
 
 move(ho3_koelkast, s2, say).
 leds(ho3_koelkast,  s2, direct, ["RightFootLeds"], ["wit"]).
-text(ho3_koelkast, s2, "Graag vertel ik jou een verhaal van de tijd toen ik een koelkast was.").
+text(ho3_koelkast, s2, "Graag vertel ik jou een verhaal over de tijd dat ik een koelkast was.").
 next(ho3_koelkast, s2, "true", s3).
 
 move(ho3_koelkast, s3, say).
@@ -66,7 +66,7 @@ text(ho3_koelkast, s4, "Pak Melk is een goede vriend van me.").
 next(ho3_koelkast, s4, "true", s5).
 
 move(ho3_koelkast, s5, say).
-text(ho3_koelkast, s5, "en met mevrouw Kaas heb ik vroeger nog veel tennis gespeeld.").
+text(ho3_koelkast, s5, "en met mevrouw Kaas heb ik vroeger veel tennis gespeeld.").
 anim(ho3_koelkast, s5, id, motion_tennis).
 audio(ho3_koelkast, s5, file, "resources/sounds/tennis.wav").
 next(ho3_koelkast, s5, "true", s6).
@@ -93,7 +93,7 @@ text(ho3_koelkast, s10, "Weetje wat grappig is, jouw favorite fruit, %fruit%, is
 next(ho3_koelkast, s10, "true", s11).
 
 move(ho3_koelkast, s11, say).
-text(ho3_koelkast, s11, "Deejay %fruit% draaide de lekkerste plaatjes met de lekkerste bietjes.").
+text(ho3_koelkast, s11, "Deejay %fruit% draaide de beste plaatjes met de lekkerste biet.").
 next(ho3_koelkast, s11, "true", s12).
 
 move(ho3_koelkast, s12, say).
@@ -103,7 +103,7 @@ leds(ho3_koelkast, s12, id, led_show_feest).
 next(ho3_koelkast, s12, "true", s13).
 
 move(ho3_koelkast, s13, say).
-text(ho3_koelkast, s13, " Pak Melk en Sinaasappelsap waren de hele tijd aan het breek dansen, het was altijd feest.").
+text(ho3_koelkast, s13, "Pak Melk en Sinaasappelsap waren de hele tijd aan het breek densen, het was altijd feest.").
 leds(ho3_koelkast, s13, reset).
 go_to_posture(ho3_koelkast, s13).
 next(ho3_koelkast, s13, "true", s14).
@@ -121,7 +121,7 @@ text(ho3_koelkast, s17, "voor iedereen was er een plekje.").
 next(ho3_koelkast, s17, "true", s18).
 
 move(ho3_koelkast, s18, say).
-text(ho3_koelkast, s18, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
+text(ho3_koelkast, s18, "In de koelkast dansten, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
 next(ho3_koelkast, s18, "true", s20).
 
 move(ho3_koelkast, s20, say).
@@ -133,7 +133,7 @@ text(ho3_koelkast, s21, "deejay %fruit% had net op tijd zijn slamix weggedraaid,
 next(ho3_koelkast, s21, "true", s22).
 
 move(ho3_koelkast, s22, say).
-text(ho3_koelkast, s22, "Opeens kwam een grote, vlezige mensenhand in beeld.").
+text(ho3_koelkast, s22, "Opeens kwam een grote mensenhand in beeld.").
 next(ho3_koelkast, s22, "true", s23).
 
 move(ho3_koelkast, s23, say).
@@ -158,7 +158,7 @@ text(ho3_koelkast, s27, "Niemand wilde nog dansen.").
 next(ho3_koelkast, s27, "true", s28).
 
 move(ho3_koelkast, s28, say).
-text(ho3_koelkast, s28, "Ik hoorde dat Mevrouw Kaas iets fluisteren tegen familie limoen, waarop het kleinste limoentje een beetje moest huilen.").
+text(ho3_koelkast, s28, "Ik hoorde dat Mevrouw Kaas iets fluisterden tegen familie limoen, en het kleinste limoentje keek een beetje bang.").
 next(ho3_koelkast, s28, "true", s29).
 
 move(ho3_koelkast, s29, say).
@@ -182,7 +182,7 @@ text(ho3_koelkast, s37, "En ook alle feestbeesten gingen weg. Het feestje was ec
 next(ho3_koelkast, s37, "true", s40).
 
 move(ho3_koelkast, s40, say).
-text(ho3_koelkast, s40, "En toen ging opeens het licht weer aan! De enge hand verscheen opnieuw, hij had %saus% vast!").
+text(ho3_koelkast, s40, "En toen ging opeens het licht weer aan! De hand verscheen opnieuw, hij had %saus% vast!").
 next(ho3_koelkast, s40, "true", s41).
 
 move(ho3_koelkast, s41, say).
@@ -258,26 +258,26 @@ leds(ho3_koelkast, s56, reset).
 %%% Graafmachine	 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho3_graafmachine, s1, say).
-text(ho3_graafmachine,  s1, "Als je klaar bent om te beginnen, dan kun je mijn linker teen in drukken.").
+text(ho3_graafmachine,  s1, "Als je klaar bent om te beginnen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_graafmachine,  s1, direct, ["RightFootLeds"], ["groen"]).
 moveConfig(ho3_graafmachine, s1, [next='RightBumperPressed']).
 next(ho3_graafmachine,  s1, "true",  s2).
 
 move(ho3_graafmachine, s2, say).
 leds(ho3_graafmachine,  s2, direct, ["RightFootLeds"], ["wit"]).
-text(ho3_graafmachine, s2, "Graag vertel ik jou een verhaal van de tijd toen ik een graafmachine was.").
+text(ho3_graafmachine, s2, "Graag vertel ik jou een verhaal over de tijd dat ik een graafmachine was.").
 next(ho3_graafmachine, s2, "true", s5).
 
 move(ho3_graafmachine, s5, say).
-text(ho3_graafmachine, s5, "Ik moest op mijn knieen gaan zitten en toen maakten ze rupsbanden aan me vast.").
+text(ho3_graafmachine, s5, "Om een graafmachine te zijn, moest op mijn knieen zitten en rupsbanden om doen.").
 next(ho3_graafmachine, s5, "true", s6).
 
 move(ho3_graafmachine, s6, say).
-text(ho3_graafmachine, s6, "En mijn arm werd aan mijn hoofd geplakt met plakband.").
+text(ho3_graafmachine, s6, "En mijn arm moest langs mijn hoofd naar voren.").
 next(ho3_graafmachine, s6, "true", s7).
 
 move(ho3_graafmachine, s7, say).
-text(ho3_graafmachine, s7, "Ik zag eruit als een olifant van ijzer.").
+text(ho3_graafmachine, s7, "Ik leek wel een beetje op een olifant van ijzer.").
 next(ho3_graafmachine, s7, "true", s8).
 
 move(ho3_graafmachine, s8, say).
@@ -307,7 +307,7 @@ text(ho3_graafmachine, s14, "Ik werk op stroom.").
 next(ho3_graafmachine, s14, "true", s15).
 
 move(ho3_graafmachine, s15, say).
-text(ho3_graafmachine, s15, "Ik vind elektriciteit het lekkerste wat er is.").
+text(ho3_graafmachine, s15, "Ik vind stroom het lekkerste wat er is.").
 next(ho3_graafmachine, s15, "true", s16).
 
 move(ho3_graafmachine, s16, say).
@@ -315,7 +315,7 @@ text(ho3_graafmachine, s16, "Mijn nichtje werkt op waterstof maar ik weet niet p
 next(ho3_graafmachine, s16, "true", s18).
 
 move(ho3_graafmachine, s18, say).
-text(ho3_graafmachine, s18, "Maar goed, we gingen dus in een stoet naar de opgraafplek.").
+text(ho3_graafmachine, s18, "Maar goed, we gingen dus allemaal samen naar de opgraafplek.").
 next(ho3_graafmachine, s18, "true", s19).
 
 move(ho3_graafmachine, s19, say).
@@ -335,15 +335,15 @@ text(ho3_graafmachine, s27, "Toen kwamen we op de graafplek.").
 next(ho3_graafmachine, s27, "true", s30).
 
 move(ho3_graafmachine, s30, say).
-text(ho3_graafmachine, s30, "Ik kreeg de rechterhoek, mijn opa groef naast mij en hield mij een beetje in de gaten.").
+text(ho3_graafmachine, s30, "Ik moest in de hoek rechters achter graven, en mijn opa groef naast mij en hield mij een beetje in de gaten.").
 next(ho3_graafmachine, s30, "true", s31).
 
 move(ho3_graafmachine, s31, say).
-text(ho3_graafmachine, s31, "Ik sloeg als een gek aan het graven.").
+text(ho3_graafmachine, s31, "Ik ging heel hard en heel snel graven.").
 next(ho3_graafmachine, s31, "true", s32).
 
 move(ho3_graafmachine, s32, say).
-text(ho3_graafmachine, s32, "Ik voelde me heel sportief bezig.").
+text(ho3_graafmachine, s32, "Ik voelde me heel sportief.").
 next(ho3_graafmachine, s32, "true", s33).
 
 move(ho3_graafmachine, s33, say).
@@ -363,11 +363,11 @@ text(ho3_graafmachine, s37, "Achter me ontstond een steeds grotere berg.").
 next(ho3_graafmachine, s37, "true", s38).
 
 move(ho3_graafmachine, s38, say).
-text(ho3_graafmachine, s38, "En af en toe gooide ik expres een beetje modder over mijn nichtje heen.").
+text(ho3_graafmachine, s38, "Af en toe gooide ik expres een beetje modder over mijn nichtje heen.").
 next(ho3_graafmachine, s38, "true", s39).
 
 move(ho3_graafmachine, s39, say).
-text(ho3_graafmachine, s39, "En dan werd ze woedend, en moest opa zijn arm om haar heen slaan terwijl ze waterstofstoom afblies.").
+text(ho3_graafmachine, s39, "Dan werd ze woedend, en moest opa zijn arm om haar heen slaan terwijl ze waterstofstoom afblies.").
 next(ho3_graafmachine, s39, "true", s40).
 
 move(ho3_graafmachine, s40, say).
@@ -397,15 +397,15 @@ text(ho3_graafmachine, s48, "Het was heel eng.").
 next(ho3_graafmachine, s48, "true", s49).
 
 move(ho3_graafmachine, s49, say).
-text(ho3_graafmachine, s49, "Maar gelukkig had mijn opa me horen piepen en dus kwam hij op me af getuft.").
+text(ho3_graafmachine, s49, "Maar gelukkig had mijn opa me horen piepen en kwam hij snel helpen.").
 next(ho3_graafmachine, s49, "true", s50).
 
 move(ho3_graafmachine, s50, say).
-text(ho3_graafmachine, s50, "En hij werd eerst heel boos dat ik mijn arm vast had laten zitten.").
+text(ho3_graafmachine, s50, "Hij werd eerst heel boos dat ik met mijn arm vast zat.").
 next(ho3_graafmachine, s50, "true", s51).
 
 move(ho3_graafmachine, s51, say).
-text(ho3_graafmachine, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger te werk zou gaan en toen ging hij me helpen met mijn arm losmaken.").
+text(ho3_graafmachine, s51, "En toen moest ik hem beloven dat ik vanaf nu voorzichtiger zou zijn en toen ging hij me helpen om mijn arm los te maken.").
 next(ho3_graafmachine, s51, "true", s52).
 
 move(ho3_graafmachine, s52, say).
@@ -458,7 +458,7 @@ leds(ho3_graafmachine, s77, id, led_show_boosheid).
 next(ho3_graafmachine, s77, "true", s79).
 
 move(ho3_graafmachine, s79, say).
-text(ho3_graafmachine, s79, "En toen wilde ik eerst super boos op haar worden want ik had hem gevonden en zij was hem aan het stelen. Maar toen zei opa dat ik dat niet mocht doen.").
+text(ho3_graafmachine, s79, "Toen wilde ik eerst boos op haar worden want ik had hem gevonden en zij was hem aan het stelen. Maar toen zei opa dat ik dat niet mocht doen.").
 next(ho3_graafmachine, s79, "true", s80).
 
 move(ho3_graafmachine, s80, say).
@@ -471,7 +471,7 @@ text(ho3_graafmachine, s82, "En toen zijn we ermee naar het museum gereden.").
 next(ho3_graafmachine, s82, "true", s83).
 
 move(ho3_graafmachine, s83, say).
-text(ho3_graafmachine, s83, "En nu ligt hij in het Robotkundig Museum voor Oude Robots en andere Machines.").
+text(ho3_graafmachine, s83, "Nu ligt hij in het Robotkundig Museum voor Oude Robots en andere Machines.").
 next(ho3_graafmachine, s83, "true", s84).
 
 move(ho3_graafmachine, s84, say).
@@ -574,7 +574,7 @@ text(ho3_next_story,  s3nd, "Dat waren mijn verhaaltjes, bedankt voor het luiste
 %%% Afscheid		 	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho3_goodbye, s1, say).
-text(ho3_goodbye,  s1, "Als je klaar bent om doei te zeggen, dan kun je op mijn linker teen drukken.").
+text(ho3_goodbye,  s1, "Als je klaar bent om doei te zeggen, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho3_goodbye,  s1, direct, ["RightFootLeds"], ["groen"]).
 moveConfig(ho3_goodbye, s1, [next='RightBumperPressed']).
 next(ho3_goodbye,  s1, "true",  s2).
@@ -589,7 +589,7 @@ text(ho3_goodbye,  s3, "Ik heb veel van je geleerd.").
 next(ho3_goodbye,  s3, "true",  s4).
 
 move(ho3_goodbye, s4, say).
-text(ho3_goodbye,  s4, "Met kleine stapjes hoop ik dat ik elke keer een steeds beter robot vriendje ben geworden. \pau=200\ ").
+text(ho3_goodbye,  s4, "Met kleine stapjes hoop ik dat ik elke keer een steeds beter robot vriendje kan worden. \pau=200\ ").
 next(ho3_goodbye,  s4, "true",  s5).
 
 move(ho3_goodbye, s5, say).

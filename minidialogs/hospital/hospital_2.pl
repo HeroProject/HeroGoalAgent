@@ -23,7 +23,7 @@ text(ho2_greeting,  s4, "Maar wat ik nog niet had vertelt is dat ik, bij het ver
 next(ho2_greeting,  s4, "true",  s5).
 
 move(ho2_greeting, s5, say).
-text(ho2_greeting,  s5, "Ook maak ik graag geluidjes, en kan ik mijn lampjes inzetten om een licht show te maken.").
+text(ho2_greeting,  s5, "Ook maak ik graag geluidjes, en kan ik mijn lampjes inzetten om een lichtshow te maken.").
 next(ho2_greeting,  s5, "true",  s6).
 
 move(ho2_greeting, s6, say).
@@ -43,7 +43,7 @@ go_to_posture(ho2_greeting, s8).
 next(ho2_greeting,  s8, "true",  s9).
 
 move(ho2_greeting, s9, say).
-text(ho2_greeting,  s9, "Alleen heb ik nog niet overal de juiste bewegingen, geluidjes, en licht shows voor.").
+text(ho2_greeting,  s9, "Alleen heb ik nog niet overal de juiste bewegingen, geluidjes, en lichtshows voor.").
 next(ho2_greeting,  s9, "true",  s10).
 
 move(ho2_greeting, s10, say).
@@ -57,7 +57,7 @@ text(ho2_tutorial,  s1, "Laat ik eerst uitleggen hoe het werkt.").
 next(ho2_tutorial,  s1, "true",  s2).
 
 move(ho2_tutorial, s2, say).
-text(ho2_tutorial,  s2, "Ik kan natuurlijk wat geluidjes, en zo, downloaden.").
+text(ho2_tutorial,  s2, "Ik kan natuurlijk wat geluidjes downloaden.").
 next(ho2_tutorial,  s2, "true",  s3).
 
 move(ho2_tutorial, s3, say).
@@ -65,7 +65,7 @@ text(ho2_tutorial,  s3, "Maar ik denk dat jij het misschien ook wel leuk vind om
 next(ho2_tutorial,  s3, "true",  s4).
 
 move(ho2_tutorial, s4, say).
-text(ho2_tutorial,  s4, "Bij elk geluidje, beweging en licht show mag jij kiezen of we het zelf gaan maken, of dat ik wat opties moet downloaden.").
+text(ho2_tutorial,  s4, "Bij elk geluidje, beweging en lichtshow mag jij kiezen of we het zelf gaan maken, of dat ik wat opties moet downloaden.").
 next(ho2_tutorial,  s4, "true",  s5).
 
 move(ho2_tutorial, s5, say).
@@ -152,7 +152,7 @@ text(ho2_tutorial,  s20a, "Ik zal zo aftellen en dan kun je daarna applaudiseren
 next(ho2_tutorial,  s20a, "true",  s20).
 
 move(ho2_tutorial, s20, say).
-text(ho2_tutorial,  s20, "Als je er klaar voor bent dan kun je tegen mijn linker teen drukken.").
+text(ho2_tutorial,  s20, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho2_tutorial,  s20, direct, ["RightFootLeds"], ["groen"]).
 moveConfig(ho2_tutorial, s20, [next='RightBumperPressed']).
 next(ho2_tutorial,  s20, "true",  s21).
@@ -207,7 +207,7 @@ text(ho2_tutorial,  s32, "Ik zal aftellen aan het begin en aan het einde van het
 next(ho2_tutorial,  s32, "true",  s33).
 
 move(ho2_tutorial, s33, say).
-text(ho2_tutorial,  s33, "Als je er klaar voor bent kun je tegen mijn linker teen drukken en mijn armen vast pakken.").
+text(ho2_tutorial,  s33, "Als je er klaar voor bent, dan kun je op mijn grijze tenen drukken waar het lampje groen is.").
 leds(ho2_tutorial,  s33, direct, ["RightFootLeds"], ["groen"]).
 moveConfig(ho2_tutorial, s33, [next='RightBumperPressed']).
 set_stiffness(ho2_tutorial, s33, ['RArm', 'LArm'], 0).
@@ -215,7 +215,7 @@ next(ho2_tutorial,  s33, "true",  s34).
 
 move(ho2_tutorial, s34, say).
 leds(ho2_tutorial,  s34, direct, ["RightFootLeds"], ["wit"]).
-text(ho2_tutorial, s34, "3. 2. 1.").
+text(ho2_tutorial, s34, "Pak mijn armen maar vast en beweeg ze in 3. 2. 1.").
 next(ho2_tutorial,  s34, "true",  s35).
 
 move(ho2_tutorial, s35, say).
@@ -239,7 +239,7 @@ text(ho2_tutorial,  s38, "Het is heel mooi geworden. Dat gaan we zo terug kijken
 next(ho2_tutorial,  s38, "true",  s41).
 
 move(ho2_tutorial, s41, say).
-text(ho2_tutorial,  s41, "Maar eerst gaan we een licht show maken").
+text(ho2_tutorial,  s41, "Maar eerst gaan we een lichtshow maken").
 next(ho2_tutorial,  s41, "true",  s42).
 
 move(ho2_tutorial, s42, say).
@@ -248,11 +248,11 @@ leds(ho2_tutorial,  s42, direct, ["FaceLeds", "ChestLeds", "FeetLeds"], ["paars"
 next(ho2_tutorial,  s42, "true",  s43).
 
 move(ho2_tutorial, s43, say).
-text(ho2_tutorial,  s43, "Leuk hè. Verder kan ik er ook een animatie aan toe voegen.").
+text(ho2_tutorial,  s43, "Leuk hè.").
 next(ho2_tutorial,  s43, "true",  s44).
 
 move(ho2_tutorial, s44, say).
-text(ho2_tutorial,  s44, "Ik kan de lichtjes laten knipperen.").
+text(ho2_tutorial,  s44, "Ik kan ook de lichtjes laten knipperen.").
 leds(ho2_tutorial, s44, direct, "all", "blink", ["paars", "oranje", "groen"], 500).
 moveConfig(ho2_tutorial, s44, [waitTimer=1500]).
 next(ho2_tutorial,  s44, "true",  s45).
@@ -269,7 +269,7 @@ next(ho2_tutorial,  s46, "true",  s47).
 
 move(ho2_tutorial, s47, say).
 leds(ho2_tutorial, s47, reset).
-text(ho2_tutorial,  s47, "Bij het maken van een lichtshow kun je kiezen of je een animatie, zoals knipperen, wilt, of dat je de lampjes gewoon wilt inkleuren.").
+text(ho2_tutorial,  s47, "Bij het maken van een lichtshow kun je kiezen of je de lichtjes wil laten knipperen, heen en weer wil laten gaan, of dat je de lampjes gewoon een kleur wilt geven.").
 next(ho2_tutorial,  s47, "true",  s48).
 
 move(ho2_tutorial, s48, say).
@@ -277,7 +277,7 @@ text(ho2_tutorial,  s48, "Laten we dat een keertje oefenen.").
 next(ho2_tutorial,  s48, "true",  s49).
 
 move(ho2_tutorial, s49, say).
-text(ho2_tutorial,  s49, "We hebben nu een liedje en een dansje bij het feestje. Tijd voor een passende licht show.").
+text(ho2_tutorial,  s49, "We hebben nu een liedje en een dansje bij het feestje. Tijd voor een passende lichtshow.").
 prepare_led_anim(ho2_tutorial, s49).
 moveConfig(ho2_tutorial, s49, [umVariable=led_show_feest]).
 
@@ -322,11 +322,11 @@ text(ho2_tutorial_2,  s6, "Top!").
 %%% Story selection			                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho2_story_selection, s1, say).
-text(ho2_story_selection,  s1, "Nu weet je hoe je leuke geluidjes, bewegingen, en licht shows kan maken.").
+text(ho2_story_selection,  s1, "Nu weet je hoe je leuke geluidjes, bewegingen, en lichtshows kan maken.").
 next(ho2_story_selection,  s1, "true",  s2).
 
 move(ho2_story_selection, s2, say).
-text(ho2_story_selection,  s2, "De volgende keer zal ik een verhaal vertellen over mijn vorige baaantjes.").
+text(ho2_story_selection,  s2, "De volgende keer zal ik een verhaal vertellen over 1 van mijn vorige baaantjes.").
 next(ho2_story_selection,  s2, "true",  s3).
 
 move(ho2_story_selection, s3, say).
@@ -334,7 +334,7 @@ text(ho2_story_selection,  s3, "Ik ben een tijdje een slimme koelkast geweest.")
 next(ho2_story_selection,  s3, "true",  s4).
 
 move(ho2_story_selection, s4, say).
-text(ho2_story_selection,  s4, "Ook heb ik een eventjes gewerkt als graafmachine.").
+text(ho2_story_selection,  s4, "Ook heb ik eventjes gewerkt als graafmachine.").
 next(ho2_story_selection,  s4, "true",  s5).
 
 move(ho2_story_selection, s5, say).
@@ -354,7 +354,7 @@ text(ho2_story_selection,  s8, "Maar ik vertel graag over al mijn avontuuuren al
 next(ho2_story_selection,  s8, "true",  s9).
 
 move(ho2_story_selection, s9, question).
-moveConfig(ho2_story_selection, s9, [type=input, context='choose_story', options= ["koelkast", "graafmachine"], umVariable=ho2_story_choice]).
+moveConfig(ho2_story_selection, s9, [type=input, context='choose_story', options= ["koelkast", "graafmachine"], umVariable=ho2_story_choice, fast = yes]).
 text(ho2_story_selection, s9, "Wil jij de volgende keer horen over mijn avontuur als koelkast of als graafmachine?").
 next(ho2_story_selection, s9, 'success', s10).
 next(ho2_story_selection, s9, 'fail', s9f).
@@ -390,7 +390,7 @@ moveConfig(ho2_story_selection, s10graafmachine, [loadUserModel="true"]).
 %%% Koelkast				                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho2_koelkast, s1, say).
-text(ho2_koelkast,  s1, "Voor het verhaal van mij als koelkast heb ik nog 1 geluidje, 1 beweging, en 1 licht show nodig.").
+text(ho2_koelkast,  s1, "Voor het verhaal van mij als koelkast heb ik nog 1 geluidje, 1 beweging, en 1 lichtshow nodig.").
 next(ho2_koelkast, s1, 'success', s2).
 
 move(ho2_koelkast, s2, say).
@@ -424,11 +424,11 @@ audio(ho2_koelkast_2, s3, id, sound_knal).
 next(ho2_koelkast_2,  s3, "true",  s4).
 
 move(ho2_koelkast_2, s4, say).
-text(ho2_koelkast_2,  s4, "Ik was tegen de deur opgelopen. Al mijn robot vriendjes lachen natuurlijk.").
+text(ho2_koelkast_2,  s4, "Ik was tegen de deur opgelopen. Al mijn robot vriendjes moesten natuurlijk lachen.").
 next(ho2_koelkast_2,  s4, "true",  s5).
 
 move(ho2_koelkast_2, s5, say).
-text(ho2_koelkast_2,  s5, "Het goede nieuws is, het geluidje werkte uitstekend!").
+text(ho2_koelkast_2,  s5, "Ja, het geluidje werkt uitstekend!").
 next(ho2_koelkast_2,  s5, "true",  s6).
 
 move(ho2_koelkast_2, s6, say).
@@ -460,7 +460,7 @@ text(ho2_koelkast_3,  s3, "Daar kan ik wel een goede bal mee slaan, al zeg ik he
 next(ho2_koelkast_3,  s3, "true",  s4).
 
 move(ho2_koelkast_3, s4, say).
-text(ho2_koelkast_3,  s4, "Dan hebben we tot slot alleen nog een licht show nodig.").
+text(ho2_koelkast_3,  s4, "Dan hebben we tot slot alleen nog een lichtshow nodig.").
 next(ho2_koelkast_3,  s4, "true",  s5).
 
 move(ho2_koelkast_3, s5, say).
@@ -472,7 +472,7 @@ text(ho2_koelkast_3,  s6, "En daar wordt ik een beetje duizelig van.").
 next(ho2_koelkast_3,  s6, "true",  s7).
 
 move(ho2_koelkast_3, s7, say).
-text(ho2_koelkast_3,  s7, "Ik wil wel graag een licht show die mijn duizeligheid uitdrukt.").
+text(ho2_koelkast_3,  s7, "Ik wil wel graag een lichtshow die mijn duizeligheid uitdrukt.").
 next(ho2_koelkast_3,  s7, "true",  s8).
 
 move(ho2_koelkast_3, s8, say).
@@ -497,7 +497,7 @@ leds(ho2_koelkast_4, s3, reset).
 %%% Graafmachine			                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(ho2_graafmachine, s1, say).
-text(ho2_graafmachine,  s1, "Voor het verhaal over mij als graafmachine heb ik nog 1 geluidje, 1 beweging, en 1 licht show nodig.").
+text(ho2_graafmachine,  s1, "Voor het verhaal over mij als graafmachine heb ik nog 1 geluidje, 1 beweging, en 1 lichtshow nodig.").
 %moveConfig(ho2_graafmachine, s1, [loadUserModel="true"]).
 next(ho2_graafmachine, s1, 'success', s2).
 
@@ -622,7 +622,7 @@ next(ho2_goodbye,  s2, "true",  s3).
 
 move(ho2_goodbye, s3, question).
 moveConfig(ho2_goodbye, s3, [type=yesno, context='answer_yesno']).
-text(ho2_goodbye, s3, "Vond je het leuk om de gebaren, geluiden, en licht shows te maken?").
+text(ho2_goodbye, s3, "Vond je het leuk om de gebaren, geluiden, en lichtshows te maken?").
 next(ho2_goodbye, s3, 'answer_yes', s4y).
 next(ho2_goodbye, s3, 'answer_no', s4n).
 next(ho2_goodbye, s3, 'answer_dontknow', s4d).
