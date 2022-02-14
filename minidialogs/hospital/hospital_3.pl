@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 		      HOSPITAL STUDY	                   %%%
-%%%     	Conversation topics for session 3	   %%%
+%%%     	Conversation minidialogs for session 3	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,11 +36,11 @@ next(ho3_greeting, s7, "graafmachine", s8graafmachine).
 next(ho3_greeting, s7, "fail", s8koelkast).
 
 move(ho3_greeting, s8koelkast, say).
-insert_topic(ho3_greeting, s8koelkast, ho3_koelkast).
+insert_minidialog(ho3_greeting, s8koelkast, ho3_koelkast).
 moveConfig(ho3_greeting, s8koelkast, [loadUserModel="true"]).
 
 move(ho3_greeting, s8graafmachine, say).
-insert_topic(ho3_greeting, s8graafmachine, ho3_graafmachine).
+insert_minidialog(ho3_greeting, s8graafmachine, ho3_graafmachine).
 moveConfig(ho3_greeting, s8graafmachine, [loadUserModel="true"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -252,7 +252,7 @@ leds(ho3_koelkast, s56, reset).
 %next(ho3_koelkast,  s57, "true",  s58).
 
 %move(ho3_koelkast, s58, say).
-%insert_topic(ho3_koelkast, s58, ho3_next_story).
+%insert_minidialog(ho3_koelkast, s58, ho3_next_story).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Graafmachine	 	                           %%%
@@ -510,7 +510,7 @@ leds(ho3_graafmachine, s92, reset).
 %next(ho3_graafmachine,  s91, "true",  s92).
 
 %move(ho3_graafmachine, s92, say).
-%insert_topic(ho3_graafmachine, s92, ho3_next_story).
+%insert_minidialog(ho3_graafmachine, s92, ho3_next_story).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Next story?		 	                           %%%
@@ -553,11 +553,11 @@ next(ho3_next_story, s6f, "fail", s6graafmachine).
 
 move(ho3_next_story, s6koelkast, say).
 text(ho3_next_story,  s6koelkast, "Koelkast, leuk!").
-insert_topic(ho3_next_story, s6koelkast, ho3_koelkast).
+insert_minidialog(ho3_next_story, s6koelkast, ho3_koelkast).
 
 move(ho3_next_story, s6graafmachine, say).
 text(ho3_next_story,  s6graafmachine, "Graafmachine, leuk!").
-insert_topic(ho3_next_story, s6graafmachine, ho3_graafmachine).
+insert_minidialog(ho3_next_story, s6graafmachine, ho3_graafmachine).
 
 move(ho3_next_story, s2n, say).
 text(ho3_next_story,  s2n, "Helemaal prima!").

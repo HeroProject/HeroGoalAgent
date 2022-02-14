@@ -1,6 +1,6 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 		      HOSPITAL STUDY	                   %%%
-%%%     	Conversation topics for session 2	   %%%
+%%%     	Conversation minidialogs for session 2	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -370,20 +370,20 @@ next(ho2_story_selection, s10, "fail", s10koelkast).
 
 move(ho2_story_selection, s10koelkast, say).
 text(ho2_story_selection,  s10koelkast, "Koelkast, leuk!").
-insert_topic(ho2_story_selection, s10koelkast, ho2_koelkast_4).
-insert_topic(ho2_story_selection, s10koelkast, ho2_koelkast_3).
-insert_topic(ho2_story_selection, s10koelkast, ho2_koelkast_2).
-insert_topic(ho2_story_selection, s10koelkast, ho2_koelkast_1).
-insert_topic(ho2_story_selection, s10koelkast, ho2_koelkast).
+insert_minidialog(ho2_story_selection, s10koelkast, ho2_koelkast_4).
+insert_minidialog(ho2_story_selection, s10koelkast, ho2_koelkast_3).
+insert_minidialog(ho2_story_selection, s10koelkast, ho2_koelkast_2).
+insert_minidialog(ho2_story_selection, s10koelkast, ho2_koelkast_1).
+insert_minidialog(ho2_story_selection, s10koelkast, ho2_koelkast).
 moveConfig(ho2_story_selection, s10koelkast, [loadUserModel="true"]).
 
 move(ho2_story_selection, s10graafmachine, say).
 text(ho2_story_selection,  s10graafmachine, "Graafmachine, leuk!").
-insert_topic(ho2_story_selection, s10graafmachine, ho2_graafmachine_4).
-insert_topic(ho2_story_selection, s10graafmachine, ho2_graafmachine_3).
-insert_topic(ho2_story_selection, s10graafmachine, ho2_graafmachine_2).
-insert_topic(ho2_story_selection, s10graafmachine, ho2_graafmachine_1).
-insert_topic(ho2_story_selection, s10graafmachine, ho2_graafmachine).
+insert_minidialog(ho2_story_selection, s10graafmachine, ho2_graafmachine_4).
+insert_minidialog(ho2_story_selection, s10graafmachine, ho2_graafmachine_3).
+insert_minidialog(ho2_story_selection, s10graafmachine, ho2_graafmachine_2).
+insert_minidialog(ho2_story_selection, s10graafmachine, ho2_graafmachine_1).
+insert_minidialog(ho2_story_selection, s10graafmachine, ho2_graafmachine).
 moveConfig(ho2_story_selection, s10graafmachine, [loadUserModel="true"]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
