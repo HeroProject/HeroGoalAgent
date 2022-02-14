@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% 		      TESTING MINIDIALOGS	                   %%%
-%%%      MiniDialogs for testing the various functionalities	   %%%
+%%% 		      TESTING MINIDIALOGS	           %%%
+%%%  MiniDialogs for testing the various functionalities   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
