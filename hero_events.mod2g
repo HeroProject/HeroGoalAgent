@@ -225,7 +225,7 @@ module hero_events {
 	%%% Wait for event (e.g. button press) in a say move   %%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	% If the next flag and repeat flags are in use, wait untill either the corresponding next or repeat events become available to clear this move.	
+	% If the next flag is in use, wait untill the corresponding next becomes available to clear this move.	
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), not(waitingForSayClear), eventsCompleted)
 		then insert(waitingForEvent(Next), waitingForSayClear).
 	
