@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% 		      HOSPITAL STUDY	                   %%%
-%%%     	Conversation minidialogs for session 1	   %%%
+%%%     	Conversation topics for session 1	   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,7 +17,7 @@ text(ho1_greeting, s2, "Hoe heet jij?").
 next(ho1_greeting, s2, "true", s3).
 
 move(ho1_greeting, s3, say).
-text(ho1_greeting,  s3, "%first_name%, wat een mooie naam! Ik denk niet dat ik ooit iemand heb ontmoet die zo heet. Denk ik.").
+text(ho1_greeting,  s3, "%first_name%, wat een mooie naam! Ik denk niet dat ik ooit iemand heb ontmoet die zo heet.").
 next(ho1_greeting,  s3, "true",  s4).
 
 move(ho1_greeting, s4, say).
@@ -91,90 +91,90 @@ next(ho1_tutorial_speech,  s5f, "true",  s6).
 move(ho1_tutorial_speech, s6, say).
 leds(ho1_tutorial_speech, s6, direct, ["FaceLeds"], ["wit"]).
 
-%%% feet %%%
-move(ho1_tutorial_feet, s1, say).
-text(ho1_tutorial_feet,  s1, "Soms heb ik een beetje moeite om mensen te verstaan.").
-next(ho1_tutorial_feet,  s1, "true",  s2).
+%%% Touch %%%
+move(ho1_tutorial_touch, s1, say).
+text(ho1_tutorial_touch,  s1, "Soms heb ik een beetje moeite om mensen te verstaan.").
+next(ho1_tutorial_touch,  s1, "true",  s2).
 
-move(ho1_tutorial_feet, s2, say).
-text(ho1_tutorial_feet,  s2, "Dan zal ik de vraag gewoon opnieuw stellen. \pau=300\ ").
-next(ho1_tutorial_feet,  s2, "true",  s3).
+move(ho1_tutorial_touch, s2, say).
+text(ho1_tutorial_touch,  s2, "Dan zal ik de vraag gewoon opnieuw stellen. \pau=300\ ").
+next(ho1_tutorial_touch,  s2, "true",  s3).
 
-move(ho1_tutorial_feet, s3, say).
-text(ho1_tutorial_feet,  s3, "Mocht ik het weer niet verstaan, dan heb ik een alternatief.").
-next(ho1_tutorial_feet,  s3, "true",  s4).
+move(ho1_tutorial_touch, s3, say).
+text(ho1_tutorial_touch,  s3, "Mocht ik het weer niet verstaan, dan heb ik een alternatief.").
+next(ho1_tutorial_touch,  s3, "true",  s4).
 
-move(ho1_tutorial_feet, s4, say).
-text(ho1_tutorial_feet,  s4, "Je kunt dan antwoord geven via mijn grijze, tenen.").
-next(ho1_tutorial_feet,  s4, "true",  s5).
+move(ho1_tutorial_touch, s4, say).
+text(ho1_tutorial_touch,  s4, "Je kunt dan antwoord geven via mijn grijze, tenen.").
+next(ho1_tutorial_touch,  s4, "true",  s5).
 
-move(ho1_tutorial_feet, s5, say).
-text(ho1_tutorial_feet,  s5, "Dat zijn namelijk knopjes.").
-next(ho1_tutorial_feet,  s5, "true", s6).
+move(ho1_tutorial_touch, s5, say).
+text(ho1_tutorial_touch,  s5, "Dat zijn namelijk knopjes.").
+next(ho1_tutorial_touch,  s5, "true", s6).
 
-move(ho1_tutorial_feet, s6, say).
-text(ho1_tutorial_feet,  s6, "Links, waar het lampje nu groen is, betekent ja \pau=400\ en rechts, waar het lampje nu rood is betekent nee").
-leds(ho1_tutorial_feet,  s6, direct, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
-next(ho1_tutorial_feet,  s6, "true",  s7).
+move(ho1_tutorial_touch, s6, say).
+text(ho1_tutorial_touch,  s6, "Links, waar het lampje nu groen is, betekent ja \pau=400\ en rechts, waar het lampje nu rood is betekent nee").
+leds(ho1_tutorial_touch,  s6, direct, ['LeftFootLeds', 'RightFootLeds'], ['red', 'green']).
+next(ho1_tutorial_touch,  s6, "true",  s7).
 
-move(ho1_tutorial_feet, s7, say).
-text(ho1_tutorial_feet,  s7, "Laten we dat proberen. \pau=400\ ").
-leds(ho1_tutorial_feet,  s7, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
-next(ho1_tutorial_feet,  s7, "true",  s8).
+move(ho1_tutorial_touch, s7, say).
+text(ho1_tutorial_touch,  s7, "Laten we dat proberen. \pau=400\ ").
+leds(ho1_tutorial_touch,  s7, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+next(ho1_tutorial_touch,  s7, "true",  s8).
 
-move(ho1_tutorial_feet, s8, question).
-moveConfig(ho1_tutorial_feet, s8, [type=yesno, inputModality=[feet=3], maxAnswerTime=[feet=5000]]).
-text(ho1_tutorial_feet, s8, "Hou je van chocola? Druk tegen mijn teen om je antwoord door te geven.").
-next(ho1_tutorial_feet, s8, 'answer_yes', s9y).
-next(ho1_tutorial_feet, s8, 'answer_no', s9n).
-next(ho1_tutorial_feet, s8, 'fail', s9f).
+move(ho1_tutorial_touch, s8, question).
+moveConfig(ho1_tutorial_touch, s8, [type=yesno, inputModality=[touch=3], maxAnswerTime=[touch=5000]]).
+text(ho1_tutorial_touch, s8, "Hou je van chocola? Druk tegen mijn teen om je antwoord door te geven.").
+next(ho1_tutorial_touch, s8, 'answer_yes', s9y).
+next(ho1_tutorial_touch, s8, 'answer_no', s9n).
+next(ho1_tutorial_touch, s8, 'fail', s9f).
 
-move(ho1_tutorial_feet, s9y, say).
-text(ho1_tutorial_feet, s9y, "Ik houd ook van chocola! Goed gedrukt trouwens.").
-next(ho1_tutorial_feet, s9y, "true", s10).
+move(ho1_tutorial_touch, s9y, say).
+text(ho1_tutorial_touch, s9y, "Ik hou ook van chocola! Goed gedrukt trouwens.").
+next(ho1_tutorial_touch, s9y, "true", s10).
 
-move(ho1_tutorial_feet, s9n, say).
-text(ho1_tutorial_feet, s9n, "Ik vind chocola ook vies! Goed gedrukt trouwens.").
-next(ho1_tutorial_feet, s9n, "true", s10).
+move(ho1_tutorial_touch, s9n, say).
+text(ho1_tutorial_touch, s9n, "Ik vind chocola ook vies! Goed gedrukt trouwens.").
+next(ho1_tutorial_touch, s9n, "true", s10).
 
-move(ho1_tutorial_feet, s9f, say).
-text(ho1_tutorial_feet, s9f, "Ik vind het ook een lastige keuze. Kelly kun jij %first_name% even laten zien waar ze precies moet drukken?").
-moveConfig(ho1_tutorial_feet, s9f, [next='FrontTactilfeeted']).
-next(ho1_tutorial_feet, s9f, "true", s10).
+move(ho1_tutorial_touch, s9f, say).
+text(ho1_tutorial_touch, s9f, "Ik vind het ook een lastige keuze. Kelly kun jij %first_name% even laten zien waar ze precies moet drukken?").
+moveConfig(ho1_tutorial_touch, s9f, [next='FrontTactilTouched']).
+next(ho1_tutorial_touch, s9f, "true", s10).
 
-move(ho1_tutorial_feet, s10, say).
-text(ho1_tutorial_feet,  s10, "Soms zal ik wat opties opnoemen. Dan kun je op de ja knop drukken als je jouw antwoord hoort.").
-leds(ho1_tutorial_feet,  s10, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
-next(ho1_tutorial_feet,  s10, "true",  s11).
+move(ho1_tutorial_touch, s10, say).
+text(ho1_tutorial_touch,  s10, "Soms zal ik wat opties opnoemen. Dan kun je op de ja knop drukken als je jouw antwoord hoort.").
+leds(ho1_tutorial_touch,  s10, direct, ['LeftFootLeds', 'RightFootLeds'], ['white', 'white']).
+next(ho1_tutorial_touch,  s10, "true",  s11).
 
-move(ho1_tutorial_feet, s11, say).
-text(ho1_tutorial_feet,  s11, "Laten we dat ook even uitproberen. \pau=400\ ").
-next(ho1_tutorial_feet,  s11, "true",  s12).
+move(ho1_tutorial_touch, s11, say).
+text(ho1_tutorial_touch,  s11, "Laten we dat ook even uitproberen. \pau=400\ ").
+next(ho1_tutorial_touch,  s11, "true",  s12).
 
-move(ho1_tutorial_feet, s12, question).
-moveConfig(ho1_tutorial_feet, s12, [type=quiz, options=['paars', 'blauw', 'groen', 'oranje'], 
-	correctAnswer=['groen'], inputModality=[feet=3]]).
-leds(ho1_tutorial_feet, s12, direct, ["FaceLeds"], ["groen"]).
-text(ho1_tutorial_feet, s12, "Welke kleur hebben mijn ogen nu? Druk op de ja knop als je het antwoord hoort.").
-next(ho1_tutorial_feet, s12, 'correct', s13cor).
-next(ho1_tutorial_feet, s12, 'incorrect', s13incor).
-next(ho1_tutorial_feet, s12, 'fail', s14).
+move(ho1_tutorial_touch, s12, question).
+moveConfig(ho1_tutorial_touch, s12, [type=quiz, options=['paars', 'blauw', 'groen', 'oranje'], 
+	correctAnswer=['groen'], inputModality=[touch=3]]).
+leds(ho1_tutorial_touch, s12, direct, ["FaceLeds"], ["groen"]).
+text(ho1_tutorial_touch, s12, "Welke kleur hebben mijn ogen nu? Druk op de ja knop als je het antwoord hoort.").
+next(ho1_tutorial_touch, s12, 'correct', s13cor).
+next(ho1_tutorial_touch, s12, 'incorrect', s13incor).
+next(ho1_tutorial_touch, s12, 'fail', s14).
 
-move(ho1_tutorial_feet, s13cor, say).
-text(ho1_tutorial_feet, s13cor, "Jazeker! Ze zijn inderdaad groen.").
-next(ho1_tutorial_feet,  s13cor, "true",  s14).
+move(ho1_tutorial_touch, s13cor, say).
+text(ho1_tutorial_touch, s13cor, "Jazeker! Ze zijn inderdaad groen.").
+next(ho1_tutorial_touch,  s13cor, "true",  s14).
 
-move(ho1_tutorial_feet, s13incor, say).
-text(ho1_tutorial_feet, s13incor, "Die kleur kunnen ze inderdaad worden, maar deze keer waren ze echt groen.").
-next(ho1_tutorial_feet,  s13incor, "true",  s14).
+move(ho1_tutorial_touch, s13incor, say).
+text(ho1_tutorial_touch, s13incor, "Die kleur kunnen ze inderdaad worden, maar deze keer waren ze echt groen.").
+next(ho1_tutorial_touch,  s13incor, "true",  s14).
 
-move(ho1_tutorial_feet, s13incor2, say).
-text(ho1_tutorial_feet, s13incor2, "Mocht je te laat of te vroeg hebben gedrukt, alle antwoorden komen twee keer voorbij. Je kunt dan eventjes wachten met drukken tot jouw antwoord terug komt.").
-next(ho1_tutorial_feet,  s13incor2, "true",  s14).
+move(ho1_tutorial_touch, s13incor2, say).
+text(ho1_tutorial_touch, s13incor2, "Mocht je te laat of te vroeg hebben gedrukt, alle antwoorden komen twee keer voorbij. Je kunt dan eventjes wachten met drukken tot jouw antwoord terug komt.").
+next(ho1_tutorial_touch,  s13incor2, "true",  s14).
 
-move(ho1_tutorial_feet, s14, say).
-leds(ho1_tutorial_feet, s14, direct, ["FaceLeds"], ["wit"]).
-text(ho1_tutorial_feet, s14, "Mocht jouw antwoord er niet tussen zitten, dan kun je eentje kiezen die het beste bij jou past.").
+move(ho1_tutorial_touch, s14, say).
+leds(ho1_tutorial_touch, s14, direct, ["FaceLeds"], ["wit"]).
+text(ho1_tutorial_touch, s14, "Mocht jouw antwoord er niet tussen zitten, dan kun je eentje kiezen die het beste bij jou past.").
 
 %%% Final questions %%%
 move(ho1_tutorial_question, s1, say).
@@ -378,7 +378,7 @@ next(ho1_beroep,  s5, "true",  s6).
 
 move(ho1_beroep, s6, question).
 moveConfig(ho1_beroep, s6, [type=input, context='answer_beroep', options= ["dokter", "politieagent", "uitvinder", "topsporter", "deejee"], umVariable=beroep, defaultAnswer="dokter"]).
-text(ho1_beroep, s6, "Wat wil jij worden later?").
+text(ho1_beroep, s6, "Wat wil jij later worden?").
 next(ho1_beroep, s6, 'success', s7).
 next(ho1_beroep, s6, 'fail', s8).
 
@@ -437,7 +437,7 @@ next(ho1_continue, s2, 'fail', s3d).
 
 move(ho1_continue, s3y, say).
 text(ho1_continue,  s3y, "Dat is helemaal prima").
-remove_minidialog(ho1_continue,  s3y, [ho1_family, ho1_sports]).
+remove_topic(ho1_continue,  s3y, [ho1_family, ho1_sports]).
 
 move(ho1_continue, s3n, say).
 text(ho1_continue,  s3n, "Gezellig, laten we verder gaan").
@@ -476,14 +476,8 @@ next(ho1_colors, s4, "true", s5).
 move(ho1_colors, s5, question).
 moveConfig(ho1_colors, s5, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(ho1_colors, s5, "Waar gebruik jij die kleur het meest?").
-next(ho1_colors, s5, 'success', s6).
+next(ho1_colors, s5, 'success', s7).
 next(ho1_colors, s5, 'fail', s7).
-
-move(ho1_colors, s6, question).
-moveConfig(ho1_colors, s6, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(ho1_colors, s6, "Oh interessant! Vertel daar eens wat meer over?").
-next(ho1_colors, s6, 'success', s7).
-next(ho1_colors, s6, 'fail', s7).
 
 move(ho1_colors, s7, say).
 text(ho1_colors,  s7, "Wat gezellig dat je dit met me deelt %first_name%.").
@@ -531,7 +525,7 @@ next(ho1_family, s7, 'fail', s8n).
 
 move(ho1_family, s8y, question).
 moveConfig(ho1_family, s8y, [type=openend, context='answer_open', inputModality=[speech=1], maxAnswerTime=[speechopenend=15000]]).
-text(ho1_family, s8y, "Ben benieuwd, vertel maar.").
+text(ho1_family, s8y, "Ik ben benieuwd, vertel maar.").
 next(ho1_family, s8y, 'success', s9).
 next(ho1_family, s8y, 'fail', s9).
 
