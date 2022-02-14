@@ -1,10 +1,14 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
-use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
-use '../minidialogs/robotstories/functional/*.pl' as knowledge.
-use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hero/*.pl' as knowledge.
+use '../minidialogs/hero/chitchat/*.pl' as knowledge.
+use '../minidialogs/hero/narrative/*.pl' as knowledge.
+use '../minidialogs/hero/functional/*.pl' as knowledge.
+use '../minidialogs/hero/hospital/*.pl' as knowledge.
+use '../minidialogs/hero/co_regulation/*.pl' as knowledge.
+use '../minidialogs/hero/stories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 
@@ -43,9 +47,12 @@ module performDialogMove(Minidialog, Move) {
 	if bel(audio(Minidialog, Move, id, ID), getUserModelValue(ID, AudioID)) then playAudio(AudioID).
 	if bel(audio(Minidialog, Move, option, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound)) then playAudio(Sound).
 	
-	% Wake up and rest.
+	% Wake up, rest, and idle.
 	if bel(wakeup(Minidialog, Move)) then wakeUp.
 	if bel(rest(Minidialog, Move)) then rest + stopLedAnimation.
+	
+	if bel(idle(Minidialog, Move, 'true')) then setIdle.
+	if bel(idle(Minidialog, Move, 'false')) then setNonIdle.
 	
 	% Set breathing
 	if bel(enableBreathing(Minidialog, Move), basePosture('Stand')) then enableBreathing.
@@ -67,7 +74,7 @@ module performDialogMove(Minidialog, Move) {
 	% Show text
 	if bel((display(Minidialog, Move, Txt, always);
 		tabletUse(TabletUse), (TabletUse = always; TabletUse = explicit), display(Minidialog, Move, Txt);
-		tabletUse(always), not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, Txt)),
+		tabletUse(always), not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText), replaceVar(RawText, Txt)),
 		text(Txt, HTxt), move(Minidialog, Move, MoveType))
 		then {
 			if bel(MoveType \= question, html(HTxt, Html)) then renderPage(Html).

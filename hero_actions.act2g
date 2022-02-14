@@ -1,10 +1,14 @@
 use 'util/*.pl' as knowledge.
 use 'minidialogs/*.pl' as knowledge.
 use 'minidialogs/co_creation/*.pl' as knowledge.
-use 'minidialogs/hospital/*.pl' as knowledge.
-use 'minidialogs/robotstories/chitchat/*.pl' as knowledge.
-use 'minidialogs/robotstories/narrative/*.pl' as knowledge.
-use 'minidialogs/robotstories/functional/*.pl' as knowledge.
+use 'minidialogs/robotstories/*.pl' as knowledge.
+use 'minidialogs/hero/*.pl' as knowledge.
+use 'minidialogs/hero/chitchat/*.pl' as knowledge.
+use 'minidialogs/hero/narrative/*.pl' as knowledge.
+use 'minidialogs/hero/functional/*.pl' as knowledge.
+use 'minidialogs/hero/hospital/*.pl' as knowledge.
+use 'minidialogs/hero/co_regulation/*.pl' as knowledge.
+use 'minidialogs/hero/stories/*.pl' as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with
@@ -115,6 +119,14 @@ define startLedAnimation(Group, AnimType, Colors, Speed) with
 define stopLedAnimation with
 	pre { true }
 	post { waitingForEvent('LedAnimationDone') }
+
+define setIdle with
+	pre { true }
+	post { waitingForEvent('SetIdle') }
+	
+define setNonIdle with
+	pre { true }
+	post { waitingForEvent('SetNonIdle') }
 
 % Interaction recording
 define startInteractionRecording(ID) with

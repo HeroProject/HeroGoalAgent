@@ -1,10 +1,14 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
-use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
-use '../minidialogs/robotstories/functional/*.pl' as knowledge.
-use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hero/*.pl' as knowledge.
+use '../minidialogs/hero/chitchat/*.pl' as knowledge.
+use '../minidialogs/hero/narrative/*.pl' as knowledge.
+use '../minidialogs/hero/functional/*.pl' as knowledge.
+use '../minidialogs/hero/hospital/*.pl' as knowledge.
+use '../minidialogs/hero/co_regulation/*.pl' as knowledge.
+use '../minidialogs/hero/stories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use '../util/logging' as module.
@@ -21,7 +25,7 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 				then {
 					%The next condition is given the 'fail'  flag.
 					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
-						then insert(nextCondition('fail')) /*+ logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt])*/.
+						then insert(nextCondition('fail')) + logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
 					if bel(keyValue(Minidialog, Move, defaultAnswer, DefaultAns), userModel(UserModel), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))

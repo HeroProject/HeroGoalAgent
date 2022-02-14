@@ -1,10 +1,14 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../minidialogs/robotstories/chitchat/*.pl' as knowledge.
-use '../minidialogs/robotstories/narrative/*.pl' as knowledge.
-use '../minidialogs/robotstories/functional/*.pl' as knowledge.
-use '../minidialogs/hospital/*.pl' as knowledge.
+use '../minidialogs/robotstories/*.pl' as knowledge.
+use '../minidialogs/hero/*.pl' as knowledge.
+use '../minidialogs/hero/chitchat/*.pl' as knowledge.
+use '../minidialogs/hero/narrative/*.pl' as knowledge.
+use '../minidialogs/hero/functional/*.pl' as knowledge.
+use '../minidialogs/hero/hospital/*.pl' as knowledge.
+use '../minidialogs/hero/co_regulation/*.pl' as knowledge.
+use '../minidialogs/hero/stories/*.pl' as knowledge.
 use '../sessions' as knowledge.
 use '../hero_actions' as actionspec.
 use '../util/logging' as module.
@@ -41,7 +45,7 @@ module askQuestion(Minidialog, Move) {
 				then {	
 					% Display question on tablet (use display/3 or display/4 or if none use regular text/3 clause).
 					if bel((display(Minidialog, Move, Txt) ; display(Minidialog, Move, Txt, _);  
-					not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, Txt)),
+					not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText), replaceVar(RawText, Txt)),
 					text(Txt, HTxt)) then {
 							% yesno: button for yes and no on screen.
 							if bel(keyValue(Minidialog, Move, type, yesno), tablet_yesno(answer_yes, Yes), tablet_yesno(answer_no, No), buttons([Yes, No], Buttons),

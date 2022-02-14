@@ -10,7 +10,7 @@
 %%%%%%%%%%%%%% Tests %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_tablet, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 
 % Multi session
@@ -24,7 +24,7 @@ sessionDesign(test_session_6, [general_wakeup, test_session_sound_2, general_res
 sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session_led_1b, general_rest]).
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
-%%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%% Memory-based Personalization Study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sessionDesign(robotstories_test, [general_wakeup, robospelen_10_peptalk, general_rest]).
 %sessionDesign(robotstories_test1, [general_wakeup, dagdromen_sport, general_rest]).
 %sessionDesign(robotstories_test2, [general_wakeup, [theme='_chitchat'], general_rest]).
@@ -45,7 +45,7 @@ sessionDesign(robotstories_control_5, [general_wakeup, begroeting_5, robospelen_
 % Experimental condition
 sessionDesign(co_creation, [general_wakeup, 
 co_intro, co_tutorial_speech, co_tutorial_feet, co_tutorial_gesture, co_tutorial_sound, co_tutorial_lights, co_invol, co_tutorial_question,
-co_zoo_intro, co_zoo_elephant, co_zoo_lion, co_zoo_dolphin, co_zoo_dolphin_showtime, 
+co_zoo_intro, co_zoo_elephant_create, co_zoo_elephant_play, co_zoo_lion_create, co_zoo_lion_play, co_zoo_dolphin_create, co_zoo_dolphin_play, 
 co_handshake, co_handshake_gesture, co_handshake_sound, co_handshake_led, co_handshake_ceremonie,
 general_rest]).
 
@@ -53,7 +53,7 @@ general_rest]).
 sessionDesign(co_creation_baseline, [general_wakeup, 
 co_intro, co_invol_baseline, co_tutorial_speech, co_tutorial_feet,
 co_zoo_intro, co_zoo_elephant_baseline, co_zoo_lion_baseline, co_zoo_dolphin_baseline, 
-co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_handshake_led_baseline, co_handshake_ceremonie,
+co_handshake, co_handshake_gesture_baseline, co_handshake_sound_baseline, co_handshake_led_baseline, co_handshake_ceremonie_baseline,
 general_rest]).
 
 %%%%%%%%%%%%%% Hospital user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,7 +95,7 @@ useGui(false).
 % When no GUI is uses, these variables need to be specified.
 setContinueSession(true).
 setBasePosture('Stand').
-setTabletUse(explicit). %can be repair, explicit, or always
+setTabletUse(always). %can be repair, explicit, or always
 
 % Experimental settings
 setUserId('999'). % user id
