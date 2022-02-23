@@ -327,11 +327,11 @@ completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidi
 
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
 %keyValue(_, _, inputModality, [speech=2, feet=2]).
-keyValue(_, _, inputModality, [speech=1, tablet=2]).
+keyValue(_, _, inputModality, [speech=2, tablet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 85).
+keyValue(_, _, speechSpeed, 90).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	feet=3000,
 				tablet=4000, 

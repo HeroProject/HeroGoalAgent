@@ -12,6 +12,7 @@
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_party, test_party2, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
 sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
+sessionDesign(testing_short_pepper, [general_wakeup_pepper, test_color, general_rest_pepper]).
 
 % Multi session
 sessionDesign(getting_acquainted, [general_wakeup, ga_intro, ga_prac_speech, ga_prac_feet, ga_bridge, ga_sports, general_rest]).
@@ -25,21 +26,21 @@ sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
 %%%%%%%%%%%%%% Memory-based Personalization Study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_test, [general_wakeup, robospelen_10_peptalk, general_rest]).
-%sessionDesign(robotstories_test1, [general_wakeup, dagdromen_sport, general_rest]).
-%sessionDesign(robotstories_test2, [general_wakeup, [theme='_chitchat'], general_rest]).
+sessionDesign(hero_test, [general_wakeup, robospelen_10_peptalk, general_rest]).
+%sessionDesign(hero_test1, [general_wakeup, dagdromen_sport, general_rest]).
+%sessionDesign(hero_test2, [general_wakeup, [theme='_chitchat'], general_rest]).
 
-sessionDesign(robotstories_memory_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_feet, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, [thread=robospelen], [thread=robospelen], secret_handshake_maken, doei_1, general_rest]).
-sessionDesign(robotstories_memory_2, [general_wakeup, begroeting_leuke_dag_gehad, [thread=robospelen], lievelingsdier, [thread=dromen], [thread=robospelen], [thread=robospelen], draadjesschool, [thread=robospelen], doei_2, general_rest]).
-sessionDesign(robotstories_memory_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, [theme=dier], lievelingseten, [thread=robospelen], lievelingskleur, doei_3, general_rest]).
-sessionDesign(robotstories_memory_4, [general_wakeup, begroeting_4, [topic=eten], [thread=robospelen], robotkleren, [thread=dromen], youtubefilmpjes, [thread=robospelen], doei_4, general_rest]).
-sessionDesign(robotstories_memory_5, [general_wakeup, begroeting_5, [thread=robospelen], [theme=youtubefilmpjes], [thread=dromen], robot_willen_zijn, [thread=robospelen], doei_5, general_rest]).
+sessionDesign(hero_memory_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_feet, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, [thread=robospelen], [thread=robospelen], secret_handshake_maken, doei_1, general_rest]).
+sessionDesign(hero_memory_2, [general_wakeup, begroeting_leuke_dag_gehad, [thread=robospelen], lievelingsdier, [thread=dromen], [thread=robospelen], [thread=robospelen], draadjesschool, [thread=robospelen], doei_2, general_rest]).
+sessionDesign(hero_memory_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, [theme=dier], lievelingseten, [thread=robospelen], lievelingskleur, doei_3, general_rest]).
+sessionDesign(hero_memory_4, [general_wakeup, begroeting_4, [topic=eten], [thread=robospelen], robotkleren, [thread=dromen], youtubefilmpjes, [thread=robospelen], doei_4, general_rest]).
+sessionDesign(hero_memory_5, [general_wakeup, begroeting_5, [thread=robospelen], [theme=youtubefilmpjes], [thread=dromen], robot_willen_zijn, [thread=robospelen], doei_5, general_rest]).
 
-sessionDesign(robotstories_control_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_feet, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, robospelen_2_springen, robospelen_3_coach, secret_handshake_maken, doei_1, general_rest]).
-sessionDesign(robotstories_control_2, [general_wakeup, begroeting_leuke_dag_gehad, robospelen_4_ingeschreven, lievelingsdier, droom_op_bestelling, robospelen_5_info, robospelen_6_gedachtelezen, draadjesschool, robospelen_7_info_vervolg, doei_2, general_rest]).
-sessionDesign(robotstories_control_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, lievelingsdier_control, lievelingseten, robospelen_8_oefenopdracht, lievelingskleur, doei_3, general_rest]).
-sessionDesign(robotstories_control_4, [general_wakeup, begroeting_4, plaats_in_de_natuur, robospelen_9_bijna, robotkleren, robospelen_droom, youtubefilmpjes, robospelen_10_peptalk, doei_4, general_rest]).
-sessionDesign(robotstories_control_5, [general_wakeup, begroeting_5, robospelen_11_tweede, superkracht, dromen_conclusie, robot_willen_zijn, robospelen_12_bedankt, doei_5, general_rest]).
+sessionDesign(hero_control_1, [general_wakeup, eerste_begroeting, tutorial_spraak, tutorial_feet, tutorial_check, robospelen_1_intro, dagdromen_sport, hero_kan_dromen, dagdromen_beroep, robospelen_2_springen, robospelen_3_coach, secret_handshake_maken, doei_1, general_rest]).
+sessionDesign(hero_control_2, [general_wakeup, begroeting_leuke_dag_gehad, robospelen_4_ingeschreven, lievelingsdier, droom_op_bestelling, robospelen_5_info, robospelen_6_gedachtelezen, draadjesschool, robospelen_7_info_vervolg, doei_2, general_rest]).
+sessionDesign(hero_control_3, [general_wakeup, begroeting_leuke_dag_gehad, binaire_getallen, lievelingsdier_control, lievelingseten, robospelen_8_oefenopdracht, lievelingskleur, doei_3, general_rest]).
+sessionDesign(hero_control_4, [general_wakeup, begroeting_4, plaats_in_de_natuur, robospelen_9_bijna, robotkleren, robospelen_droom, youtubefilmpjes, robospelen_10_peptalk, doei_4, general_rest]).
+sessionDesign(hero_control_5, [general_wakeup, begroeting_5, robospelen_11_tweede, superkracht, dromen_conclusie, robot_willen_zijn, robospelen_12_bedankt, doei_5, general_rest]).
 
 %%%%%%%%%%%%%% Co-creation user study %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Experimental condition
@@ -68,22 +69,34 @@ sessionDesign(demo_3, [general_wakeup, lievelingseten, general_rest]).
 sessionDesign(demo_4, [general_wakeup, lievelingseten_vervolg_pasta, general_rest]).
 sessionDesign(demo_5, [general_wakeup, secret_handshake_maken, demo_doei_1, general_rest]).
 
+%%%%%%%%%%%%%% Demos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sessionDesign(robotstories_kiem_it3_1, [general_wakeup_pepper, rs_3_intro_1, rs_3_intro_2, rs_3_intro_3, rs_3_intro_4, rs_3_intro_5,
+rs_3_intro_6, rs_3_intro_7, rs_3_intro_8, rs_3_intro_9, general_rest_pepper]).
+%sessionDesign(robotstories_kiem_it3_1, [general_wakeup_pepper, rs_3_intro_9, general_rest_pepper]).
+sessionDesign(robotstories_kiem_it3_2, [general_wakeup_pepper, rs_3_mens, general_rest_pepper]).
+sessionDesign(robotstories_kiem_it3_3, [general_wakeup_pepper, rs_3_plek, general_rest_pepper]).
+sessionDesign(robotstories_kiem_it3_4, [general_wakeup_pepper, rs_3_her, general_rest_pepper]).
+sessionDesign(robotstories_kiem_it3_4, [general_wakeup_pepper, rs_3_tablet_text, general_rest_pepper]).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Test suite
-multiSessionDesign([testing_short]).
+%multiSessionDesign([testing_short]).
+%multiSessionDesign([testing_short_pepper]).
 %multiSessionDesign([test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
 
 % Hospital study
 %multiSessionDesign([hospital_1, hospital_2, hospital_3]).
 
-% Robotstories
-%multiSessionDesign([robotstories_1, robotstories_2, robotstories_3, robotstories_4, robotstories_5, robotstories_6]).
-%multiSessionDesign([robotstories_test, robotstories_test, robotstories_test, robotstories_test, robotstories_test]).
-%multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5, robotstories_memory_6]).
-%multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5, robotstories_control_6]).
+% hero
+%multiSessionDesign([hero_1, hero_2, hero_3, hero_4, hero_5, hero_6]).
+%multiSessionDesign([hero_test, hero_test, hero_test, hero_test, hero_test]).
+%multiSessionDesign([hero_memory_1, hero_memory_2, hero_memory_3, hero_memory_4, hero_memory_5, hero_memory_6]).
+%multiSessionDesign([hero_control_1, hero_control_2, hero_control_3, hero_control_4, hero_control_5, hero_control_6]).
 
+% Robotstories
+multiSessionDesign([robotstories_kiem_it3_1, robotstories_kiem_it3_2, robotstories_kiem_it3_3, robotstories_kiem_it3_4, robotstories_kiem_it3_5]).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,18 +108,18 @@ useGui(false).
 % When no GUI is uses, these variables need to be specified.
 setContinueSession(true).
 setBasePosture('Stand').
-setTabletUse(always). %can be repair, explicit, or always
+setTabletUse(explicit). %can be repair, explicit, or always
 
 % Experimental settings
 setUserId('999'). % user id
-setSessionId(1). % session id
+setSessionId(5). % session id
 useMemory(true). % condition
 
 %multiSessionDesign([demo_1, demo_2, demo_3, demo_4, demo_5]).
-%multiSessionDesign([robotstories_memory_1, robotstories_memory_2, robotstories_memory_3, robotstories_memory_4, robotstories_memory_5]).
-%multiSessionDesign([robotstories_control_1, robotstories_control_2, robotstories_control_3, robotstories_control_4, robotstories_control_5]).
+%multiSessionDesign([hero_memory_1, hero_memory_2, hero_memory_3, hero_memory_4, hero_memory_5]).
+%multiSessionDesign([hero_control_1, hero_control_2, hero_control_3, hero_control_4, hero_control_5]).
 
-addLocalVariable(first_name, "Mike"). % name empty for condition 'false'
+addLocalVariable(first_name, "Max"). % name empty for condition 'false'
 % Record the interaction
 recordInteractionActive(false).
 
