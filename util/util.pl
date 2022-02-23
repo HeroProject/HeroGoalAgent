@@ -8,9 +8,7 @@
 	waitingForLedAnim/1, waitingForMotionAnim/1, waitingForSoundAnim/1, soundConfig/2,
 	emotion/3,
 	paused/0, pause_act/0, unpause_act/0, stop_act/0, waitForPause/1, waitForUnPause/1,
-	animOption/3,
-	basePosture/1,
-	tabletUse/1.
+	animOption/3.
 
 % Predicates that indicate the robot status.
 :- dynamic posture/1,
@@ -22,11 +20,8 @@
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
 	waitingForSession/0, waitingForMetadata/0, waitingForHistory/0,
-	waitingForGuiData/1,
-	userId/1, sessionId/1,
-	continueSession/0, localVariable/2,
 	dialogHistory/1, narrativeHistory/1,
-	probes/1, topicsOfInterest/1, availableChitchats/1.
+	topicsOfInterest/1, availableChitchats/1.
 
 % Predicates related to move execution and transition handling.
 :-dynamic currentMinidialog/1, selectedMinidialog/2, currentMove/1, currentInputModality/1, currentAttempt/1,   
@@ -271,11 +266,6 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
 
-% Generate interaction recording id
-interaction_recording_id(ID) :- userId(UserId), atom_string(UserId, SUserId), sessionId(Session), atom_string(Session, SSession), string_concat(SUserId, "_", Left), string_concat(Left, SSession, ID).
-interaction_probe_id(Count, ID) :- atom_string(Count, SCount), userId(UserId), atom_string(UserId, SUserId), sessionId(Session), atom_string(Session, SSession), string_concat(SUserId, "_", Left),
-					string_concat(Left, SSession, MiddleL), string_concat(MiddleL, "_", MiddleR), string_concat(MiddleR, SCount, ID).
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -319,31 +309,3 @@ completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidi
 completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, branchingPoint, _), eventsCompleted, correctPosture.
 
 completed(Move) :- currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, continuator), eventsCompleted, correctPosture.
-					
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% DEFAULT CONVERSATIONAL SETTINGS %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% override config param for specific move by using key-label in key-value list associated with that move.
-
-% Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
-%keyValue(_, _, inputModality, [speech=2, feet=2]).
-keyValue(_, _, inputModality, [speech=2, tablet=2]).
-% If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
-keyValue(_, _, additionalAttempt, true).
-% Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 90).
-% Default response times for different input modalities, question types, and attempt numbers
-keyValue(_, _, maxAnswerTime, [	feet=3000,
-				tablet=4000, 
-				speechopenend=12000,
-				speechyesnofirst=3500, 
-				speechyesnononinitial=3500, 
-				speechinputfirst=5000, 
-				speechinputnoninitial=3500,
-				speechquizfirst=5000,
-				speechquiznoninitial=3500]).						 
-
-% Default responses of robot to an input modality switch.
-keyValue(_, _, modalitySwitchResponse, [feet='Sorry, dat ging even mis. Je kunt nu mijn voeten gebruiken om je antwoord door te geven.',
-					speech='Sorry, dat ging even mis.  Je mag je antwoord nu hardop tegen mij zeggen.',
-					tablet='Sorry, dat ging even mis. Je kunt nu de tè blèet gebruiken om je antwoord door te geven.']).

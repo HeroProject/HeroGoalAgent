@@ -1,14 +1,6 @@
 use 'util/*.pl' as knowledge.
 use 'minidialogs/*.pl' as knowledge.
 use 'minidialogs/co_creation/*.pl' as knowledge.
-use 'minidialogs/robotstories/*.pl' as knowledge.
-use 'minidialogs/hero/*.pl' as knowledge.
-use 'minidialogs/hero/chitchat/*.pl' as knowledge.
-use 'minidialogs/hero/narrative/*.pl' as knowledge.
-use 'minidialogs/hero/functional/*.pl' as knowledge.
-use 'minidialogs/hero/hospital/*.pl' as knowledge.
-use 'minidialogs/hero/co_regulation/*.pl' as knowledge.
-use 'minidialogs/hero/stories/*.pl' as knowledge.
 
 % Basic expressive actions (output modalities)
 define say(Text) with
@@ -128,23 +120,6 @@ define setNonIdle with
 	pre { true }
 	post { waitingForEvent('SetNonIdle') }
 
-% Interaction recording
-define startInteractionRecording(ID) with
-	pre { true }
-	post { waitingForEvent('InteractionRecordingStarted') }
-
-define stopInteractionRecording with
-	pre { true }
-	post { waitingForEvent('InteractionRecordingStopped') }
-	
-define startInteractionProbe(ID) with
-	pre { true }
-	post { waitingForEvent('InteractionProbeStarted') }
-
-define stopInteractionProbe with
-	pre { true }
-	post { waitingForEvent('InteractionProbeStopped') }
-	
 % Agent external memory / database control
 define setSession(ID, SessionId) with
 	pre { true }
