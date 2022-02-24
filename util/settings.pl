@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(testing_short). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(test_short). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
 
@@ -14,7 +14,7 @@ userId('999').
 localVariable(first_name, "Max"). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
-useMemory(true). % condition
+useMemory(false). % condition
 continueSession(true).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
