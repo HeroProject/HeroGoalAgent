@@ -1,12 +1,12 @@
 use 'util/*.pl' as knowledge.
 use 'minidialogs/*.pl' as knowledge.
 use 'minidialogs/co_creation/*.pl' as knowledge.
-use hero_actions as actionspec.
+use agent_actions as actionspec.
 use 'recognitionAndRepairPipeline/*.mod2g' as module.
 use 'dialogManagement/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
-module hero_events {
+module agent_events {
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Percept and event processing      %%%

@@ -1,28 +1,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Settings			                           %%%
+%%% 		SETTINGS for AGENT APPLICATION		   %%%
+%%%  			  				   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SESSION SETTINGS		    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+multiSessionDesignId(testing_short). % see minidialogs/session.pl for available multi-session designs
+sessionId(1).
+userId('999').
+
+%%% Local Variables 		    %%%
+localVariable(first_name, "Max"). % %fist_name% can be used in text.
+
+%%% Memory settings		    %%%
+useMemory(true). % condition
 continueSession(true).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DEFAULT VALUES		    %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ROBOT defaults		    %%%
+pauseButton('MiddleTactilTouched').
 basePosture('Stand').
 tabletUse(explicit). %can be repair, explicit, or always
-multiSessionDesignId(test_short). % see minidialogs/session.pl for available multi-session designs
 
-% Experimental settings
-userId('999'). % user id
-sessionId(5). % session id
-useMemory(true). % condition
-
-localVariable(first_name, "Max"). % name empty for condition 'false'
-
-% Button to pause and resume the robot during the interaction
-pauseButton('MiddleTactilTouched').
-% The eventFailSafe is a backup timer that clears all waitingFor attributes and continues the interaction
-% Useful if functionality of naoqi is buggy and the right events are not returned.
-evenFailSafeActive(false). 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% DEFAULT CONVERSATIONAL SETTINGS %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MOVECONFIG defaults		    %%% 
 % override config param for specific move by using key-label in key-value list associated with that move.
 
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.

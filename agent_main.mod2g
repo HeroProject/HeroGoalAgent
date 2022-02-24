@@ -1,11 +1,11 @@
 use 'util/*.pl' as knowledge.
 use 'minidialogs/*.pl' as knowledge.
 use 'minidialogs/co_creation/*.pl' as knowledge.
-use hero_actions as actionspec.
+use agent_actions as actionspec.
 use 'dialogManagement/*.mod2g' as module.
 use 'userModel/*.mod2g' as module.
 
-module hero_main {
+module agent_main {
 	% Adapt minidialog goal if all the necessary information is loaded from the database.
 	if not(goal(session([]))) then {	
 		if bel(waitingForHistory, not(waitingForEvent('ClearHistory')), userId(UserId), 
@@ -14,8 +14,13 @@ module hero_main {
 	
 		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), multiSessionDesignId(MultisessionID), multiSessionDesign(MultisessionID, MultiSessionDesign),
 				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))
-			then delete(waitingForSession) + insert(session(Session), waitingForMetadata) + loadDependencyMetadata(Session).
+			then delete(waitingForSession) + insert(session(Session), waitingForMetadata).
 		
+		if bel(waitingForMetadata, session(Session)) then {
+			if bel(useMemory(true)) then loadDependencyMetadata(Session).
+			if bel(useMemory(false)) then delete(waitingForMetadata).
+		}
+				
 		if bel(session(_), not(waitingForMetadata), memoryTasksCompleted) then adopt(session([])) + nextMinidialog.
 	}
 	

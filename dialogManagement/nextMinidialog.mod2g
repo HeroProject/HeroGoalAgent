@@ -4,7 +4,7 @@ use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../userModel/loadInteractantData' as module.
 use selectNarrativeDialog as module.
 use selectChitchatDialog as module.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 
 
 order=linearall.

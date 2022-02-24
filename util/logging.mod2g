@@ -1,9 +1,11 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 
 module logging(Entry) {
-	if bel(userId(UID)) 
-		then setMemoryEntry(UID, 'interaction_history', Entry) + log(interaction_history(UID, 'interaction_history', Entry)).
+	if bel(userId(UID)) then {
+		if bel(useMemory(true)) then setMemoryEntry(UID, 'interaction_history', Entry) + log(interaction_history(UID, 'interaction_history', Entry)).
+		if not(bel(useMemory(true))) then log(interaction_history(UID, 'interaction_history', Entry)).
+	}
 }

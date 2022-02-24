@@ -1,7 +1,7 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 use modalitySwitch as module.
 
 % add started to call

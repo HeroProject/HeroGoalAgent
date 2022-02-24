@@ -30,7 +30,7 @@ text(test_chocolate, s2f, "Oke.").
 %%% Color - Testing input question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_color, s1, question).
-moveConfig(test_color, s1, [type=input, context='answer_color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='rood']).
+moveConfig(test_color, s1, [type=input, context='color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], defaultAnswer='rood']).
 text(test_color, s1, "Wat is jouw lievelingskleur?").
 next(test_color, s1, 'success', s2).
 next(test_color, s1, 'fail', s2f).
@@ -42,64 +42,10 @@ move(test_color, s2f, say).
 text(test_color, s2f, "Mijn levelingskleur is %test_color_s1%.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Party - Testing branch question	                   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-move(test_party, s1, question).
-moveConfig(test_party, s1, [type = input, context = "answer_koelkast_branch_1", options = ['dansen', 'zingen', 'muziek maken'], defaultAnswer='zingen']).
-text(test_party, s1, "Dansen, zingen, of muziek maken?").
-next(test_party, s1, "dansen", s2a).
-next(test_party, s1, "zingen", s2b).
-next(test_party, s1, "muziek maken", s2c).
-next(test_party, s1, "fail", s2f).
-
-move(test_party, s2a, say).
-text(test_party, s2a, "In de koelkast dansen wij inderdaad het liefst. Ook op die ene avond. We dansten de hele dag en de hele nacht, en altijd in het donker.").
-next(test_party, s2a, "true", s3).
-
-move(test_party, s2b, say).
-text(test_party, s2b, "In de koelkast zingen wij inderdaad het liefst. Ook op die ene avond. We zongen de hele dag en de hele nacht, en altijd in het donker.").
-next(test_party, s2b, "true", s3).
-
-move(test_party, s2c, say).
-text(test_party, s2c, "In de koelkast maken wij inderdaad het liefst muziek. Ook op die ene avond. We maakten muziek de hele dag en de hele nacht, en altijd in het donker.").
-next(test_party, s2c, "true", s3).
-
-move(test_party, s2f, say).
-text(test_party, s2f, "In de koelkast dansen, zongen, en maakten we muziek de hele dag en de hele nacht, en altijd in het donker.").
-next(test_party, s2f, "true", s3).
-
-move(test_party, s3, branchingPoint, test_party_s1).
-next(test_party, s3, "dansen", s3a).
-next(test_party, s3, "_others", s3b).
-next(test_party, s3, "fail", s3f).
-
-move(test_party, s3a, say).
-text(test_party, s3a, "Ik hou heel erg van dansen.").
-next(test_party, s3a, "true", s4).
-
-move(test_party, s3b, say).
-text(test_party, s3b, "Ik hou heel erg van zingen en muziek maken.").
-next(test_party, s3b, "true", s4).
-
-move(test_party, s3f, say).
-text(test_party, s3f, "Ik hou heel erg van dansen, zingen, en muziek maken").
-next(test_party, s3f, "true", s4).
-
-move(test_party, s4, branchingPoint, test_party_s1).
-next(test_party, s4, "success", s4a).
-next(test_party, s4, "fail", s3f).
-
-move(test_party, s4a, say).
-text(test_party, s4a, "Dat ging goed!").
-
-move(test_party, s4a, say).
-text(test_party, s4a, "Fail is goed doorgekomen").
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Color 2 - Testing quiz question	                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(test_color2, s1, question).
-moveConfig(test_color2, s1, [type=quiz, context='answer_color', options=['rood', 'grijs', 'blauw', 'wit'], correctAnswer=['grijs', 'wit']]).
+moveConfig(test_color2, s1, [type=quiz, context='color', options=['rood', 'grijs', 'blauw', 'wit'], correctAnswer=['grijs', 'wit']]).
 text(test_color2, s1, "Kun je me vertellen welke kleur ik ben?").
 next(test_color2, s1, 'correct', s2cor).
 next(test_color2, s1, 'incorrect', s2incor).
@@ -306,7 +252,7 @@ display(test_tablet, s4, "Mij zie je altijd", always).
 next(test_tablet, s4, "true", s5).
 
 move(test_tablet, s5, question).
-moveConfig(test_tablet, s5, [type=input, context='answer_color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'],
+moveConfig(test_tablet, s5, [type=input, context='color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'],
 defaultAnswer='rood']).
 display(test_tablet, s5, "2 Wat is jouw lievelingskleur?").
 text(test_tablet, s5, "Wat is jouw lievelingskleur?").
@@ -328,7 +274,7 @@ text(test_first_session,  s1, "Het lijkt mij leuk om over sport te praten, %firs
 next(test_first_session, s1, "true", s2).
 
 move(test_first_session, s2, question).
-moveConfig(test_first_session, s2, [type=input, context='answer_sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=test_favo_sport, fast=yes]).
+moveConfig(test_first_session, s2, [type=input, context='sports', options=['voetbal', 'hockey', 'dansen', 'paard rijden'], umVariable=test_favo_sport, fast=yes]).
 text(test_first_session, s2, "Wat is jouw lievelings sport?").
 next(test_first_session, s2, 'success', s3).
 next(test_first_session, s2, 'fail', s5f).

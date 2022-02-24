@@ -1,14 +1,13 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 use nextMinidialog as module.
 use selectNextMove as module.
 
 order=linearall.
 
 module nextDialogMove(Minidialog, Move, C) {
-	if bel(evenFailSafeActive(true)) then canceltimer(eventFailSafe).
 	% ... clean up (and reset nextCondition to default value 'true') ...
 	% reset answers processing flag
 	if bel(answerProcessed) then delete(answerProcessed).

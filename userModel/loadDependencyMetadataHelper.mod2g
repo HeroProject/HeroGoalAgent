@@ -1,7 +1,7 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use loadInteractantDataHelper as module.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 
 order=linearall.
 

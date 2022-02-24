@@ -1,7 +1,7 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 
 order=linearall.
 
@@ -200,9 +200,6 @@ module performDialogMove(Minidialog, Move) {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
-	%Active eventFailSave if required.	
-	if bel(evenFailSafeActive(true)) then starttimer(eventFailSafe, 16000, 16000).
 	
 	%Remove start to prevent repeating the execution of this module (again) and record that robot action has started.
 	if true then delete(start) + insert(started).

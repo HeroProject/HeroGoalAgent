@@ -4,12 +4,12 @@ use '..\..\clients\cbsr-eis-connector.jar' as environment with
 		flowagent='mikeagent-dsvpjs',
 		flowlang='nl-NL'.
 		
-define hero as agent {
-	use hero_init as init.
-	use hero_events as event.
-	use hero_main as main.
+define agent_core as agent {
+	use agent_init as init.
+	use agent_events as event.
+	use agent_main as main.
 }
 
 launchpolicy{
-	when * launch hero.
+	when * launch agent_core.
 }

@@ -1,6 +1,6 @@
 use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
-use '../hero_actions' as actionspec.
+use '../agent_actions' as actionspec.
 
 order=linearall.
 
@@ -14,12 +14,13 @@ module initializeUserModel {
 				then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 		}
 	
-	% Initialize remote user model.
-	if bel(userId(UserId), sessionId(SessionId))
-		then delete(waitingForInit) + setSession(UserId, SessionId) + insert(waitingForSession).
+	% Synchronize with remote user model and history
+	if bel(useMemory(true)) then {
+		if bel(userId(UserId), sessionId(SessionId)) then setSession(UserId, SessionId).
+		if bel(continueSession(true), userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
+		if bel(continueSession(false), userId(UserId), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+	}
 	
-	% Initialize history
-	if bel(continueSession(true), userId(UserId), useMemory(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
-	if bel(continueSession(false), userId(UserId), sessionId(SessionId), useMemory(true)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
 	
+	if true then delete(waitingForInit) + insert(waitingForSession).
 }
