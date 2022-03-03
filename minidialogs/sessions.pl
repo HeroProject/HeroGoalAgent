@@ -24,8 +24,8 @@ sessionDesign(test_session_6, [general_wakeup, test_session_sound_2, general_res
 sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session_led_1b, general_rest]).
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
-%%%%%%%%%%%%%% Sorovoca %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(sorocova_1, [general_wakeup, example_1, example_2, example_3, example_4, general_rest]).
+%%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
@@ -36,5 +36,5 @@ multiSessionDesign(test_short, [testing_short]).
 multiSessionDesign(test_short_pepper, [testing_short_pepper]).
 multiSessionDesign(test_multi_session, [test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
 
-%%%%%%%%%%%%%% Sorovoca %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesign(sorocova, [sorocova_1]).
+%%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+multiSessionDesign(robotstories, [robotstories_1]).

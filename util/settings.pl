@@ -6,12 +6,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(test_short). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(robotstories). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
 
 %%% Local Variables 		    %%%
 localVariable(first_name, "Max"). % %fist_name% can be used in text.
+localVariable(location, "de Bijnkers, hoek").
+%localVariable(location, "de Wilgen, hof").
+
 
 %%% Memory settings		    %%%
 useMemory(false). % condition
