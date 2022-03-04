@@ -6,12 +6,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(robotstories). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(robotstories_test). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "Max"). % %fist_name% can be used in text.
+localVariable(first_name, "linders"). % %fist_name% can be used in text.
 localVariable(location, "de Bijnkers, hoek").
 %localVariable(location, "de Wilgen, hof").
 
@@ -37,7 +37,7 @@ keyValue(_, _, inputModality, [speech=2, tablet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 90).
+keyValue(_, _, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(_, _, maxAnswerTime, [	feet=3000,
 				tablet=4000, 

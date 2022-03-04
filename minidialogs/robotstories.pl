@@ -408,7 +408,7 @@ next(rs_mens, s22nee, "success", s23).
 next(rs_mens, s22nee, "fail", s24).
 
 move(rs_mens, s23, say).
-text(rs_mens, s23, "Dankjewel dat u me dit uitlegt!").
+text(rs_mens, s23, "dank u wel dat u me dit uitlegt!").
 next(rs_mens, s23, "true", s24).
 
 move(rs_mens, s24, say).
@@ -600,7 +600,7 @@ text(rs_plek, s11strand, "Wat bijzonder dat u dat kunt voelen").
 next(rs_plek, s11strand, "true", s12strand).
 
 move(rs_plek, s12strand, say).
-text(rs_plek, s12strand, "Ik heb gehoord dat je ook dingen van zand kunt bouwen. Zandkastelen, bijvoorbeeld \pau=300\ ").
+text(rs_plek, s12strand, "Ik heb gehoord dat u ook dingen van zand kunt bouwen. Zandkastelen, bijvoorbeeld \pau=300\ ").
 next(rs_plek, s12strand, "true", s13strand).
 
 move(rs_plek, s13strand, question).
@@ -727,7 +727,7 @@ next(rs_plek, s18bos, "success", s19bos).
 next(rs_plek, s18bos, "fail", s19bos).
 
 move(rs_plek, s19bos, say).
-text(rs_plek, s19bos, "Dankjewel voor alles wat u me hebt verteld over het bos").
+text(rs_plek, s19bos, "dank u wel voor alles wat u me hebt verteld over het bos").
 next(rs_plek, s19bos, "true", s20bos).
 
 move(rs_plek, s20bos, say).
@@ -755,7 +755,7 @@ text(rs_plek, s24bos, "Ze zijn waardevol").
 
 move(rs_verhaal, s1, say).
 text(rs_verhaal, s1, "Wat heeft u mij al veel verteld!").
-next(rs_verhaal, s1, "true", s2).
+next(rs_verhaal, s1, "true", s10).
 
 move(rs_verhaal, s2, say).
 text(rs_verhaal, s2, "Dat u vroeger op school zat.").
@@ -771,7 +771,7 @@ next(rs_verhaal, s4, "true", s5).
 
 move(rs_verhaal, s5, question).
 moveConfig(rs_verhaal, s5, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s5, "Kun u mij nog meer vertellen over dingen die ik nog niet weet??").
+text(rs_verhaal, s5, "Kunt u mij meer vertellen over dingen die ik nog niet weet??").
 next(rs_verhaal, s5, "answer_yes", s6).
 next(rs_verhaal, s5, "answer_no", s6).
 next(rs_verhaal, s5, "answer_dontknow", s6).
@@ -813,7 +813,7 @@ next(rs_verhaal, s12faasen, "success", s13faasen).
 next(rs_verhaal, s12faasen, "fail", s14faasen).
 
 move(rs_verhaal, s13faasen, say).
-text(rs_verhaal, s13faasen, "Echt waar? Dat is met machines en zo. Met robots. Net als ik!").
+text(rs_verhaal, s13faasen, "Echt waar? Dat is met machines en zo. \pau=500\ Met robots. Net als ik!").
 next(rs_verhaal, s13faasen, "true", s14faasen).
 
 move(rs_verhaal, s14faasen, question).
@@ -859,7 +859,7 @@ text(rs_verhaal, s12roos, "Ik ben nog ergens benieuwd naar").
 next(rs_verhaal, s12roos, "true", s13roos).
 
 move(rs_verhaal, s13roos, say).
-text(rs_verhaal, s13roos, "ik heb gehoord dat mensen ook soms huisdieren hebben").
+text(rs_verhaal, s13roos, "ik heb gehoord dat mensen soms huisdieren hebben").
 next(rs_verhaal, s13roos, "true", s14roos).
 
 move(rs_verhaal, s14roos, say).
@@ -868,43 +868,27 @@ next(rs_verhaal, s14roos, "true", s15roos).
 
 move(rs_verhaal, s15roos, question).
 moveConfig(rs_verhaal, s15roos, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s15roos, "Bent u zo'n mens met een huisdier?").
+text(rs_verhaal, s15roos, "Bent u zo'n mens, met een huisdier").
 next(rs_verhaal, s15roos, "answer_yes", s16roosja).
 next(rs_verhaal, s15roos, "answer_no", s16roosnee).
 next(rs_verhaal, s15roos, "answer_dontknow", s16roosnee).
 next(rs_verhaal, s15roos, "fail", s16roosnee).
 
-move(rs_intro, s16roosja, question).
-moveConfig(rs_intro, s16roosja, [type=input, context='animals', fast=yes, options=['hond', 'kat', 'parkiet', 'konijn'], umVariable=rs_roos_dier]).
-text(rs_intro, s16roosja, "Wat voor huisdier heeft u?").
-next(rs_intro, s16roosja, 'success', s17roosja).
-next(rs_intro, s16roosja, 'fail', s16roosnee).
+move(rs_verhaal, s16roosja, question).
+moveConfig(rs_verhaal, s16roosja, [type=input, context='animals', fast=yes, options=['hond', 'kat', 'parkiet', 'konijn'], umVariable=rs_roos_dier]).
+text(rs_verhaal, s16roosja, "Wat voor huisdier heeft u?").
+next(rs_verhaal, s16roosja, 'success', s17roosja).
+next(rs_verhaal, s16roosja, 'fail', s16roosnee).
 
 move(rs_verhaal, s17roosja, question).
 moveConfig(rs_verhaal, s17roosja, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(rs_verhaal, s17roosja, "Een %rs_roos_dier%, wat voor dier is dat?").
-next(rs_verhaal, s17roosja, "success", s18roosja).
-next(rs_verhaal, s17roosja, "fail", s18roosja).
-
-move(rs_verhaal, s17roosja, question).
-moveConfig(rs_verhaal, s17roosja, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(rs_verhaal, s17roosja, "Wat voor geluid maakt een %rs_roos_dier%?").
-next(rs_verhaal, s17roosja, "success", s18roos).
-next(rs_verhaal, s17roosja, "fail", s18roos).
+next(rs_verhaal, s17roosja, "success", s19roos).
+next(rs_verhaal, s17roosja, "fail", s19roos).
 
 move(rs_verhaal, s16roosnee, say).
-text(rs_verhaal, s16roosnee, "Ik vind zelf een parkiet erg leuk.").
-next(rs_verhaal, s16roosnee, "true", s17roosnee).
-
-move(rs_verhaal, s17roosnee, question).
-moveConfig(rs_verhaal, s17roosnee, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(rs_verhaal, s17roosnee, "Wat voor geluid maakt een parkiet?").
-next(rs_verhaal, s17roosnee, "success", s18roos).
-next(rs_verhaal, s17roosnee, "fail", s18roos).
-
-move(rs_verhaal, s18roos, say).
-text(rs_verhaal, s18roos, "Dat klinkt heel leuk.").
-next(rs_verhaal, s18roos, "true", s19roos).
+text(rs_verhaal, s16roosnee, "Ik vind zelf parkieten erg leuk.").
+next(rs_verhaal, s16roosnee, "true", s19roos).
 
 move(rs_verhaal, s19roos, say).
 text(rs_verhaal, s19roos, "Ik hoop dat ik er ooit 1 in het echt zie").
@@ -916,7 +900,7 @@ next(rs_verhaal, s11vanwijnen, "true", s12vanwijnen).
 
 move(rs_verhaal, s12vanwijnen, question).
 moveConfig(rs_verhaal, s12vanwijnen, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s12vanwijnen, "Vind je het goed als ik je misschien nog 1 vraag stel?").
+text(rs_verhaal, s12vanwijnen, "Vind u het goed als ik u misschien nog 1 vraag stel?").
 next(rs_verhaal, s12vanwijnen, "answer_yes", s13vanwijnen).
 next(rs_verhaal, s12vanwijnen, "answer_no", s13vanwijnennee).
 next(rs_verhaal, s12vanwijnen, "answer_dontknow", s13vanwijnen).
@@ -930,7 +914,7 @@ text(rs_verhaal, s13vanwijnen, "Ik heb gehoord dat mensen ook broers en zussen h
 next(rs_verhaal, s13vanwijnen, "true", s14vanwijnen).
 
 move(rs_verhaal, s14vanwijnen, say).
-text(rs_verhaal, s14vanwijnen, "zelf kom ik uit een fabriek, dus ik heb ook heel veel broers en zussen").
+text(rs_verhaal, s14vanwijnen, "zelf kom ik uit een fabriek, dus ik een soort broers en zussen").
 next(rs_verhaal, s14vanwijnen, "true", s15vanwijnen).
 
 move(rs_verhaal, s15vanwijnen, say).
@@ -938,59 +922,212 @@ text(rs_verhaal, s15vanwijnen, "die lijken allemaal precies op mij").
 next(rs_verhaal, s15vanwijnen, "true", s16vanwijnen).
 
 move(rs_verhaal, s16vanwijnen, say).
-text(rs_verhaal, s16vanwijnen, "net als tweelingen, alleen noemen we dat geen broers of zussen").
-next(rs_verhaal, s16vanwijnen, "true", s17vanwijnen).
-
-move(rs_verhaal, s17vanwijnen, say).
-text(rs_verhaal, s17vanwijnen, "Komt u uit een, haha, hoe zeidene ze dat ook alweer.").
-next(rs_verhaal, s17vanwijnen, "true", s18vanwijnen).
+text(rs_verhaal, s16vanwijnen, "net als tweelingen, alleen noemen we dat geen familie").
+next(rs_verhaal, s16vanwijnen, "true", s18vanwijnen).
 
 move(rs_verhaal, s18vanwijnen, question).
 moveConfig(rs_verhaal, s18vanwijnen, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s18vanwijnen, "Komt u uit een groot nest").
-next(rs_verhaal, s18vanwijnen, "answer_yes", s19vanwijnenja).
-next(rs_verhaal, s18vanwijnen, "answer_no", s19vanwijnennee).
-next(rs_verhaal, s18vanwijnen, "answer_dontknow", s19vanwijnenweetniet).
-next(rs_verhaal, s18vanwijnen, "fail", s19vanwijnenweetniet).
+text(rs_verhaal, s18vanwijnen, "Heb jij een broef of zus?").
+next(rs_verhaal, s18vanwijnen, "answer_yes", s19vanwijnen).
+next(rs_verhaal, s18vanwijnen, "answer_no", s19vanwijnen).
+next(rs_verhaal, s18vanwijnen, "answer_dontknow", s19vanwijnen).
+next(rs_verhaal, s18vanwijnen, "fail", s19vanwijnen).
 
-move(rs_verhaal, s19vanwijnenja, say).
-text(rs_verhaal, s19vanwijnenja, "Wat bijzonder! Ik zou ook graag een broer of zus hebben.").
-next(rs_verhaal, s19vanwijnenja, "true", s20vanwijnenja).
+move(rs_verhaal, s19vanwijnen, say).
+text(rs_verhaal, s19vanwijnen, "Wat bijzonder!").
+next(rs_verhaal, s19vanwijnen, "true", s20vanwijnen).
 
-move(rs_verhaal, s20vanwijnenja, question).
-moveConfig(rs_verhaal, s20vanwijnenja, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(rs_verhaal, s20vanwijnenja, "Hoe is dat?").
-next(rs_verhaal, s20vanwijnenja, "success", s20vanwijnen).
-next(rs_verhaal, s20vanwijnenja, "fail", s20vanwijnen).
-
-move(rs_verhaal, s19vanwijnennee, question).
-moveConfig(rs_verhaal, s19vanwijnennee, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(rs_verhaal, s19vanwijnennee, "Hoe is dat?").
-next(rs_verhaal, s19vanwijnennee, "success", s20vanwijnen).
-next(rs_verhaal, s19vanwijnennee, "fail", s20vanwijnen).
-
-move(rs_verhaal, s19vanwijnenweetniet, question).
-moveConfig(rs_verhaal, s19vanwijnenweetniet, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s19vanwijnenweetniet, "Heeft u broers of zussen?").
-next(rs_verhaal, s19vanwijnenweetniet, "answer_yes", s19vanwijnenja).
-next(rs_verhaal, s19vanwijnenweetniet, "answer_no", s19vanwijnennee).
-next(rs_verhaal, s19vanwijnenweetniet, "answer_dontknow", s20vanwijnen).
-next(rs_verhaal, s19vanwijnenweetniet, "fail", s20vanwijnen).
-
-move(rs_verhaal, s20vanwijnen, say).
-text(rs_verhaal, s20vanwijnen, "Goh, zo had ik er nooit over nagedacht").
-next(rs_verhaal, s20vanwijnen, "true", s21vanwijnen).
+move(rs_verhaal, s20vanwijnen, question).
+moveConfig(rs_verhaal, s20vanwijnen, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_verhaal, s20vanwijnen, "Hoe is dat?").
+next(rs_verhaal, s20vanwijnen, "success", s21vanwijnen).
+next(rs_verhaal, s20vanwijnen, "fail", s21vanwijnen).
 
 move(rs_verhaal, s21vanwijnen, say).
-text(rs_verhaal, s21vanwijnen, "Maar je vertelt het heel mooi").
+text(rs_verhaal, s21vanwijnen, "Maar u vertelt het heel mooi").
 next(rs_verhaal, s21vanwijnen, "true", s22vanwijnen).
 
 move(rs_verhaal, s22vanwijnen, say).
 text(rs_verhaal, s22vanwijnen, "Ik kan het me nu een beetje voorstellen").
 
 %%% Van den Heuvel %%%
+move(rs_verhaal, s11vdheuvel, say).
+text(rs_verhaal, s11vdheuvel, "Ik heb gehoord dat er wandeltochten bestaan").
+next(rs_verhaal, s11vdheuvel, "true", s12vdheuvel).
+
+move(rs_verhaal, s12vdheuvel, say).
+text(rs_verhaal, s12vdheuvel, "die duren 4,0 dagen").
+next(rs_verhaal, s12vdheuvel, "true", s13vdheuvel).
+
+move(rs_verhaal, s13vdheuvel, say).
+text(rs_verhaal, s13vdheuvel, "aan het eind is er een blarenbal").
+next(rs_verhaal, s13vdheuvel, "true", s14vdheuvel).
+
+move(rs_verhaal, s14vdheuvel, say).
+text(rs_verhaal, s14vdheuvel, "en krijgen alle mensen een vierdaagsekruisje").
+next(rs_verhaal, s14vdheuvel, "true", s15vdheuvel).
+
+move(rs_verhaal, s15vdheuvel, question).
+moveConfig(rs_verhaal, s15vdheuvel, [type=yesno, context='answer_yesno']).
+text(rs_verhaal, s15vdheuvel, "Heeft u daar wel eens aan meegedaan, %rs_3_gender% %first_name%?").
+next(rs_verhaal, s15vdheuvel, "answer_yes", s16vdheuvelja).
+next(rs_verhaal, s15vdheuvel, "answer_no", s16vdheuvelnee).
+next(rs_verhaal, s15vdheuvel, "answer_dontknow", s16vdheuvelnee).
+next(rs_verhaal, s15vdheuvel, "fail", s16vdheuvelnee).
+
+move(rs_verhaal, s16vdheuvelja, question).
+moveConfig(rs_verhaal, s16vdheuvelja, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_verhaal, s16vdheuvelja, "En, Wat vond u daarvan?").
+next(rs_verhaal, s16vdheuvelja, "success", s18vdheuvelja).
+next(rs_verhaal, s16vdheuvelja, "fail", s18vdheuvelja).
+
+move(rs_verhaal, s16vdheuvelnee, question).
+moveConfig(rs_verhaal, s16vdheuvelnee, [type=yesno, context='answer_yesno']).
+text(rs_verhaal, s16vdheuvelnee, "Maar u houd wel van wandelen, toch?").
+next(rs_verhaal, s16vdheuvelnee, "answer_yes", s18vdheuvelja).
+next(rs_verhaal, s16vdheuvelnee, "answer_no", s26vdheuvelnee).
+next(rs_verhaal, s16vdheuvelnee, "answer_dontknow", s26vdheuvelnee).
+next(rs_verhaal, s16vdheuvelnee, "fail", s26vdheuvelnee).
+
+move(rs_verhaal, s18vdheuvelja, say).
+text(rs_verhaal, s18vdheuvelja, "Wat leuk om te horen").
+next(rs_verhaal, s18vdheuvelja, "true", s19vdheuvelja).
+
+move(rs_verhaal, s19vdheuvelja, question).
+moveConfig(rs_verhaal, s19vdheuvelja, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_verhaal, s19vdheuvelja, "Wat heb je meegemaakt tijdens het wandelen?").
+next(rs_verhaal, s19vdheuvelja, "success", s20vdheuvelja).
+next(rs_verhaal, s19vdheuvelja, "fail", s20vdheuvelja).
+
+move(rs_verhaal, s20vdheuvelja, say).
+text(rs_verhaal, s20vdheuvelja, "Ik vraag me af of ik blaren kan krijgen").
+next(rs_verhaal, s20vdheuvelja, "true", s21vdheuvelja).
+
+move(rs_verhaal, s21vdheuvelja, say).
+text(rs_verhaal, s21vdheuvelja, "of een medaille wanneer ik 5,0, kilometer loop").
+next(rs_verhaal, s21vdheuvelja, "true", s22vdheuvelja).
+
+move(rs_verhaal, s22vdheuvelja, say).
+text(rs_verhaal, s22vdheuvelja, "misschien wel niet").
+next(rs_verhaal, s22vdheuvelja, "true", s23vdheuvelja).
+
+move(rs_verhaal, s23vdheuvelja, say).
+text(rs_verhaal, s23vdheuvelja, "ook vanwege mijn wielen").
+next(rs_verhaal, s23vdheuvelja, "true", s24vdheuvelja).
+
+move(rs_verhaal, s24vdheuvelja, say).
+text(rs_verhaal, s24vdheuvelja, "en, als mens verdien je het echt!").
+next(rs_verhaal, s24vdheuvelja, "true", s25vdheuvelja).
+
+move(rs_verhaal, s25vdheuvelja, question).
+moveConfig(rs_verhaal, s25vdheuvelja, [type=yesno, context='answer_yesno']).
+text(rs_verhaal, s25vdheuvelja, "Volgens mij heeft u genoten van alle wandelingen, klopt dat?").
+next(rs_verhaal, s25vdheuvelja, "answer_yes", s26vdheuvelja).
+next(rs_verhaal, s25vdheuvelja, "answer_no", s26vdheuvelnee).
+next(rs_verhaal, s25vdheuvelja, "answer_dontknow", s26vdheuvelnee).
+next(rs_verhaal, s25vdheuvelja, "fail", s26vdheuvelnee).
+
+move(rs_verhaal, s26vdheuvelja, say).
+text(rs_verhaal, s26vdheuvelja, "Ik word er ook enthousiast van").
+next(rs_verhaal, s26vdheuvelja, "true", s27vdheuvelja).
+
+move(rs_verhaal, s27vdheuvelja, say).
+text(rs_verhaal, s27vdheuvelja, "als ik u zo hoor praten").
+next(rs_verhaal, s27vdheuvelja, "true", s28vdheuvelja).
+
+move(rs_verhaal, s28vdheuvelja, say).
+text(rs_verhaal, s28vdheuvelja, "dank u wel voor het delen, %rs_3_gender% %first_name%").
+
+move(rs_verhaal, s26vdheuvelnee, say).
+text(rs_verhaal, s26vdheuvelnee, "Oeps. Dan zag ik dat verkeerd.").
+next(rs_verhaal, s26vdheuvelnee, "true", s27vdheuvelnee).
+
+move(rs_verhaal, s27vdheuvelnee, say).
+text(rs_verhaal, s27vdheuvelnee, "Als ik terug in de tijd kon").
+next(rs_verhaal, s27vdheuvelnee, "true", s28vdheuvelnee).
+
+move(rs_verhaal, s28vdheuvelnee, say).
+text(rs_verhaal, s28vdheuvelnee, "was ik graag mee gewandeld met u %rs_3_gender% %first_name%").
+next(rs_verhaal, s28vdheuvelnee, "true", s29vdheuvelnee).
+
+move(rs_verhaal, s29vdheuvelnee, say).
+text(rs_verhaal, s29vdheuvelnee, "dank u wel voor het delen").
 
 %%% Linders %%%
+move(rs_verhaal, s11linders, say).
+text(rs_verhaal, s11linders, "En, Ik ben helemaal vergeten te vragen naar uw werk!").
+next(rs_verhaal, s11linders, "true", s12linders).
+
+move(rs_verhaal, s12linders, question).
+moveConfig(rs_verhaal, s12linders, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_verhaal, s12linders, "Wat deed u eigenlijk voor werk?").
+next(rs_verhaal, s12linders, "success", s13linders).
+next(rs_verhaal, s12linders, "fail", s16linders).
+
+move(rs_verhaal, s13linders, say).
+text(rs_verhaal, s13linders, "Echt waar? \pau=500\ dan bent u heel goed in het overzicht houden").
+next(rs_verhaal, s13linders, "true", s14linders).
+
+move(rs_verhaal, s14linders, say).
+text(rs_verhaal, s14linders, "dan was iedereen op de juiste plaats").
+next(rs_verhaal, s14linders, "true", s15linders).
+
+move(rs_verhaal, s15linders, say).
+text(rs_verhaal, s15linders, "op het juiste tijdstip. Dankzij, u.").
+next(rs_verhaal, s15linders, "true", s16linders).
+
+move(rs_verhaal, s16linders, question).
+moveConfig(rs_verhaal, s16linders, [type=openend, context='answer_open', inputModality=[speech=1]]).
+text(rs_verhaal, s16linders, "En wat vond u het leukste aan uw werk?").
+next(rs_verhaal, s16linders, "success", s17linders).
+next(rs_verhaal, s16linders, "fail", s17linders).
+
+move(rs_verhaal, s17linders, say).
+text(rs_verhaal, s17linders, "Wat leuk dat u dat met mij deelt %rs_3_gender% %first_name%.").
+next(rs_verhaal, s17linders, "true", s18linders).
+
+move(rs_verhaal, s18linders, say).
+text(rs_verhaal, s18linders, "zelf ben ik eigenlijk een soort computer").
+next(rs_verhaal, s18linders, "true", s19linders).
+
+move(rs_verhaal, s19linders, say).
+text(rs_verhaal, s19linders, "dus ik houd ook wel van administratie").
+next(rs_verhaal, s19linders, "true", s20linders).
+
+move(rs_verhaal, s20linders, say).
+text(rs_verhaal, s20linders, "en orde op zaken stellen").
+next(rs_verhaal, s20linders, "true", s21linders).
+
+move(rs_verhaal, s21linders, question).
+moveConfig(rs_verhaal, s21linders, [type=yesno, context='answer_yesno']).
+text(rs_verhaal, s21linders, "Het klinkt ook alsof het een hele gezellige werkplek was, klopt dat?").
+next(rs_verhaal, s21linders, "answer_yes", s22lindersja).
+next(rs_verhaal, s21linders, "answer_no", s22lindersnee).
+next(rs_verhaal, s21linders, "answer_dontknow", s22lindersnee).
+next(rs_verhaal, s21linders, "fail", s22lindersnee).
+
+move(rs_verhaal, s22lindersja, say).
+text(rs_verhaal, s22lindersja, "Wat leuk om te horen").
+next(rs_verhaal, s22lindersja, "true", s23lindersja).
+
+move(rs_verhaal, s23lindersja, say).
+text(rs_verhaal, s23lindersja, "Ik word er ook enthousiast van").
+next(rs_verhaal, s23lindersja, "true", s24lindersja).
+
+move(rs_verhaal, s24lindersja, say).
+text(rs_verhaal, s24lindersja, "als ik u zo hoor praten").
+next(rs_verhaal, s24lindersja, "true", s25linders).
+
+move(rs_verhaal, s22lindersnee, say).
+text(rs_verhaal, s22lindersnee, "Oeps. Dan zag ik dat verkeerd.").
+next(rs_verhaal, s22lindersnee, "true", s23lindersnee).
+
+move(rs_verhaal, s23lindersnee, say).
+text(rs_verhaal, s23lindersnee, "Ik vond het wel heel gezellig met u te praten").
+next(rs_verhaal, s23lindersnee, "true", s25linders).
+
+move(rs_verhaal, s25linders, say).
+text(rs_verhaal, s25linders, "dank u wel voor het delen %rs_3_gender% %first_name%.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Slot				                   %%%
@@ -1013,7 +1150,7 @@ text(rs_slot, s4, "Daar ben ik heel blij om.").
 next(rs_slot, s4, "true", s5).
 
 move(rs_slot, s5, say).
-text(rs_slot, s5, "Dank u wel, voor alles. \\pau=500\\ ").
+text(rs_slot, s5, "Dank u wel, voor alles. \pau=500\ ").
 next(rs_slot, s5, "true", s6).
 
 move(rs_slot, s6, question).
@@ -1036,4 +1173,4 @@ text(rs_slot, s7nee, "Dat is helemaal goed.").
 next(rs_slot, s7nee, "true", s8nee).
 
 move(rs_slot, s8nee, say).
-text(rs_slot, s8nee, "Ik wens je het allerbeste toe en dankjewel voor je tijd").
+text(rs_slot, s8nee, "Ik wens u het allerbeste toe en dank u wel voor u tijd").
