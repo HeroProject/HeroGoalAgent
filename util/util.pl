@@ -30,7 +30,7 @@
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
-	waitingForSayClear/0, waitingForTimer/0,
+	waitingForSayClear/0, waitingForTimer/0, waitingForTablet/1, waitingForDelay/0,
 	waitingForInit/0.
 
 :- dynamic expCondition/1.
@@ -197,20 +197,22 @@ generateKeyFromMinidialogAndMove(Minidialog, Move, Key) :- atomics_to_string([Mi
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
-getInputModalityOrder(Minidialog, Move, Order) :- keyValue(Minidialog, Move, inputModality, Modalities), getKeys(Modalities, Order).
+getInputModalityOrder(Minidialog, Move, Order) :- (keyValue(Minidialog, Move, inputModality, Modalities); not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities)), getKeys(Modalities, Order).
 getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Minidialog, Move, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
 
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
 
-getMaxAnswerTime(Minidialog, Move, Modality, _, _, MaxAnswerTime) :- Modality \= speech, keyValue(Minidialog, Move, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, speech, openend, _, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), Attempt = 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
-								  member((Key=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), Attempt > 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
-								  member((Key=MaxAnswerTime), Times), !.
+getMaxAnswerTime(Minidialog, Move, Modality, _, _, MaxAnswerTime) :- Modality \= speech, (keyValue(Minidialog, Move, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, speech, openend, _, MaxAnswerTime) :- (keyValue(Minidialog, Move, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- Attempt = 1, atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
+								(keyValue(Minidialog, Move, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- Attempt > 1, atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
+								(keyValue(Minidialog, Move, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !).
 								  
 getModalitySwitchResponse(Minidialog, Move, ToModality, Response) :- keyValue(Minidialog, Move, modalitySwitchResponse, Responses), member((ToModality=Response), Responses), !.
 
@@ -274,7 +276,7 @@ readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)),
 readyForAction(Minidialog, Move) :- start, not(paused), not(waitingForEvent(_)), audio(Minidialog, Move, id, ID), getUserModelValue(ID, _), memoryTasksCompleted.
 
 % All events have been completed when all robot events indicating actions have been done (saying something, gesture, etc.) have been received.
-eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer).
+eventsCompleted :- started, not(waitingForEvent(_)), not(waitingForTimer), not(waitingForTablet(_)).
 
 % All memory tasks have been completed when all expected memory events and data have been received.
 memoryTasksCompleted :- not(waitingForEvent('InteractantDataSet')),  not(waitingForEvent('MemoryEntryStored')), not(waitingForMemoryData(_)).

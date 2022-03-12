@@ -25,8 +25,8 @@ sessionDesign(test_session_7, [general_wakeup, test_session_led_1a, test_session
 sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]).
 
 %%%%%%%%%%%%%% Robotstories %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
-sessionDesign(robotstories_test, [general_wakeup_pepper, rs_verhaal, general_rest_pepper]).
+sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
+sessionDesign(robotstories_test, [general_wakeup_pepper, rs_slot, general_rest_pepper]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%

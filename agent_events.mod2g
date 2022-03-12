@@ -72,6 +72,9 @@ module agent_events {
 	% waitingForTimer
 	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
 	
+	% delay timer
+	if bel(timeout(delay)) then delete(waitingForDelay).
+	
 	% Event fail safe TODO: fix this
 	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
@@ -195,7 +198,8 @@ module agent_events {
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	% Question
-	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), eventsCompleted, not(waitingForAnswer), not(answer(Minidialog, Move, _, _)))
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), eventsCompleted, 
+		not(waitingForAnswer), not(answer(Minidialog, Move, _, _)), not(waitingForDelay))
 		then askQuestion(Minidialog, Move).
 		
 	% Audiorecording
@@ -220,12 +224,20 @@ module agent_events {
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), not(waitingForSayClear), eventsCompleted)
 		then insert(waitingForEvent(Next), waitingForSayClear).
 	
+	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, nextTablet, Next), 
+			not(waitingForTablet(_)), button(Next, Button), html(Button, Html), eventsCompleted)
+		then insert(waitingForTablet(Next)) + renderPage(Html).
+	
 	% If the next event is available, clear this move.
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
 		then delete(waitingForSayClear).
 	
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
 		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).
+	
+	if  percept(answer(Next)), bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, nextTablet, Next),	
+			waitingForTablet(Next), html('', Html))
+		then delete(waitingForTablet(Next)) + renderPage(Html).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Move transition handling            %%%
