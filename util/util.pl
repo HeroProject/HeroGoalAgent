@@ -172,6 +172,9 @@ updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(member((Key=_), O
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel), !.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel, !.
 
+updateUserModelList([Key=Value | T], OldUserModel, NewUserModel) :- updateUserModel(Key, Value, OldUserModel, TransUserModel), updateUserModelList(T, TransUserModel, NewUserModel).
+updateUserModelList([], UserModel, UserModel).
+
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
 %getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
@@ -203,14 +206,16 @@ getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Min
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
 
-getMaxAnswerTime(Minidialog, Move, Modality, _, _, MaxAnswerTime) :- Modality \= speech, keyValue(Minidialog, Move, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, speech, openend, _, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), Attempt = 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
-								  member((Key=MaxAnswerTime), Times), !.
-getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- keyValue(Minidialog, Move, maxAnswerTime, Times), Attempt > 1, 
-								  atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
-								  member((Key=MaxAnswerTime), Times), !.
+getMaxAnswerTime(Minidialog, Move, Modality, _, _, MaxAnswerTime) :- Modality \= speech, (keyValue(Minidialog, Move, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Modality=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, speech, openend, _, MaxAnswerTime) :- (keyValue(Minidialog, Move, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((speechopenend=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- Attempt = 1, atom_concat(Modality, Type, ModType), atom_concat(ModType, first, Key),
+								(keyValue(Minidialog, Move, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !).
+getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- Attempt > 1, atom_concat(Modality, Type, ModType), atom_concat(ModType, noninitial, Key),
+								(keyValue(Minidialog, Move, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !; 
+								keyValue(default, default, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !).
 								  
 getModalitySwitchResponse(Minidialog, Move, ToModality, Response) :- keyValue(Minidialog, Move, modalitySwitchResponse, Responses), member((ToModality=Response), Responses), !.
 
@@ -265,6 +270,12 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 % Delete minidialogs from minidialog list
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Math			            		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+math_generate_left_right(Left, Right, Answer) :- random(1,11, Left), random(1,11, Right), Answer is Left*Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

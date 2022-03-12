@@ -28,8 +28,10 @@ module agent_main {
 	if bel(currentMinidialog(Minidialog), currentMove(Move), readyForAction(Minidialog, Move)) then performDialogMove(Minidialog, Move).
 	
 	%TODO: make pretty
-	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
-	if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
+	%if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
+	%if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
+	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden."). 
+	if bel(unpause_act) then delete(unpause_act, paused) + say("Laten we weer verder gaan.").
 	if bel(stop_act) then delete(stop_act) + say("Weltrusten") + rest + stopLedAnimation.
 }
 	

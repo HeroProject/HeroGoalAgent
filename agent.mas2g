@@ -1,7 +1,7 @@
 use '..\..\clients\cbsr-eis-connector.jar' as environment with
 		server='localhost',
-		flowkey='util/dialogflowagent.json',
-		flowagent='mikeagent-dsvpjs',
+		flowkey='util/dialogflowagent_sorocova.json',
+		flowagent='sorocova-spap',
 		flowlang='nl-NL'.
 		
 define agent_core as agent {

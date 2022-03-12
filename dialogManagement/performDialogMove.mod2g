@@ -65,8 +65,8 @@ module performDialogMove(Minidialog, Move) {
 	% Show text
 	if bel((display(Minidialog, Move, Txt, always);
 		tabletUse(TabletUse), (TabletUse = always; TabletUse = explicit), display(Minidialog, Move, Txt);
-		tabletUse(always), not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText), replaceVar(RawText, Txt)),
-		text(Txt, HTxt), move(Minidialog, Move, MoveType))
+		tabletUse(always), not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, Txt)),
+		replaceVar(Txt, VTxt), text(VTxt, HTxt), move(Minidialog, Move, MoveType))
 		then {
 			if bel(MoveType \= question, html(HTxt, Html)) then renderPage(Html).
 			
@@ -195,7 +195,14 @@ module performDialogMove(Minidialog, Move) {
     	if bel(session(Session)) then delete(session(Session)) + insert(session([NestedMinidialog | Session])).
 	}
 	
-	%if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
+	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%					Math						%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	if bel(math_generate(Minidialog, Move), math_generate_left_right(Left, Right, Answer), userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%

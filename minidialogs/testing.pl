@@ -500,5 +500,7 @@ next(test_feet, s1, "true", s2).
 move(test_feet, s2, say).
 text(test_feet, s2, "Dat was het.").
 leds(test_feet, s2, reset).
-%% 
+%%
+
+remove_minidialog(test_remove, s1, []).
 

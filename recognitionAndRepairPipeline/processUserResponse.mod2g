@@ -27,17 +27,28 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 							if bel(length(Params, 0)) then insert(answer(Minidialog, Move, Intent, [text=Text])).
 						}
 											
-					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type=quiz, length(Params, 1), member((_=AnsC), Params),
-						(number(AnsC), Intent='integer', Ans is integer(AnsC); number(AnsC), Intent\='integer', Ans is AnsC; not(number(AnsC)), downcase_atom(AnsC, Ans)),
-						keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer))
-						then {
-							if bel(Ans\='', member(Ans, CorrectAnswer))
-								then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
-							if bel(Ans\='', not(member(Ans, CorrectAnswer)))
-								then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
-							if bel(Ans='') then repair(Minidialog,Move). %Log
+					% quiz questions -> checks whether the answer is correct or not.				
+					if bel(Type=quiz, length(Params, 1), member((_=AnsC), Params)) then 
+					{
+						if bel(AnsC\='', number(AnsC), Ans is integer(AnsC)) then {
+							if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
+								if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
+								if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
+							}
+							if bel(keyValue(Minidialog, Move, correctAnswer, math_answer), getUserModelValue(math_answer, CorrectAnswer)) then {
+								if bel(Ans=CorrectAnswer) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
+								if bel(Ans\=CorrectAnswer) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
+							}
 						}
+						
+						if bel(AnsC\='', not(number(AnsC)), downcase_atom(AnsC, Ans), 
+							keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer)) then {
+								if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
+								if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
+						}
+						
+						if bel(AnsC='') then repair(Minidialog,Move).
+					}
 					
 					if bel(Type=openend, length(Params, 0))
 						then {
@@ -58,18 +69,29 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 					if bel(Type=yesno)
 						then insert(answer(Minidialog, Move, Intent, [text=Intent])).
 					
-					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(Minidialog, Move, options, Options), mcCounter(Count), nth0(Count, Options, AnsB), downcase_atom(AnsB, Ans))
+					if bel(Type \= yesno, Intent = 'answer_yes', keyValue(Minidialog, Move, options, Options), mcCounter(Count), nth0(Count, Options, AnsB))
 						then {
-							if bel(Type=input)
+							if bel(Type=input, downcase_atom(AnsB, Ans))
 								then insert(answer(Minidialog, Move, Ans, [text=Ans])).
 							
-							if bel(Type=quiz, keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer))
-								then {
-									if bel(member(Ans, CorrectAnswer))
-										then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
-									if bel(not(member(Ans, CorrectAnswer)))
-										then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+							if bel(Type=quiz) then {
+								if bel(number(AnsB), Ans is integer(AnsB)) then {
+									if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
+										if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+										if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+									}
+									if bel(keyValue(Minidialog, Move, correctAnswer, math_answer), getUserModelValue(math_answer, CorrectAnswer)) then {
+										if bel(Ans=CorrectAnswer) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+										if bel(Ans\=CorrectAnswer) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+									}
 								}
+								
+								if bel(not(number(AnsB)), downcase_atom(AnsB, Ans), 
+									keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer)) then {
+										if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+										if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+								}
+							}
 						}
 					
 					if bel(Type \= yesno, Intent = 'answer_no')
@@ -90,15 +112,24 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 					%if bel(Type = sorter) then insert(answer(Minidialog, Move, Intent, [text=Text])).
 					
 					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type = quiz, downcase_atom(Intent, Ans), keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer))
-						then {
-							if bel(member(Ans, CorrectAnswer))
-								then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Text])).
-							if not(bel(answer(Minidialog, Move, correct, _)))
-								then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Text])).
-							%if bel(Intent='answer_character', character(Old))
-								%then delete(character(Old)) + insert(character(Ans)).
+					if bel(Type=quiz) then {
+						if bel(number(Intent), Ans is integer(Intent)) then {
+							if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
+								if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+								if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+							}
+							if bel(keyValue(Minidialog, Move, correctAnswer, math_answer), getUserModelValue(math_answer, CorrectAnswer)) then {
+								if bel(Ans=CorrectAnswer) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+								if bel(Ans\=CorrectAnswer) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+							}
 						}
+						
+						if bel(not(number(Intent)), downcase_atom(Intent, Ans), 
+							keyValue(Minidialog, Move, correctAnswer, CorrectAnswerB), maplist(downcase_atom, CorrectAnswerB, CorrectAnswer)) then {
+								if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
+								if not(bel(member(Ans, CorrectAnswer))) then insert(answer(Minidialog, Move, incorrect, [entity=Ans, text=Ans])).
+						}
+					}
 						
 					if not(bel(answer(Minidialog, Move, _, _)))
 						then print("Error: no answer was found although it was expected") 
