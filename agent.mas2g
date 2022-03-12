@@ -1,4 +1,4 @@
-use '..\..\clients\cbsr-eis-connector.jar' as environment with
+use '..\..\clients\sic-eis-connector.jar' as environment with
 		server='localhost',
 		flowkey='util/dialogflowagent_sorocova.json',
 		flowagent='sorocova-spap',
