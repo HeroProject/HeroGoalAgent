@@ -200,7 +200,7 @@ generateKeyFromMinidialogAndMove(Minidialog, Move, Key) :- atomics_to_string([Mi
 
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
-getInputModalityOrder(Minidialog, Move, Order) :- keyValue(Minidialog, Move, inputModality, Modalities), getKeys(Modalities, Order).
+getInputModalityOrder(Minidialog, Move, Order) :- (keyValue(Minidialog, Move, inputModality, Modalities); not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities)), getKeys(Modalities, Order).
 getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Minidialog, Move, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
 
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).

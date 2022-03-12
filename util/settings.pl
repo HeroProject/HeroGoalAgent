@@ -29,8 +29,8 @@ tabletUse(explicit). %can be repair, explicit, or always
 % override config param for specific move by using key-label in key-value list associated with that move.
 
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
-%keyValue(_, _, inputModality, [speech=2, feet=2]).
-keyValue(_, _, inputModality, [speech=2, tablet=2]).
+%keyValue(default, default, inputModality, [speech=2, feet=2]).
+keyValue(default, default, inputModality, [speech=2, tablet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
