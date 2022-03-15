@@ -30,8 +30,9 @@
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
-	waitingForSayClear/0, waitingForTimer/0,
-	waitingForInit/0.
+	waitingForTimer/0,
+	waitingForInit/0,
+	eventListener/2.
 
 :- dynamic expCondition/1.
 
@@ -198,6 +199,9 @@ concatenate([H], H).
 %Generate a key in the form of Minidialog_Move for referencing a particular minidialog-move pair.
 generateKeyFromMinidialogAndMove(Minidialog, Move, Key) :- atomics_to_string([Minidialog, Move], '_', KeyS), atom_string(Key, KeyS).
 
+getSpeechSpeed(Minidialog, Move, Speed) :- keyValue(Minidialog, Move, speechSpeed, Speed).
+getSpeechSpeed(Minidialog, Move, Speed) :- not(keyValue(Minidialog, Move, speechSpeed, _)), keyValue(default, default, speechSpeed, Speed).
+
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
 getInputModalityOrder(Minidialog, Move, Order) :- (keyValue(Minidialog, Move, inputModality, Modalities); not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities)), getKeys(Modalities, Order).
@@ -275,7 +279,7 @@ delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(Minid
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-math_generate_left_right(Left, Right, Answer) :- random(1,11, Left), random(1,11, Right), Answer is Left*Right.
+math_generate_left_right(Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

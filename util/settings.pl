@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_pilot). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
 
@@ -14,7 +14,7 @@ userId('999').
 localVariable(first_name, "Mike"). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
-useMemory(false).
+useMemory(true).
 continueSession(true).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -22,7 +22,7 @@ continueSession(true).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ROBOT defaults		    %%%
 pauseButton('MiddleTactilTouched').
-basePosture('Stand').
+basePosture('Sit').
 tabletUse(explicit). %can be repair, explicit, or always
 
 %%% MOVECONFIG defaults		    %%% 
@@ -34,7 +34,7 @@ keyValue(default, default, inputModality, [speech=2, tablet=2]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
-keyValue(_, _, speechSpeed, 85).
+keyValue(default, default, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(default, default, maxAnswerTime, [	feet=3000,
 						tablet=4000, 

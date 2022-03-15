@@ -11,7 +11,7 @@ text(Content,Html) :- text(T), format(atom(Html),T,[Content]).
 img('<img src="~a"/>').
 img(Src,Html) :- img(I), format(atom(Html),I,[Src]).
 
-button('<button class="btn btn-primary btn-lg mt-5 ml-3">~a</button>').
+button('<button class="btn btn-primary btn-lg mt-5 ml-3" style="font-size:2rem">~a</button>').
 button(Content,Html) :- button(B), format(atom(Html),B,[Content]).
 
 buttons([],Html,Html).

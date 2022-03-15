@@ -56,6 +56,17 @@ module agent_events {
 	% ... for NAO events
 	forall bel(event(E), waitingForEvent(E))
 		do delete(waitingForEvent(E)).
+	
+	% All event handlers trigger for all current events
+	forall bel(event(E), eventListener(E, Result))
+		do {
+			% the resulting next condition is selected.
+			if bel(nextCondition(Con)) then delete(eventListener(E, Result), nextCondition(Con)) + insert(nextCondition(Result)).
+			
+			% the remaining event listeners are deleted, because only one needs to be triggered.
+			forall bel(eventListener(OtherEvent, OtherResult)) do delete(eventListener(OtherEvent, OtherResult), waitingForEvent(OtherEvent)).
+		}
+		
 	% ... for posture changes
 	if bel(posture(Posture), waitingForPosture(Posture))
 		then delete(waitingForPosture(Posture)).
@@ -70,10 +81,19 @@ module agent_events {
 	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
 	
 	% waitingForTimer
-	if bel(timeout(waitingForTimer)) then delete(waitingForTimer).
+	if bel(timeout(waitTimer)) then delete(waitingForTimer).
+	
+	% Go timer
+	if bel(timeout(goTimer)) then {
+		% set the next condition to timer if the go timer timeouts
+		if bel(nextCondition(Con)) then delete(nextCondition(Con)) + insert(nextCondition('timer')).
+		
+		% Remove all the event listeners waiting to be triggered. This timeout makes them obsolete.
+		forall bel(eventListener(Event, Result)) do delete(eventListener(Event, Result), waitingForEvent(Event)).	
+	} 
 	
 	% Event fail safe TODO: fix this
-	if bel(timeout(eventFailSafe), not(waitingForSayClear)) then {
+	if bel(timeout(eventFailSafe), not(eventListener(_, _))) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
 		%if bel(waitingForAudio) then delete(waitingForAudio).
 		%if bel(currentMinidialog(Minidialog), currentMove(Move)) then log(eventFailSafe(Minidialog, Move)).
@@ -211,21 +231,6 @@ module agent_events {
 	% Emotion
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, emotion), eventsCompleted, not(waitingForEmotion), not(emotion(Minidialog, Move,_)))
 		then startWatching(6) + insert(waitingForEmotion).
-	
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%%% Wait for event (e.g. button press) in a say move   %%%
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
-	% If the next flag is in use, wait untill the corresponding next becomes available to clear this move.	
-	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), not(waitingForSayClear), eventsCompleted)
-		then insert(waitingForEvent(Next), waitingForSayClear).
-	
-	% If the next event is available, clear this move.
-	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, next, Next), waitingForSayClear, not(waitingForEvent(Next)))
-		then delete(waitingForSayClear).
-	
-	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, say), keyValue(Minidialog, Move, waitTimer, Time), not(timeout(waitingForTimer)), eventsCompleted)
-		then starttimer(waitingForTimer, Time, Time) + insert(waitingForTimer).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%% Move transition handling            %%%

@@ -7,15 +7,18 @@
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sessionDesign(sorocova_test_1, [general_wakeup, sor_test_full, general_rest]).
+sessionDesign(sorocova_pilot_1, [general_wakeup, sor_intro, sor_tutorial, sor_test_full, general_rest]).
+sessionDesign(sorocova_pilot_2, [general_wakeup, general_rest]).
+
+sessionDesign(sorocova_test_1, [general_wakeup, sor_tutorial, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+multiSessionDesign(sorocova_pilot, [sorocova_pilot_1, sorocova_pilot_2]).
+
 multiSessionDesign(sorocova_test, [sorocova_test_1]).
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test Suite			                           %%%
