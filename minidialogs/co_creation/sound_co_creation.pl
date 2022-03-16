@@ -84,7 +84,7 @@ save_sound(co_sound, sdownload8robot, 1).
 move(co_sound, smaken1, say).
 text(co_sound,  smaken1, "Als je klaar bent om te beginnen, kun je mijn linker teen indrukken.").
 leds(co_sound,  smaken1, direct, ["RightFootLeds"], ["groen"]).
-moveConfig(co_sound, smaken1, [next='RightBumperPressed', repeat='MiddleTactilTouched']).
+moveConfig(co_sound, smaken1, [eventListener=['true'='RightBumperPressed']]).
 next(co_sound,  smaken1, "true",  smaken2).
 
 move(co_sound, smaken2, say).

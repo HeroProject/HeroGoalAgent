@@ -30,8 +30,10 @@
 	waitingForDetection/0, waitingForAnswer/0, waitingForEvent/1, waitingForAudioFile/1, waitingForMemoryLed/1,
 	waitingForEmotion/0, answerProcessed/0, waitingForPosture/1,
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
-	waitingForSayClear/0, waitingForTimer/0, waitingForTablet/1, waitingForDelay/0,
-	waitingForInit/0.
+	waitingForTablet/1, waitingForDelay/0,
+	waitingForTimer/0,
+	waitingForInit/0,
+	eventListener/2.
 
 :- dynamic expCondition/1.
 
@@ -172,6 +174,9 @@ updateUserModel(Key, Value, OldUserModel, NewUserModel) :- not(member((Key=_), O
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), not(OldValue = Value), delete(OldUserModel, (Key=OldValue), UserModelTemp), append(UserModelTemp, [Key=Value], NewUserModel), !.
 updateUserModel(Key, Value, OldUserModel, NewUserModel) :- member((Key=OldValue), OldUserModel), OldValue = Value, NewUserModel = OldUserModel, !.
 
+updateUserModelList([Key=Value | T], OldUserModel, NewUserModel) :- updateUserModel(Key, Value, OldUserModel, TransUserModel), updateUserModelList(T, TransUserModel, NewUserModel).
+updateUserModelList([], UserModel, UserModel).
+
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
 %getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
@@ -195,10 +200,15 @@ concatenate([H], H).
 %Generate a key in the form of Minidialog_Move for referencing a particular minidialog-move pair.
 generateKeyFromMinidialogAndMove(Minidialog, Move, Key) :- atomics_to_string([Minidialog, Move], '_', KeyS), atom_string(Key, KeyS).
 
+getSpeechSpeed(Minidialog, Move, Speed) :- keyValue(Minidialog, Move, speechSpeed, Speed).
+getSpeechSpeed(Minidialog, Move, Speed) :- not(keyValue(Minidialog, Move, speechSpeed, _)), keyValue(default, default, speechSpeed, Speed).
+
 addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), string_concat(STFront, "\ ", SpeedText), string_concat(SpeedText, Text, Result).
 
 getInputModalityOrder(Minidialog, Move, Order) :- (keyValue(Minidialog, Move, inputModality, Modalities); not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities)), getKeys(Modalities, Order).
 getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Minidialog, Move, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
+getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
+
 
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).
@@ -267,6 +277,12 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 % Delete minidialogs from minidialog list
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Math			            		   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+math_generate_left_right(Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

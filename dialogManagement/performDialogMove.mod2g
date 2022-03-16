@@ -2,6 +2,7 @@ use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../agent_actions' as actionspec.
+use '../util/registerEventListeners.mod2g' as module.
 
 order=linearall.
 
@@ -12,7 +13,7 @@ module performDialogMove(Minidialog, Move) {
 	%%				DIALOG ATTRIBUTES				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Say what needs to be said.
-	if bel(text(Minidialog, Move, Text), keyValue(Minidialog, Move, speechSpeed, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
+	if bel(text(Minidialog, Move, Text), getSpeechSpeed(Minidialog, Move, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
 	{
 		if bel(keyValue(Minidialog, Move, noAnimation, "true")) then say(TextProcessed).
 		if not(bel(keyValue(Minidialog, Move, noAnimation, "true"))) then sayAnimated(TextProcessed).
@@ -57,6 +58,18 @@ module performDialogMove(Minidialog, Move) {
 	
 	% Set stiffness
 	if bel(set_stiffness(Minidialog, Move, Joints, Stiffness)) then setStiffness(Joints, Stiffness).
+		
+	% Register event listener. Wait the interaction untill the event has thrown.
+	if bel(currentMinidialog(Minidialog), currentMove(Move), keyValue(Minidialog, Move, eventListener, Listeners))
+		then registerEventListeners(Listeners).
+	
+	% Waittimer
+	if bel(currentMinidialog(Minidialog), currentMove(Move), keyValue(Minidialog, Move, waitTimer, Time))
+		then starttimer(waitTimer, Time, Time) + insert(waitingForTimer).
+	
+	% Gotimer
+	if bel(currentMinidialog(Minidialog), currentMove(Move), keyValue(Minidialog, Move, goTimer, Time))
+		then starttimer(goTimer, Time, Time).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					WEBPAGE						%%
@@ -196,6 +209,13 @@ module performDialogMove(Minidialog, Move) {
 	}
 	
 	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%					Math						%%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	if bel(math_generate(Minidialog, Move), math_generate_left_right(Left, Right, Answer), userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%

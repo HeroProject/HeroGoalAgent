@@ -12,6 +12,9 @@ module nextDialogMove(Minidialog, Move, C) {
 	% reset answers processing flag
 	if bel(answerProcessed) then delete(answerProcessed).
 	
+	% delete active go timer
+	if bel(keyValue(Minidialog, Move, goTimer, _), not(timeout(goTimer))) then canceltimer(goTimer). 
+	
 	% Cleanup: remove move specific parameters (if any).	
 	if bel(move(Minidialog, Move, question), modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count))
 		then delete(modalityCounter(ModCount), currentInputModality(Modality), currentAttempt(Attempt), mcCounter(Count)). 

@@ -1,0 +1,17 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../minidialogs/co_creation/*.pl' as knowledge.
+use '../agent_actions' as actionspec.
+
+order=linearall.
+
+module registerEventListeners(Listeners) {
+
+		if bel(nth0(0, Listeners, Result=Event, RestOfListeners), length(RestOfListeners, L))
+		then {
+			if not(bel(eventListener(Event, Result))) then insert(waitingForEvent(Event), eventListener(Event, Result)).
+			
+			if bel(L \= 0) then registerEventListeners(RestOfListeners).
+		}
+	
+}

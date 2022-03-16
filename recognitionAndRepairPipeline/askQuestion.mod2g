@@ -35,9 +35,9 @@ module askQuestion(Minidialog, Move) {
 			if bel(currentInputModality(tablet), getMaxAnswerTime(Minidialog, Move, tablet, _, _, MaxAnswerTime))
 				then {	
 					% Display question on tablet (use display/3 or display/4 or if none use regular text/3 clause).
-					if bel((display(Minidialog, Move, Txt) ; display(Minidialog, Move, Txt, _);  
-					not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText), replaceVar(RawText, Txt)),
-					text(Txt, HTxt)) then {
+					if bel((display(Minidialog, Move, RawText) ; display(Minidialog, Move, RawText, _);  
+					not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText)),
+					replaceVar(RawText, Txt), text(Txt, HTxt)) then {
 							% yesno: button for yes and no on screen.
 							if bel(keyValue(Minidialog, Move, type, yesno), tablet_yesno(answer_yes, Yes), tablet_yesno(answer_no, No), buttons([Yes, No], Buttons),
 							atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
@@ -48,12 +48,17 @@ module askQuestion(Minidialog, Move) {
 							atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
 									then renderPage(Html) + insert(waitingForAnswer).
 							
+							% If there is a form element show the input form instead
+							if bel(keyValue(Minidialog, Move, form, numberField), numberField(Field), 
+							atom_concat(HTxt, Field, TandF), html(TandF, Html))
+								then renderPage(Html) + insert(waitingForAnswer).
+							
 							%if bel(keyListValues(Minidialog, Move, [type, options], [sorter, List]), sortItems(List, Items), html(Items, Html))
 								%then renderPage(Html) + insert(waitingForAnswer).
-							
-							% If there is a time limit set timer.
-							if bel(MaxAnswerTime \= 0) then starttimer(Move,MaxAnswerTime,MaxAnswerTime). 
-					}
+					}					
+					
+					% If there is a time limit set timer.
+					if bel(MaxAnswerTime \= 0) then starttimer(Move,MaxAnswerTime,MaxAnswerTime). 
 				}
 			}			
 }

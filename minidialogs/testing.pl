@@ -494,11 +494,13 @@ text(test_getal, s2_fail, "Dat ging mis.").
 move(test_feet, s1, say).
 text(test_feet, s1, "Kijk, mijn voeten zijn nu groen en rood").
 leds(test_feet, s1, direct, ["LeftFootLeds", "RightFootLeds"], ["red", "green"]).
-moveConfig(test_feet, s1, [next='RightBumperPressed']).
+moveConfig(test_feet, s1, [eventListener=['true'='RightBumperPressed']]).
 next(test_feet, s1, "true", s2).
 
 move(test_feet, s2, say).
 text(test_feet, s2, "Dat was het.").
 leds(test_feet, s2, reset).
-%% 
+%%
+
+remove_minidialog(test_remove, s1, []).
 
