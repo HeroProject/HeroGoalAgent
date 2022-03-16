@@ -7,10 +7,10 @@
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-sessionDesign(sorocova_pilot_1, [general_wakeup, sor_intro, sor_tutorial, sor_test_full, general_rest]).
-sessionDesign(sorocova_pilot_2, [general_wakeup, general_rest]).
+sessionDesign(sorocova_pilot_1, [general_wakeup, sor_intro, sor_tutorial, sor_kletsen_dier, sor_kletsen_lievelingseten, sor_rekenen_1, sor_rekenen_2, sor_rekenen_3, sor_rekenen_4, sor_afronding, general_rest]).
+sessionDesign(sorocova_pilot_2, [general_wakeup, sor_ses2_intro, sor_test_artiesten, sor_test_buitenspelen, sor_test_pokemon, sor_ses2_afscheid, general_rest]).
 
-sessionDesign(sorocova_test_1, [general_wakeup, sor_tutorial, general_rest]).
+sessionDesign(sorocova_test_1, [general_wakeup, sor_kletsen_lievelingseten, sor_rekenen_3, sor_rekenen_4, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%

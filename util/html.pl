@@ -18,4 +18,4 @@ buttons([],Html,Html).
 buttons([Curr|Rest],Tmp,Html) :- button(Curr,B), atom_concat(Tmp,B,New), buttons(Rest,New,Html).
 buttons(ContentList,Html) :- buttons(ContentList,'',Html).
 
-numberField('<form><input type="number" class="w-25"><input type="submit" value="Antwoorden"></form>').
+numberField('<form><input type="number" class="form-control w-25"><input type="submit" class="btn btn-primary" value="Antwoorden"></form>').

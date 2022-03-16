@@ -206,6 +206,8 @@ addSpeechSpeed(Text, Speed, Result) :- string_concat("\rspd=", Speed, STFront), 
 
 getInputModalityOrder(Minidialog, Move, Order) :- (keyValue(Minidialog, Move, inputModality, Modalities); not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities)), getKeys(Modalities, Order).
 getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- keyValue(Minidialog, Move, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
+getMaxAnswerAttempts(Minidialog, Move, Modality, MaxAnsAttempts) :- not(keyValue(Minidialog, Move, inputModality, _)), keyValue(default, default, inputModality, Modalities), member((Modality=MaxAnsAttempts), Modalities), !.
+
 
 getKeys([(Key=_)|Pairs], [Key|Keys]) :- getKeys(Pairs, Keys).
 getKeys([], []).

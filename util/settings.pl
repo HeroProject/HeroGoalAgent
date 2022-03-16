@@ -23,7 +23,7 @@ continueSession(true).
 %%% ROBOT defaults		    %%%
 pauseButton('MiddleTactilTouched').
 basePosture('Sit').
-tabletUse(explicit). %can be repair, explicit, or always
+tabletUse(repair). %can be repair, explicit, or always
 
 %%% MOVECONFIG defaults		    %%% 
 % override config param for specific move by using key-label in key-value list associated with that move.
