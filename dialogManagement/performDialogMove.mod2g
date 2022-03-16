@@ -81,9 +81,9 @@ module performDialogMove(Minidialog, Move) {
 		tabletUse(always), not(display(Minidialog, Move, _)), not(display(Minidialog, Move, _, _)), text(Minidialog, Move, RawText)),
 		replaceVar(RawText, Txt), text(Txt, HTxt), move(Minidialog, Move, MoveType))
 		then {
-			if bel(MoveType \= question, html(HTxt, Html)) then renderPage(Html).
+			if bel((MoveType \= question; tabletUse(repair)), html(HTxt, Html)) then renderPage(Html).
 			
-			if bel(MoveType = question) then {
+			if bel(MoveType = question, not(tabletUse(repair))) then {
 				if bel(keyValue(Minidialog, Move, type, yesno), tablet_yesno(answer_yes, Yes), tablet_yesno(answer_no, No), 
 				buttons([Yes, No], Buttons), atom_concat(HTxt, Buttons, TandB), html(TandB, Html))
 				then renderPage(Html).	
