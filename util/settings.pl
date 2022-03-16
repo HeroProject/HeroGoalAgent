@@ -13,6 +13,7 @@ userId('999').
 %%% Local Variables 		    %%%
 localVariable(first_name, "leo"). % %fist_name% can be used in text.
 localVariable(location, "de Bijnkers, hoek").
+localVariable(location_tablet, "de Bijnkershoek").
 %localVariable(location, "de Wilgen, hof").
 
 % Namen
@@ -42,19 +43,19 @@ tabletUse(repair). %can be repair, explicit, or always
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
 
 %keyValue(default, default, inputModality, [speech=2, feet=2]).
-keyValue(default, default, inputModality, [speech=2, tablet=2]).
+keyValue(default, default, inputModality, [speech=2, tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)
 keyValue(default, default, speechSpeed, 85).
 % Default response times for different input modalities, question types, and attempt numbers
 keyValue(default, default, maxAnswerTime, [	feet=3000,
-						tablet=4000, 
+						tablet=0, 
 						speechopenend=12000,
-						speechyesnofirst=3500, 
-						speechyesnononinitial=3500, 
-						speechinputfirst=5000, 
-						speechinputnoninitial=3500,
+						speechyesnofirst=4500, 
+						speechyesnononinitial=4500, 
+						speechinputfirst=6000, 
+						speechinputnoninitial=4000,
 						speechquizfirst=5000,
 						speechquiznoninitial=3500]).					 
 

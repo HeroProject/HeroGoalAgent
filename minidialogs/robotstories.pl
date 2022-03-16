@@ -25,7 +25,7 @@ next(rs_intro, s3, "true", s4).
 move(rs_intro, s4, question).
 moveConfig(rs_intro, s4, [type=yesno, context='answer_yesno']).
 text(rs_intro, s4, "Volgens mij ben ik in %location%. Klopt dat?").
-display(rs_intro, s4, "Volgens mij ben ik in %location%. Klopt dat?", always).
+display(rs_intro, s4, "Volgens mij ben ik in %location_tablet%. Klopt dat?", always).
 next(rs_intro, s4, "answer_yes", s5ja).
 next(rs_intro, s4, "answer_no", s5nee).
 next(rs_intro, s4, "answer_dontknow", s5nee).
@@ -101,8 +101,8 @@ next(rs_intro, s14, "true", s15).
 
 move(rs_intro, s15, question).
 moveConfig(rs_intro, s15, [type=input, options=['pop', 'rock', 'blues', 'jazz', 'country', 'smartlap'], inputModality=[tablet=1], maxAnswerTime=[tablet=0], umVariable=rs_muzieksoort]).
-text(rs_intro, s15, "Druk maar op het knopje met het soort muziek dat u het leukste vind.").
-display(rs_intro, s15, "Druk maar op het knopje met het soort muziek dat u het leukste vind.").
+text(rs_intro, s15, "Druk maar op het knopje met het soort muziek dat u het leukste vindt.").
+display(rs_intro, s15, "Kies uw favoriete muziek.").
 next(rs_intro, s15, 'success', s15b).
 next(rs_intro, s15, 'fail', s16).
 
@@ -193,7 +193,7 @@ next(rs_intro, s31, "true", s32).
 
 move(rs_intro, s32, question).
 moveConfig(rs_intro, s32, [type=input, context="gender", options=['meneer', 'mevrouw'], fast=yes, umVariable=rs_3_gender, defaultAnswer='']).
-text(rs_intro, s32, "Ben u een meneer of mevrouw?").
+text(rs_intro, s32, "Bent u een meneer of mevrouw?").
 display(rs_intro, s32, "Ben u een meneer of mevrouw?", always).
 next(rs_intro, s32, "success", s33).
 next(rs_intro, s32, "fail", s33).
@@ -203,7 +203,7 @@ text(rs_intro, s33, "Wat leuk om u te ontmoeten, %rs_3_gender% %first_name%").
 next(rs_intro, s33, "true", s34).
 
 move(rs_intro, s34, question).
-moveConfig(rs_intro, s34, [type=input, context="answer_age", umVariable=rs_3_age]).
+moveConfig(rs_intro, s34, [type=input, context="answer_age", form=numberField, umVariable=rs_3_age]).
 text(rs_intro, s34, "Hoe oud bent u eigenlijk?").
 display(rs_intro, s34, "Hoe oud bent u eigenlijk?", always).
 next(rs_intro, s34, "success", s35).
@@ -232,8 +232,8 @@ text(rs_intro, s36f, "U kan mij vast wel wat vertellen over vroeger.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 move(rs_herinneringen, s1, question).
 moveConfig(rs_herinneringen, s1, [type=yesno, context='answer_yesno', umVariable=rs_op_school]).
-text(rs_herinneringen, s1, "Kunt u nog herinneren dat u vroeger als school zat?").
-display(rs_herinneringen, s1, "Kunt u nog herinneren dat u vroeger als school zat?", always).
+text(rs_herinneringen, s1, "Kunt u nog herinneren dat u vroeger op school zat?").
+display(rs_herinneringen, s1, "Kunt u nog herinneren dat u vroeger op school zat?", always).
 next(rs_herinneringen, s1, "answer_yes", s2ja).
 next(rs_herinneringen, s1, "answer_no", s2nee).
 next(rs_herinneringen, s1, "answer_dontknow", s2nee).
@@ -263,7 +263,7 @@ text(rs_herinneringen, s5, "Maar wat fijn dat u hierover nadenkt!").
 next(rs_herinneringen, s5, "true", s6).
 
 move(rs_herinneringen, s6, question).
-moveConfig(rs_herinneringen, s6, [type=openend, context='answer_open', inputModality=[speech=1], delay=5000, umVariabele=rs_leukste_aan_vroeger]).
+moveConfig(rs_herinneringen, s6, [type=openend, context='answer_open', inputModality=[speech=1], delay=7000, umVariabele=rs_leukste_aan_vroeger]).
 text(rs_herinneringen, s6, "En, Wat kun u nog meer herinneren over vroeger? Wat vond u het leukst aan toen opgroeien?").
 display(rs_herinneringen, s6, "Wat vond u het leukst aan toen opgroeien?", always).
 next(rs_herinneringen, s6, "success", s7).
@@ -422,15 +422,16 @@ next(rs_mens, s22ja, "success", s23).
 next(rs_mens, s22ja, "fail", s24).
 
 move(rs_mens, s21nee, say).
-text(rs_mens, s21nee, "O. Wat jammer.").
+text(rs_mens, s21nee, "Het lijkt mij bijzonder.").
 next(rs_mens, s21nee, "true", s22nee).
 
-move(rs_mens, s22nee, question).
-moveConfig(rs_mens, s22nee, [type=openend, context='answer_open', inputModality=[speech=1]]).
-text(rs_mens, s22nee, "Waarom kan dat niet, %rs_3_gender% %first_name%?").
-display(rs_mens, s22nee, "Waarom kan dat niet, %rs_3_gender% %first_name%?", always).
-next(rs_mens, s22nee, "success", s23).
-next(rs_mens, s22nee, "fail", s24).
+move(rs_mens, s22nee, say).
+text(rs_mens, s22nee, "Maar het is niet mijn droom.").
+next(rs_mens, s22nee, "true", s22nee2).
+
+move(rs_mens, s22nee2, say).
+text(rs_mens, s22nee2, "U weet veel beter, Hoe dat moet").
+next(rs_mens, s22nee2, "true", s23).
 
 move(rs_mens, s23, say).
 text(rs_mens, s23, "dank u wel dat u me dit uitlegt!").
@@ -445,8 +446,8 @@ text(rs_mens, s25, "ik weet ook dat ik veel vragen stel").
 next(rs_mens, s25, "true", s26).
 
 move(rs_mens, s26, say).
-text(rs_mens, s26, "hopelijk vind u dat niet vervelend").
-next(rs_mens, s26, "true", s27).
+text(rs_mens, s26, "hopelijk vindt u dat niet vervelend").
+next(rs_mens, s26, "true", s29).
 
 move(rs_mens, s27, say).
 text(rs_mens, s27, "alleen als ik vragen stel").
@@ -469,9 +470,9 @@ text(rs_mens, s31, "Omdat u een mens bent en ik niet").
 next(rs_mens, s31, "true", s32).
 
 move(rs_mens, s32, question).
-moveConfig(rs_mens, s32, [type=openend, context='answer_open', inputModality=[speech=1], delay=5000]).
+moveConfig(rs_mens, s32, [type=openend, context='answer_open', inputModality=[speech=1], delay=7000]).
 text(rs_mens, s32, "hoe is het dan, om een mens te zijn?").
-display(rs_mens, s32, "hoe is het dan, om een mens te zijn?", always).
+display(rs_mens, s32, "Hoe is het dan, om een mens te zijn?", always).
 next(rs_mens, s32, "success", s33).
 next(rs_mens, s32, "fail", s33fail).
 
@@ -547,8 +548,8 @@ next(rs_plek, s3, "true", s4).
 
 move(rs_plek, s4, question).
 moveConfig(rs_plek, s4, [type=input, context="zee_bos_bergen_strand", options=['strand', 'bos'], fast=yes, umVariable=rs_3_bos_of_strand, defaultAnswer='strand']).
-text(rs_plek, s4, "Van welke van de twee houd u het meest, het bos, of het strand?").
-display(rs_plek, s4, "Van welke van de twee houd u het meest, het bos, of het strand?", always).
+text(rs_plek, s4, "Van welke van de twee houdt u het meest, het bos, of het strand?").
+display(rs_plek, s4, "Van welke van de twee houdt u het meest, het bos, of het strand?", always).
 next(rs_plek, s4, "strand", s5strand).
 next(rs_plek, s4, "bos", s5bos).
 next(rs_plek, s4, "_others", s5others).
@@ -814,8 +815,8 @@ text(rs_verhaal, s3, "Wat u het leukste vond vroeger.").
 next(rs_verhaal, s3, "true", s4).
 
 move(rs_verhaal, s4, say).
-text(rs_verhaal, s4, "En natuurlijk %rs_kleur%, uw favoriete").
-next(rs_verhaal, s4, "true", s5).
+text(rs_verhaal, s4, "En natuurlijk %rs_kleur%, uw favoriete kleur").
+next(rs_verhaal, s4, "true", s6).
 
 move(rs_verhaal, s5, question).
 moveConfig(rs_verhaal, s5, [type=yesno, context='answer_yesno']).
@@ -956,8 +957,8 @@ next(rs_verhaal, s11vanwijnen, "true", s12vanwijnen).
 
 move(rs_verhaal, s12vanwijnen, question).
 moveConfig(rs_verhaal, s12vanwijnen, [type=yesno, context='answer_yesno']).
-text(rs_verhaal, s12vanwijnen, "Vind u het goed als ik u misschien nog 1 vraag stel?").
-display(rs_verhaal, s12vanwijnen, "Vind u het goed als ik u misschien nog 1 vraag stel?", always).
+text(rs_verhaal, s12vanwijnen, "vindt u het goed als ik u misschien nog 1 vraag stel?").
+display(rs_verhaal, s12vanwijnen, "vindt u het goed als ik u misschien nog 1 vraag stel?", always).
 next(rs_verhaal, s12vanwijnen, "answer_yes", s13vanwijnen).
 next(rs_verhaal, s12vanwijnen, "answer_no", s13vanwijnennee).
 next(rs_verhaal, s12vanwijnen, "answer_dontknow", s13vanwijnen).
@@ -1305,8 +1306,8 @@ next(rs_slot, s7nee, "true", s9).
 
 move(rs_slot, s9, question).
 moveConfig(rs_slot, s9, [type=yesno, context='answer_yesno']).
-text(rs_slot, s9, "Vind u het leuk als ik een keer terug kom?").
-display(rs_slot, s9, "Vind u het leuk als ik een keer terug kom?", always).
+text(rs_slot, s9, "vindt u het leuk als ik een keer terug kom?").
+display(rs_slot, s9, "Vindt u het leuk als ik een keer terug kom?", always).
 next(rs_slot, s9, "answer_yes", s10ja).
 next(rs_slot, s9, "answer_no", s10nee).
 next(rs_slot, s9, "answer_dontknow", s10nee).

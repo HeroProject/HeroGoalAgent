@@ -82,6 +82,7 @@ text(test_beroep, s2fail1, "Dat ging mis.").
 move(test_open, s1, question).
 moveConfig(test_open, s1, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(test_open, s1, "Waarom is een zeeluiaard je lievelingsdier?").
+display(test_open, s1, "Waarom is een zeeluiaard je lievelingsdier?", always).
 next(test_open, s1, 'success', s2).
 next(test_open, s1, 'fail', s2f).
 
