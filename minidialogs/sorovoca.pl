@@ -589,7 +589,7 @@ text(sor_rekenen_4, s10cor, "Ja dat klopt helemaal!").
 display(sor_rekenen_4,  s10cor, '', always).
 
 move(sor_rekenen_4, s10incor, say).
-text(sor_rekenen_4, s10incor, "We zijn er nog niet helemaal. Weet je wat? We gaan eerst verder met een andere som.").
+text(sor_rekenen_4, s10incor, "We zijn er nog niet helemaal.").
 display(sor_rekenen_4,  s10incor, '', always).
 
 move(sor_rekenen_4, s10f, say).

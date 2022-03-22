@@ -7,7 +7,7 @@
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
-sessionDesign(robotstories_test, [general_wakeup_pepper, rs_slot, general_rest_pepper]).
+sessionDesign(robotstories_test, [general_wakeup_pepper, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%

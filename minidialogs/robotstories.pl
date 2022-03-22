@@ -166,7 +166,7 @@ text(rs_intro, s25, "Mo").
 next(rs_intro, s25, "true", s26).
 
 move(rs_intro, s26, say).
-moveConfig(rs_intro, s26, [waitTimer=3000]).
+moveConfig(rs_intro, s26, [waitTimer=5000]).
 text(rs_intro, s26, "Wat is uw naam?").
 display(rs_intro, s26, "Wat is uw naam?", always).
 next(rs_intro, s26, "true", s27).
@@ -508,8 +508,8 @@ text(rs_mens, s38, "En ik. Een robot expert").
 next(rs_mens, s38, "true", s39).
 
 move(rs_mens, s39, question).
-moveConfig(rs_mens, s39, [type=yesno, context='answer_yesno']).
-text(rs_mens, s39, "Wilt u nog verder met mij praten?").
+moveConfig(rs_mens, s39, [type=yesno, inputModality=[tablet=1]]).
+text(rs_mens, s39, "Mijn begeleider heeft nog een vraag.").
 display(rs_mens, s39, "Wilt u nog verder met mij praten?", always).
 next(rs_mens, s39, "answer_yes", s40ja).
 next(rs_mens, s39, "answer_no", s40nee).
@@ -849,7 +849,7 @@ next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['mozer']]],
 next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['roos']]], s11roos).
 next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['van wijnen']]], s11vanwijnen).
 next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['van den heuvel']]], s11vdheuvel).
-next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['linders']]], s11linders).
+next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['ellie']]], s11linders).
 next(rs_verhaal, s10, [[umVariable=first_name, filter=green, values=['_any']]], s11generiek).
 
 %%% Faasen %%%
