@@ -6,34 +6,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(robotstories_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(koelkast). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
-userId('4').
+userId('999').
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "roos"). % %fist_name% can be used in text.
-localVariable(location, "de Bijnkers, hoek").
-localVariable(location_tablet, "de Bijnkershoek").
-%localVariable(location, "de Wilgen, hof").
-
-% Volgorde:
-% leo
-% faasen
-% ellie
-% roos 
-
-% Namen
-%'faasen'
-%'mozer'
-%'roos'
-%'van wijnen'
-%'van den heuvel'
-%'linders'
-
+localVariable(first_name, "Romera"). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
-useMemory(true). % condition
-continueSession(true).
+useMemory(false). % condition
+continueSession(false).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT VALUES		    %%%
@@ -48,8 +30,8 @@ tabletUse(repair). %can be repair, explicit, or always
 
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
 
-%keyValue(default, default, inputModality, [speech=2, feet=2]).
-keyValue(default, default, inputModality, [speech=2, tablet=1]).
+keyValue(default, default, inputModality, [speech=2, feet=2]).
+%keyValue(default, default, inputModality, [speech=2, tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(_, _, additionalAttempt, true).
 % Default speech speed (value between 1-100)

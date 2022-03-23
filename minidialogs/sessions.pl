@@ -6,14 +6,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
-sessionDesign(robotstories_test, [general_wakeup_pepper, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
+sessionDesign(koelkast_1, [general_wakeup, koelkast, general_rest]).
+sessionDesign(graafmachine_1, [general_wakeup, graafmachine, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesign(robotstories, [robotstories_1]).
-multiSessionDesign(robotstories_test, [robotstories_test]).
+multiSessionDesign(koelkast, [koelkast_1]).
+multiSessionDesign(graafmachine, [graafmachine_1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test Suite			                           %%%
