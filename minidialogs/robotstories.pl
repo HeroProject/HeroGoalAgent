@@ -81,7 +81,7 @@ text(rs_intro, s10, "Als u iets zegt, dan probeer ik dat altijd zo goed mogelijk
 next(rs_intro, s10, "true", s11).
 
 move(rs_intro, s11, question).
-moveConfig(rs_intro, s11, [type=input, context='color', fast=yes, options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], inputModality=[speech=2], umVariable=rs_kleur]).
+moveConfig(rs_intro, s11, [type=input, context='color', options=['rood', 'geel', 'blauw', 'paars', 'oranje', 'groen'], inputModality=[speech=2], umVariable=rs_kleur]).
 text(rs_intro, s11, "Wat is uw lievelingskleur?").
 display(rs_intro, s11, "Wat is uw lievelingskleur?", always).
 next(rs_intro, s11, 'success', s12).
@@ -192,7 +192,7 @@ text(rs_intro, s31, "Ik weet dus niet of u").
 next(rs_intro, s31, "true", s32).
 
 move(rs_intro, s32, question).
-moveConfig(rs_intro, s32, [type=input, context="gender", options=['meneer', 'mevrouw'], fast=yes, umVariable=rs_3_gender, defaultAnswer='']).
+moveConfig(rs_intro, s32, [type=input, context="gender", options=['meneer', 'mevrouw'],  umVariable=rs_3_gender, defaultAnswer='']).
 text(rs_intro, s32, "Bent u een meneer of mevrouw?").
 display(rs_intro, s32, "Ben u een meneer of mevrouw?", always).
 next(rs_intro, s32, "success", s33).
@@ -547,7 +547,7 @@ text(rs_plek, s3, "het bos, en het strand.").
 next(rs_plek, s3, "true", s4).
 
 move(rs_plek, s4, question).
-moveConfig(rs_plek, s4, [type=input, context="zee_bos_bergen_strand", options=['strand', 'bos'], fast=yes, umVariable=rs_3_bos_of_strand, defaultAnswer='strand']).
+moveConfig(rs_plek, s4, [type=input, context="zee_bos_bergen_strand", options=['strand', 'bos'], umVariable=rs_3_bos_of_strand, defaultAnswer='strand']).
 text(rs_plek, s4, "Van welke van de twee houdt u het meest, het bos, of het strand?").
 display(rs_plek, s4, "Van welke van de twee houdt u het meest, het bos, of het strand?", always).
 next(rs_plek, s4, "strand", s5strand).
@@ -744,7 +744,7 @@ next(rs_plek, s14dbos, "true", s14dbosb).
 
 move(rs_plek, s14dbosb, say).
 moveConfig(rs_plek, s14dbosb, [nextTablet='Klaar']).
-next(rs_plek, s14dbosb, "true", s15).
+next(rs_plek, s14dbosb, "true", s15bos).
 
 move(rs_plek, s14dneebos, say).
 text(rs_plek, s14dneebos, "Dat begrijp ik, misschien stinkt het ook wel.").
@@ -931,7 +931,7 @@ next(rs_verhaal, s15roos, "answer_dontknow", s16roosnee).
 next(rs_verhaal, s15roos, "fail", s16roosnee).
 
 move(rs_verhaal, s16roosja, question).
-moveConfig(rs_verhaal, s16roosja, [type=input, context='animals', fast=yes, options=['hond', 'kat', 'parkiet', 'konijn'], umVariable=rs_roos_dier]).
+moveConfig(rs_verhaal, s16roosja, [type=input, context='animals', options=['hond', 'kat', 'parkiet', 'konijn'], umVariable=rs_roos_dier]).
 text(rs_verhaal, s16roosja, "Wat voor huisdier heeft u?").
 display(rs_verhaal, s16roosja, "Wat voor huisdier heeft u?", always).
 next(rs_verhaal, s16roosja, 'success', s17roosja).

@@ -51,7 +51,7 @@ enableBreathing(general_wakeup_pepper, s3).
 %%% Rest	    		                           %%%
 move(general_rest_pepper, s1, say).
 text(general_rest_pepper, s1, "Ik ga nu weer rusten.").
-disableBreathing(general_rest_pepper, s1).
+%disableBreathing(general_rest_pepper, s1).
 display(general_rest_pepper, s1, '', always).
 next(general_rest_pepper, s1, "true", s2).
 

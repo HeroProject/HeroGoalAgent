@@ -6,21 +6,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(robotstories_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(robotstories). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
-userId('4').
+userId('7').
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "roos"). % %fist_name% can be used in text.
-localVariable(location, "de Bijnkers, hoek").
-localVariable(location_tablet, "de Bijnkershoek").
-%localVariable(location, "de Wilgen, hof").
+localVariable(first_name, "van den heuvel"). % %fist_name% can be used in text.
+localVariable(location, "de Wilgen, hof").
+localVariable(location_tablet, "de Wilgenhof").
+
+%localVariable(location, "de Bijnkers, hoek").
+%localVariable(location_tablet, "de Bijnkershoek").
 
 % Volgorde:
-% leo
-% faasen
-% ellie
-% roos 
+
 
 % Namen
 %'faasen'
