@@ -156,7 +156,7 @@ module agent_events {
 			% If a user does not respond, listening is already finished. Delete its waiting flag.
 			if true then delete(waitingForDetection).
 			
-			if bel(keyValue(Minidialog, Move, additionalAttempt, true), currentAttempt(1)) then insert(additionalAttempt(Minidialog, Move)).
+			if bel(getAdditionalAttempt(Minidialog, Move), currentAttempt(1)) then insert(additionalAttempt(Minidialog, Move)).
 			
 			% If the question is open-endend no response can be processed, for any other question a repair attempt is appropriate.
 			if not(bel(keyValue(Minidialog, Move, type, openend))) then repair(Minidialog,Move).

@@ -225,6 +225,11 @@ getMaxAnswerTime(Minidialog, Move, Modality, Type, Attempt, MaxAnswerTime) :- At
 								keyValue(default, default, maxAnswerTime, Times), member((Key=MaxAnswerTime), Times), !).
 								  
 getModalitySwitchResponse(Minidialog, Move, ToModality, Response) :- keyValue(Minidialog, Move, modalitySwitchResponse, Responses), member((ToModality=Response), Responses), !.
+getModalitySwitchResponse(Minidialog, Move, ToModality, Response) :- not(keyValue(Minidialog, Move, modalitySwitchResponse, _)), keyValue(default, default, modalitySwitchResponse, Responses), 
+								     member((ToModality=Response), Responses), !.
+
+getAdditionalAttempt(Minidialog, Move) :- keyValue(Minidialog, Move, additionalAttempt, true).
+getAdditionalAttempt(Minidialog, Move) :- not(keyValue(Minidialog, Move, additionalAttempt, _)), keyValue(default, default, additionalAttempt, true).
 
 % Pop first element out of list.
 pop([H | Minidialog], H, Minidialog).
