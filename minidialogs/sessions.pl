@@ -6,14 +6,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
-sessionDesign(robotstories_test, [general_wakeup_pepper, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
+
+sessionDesign(sorocova_pilot_1, [general_wakeup, sor_intro, sor_tutorial, sor_kletsen_dier, sor_kletsen_lievelingseten, sor_rekenen_1, sor_rekenen_2, sor_rekenen_3, sor_rekenen_4, sor_afronding, general_rest]).
+sessionDesign(sorocova_pilot_2, [general_wakeup, sor_ses2_intro, sor_test_artiesten, sor_test_buitenspelen, sor_test_pokemon, sor_ses2_afscheid, general_rest]).
+
+sessionDesign(sorocova_test_1, [general_wakeup, sor_kletsen_lievelingseten, sor_rekenen_3, sor_rekenen_4, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesign(robotstories, [robotstories_1]).
-multiSessionDesign(robotstories_test, [robotstories_test]).
+
+multiSessionDesign(sorocova_pilot, [sorocova_pilot_1, sorocova_pilot_2]).
+
+multiSessionDesign(sorocova_test, [sorocova_test_1]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test Suite			                           %%%
@@ -22,7 +27,7 @@ multiSessionDesign(robotstories_test, [robotstories_test]).
 %%%%%%%%%%%%%% Session Design %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_color2, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 sessionDesign(testing_short_pepper, [general_wakeup_pepper, test_color, general_rest_pepper]).
 
@@ -40,4 +45,3 @@ sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]
 multiSessionDesign(test_short, [testing_short]).
 multiSessionDesign(test_short_pepper, [testing_short_pepper]).
 multiSessionDesign(test_multi_session, [test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-
