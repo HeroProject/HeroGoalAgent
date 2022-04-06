@@ -287,7 +287,18 @@ delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(Minid
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-math_generate_left_right(Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
+math_generate_left_right(0, Left, Right, Answer) :- random_member(Left, [2, 5, 10]), random(2,11, Right), Answer is Left*Right.
+math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
+math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), Right is R1 * 10, Answer is Left*Right.
+math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right.
+math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,11, R1), Right is R1 * 10, Answer is Left*Right.
+math_generate_left_right(5, Left, Right, Answer) :- random(2,11, Left), random(11,20, Right), Answer is Left*Right.
+math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right.
+math_generate_left_right(7, Left, Right, Answer) :- random(2,11, Left), random(11,100, Right), Answer is Left*Right.
+math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(11,100, R1), random_member(Factor, [10, 100]), Right is R1 * Factor, Answer is Left*Right.
+math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right.
+math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right.
+math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

@@ -10,7 +10,7 @@
 sessionDesign(sorocova_pilot_1, [general_wakeup, sor_intro, sor_tutorial, sor_kletsen_dier, sor_kletsen_lievelingseten, sor_rekenen_1, sor_rekenen_2, sor_rekenen_3, sor_rekenen_4, sor_afronding, general_rest]).
 sessionDesign(sorocova_pilot_2, [general_wakeup, sor_ses2_intro, sor_test_artiesten, sor_test_buitenspelen, sor_test_pokemon, sor_ses2_afscheid, general_rest]).
 
-sessionDesign(sorocova_test_1, [general_wakeup, sor_kletsen_lievelingseten, sor_rekenen_3, sor_rekenen_4, general_rest]).
+sessionDesign(sorocova_test_1, [general_wakeup, sor_test_full, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
@@ -27,7 +27,7 @@ multiSessionDesign(sorocova_test, [sorocova_test_1]).
 %%%%%%%%%%%%%% Session Design %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functionalities
 sessionDesign(testing_complete, [general_wakeup, test_chocolate, test_color, test_color2, test_sound, test_sound2, test_animation, test_leds, test_leds_anim, test_posture, test_motion, test_motion_file, general_rest]).
-sessionDesign(testing_short, [general_wakeup, test_color2, general_rest]).
+sessionDesign(testing_short, [general_wakeup, test_color, general_rest]).
 sessionDesign(testing_stop_led, [general_wakeup, test_stop_led, general_rest]).
 sessionDesign(testing_short_pepper, [general_wakeup_pepper, test_color, general_rest_pepper]).
 

@@ -6,9 +6,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(robotstories_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
+mathLevel(0).
 
 %%% Local Variables 		    %%%
 localVariable(first_name, "Mike"). % %fist_name% can be used in text.

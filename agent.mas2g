@@ -1,7 +1,7 @@
 use '..\..\clients\sic-eis-connector.jar' as environment with
 		server='localhost',
 		flowkey='util/dialogflowagent_sorocova.json',
-		flowagent='mikeagent-dsvpjs',
+		flowagent='sorocova-spap',
 		flowlang='nl-NL'.
 		
 define agent_core as agent {
