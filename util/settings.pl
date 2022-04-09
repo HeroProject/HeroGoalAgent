@@ -6,10 +6,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_pilot). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
-mathLevel(0).
+startMathLevel(0).
 
 %%% Local Variables 		    %%%
 localVariable(first_name, "Mike"). % %fist_name% can be used in text.
@@ -46,7 +46,9 @@ keyValue(default, default, maxAnswerTime, [	feet=3000,
 						speechinputfirst=5000, 
 						speechinputnoninitial=3500,
 						speechquizfirst=5000,
-						speechquiznoninitial=3500]).					 
+						speechquiznoninitial=3500,
+						speechmathfirst=5000,
+						speechmathnoninitial=3500]).					 
 
 % Default responses of robot to an input modality switch.
 keyValue(default, default, modalitySwitchResponse, [feet='Sorry, dat ging even mis. Je kunt nu mijn voeten gebruiken om je antwoord door te geven.',

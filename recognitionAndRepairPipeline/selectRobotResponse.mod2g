@@ -51,6 +51,10 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 					%for quiz questions
 					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
 						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					
+					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					
 					%for open questions
 					if bel(Type=openend)
 						then insert(nextCondition('success')).

@@ -404,7 +404,7 @@ display(sor_rekenen_1, s7, "%math_left% x %math_right%", always).
 next(sor_rekenen_1, s7, "true", s8).
 
 move(sor_rekenen_1, s8, say).
-text(sor_rekenen_1, s8, "Druk op mijn teen als je het antwoord weet.").
+text(sor_rekenen_1, s8, "Druk op mijn groene teen als je het antwoord weet.").
 moveConfig(sor_rekenen_1, s8, [eventListener=['true'='RightBumperPressed', 'help'='LeftBumperPressed'], goTimer=120000]).
 display(sor_rekenen_1, s8, "%math_left% x %math_right%", always).
 leds(sor_rekenen_1, s8, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
@@ -413,7 +413,7 @@ next(sor_rekenen_1, s8, "help", s10f).
 next(sor_rekenen_1, s8, "timer", s10f).
 
 move(sor_rekenen_1, s9, question).
-moveConfig(sor_rekenen_1, s9, [type=quiz, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
+moveConfig(sor_rekenen_1, s9, [type=math, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
 text(sor_rekenen_1, s9, "Wat is %math_left% keer %math_right%?").
 display(sor_rekenen_1, s9, "%math_left% x %math_right%", always).
 leds(sor_rekenen_1, s9, reset).

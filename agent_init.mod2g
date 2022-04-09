@@ -9,7 +9,8 @@ module agent_init {
 	if true then insert(waitingForInit,
 						start, nextCondition('true'),
 						posture('Unknown'), batteryCharge(100),
-						availableChitchats([])).
+						availableChitchats([]),
+						mathCorrect(0)).
 	
 	% Initalize pause button
 	if bel(pauseButton(PB)) then insert(waitForPause(PB)).

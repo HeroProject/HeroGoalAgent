@@ -32,8 +32,9 @@
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForTablet/1, waitingForDelay/0,
 	waitingForTimer/0,
-	waitingForInit/0,
-	eventListener/2.
+	waitingForInit/0, waitingForAfterMemoryInit/0,
+	eventListener/2,
+	mathCorrect/1.
 
 :- dynamic expCondition/1.
 

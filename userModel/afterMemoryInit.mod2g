@@ -1,0 +1,13 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../agent_actions' as actionspec.
+
+
+module afterMemoryInit {
+	
+	% If mathLevel is set then insert the startMathLevel.
+	if bel(userId(UserId), not(getUserModelValue(mathLevel, _)), startMathLevel(Level), 
+			userModel(UserModel), updateUserModel(mathLevel, Level, UserModel, NewUserModel)) 
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, mathLevel, Level).
+	
+}

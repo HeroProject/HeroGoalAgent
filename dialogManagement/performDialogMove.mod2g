@@ -214,7 +214,7 @@ module performDialogMove(Minidialog, Move) {
 	%%					Math						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	if bel(math_generate(Minidialog, Move), mathLevel(Level), math_generate_left_right(Level, Left, Right, Answer), userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
+	if bel(math_generate(Minidialog, Move), getUserModelValue(mathLevel, Level), math_generate_left_right(Level, Left, Right, Answer), userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
 		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

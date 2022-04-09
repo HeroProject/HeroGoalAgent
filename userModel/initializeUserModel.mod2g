@@ -15,11 +15,14 @@ module initializeUserModel {
 		}
 	
 	% Synchronize with remote user model and history
-	if bel(useMemory(true)) then {
-		if bel(userId(UserId), sessionId(SessionId)) then setSession(UserId, SessionId).
-		if bel(continueSession(true), userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
-		if bel(continueSession(false), userId(UserId), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+	if bel(useMemory(true), userId(UserId)) then {
+		if bel(sessionId(SessionId)) then setSession(UserId, SessionId).
+		if bel(continueSession(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
+		if bel(continueSession(false), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+		if bel(not(getUserModelValue(mathLevel, _))) then getInteractantData(UserId, mathLevel).
 	}
+	
+	
 	
 	
 	if true then delete(waitingForInit) + insert(waitingForSession).

@@ -28,7 +28,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 						}
 											
 					% quiz questions -> checks whether the answer is correct or not.				
-					if bel(Type=quiz, length(Params, 1), member((_=AnsC), Params)) then 
+					if bel((Type=quiz; Type=math), length(Params, 1), member((_=AnsC), Params)) then 
 					{
 						if bel(AnsC\='', number(AnsC), Ans is integer(AnsC)) then {
 							if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
@@ -74,7 +74,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 							if bel(Type=input, downcase_atom(AnsB, Ans))
 								then insert(answer(Minidialog, Move, Ans, [text=Ans])).
 							
-							if bel(Type=quiz) then {
+							if bel(Type=quiz; Type=math) then {
 								if bel(number(AnsB), Ans is integer(AnsB)) then {
 									if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
 										if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
@@ -112,7 +112,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 					%if bel(Type = sorter) then insert(answer(Minidialog, Move, Intent, [text=Text])).
 					
 					% quiz questions -> checks whether the answer is correct or not.
-					if bel(Type=quiz) then {
+					if bel(Type=quiz; Type=math) then {
 						if bel(number(Intent), Ans is integer(Intent)) then {
 							if bel(keyValue(Minidialog, Move, correctAnswer, CorrectAnswer), CorrectAnswer \= math_answer) then {
 								if bel(member(Ans, CorrectAnswer)) then insert(answer(Minidialog, Move, correct, [entity=Ans, text=Ans])).
