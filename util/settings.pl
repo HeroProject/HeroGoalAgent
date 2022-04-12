@@ -6,12 +6,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(robotstories_test). % see minidialogs/session.pl for available multi-session designs
-sessionId(1).
+multiSessionDesignId(zoe). % see minidialogs/session.pl for available multi-session designs
+sessionId(3).
 userId('999').
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "Mike"). % %fist_name% can be used in text.
+localVariable(first_name, "Zoey"). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
 useMemory(true). % condition
@@ -23,7 +23,7 @@ continueSession(true).
 %%% ROBOT defaults		    %%%
 pauseButton('MiddleTactilTouched').
 basePosture('Stand').
-tabletUse(repair). %can be repair, explicit, or always
+tabletUse(always). %can be repair, explicit, or always
 
 %%% MOVECONFIG defaults		    %%% 
 % override config param for specific move by using key-label in key-value list associated with that move.
@@ -31,7 +31,8 @@ tabletUse(repair). %can be repair, explicit, or always
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
 
 %keyValue(default, default, inputModality, [speech=2, feet=2]).
-keyValue(default, default, inputModality, [speech=2, tablet=1]).
+keyValue(default, default, inputModality, [tablet=1]).
+%keyValue(default, default, inputModality, [speech=2, tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(default, default, additionalAttempt, true).
 % Default speech speed (value between 1-100)

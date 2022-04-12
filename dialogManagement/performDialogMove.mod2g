@@ -119,8 +119,8 @@ module performDialogMove(Minidialog, Move) {
 		}
 	
 	% Save result of audio co-creation
-	%if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
-			%delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
+	if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
+			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 	
 	if bel(save_sound(Minidialog, Move, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then

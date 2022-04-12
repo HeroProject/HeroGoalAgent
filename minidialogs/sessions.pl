@@ -6,14 +6,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-sessionDesign(robotstories_1, [general_wakeup_pepper, rs_intro, rs_herinneringen, rs_mens, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
-sessionDesign(robotstories_test, [general_wakeup_pepper, rs_plek, rs_verhaal, rs_slot, general_rest_pepper]).
+
+sessionDesign(zoe_kennismaking, [general_wakeup, zoe_begroeting]).
+sessionDesign(zoe_handshake, [general_wakeup, zoe_handshake_doen]).
+sessionDesign(zoe_gesprekje, [general_wakeup, lievelingsdier, lievelingseten]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Multi-session design	                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesign(robotstories, [robotstories_1]).
-multiSessionDesign(robotstories_test, [robotstories_test]).
+
+multiSessionDesign(zoe, [zoe_kennismaking, zoe_handshake, zoe_gesprekje]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test Suite			                           %%%
