@@ -765,51 +765,9 @@ text(sor_ses2_afscheid,  s6, "Doei doei.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 move(sor_test_full, s1, say).
-text(sor_test_full, s1, "Een robotvriend van mij is stalhulp.").
+text(sor_test_full, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% paarden.").
 next(sor_test_full, s1, "true", s2).
 
 move(sor_test_full, s2, say).
-text(sor_test_full, s2, "Hij moet de paarden tellen.").
-math_generate(sor_test_full, s2).
-next(sor_test_full, s2, "true", s3).
-
-move(sor_test_full, s3, say).
-text(sor_test_full, s3, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% paarden.").
-next(sor_test_full, s3, "true", s4).
-
-move(sor_test_full, s4, say).
-text(sor_test_full, s4, "Hoeveel paarden zijn er in totaal?").
-next(sor_test_full, s4, "true", s5).
-
-move(sor_test_full, s5, say).
-text(sor_test_full, s5, "We moeten dus uitrekenen hoeveel %math_left% keer %math_right% is.").
-display(sor_test_full, s5, "%math_left% x %math_right%", always).
-next(sor_test_full, s5, "true", s6).
-
-move(sor_test_full, s6, say).
-text(sor_test_full, s6, "Druk op mijn teen als je het antwoord weet.").
-moveConfig(sor_test_full, s6, [eventListener=['true'='RightBumperPressed', 'fail'='LeftBumperPressed'], goTimer=120000]).
-display(sor_test_full, s6, "%math_left% x %math_right%", always).
-leds(sor_test_full, s6, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
-next(sor_test_full, s6, "true", s7).
-next(sor_test_full, s6, "fail", s8f).
-next(sor_test_full, s6, "timer", s8f).
-
-move(sor_test_full, s7, question).
-moveConfig(sor_test_full, s7, [type=quiz, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
-text(sor_test_full, s7, "Wat is %math_left% keer %math_right%?").
-display(sor_test_full, s7, "%math_left% x %math_right%", always).
-leds(sor_test_full, s7, reset).
-next(sor_test_full, s7, 'correct', s8cor).
-next(sor_test_full, s7, 'incorrect', s8incor).
-next(sor_test_full, s7, 'fail', s8f).
-
-move(sor_test_full, s8cor, say).
-text(sor_test_full, s8cor, "Ja klopt!").
-
-move(sor_test_full, s8incor, say).
-text(sor_test_full, s8incor, "Helaas. Het moest %math_answer% zijn.").
-
-move(sor_test_full, s8f, say).
-text(sor_test_full, s8f, "Zal ik het maar verklappen? Het is %math_answer%.").
-leds(sor_test_full, s8f, reset).
+text(sor_test_full, s2, "Hoeveel paarden zijn er in totaal?").
+insert_minidialog(sor_test_full, s2, math_dialog).

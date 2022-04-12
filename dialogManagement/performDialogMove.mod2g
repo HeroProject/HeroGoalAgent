@@ -13,11 +13,13 @@ module performDialogMove(Minidialog, Move) {
 	%%				DIALOG ATTRIBUTES				%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Say what needs to be said.
-	if bel(text(Minidialog, Move, Text), getSpeechSpeed(Minidialog, Move, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) then 
-	{
-		if bel(keyValue(Minidialog, Move, noAnimation, "true")) then say(TextProcessed).
-		if not(bel(keyValue(Minidialog, Move, noAnimation, "true"))) then sayAnimated(TextProcessed).
-	}
+	if bel((text(Minidialog, Move, Text); text_generator(Minidialog, Move, Source), generate_text_from_source(Source, Text)),
+			getSpeechSpeed(Minidialog, Move, Speed), replaceVar(Text, Text2), addSpeechSpeed(Text2, Speed, TextProcessed)) 
+		then 
+		{
+			if bel(keyValue(Minidialog, Move, noAnimation, "true")) then say(TextProcessed).
+			if not(bel(keyValue(Minidialog, Move, noAnimation, "true"))) then sayAnimated(TextProcessed).
+		}
 
 	% Led there be light.
 	if bel(leds(Minidialog, Move, direct, Leds, Colors), valueListFromKeyList(Colors, ColorsR)) then setLedColor(Leds, ColorsR).
@@ -214,8 +216,36 @@ module performDialogMove(Minidialog, Move) {
 	%%					Math						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
+	% Math sum generation
 	if bel(math_generate(Minidialog, Move), getUserModelValue(mathLevel, Level), math_generate_left_right(Level, Left, Right, Answer), userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
 		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
+	
+	% Math level adaptation
+	if bel(math_evaluate(Minidialog, Move, Key), getUserModelValue(Key, Result), mathCorrect(Correct), mathCorrectThreshold(Threshold),
+		userModel(UserModel), getUserModelValue(mathLevel, Level), userId(UserId)) then
+	{
+		% After a correct answer increase the level if the number of correct answers for that level exceeds the threshold and a higher level exists.
+		if bel(Result=correct, Correct >= Threshold, mathMaxLevel(MaxLevel), Level < MaxLevel, NewLevel is Level + 1, 
+				updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
+			then delete(userModel(UserModel), mathCorrect(Correct)) + insert(userModel(UpdatedUserModel), mathCorrect(0)) + setInteractantData(UserId, mathLevel, NewLevel).
+		% After a correct answer and the level threshold is not reached up the answers correct counter.
+		if bel(Result=correct, Correct < Threshold, NewCorrect is Correct + 1)
+			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
+		% After an incorrect answer and there were prevously correct answers for this level (Correct > 0) then lower the correct counter by 1.
+		if bel(Result=incorrect, Correct > 0, NewCorrect is Correct - 1)
+			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
+		% After an incorrect answer lower the level, if not at lowest level, by 1 if there were no correct answers previously (Correct = 0).
+		if bel(Result=incorrect, Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
+			then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).							
+	}
+	
+	if bel(math_support(Minidialog, Move)) then 
+	{
+		% Todo: this needs to be based on the actual sum
+		if bel(supportCondition(1), session(Session)) then delete(session(Session)) + insert(session([math_help_double | Session])).
+		
+		if bel(supportCondition(0), session(Session)) then delete(session(Session)) + insert(session([math_no_help | Session])).
+	}
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%

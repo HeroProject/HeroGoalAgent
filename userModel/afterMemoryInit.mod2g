@@ -2,12 +2,19 @@ use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../agent_actions' as actionspec.
 
+order=linearall.
 
 module afterMemoryInit {
 	
 	% If mathLevel is set then insert the startMathLevel.
-	if bel(userId(UserId), not(getUserModelValue(mathLevel, _)), startMathLevel(Level), 
+	if bel(userId(UserId), (not(getUserModelValue(mathLevel, _)); resetMathLevel(true)), startMathLevel(Level), 
 			userModel(UserModel), updateUserModel(mathLevel, Level, UserModel, NewUserModel)) 
 		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, mathLevel, Level).
 	
+	% Generate initial sum
+	if bel(getUserModelValue(mathLevel, Level), math_generate_left_right(Level, Left, Right, Answer),
+		userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
+	
+	if bel(waitingForAfterMemoryInit) then delete(waitingForAfterMemoryInit).
 }

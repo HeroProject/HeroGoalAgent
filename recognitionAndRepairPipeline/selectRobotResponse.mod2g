@@ -49,11 +49,17 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 					}
 					
 					%for quiz questions
-					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					if bel(Type=quiz; Type=math) then
+					{
+						% Store the result (correct or incorrect) of the quiz or math question	
+						if bel(keyValue(Minidialog, Move, umResult, ResultKey), userModel(UserModel), updateUserModel(ResultKey, Ans, UserModel, UpdatedUserModel))
+							then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)).
+							
+						% Set the nextCondition flag to either correct or incorrect and save the interactor's answer.
+						if bel(userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
+							then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
+					} 
 					
-					if bel(Type=quiz, userModel(UserModel), member((entity=Entity), Data), updateUserModel(Key, Entity, UserModel, UpdatedUserModel))
-						then delete(userModel(UserModel)) + insert(nextCondition(Ans), userModel(UpdatedUserModel)) + setInteractantData(UserId, Key, Entity).
 					
 					%for open questions
 					if bel(Type=openend)

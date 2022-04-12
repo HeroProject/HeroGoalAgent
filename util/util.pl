@@ -284,22 +284,27 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
 
+% Text generation
+generate_text_from_source(math_praise, SelectedText) :- findall(Text, math_praise(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_incorrect_no_help, SelectedText) :- findall(Text, math_incorrect_no_help(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-math_generate_left_right(0, Left, Right, Answer) :- random_member(Left, [2, 5, 10]), random(2,11, Right), Answer is Left*Right.
-math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
-math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), Right is R1 * 10, Answer is Left*Right.
-math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right.
-math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,11, R1), Right is R1 * 10, Answer is Left*Right.
-math_generate_left_right(5, Left, Right, Answer) :- random(2,11, Left), random(11,20, Right), Answer is Left*Right.
-math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right.
-math_generate_left_right(7, Left, Right, Answer) :- random(2,11, Left), random(11,100, Right), Answer is Left*Right.
-math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(11,100, R1), random_member(Factor, [10, 100]), Right is R1 * Factor, Answer is Left*Right.
-math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right.
-math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right.
-math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right.
+mathMaxLevel(11).
+math_generate_left_right(0, Left, Right, Answer) :- random_member(Left, [2, 5, 10]), random(2,11, Right), Answer is Left*Right, !.
+math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right, !.
+math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,11, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(5, Left, Right, Answer) :- random(2,11, Left), random(11,20, Right), Answer is Left*Right, !.
+math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(7, Left, Right, Answer) :- random(2,11, Left), random(11,100, Right), Answer is Left*Right, !.
+math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(11,100, R1), random_member(Factor, [10, 100]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right, !.
+math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right, !.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%
