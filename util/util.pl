@@ -286,9 +286,13 @@ delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(Minid
 
 % Text generation
 generate_text_from_source(math_praise, SelectedText) :- findall(Text, math_praise(Text), Texts), random_select(SelectedText, Texts, _).
-generate_text_from_source(math_incorrect_no_help, SelectedText) :- findall(Text, math_incorrect_no_help(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_incorrect(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
 
+
+% hack
+incorrectHack(incorrect).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -9,13 +9,12 @@
 multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
-%personalizationCondition(1).
 supportCondition(1).
 
 % Math setting
 startMathLevel(4).
-resetMathLevel(false).
-mathCorrectThreshold(2).
+resetMathLevel(true).
+mathCorrectThreshold(0).
 
 %%% Local Variables 		    %%%
 localVariable(first_name, "Mike"). % %fist_name% can be used in text.

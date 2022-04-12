@@ -14,12 +14,20 @@ next(math_dialog, s1, "true", s2).
 
 move(math_dialog, s2, say).
 text(math_dialog, s2, "Druk op mijn teen onder het groene lampje als je het antwoord weet.").
-moveConfig(math_dialog, s2, [eventListener=['true'='RightBumperPressed', 'fail'='LeftBumperPressed'], goTimer=120000]).
+moveConfig(math_dialog, s2, [eventListener=['true'='RightBumperPressed', 'noanswer'='LeftBumperPressed'], goTimer=120000]).
 display(math_dialog, s2, "%math_left% x %math_right%", always).
 leds(math_dialog, s2, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
 next(math_dialog, s2, "true", s3).
-next(math_dialog, s2, "fail", s4f).
-next(math_dialog, s2, "timer", s4f).
+next(math_dialog, s2, "noanswer", s3f).
+next(math_dialog, s2, "timer", s3f).
+
+move(math_dialog, s3f, say).
+text_generator(math_dialog, s3f, math_no_answer).
+math_evaluate(math_dialog, s3f, noanswer).
+next(math_dialog, s3f, "true", s4f).
+
+move(math_dialog, s4f, say).
+math_support(math_dialog, s4f).
 
 move(math_dialog, s3, question).
 moveConfig(math_dialog, s3, [type=math, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField, 
@@ -49,14 +57,17 @@ next(math_dialog, s6, 'incorrect', s6incor).
 
 move(math_dialog, s6cor, say).
 text_generator(math_dialog, s6cor, math_praise).
-next(math_dialog, s6cor, "true", s7).
+next(math_dialog, s6cor, "true", s7cor).
+
+move(math_dialog, s7cor, say).
+math_generate(math_dialog, s7cor).
 
 move(math_dialog, s6incor, say).
-math_support(math_dialog, s6incor).
-next(math_dialog, s6incor, "true", s7).
+text_generator(math_dialog, s6incor, math_incorrect).
+next(math_dialog, s6incor, "true", s7incor).
 
-move(math_dialog, s7, say).
-math_generate(math_dialog, s7).
+move(math_dialog, s7incor, say).
+math_support(math_dialog, s7incor).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Hulpvragen				                   %%%
@@ -64,7 +75,7 @@ math_generate(math_dialog, s7).
 
 %%% Geen hulp
 move(math_no_help, s1, say).
-text_generator(math_no_help, s1, math_incorrect_no_help).
+text(math_no_help, s1, "Het antwoord is %math_answer%.").
 next(math_no_help, s1, "true", s2).
 
 move(math_no_help, s2, say).
@@ -76,7 +87,7 @@ math_generate(math_no_help, s3).
 
 %%% Verdubbelen
 move(math_help_double, s1, say).
-text(math_help_double, s1, "Laten we stapje voor stapje naar het antwoord toe werken.").
+text(math_help_double, s1, "Laten we samen stapje voor stapje naar het antwoord toe werken.").
 next(math_help_double, s1, "true", s2).
 
 move(math_help_double, s2, say).
@@ -95,10 +106,15 @@ math_praise("Goed zo.").
 math_praise("Correct. Super gedaan").
 math_praise("Helemaal goed. Top").
 
-math_incorrect_no_help("Hey, ik zelf kwam tot een ander antwoord. Namelijk %math_answer%.").
-math_incorrect_no_help("Hey, ik zelf kwam tot een ander antwoord. Namelijk %math_answer%.").
-math_incorrect_no_help("Hey, ik zelf kwam tot een ander antwoord. Namelijk %math_answer%.").
+math_incorrect("Hey, ik zelf kwam tot een ander antwoord.").
+math_incorrect("Ik heb even meegerekend en ik kwam op iets anders uit.").
+math_incorrect("Volgens mij moet het wat anders zijn.").
+
+math_no_answer("Soms kom ik er ook niet uit.").
+math_no_answer("Ik weet het ook niet altijd.").
+math_no_answer("Deze is ook lastig.").
 
 math_move_on("Dat is niet erg. Ik heb nog zat andere vragen. Laten we gewoon verder gaan.").
 math_move_on("Geeft niets. Laten we naar een ander probleem van me kijken.").
 math_move_on("Geen probleem. Overkomt mij ook vaak genoeg. We gaan gewoon verder.").
+

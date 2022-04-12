@@ -221,7 +221,7 @@ module performDialogMove(Minidialog, Move) {
 		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
 	% Math level adaptation
-	if bel(math_evaluate(Minidialog, Move, Key), getUserModelValue(Key, Result), mathCorrect(Correct), mathCorrectThreshold(Threshold),
+	if bel((math_evaluate(Minidialog, Move, Key), Key\=noanswer, getUserModelValue(Key, Result); math_evaluate(Minidialog, Move, Result), Result=noanswer), mathCorrect(Correct), mathCorrectThreshold(Threshold),
 		userModel(UserModel), getUserModelValue(mathLevel, Level), userId(UserId)) then
 	{
 		% After a correct answer increase the level if the number of correct answers for that level exceeds the threshold and a higher level exists.
@@ -232,10 +232,10 @@ module performDialogMove(Minidialog, Move) {
 		if bel(Result=correct, Correct < Threshold, NewCorrect is Correct + 1)
 			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
 		% After an incorrect answer and there were prevously correct answers for this level (Correct > 0) then lower the correct counter by 1.
-		if bel(Result=incorrect, Correct > 0, NewCorrect is Correct - 1)
+		if bel((Result=incorrect; Result=noanswer), Correct > 0, NewCorrect is Correct - 1)
 			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
 		% After an incorrect answer lower the level, if not at lowest level, by 1 if there were no correct answers previously (Correct = 0).
-		if bel(Result=incorrect, Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
+		if bel((Result=incorrect; Result=noanswer), Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
 			then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).							
 	}
 	
