@@ -10,7 +10,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 		then {
 			if bel(currentInputModality(speech))
 				then {
-					if true then delete(waitingForAnswer) + logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=speech, currentAttempt=CurrentAttempt]).
+					if true then delete(waitingForAnswer) + logging('interaction_history', [minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=speech, currentAttempt=CurrentAttempt]).
 									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
 					if bel(Type=yesno, length(Params, 0)) then insert(answer(Minidialog, Move, Intent, [text=Text])).
@@ -64,7 +64,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 			if bel(currentInputModality(feet))
 				then {
 			
-					if true then delete(waitingForAnswer) + canceltimer(Move) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=feet, currentAttempt=CurrentAttempt]).
+					if true then delete(waitingForAnswer) + canceltimer(Move) + setLedColor(['LeftFootLeds', 'RightFootLeds'], ['white', 'white']) + logging('interaction_history', [minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=feet, currentAttempt=CurrentAttempt]).
 					
 					if bel(Type=yesno)
 						then insert(answer(Minidialog, Move, Intent, [text=Intent])).
@@ -101,7 +101,7 @@ module processUserResponse(Minidialog, Move, Intent, Text, Params) {
 			if bel(currentInputModality(tablet))
 				then {
 					if true then delete(waitingForAnswer) 
-						+ logging([minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=tablet, currentAttempt=CurrentAttempt]).
+						+ logging('interaction_history', [minidialog=Minidialog, move=Move, action=userResponse, text=Text, intent=Intent, params=Params, modality=tablet, currentAttempt=CurrentAttempt]).
 									
 					% yesno questions -> answer_yes or answer_no are the expected answers.	
 					if bel(Type = yesno, tablet_yesno(Ans, Intent)) then insert(answer(Minidialog, Move, Ans, [text=Text])).

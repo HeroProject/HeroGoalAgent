@@ -10,6 +10,7 @@
 move(math_dialog, s1, say).
 text(math_dialog, s1, "Dus hoeveel is %math_left% keer %math_right%").
 display(math_dialog, s1, "%math_left% x %math_right%", always).
+math_start_timer(math_dialog, s1).
 next(math_dialog, s1, "true", s2).
 
 move(math_dialog, s2, say).

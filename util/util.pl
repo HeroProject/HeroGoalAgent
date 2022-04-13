@@ -34,7 +34,7 @@
 	waitingForTimer/0,
 	waitingForInit/0, waitingForAfterMemoryInit/0,
 	eventListener/2,
-	mathCorrect/1, activeInteraction/0.
+	mathCorrect/1, activeInteraction/0, mathTime/1.
 
 :- dynamic expCondition/1.
 
@@ -180,7 +180,6 @@ updateUserModelList([Key=Value | T], OldUserModel, NewUserModel) :- updateUserMo
 updateUserModelList([], UserModel, UserModel).
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
-%getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
 

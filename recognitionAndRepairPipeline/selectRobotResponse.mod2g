@@ -16,7 +16,7 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 				then {
 					%The next condition is given the 'fail'  flag.
 					if bel(currentInputModality(CurrentModality), currentAttempt(CurrentAttempt)) 
-						then insert(nextCondition('fail')) + logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+						then insert(nextCondition('fail')) + logging('interaction_history', [minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=failure, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 					
 					%If a default answer is provided for an input question, that is stored userModel key-value list
 					if bel(keyValue(Minidialog, Move, defaultAnswer, DefaultAns), userModel(UserModel), updateUserModel(Key, DefaultAns, UserModel, UpdatedUserModel))
@@ -67,7 +67,7 @@ module selectRobotResponse(Minidialog, Move, Ans, Data) {
 					
 					%Logging
 					if bel(member((text=Text), Data), currentInputModality(CurrentModality), currentAttempt(CurrentAttempt))
-						then logging([minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
+						then logging('interaction_history', [minidialog=Minidialog, move=Move, action=questionFinalResult, questionType=Type, result=Ans, text=Text, finalModality=CurrentModality, finalAttempt=CurrentAttempt]).
 				}
 						
 			% Flag that the answer has been processed.

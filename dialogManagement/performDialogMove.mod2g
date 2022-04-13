@@ -3,6 +3,7 @@ use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../agent_actions' as actionspec.
 use '../util/registerEventListeners.mod2g' as module.
+use '../util/logging' as module.
 
 order=linearall.
 
@@ -230,6 +231,8 @@ module performDialogMove(Minidialog, Move) {
 	if bel((math_evaluate(Minidialog, Move, Key), Key\=noanswer, getUserModelValue(Key, Result); math_evaluate(Minidialog, Move, Result), Result=noanswer), mathCorrect(Correct), mathCorrectThreshold(Threshold),
 		userModel(UserModel), getUserModelValue(mathLevel, Level), userId(UserId)) then
 	{
+		if true then canceltimer(mathTimer).
+		
 		% After a correct answer increase the level if the number of correct answers for that level exceeds the threshold and a higher level exists.
 		if bel(Result=correct, Correct >= Threshold, mathMaxLevel(MaxLevel), Level < MaxLevel, NewLevel is Level + 1, 
 				updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
@@ -242,7 +245,14 @@ module performDialogMove(Minidialog, Move) {
 			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
 		% After an incorrect answer lower the level, if not at lowest level, by 1 if there were no correct answers previously (Correct = 0).
 		if bel((Result=incorrect; Result=noanswer), Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
-			then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).							
+			then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).
+		
+		% Logging after a result
+		if bel(Result\=noanswer, valueListFromKeyList([math_left, math_right, math_answer, math_given_answer], [MathLeft, MathRight, CorrectAnswer, GivenAnswer]), mathTime(Time))
+			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=GivenAnswer, evaluation=Result, time=Time]).
+		
+		if bel(Result=noanswer, valueListFromKeyList([math_left, math_right, math_answer], [MathLeft, MathRight, CorrectAnswer]), mathTime(Time))
+			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=Result, evaluation=Result, time=Time]).			
 	}
 	
 	if bel(math_support(Minidialog, Move)) then 
@@ -252,6 +262,8 @@ module performDialogMove(Minidialog, Move) {
 		
 		if bel(enableSupport(0), session(Session)) then delete(session(Session)) + insert(session([math_no_help | Session])).
 	}
+	
+	if bel(math_start_timer(Minidialog, Move)) then starttimer(mathTimer, 1000, 300000) + logging('math_log', [start=now]).
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%

@@ -72,10 +72,15 @@ module agent_events {
 		then delete(waitingForPosture(Posture)).
 	
 	% Handling timeouts
-	if percept(timer(Move, _)), not(bel(timeout(Move)))
+	if percept(timer(Move, _), Move\=mathTimer), not(bel(timeout(Move)))
 		then insert(timeout(Move)).
 	if bel(timeout(Move)), not(percept(timer(Move, _)))
 		then delete(timeout(Move)).
+	
+	forall percept(timer(mathTimer, Time)) do {
+		if bel(mathTime(OldTime)) then delete(mathTime(OldTime)) + insert(mathTime(Time)).
+		if not(bel(mathTime(_))) then insert(mathTime(Time)).
+	}
 		
 	% Motion recording timeout
 	if bel(timeout(recordMotion)) then stopMotionRecording + wakeUp.
@@ -92,11 +97,15 @@ module agent_events {
 		forall bel(eventListener(Event, Result)) do delete(eventListener(Event, Result), waitingForEvent(Event)).	
 	} 
 	
+
+	
+	
 	% delay timer
 	if bel(timeout(delay)) then delete(waitingForDelay).
 	
+	% max duration timer
 	if bel(timeout(maxInteractionDuration)) then delete(activeInteraction).
-	
+		
 	% Event fail safe TODO: fix this
 	if bel(timeout(eventFailSafe), not(eventListener(_, _))) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).
