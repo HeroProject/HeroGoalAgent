@@ -210,8 +210,14 @@ module performDialogMove(Minidialog, Move) {
     	if bel(session(Session)) then delete(session(Session)) + insert(session([NestedMinidialog | Session])).
 	}
 	
+	forall bel(insert_minidialog_when_active(Minidialog, Move, NestedMinidialog), activeInteraction) do {
+    	if bel(session(Session)) then delete(session(Session)) + insert(session([NestedMinidialog | Session])).
+	}
+	
 	if bel(remove_minidialog(Minidialog, Move, MinidialogsToDelete), session(Session), delete_minidialogs(Session, MinidialogsToDelete, UpdatedSession)) then delete(session(Session)) + insert(session(UpdatedSession)).
 
+	if bel(set_max_duration(Minidialog, Move, Duration)) then insert(activeInteraction) + starttimer(maxInteractionDuration, Duration, Duration).
+	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					Math						%%
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

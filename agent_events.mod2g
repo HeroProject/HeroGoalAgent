@@ -95,6 +95,8 @@ module agent_events {
 	% delay timer
 	if bel(timeout(delay)) then delete(waitingForDelay).
 	
+	if bel(timeout(maxInteractionDuration)) then delete(activeInteraction).
+	
 	% Event fail safe TODO: fix this
 	if bel(timeout(eventFailSafe), not(eventListener(_, _))) then {
 		forall bel(waitingForEvent(E)) do delete(waitingForEvent(E)).

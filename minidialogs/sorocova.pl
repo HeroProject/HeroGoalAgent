@@ -763,11 +763,26 @@ text(sor_ses2_afscheid,  s6, "Doei doei.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Testing				                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+move(sor_test_intro, s1, say).
+text(sor_test_intro,  s1, "Laten we gaan rekenen").
+set_max_duration(sor_test_intro,  s1, 480000). % 8 minutes
 
-move(sor_test_full, s1, say).
-text(sor_test_full, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% paarden.").
-next(sor_test_full, s1, "true", s2).
+minidialog(sor_test_horses, [type=chitchat, theme=math, topic=horses]).
+move(sor_test_horses, s1, say).
+text(sor_test_horses, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% paarden.").
+next(sor_test_horses, s1, "true", s2).
 
-move(sor_test_full, s2, say).
-text(sor_test_full, s2, "Hoeveel paarden zijn er in totaal?").
-insert_minidialog(sor_test_full, s2, math_dialog).
+move(sor_test_horses, s2, say).
+text(sor_test_horses, s2, "Hoeveel paarden zijn er in totaal?").
+insert_minidialog(sor_test_horses, s2, math_next).
+insert_minidialog(sor_test_horses, s2, math_dialog).
+
+minidialog(sor_test_cows, [type=chitchat, theme=math, topic=cows]).
+move(sor_test_cows, s1, say).
+text(sor_test_cows, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% koeien.").
+next(sor_test_cows, s1, "true", s2).
+
+move(sor_test_cows, s2, say).
+text(sor_test_cows, s2, "Hoeveel koeien zijn er in totaal?").
+insert_minidialog(sor_test_cows, s2, math_next).
+insert_minidialog(sor_test_cows, s2, math_dialog).

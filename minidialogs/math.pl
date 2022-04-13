@@ -57,10 +57,6 @@ next(math_dialog, s6, 'incorrect', s6incor).
 
 move(math_dialog, s6cor, say).
 text_generator(math_dialog, s6cor, math_praise).
-next(math_dialog, s6cor, "true", s7cor).
-
-move(math_dialog, s7cor, say).
-math_generate(math_dialog, s7cor).
 
 move(math_dialog, s6incor, say).
 text_generator(math_dialog, s6incor, math_incorrect).
@@ -68,6 +64,14 @@ next(math_dialog, s6incor, "true", s7incor).
 
 move(math_dialog, s7incor, say).
 math_support(math_dialog, s7incor).
+
+%%% Math Next
+move(math_next, s1, say).
+math_generate(math_next, s1).
+next(math_next, s1, "true", s2).
+
+move(math_next, s2, say).
+insert_minidialog_when_active(math_next, s2, [theme=math]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Hulpvragen				                   %%%
@@ -80,10 +84,6 @@ next(math_no_help, s1, "true", s2).
 
 move(math_no_help, s2, say).
 text_generator(math_no_help, s2, math_move_on).
-next(math_no_help, s2, "true", s3).
-
-move(math_no_help, s3, say).
-math_generate(math_no_help, s3).
 
 %%% Verdubbelen
 move(math_help_double, s1, say).
@@ -92,10 +92,6 @@ next(math_help_double, s1, "true", s2).
 
 move(math_help_double, s2, say).
 text(math_help_double, s2, "We doen dat door te verdubbelen.").
-next(math_help_double, s2, "true", s3).
-
-move(math_help_double, s3, say).
-math_generate(math_help_double, s3).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Generic math tutor utterances                          %%%

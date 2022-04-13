@@ -34,7 +34,7 @@
 	waitingForTimer/0,
 	waitingForInit/0, waitingForAfterMemoryInit/0,
 	eventListener/2,
-	mathCorrect/1.
+	mathCorrect/1, activeInteraction/0.
 
 :- dynamic expCondition/1.
 
@@ -290,9 +290,6 @@ generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_in
 generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
 
-
-% hack
-incorrectHack(incorrect).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
