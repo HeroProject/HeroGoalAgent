@@ -763,26 +763,73 @@ text(sor_ses2_afscheid,  s6, "Doei doei.").
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Testing				                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+minidialog(sor_test_intro, [type=functional, function=intro]).
 move(sor_test_intro, s1, say).
-text(sor_test_intro,  s1, "Laten we gaan rekenen").
-set_max_duration(sor_test_intro,  s1, 480000). % 8 minutes
+text(sor_test_intro,  s1, "Laten we kennismaken").
+next(sor_test_intro, s1, "true", s2).
 
-minidialog(sor_test_horses, [type=chitchat, theme=math, topic=horses]).
-move(sor_test_horses, s1, say).
-text(sor_test_horses, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% paarden.").
-next(sor_test_horses, s1, "true", s2).
+move(sor_test_intro, s2, question).
+moveConfig(sor_test_intro, s2, [type=input, context="animals", options=['hond', 'kat', 'koe', 'paard', 'schaap'], fast=yes, umVariable='lievelingsdier', topics=[success=['dieren', '_answer']]]).
+text(sor_test_intro, s2, "Wat is jouw lievelingsdier?").
+next(sor_test_intro, s2, "success", s3).
+next(sor_test_intro, s2, "fail", s3f).
 
-move(sor_test_horses, s2, say).
-text(sor_test_horses, s2, "Hoeveel paarden zijn er in totaal?").
-insert_minidialog(sor_test_horses, s2, math_next).
-insert_minidialog(sor_test_horses, s2, math_dialog).
+move(sor_test_intro, s3, say).
+text(sor_test_intro,  s3, "Wat leuk dat een %lievelingsdier% je lievelingsdier is.").
+next(sor_test_intro, s3, "true", s4).
 
-minidialog(sor_test_cows, [type=chitchat, theme=math, topic=cows]).
-move(sor_test_cows, s1, say).
-text(sor_test_cows, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% koeien.").
-next(sor_test_cows, s1, "true", s2).
+move(sor_test_intro, s3f, say).
+text(sor_test_intro,  s3f, "Oke").
+next(sor_test_intro, s3f, "true", s4).
 
-move(sor_test_cows, s2, say).
-text(sor_test_cows, s2, "Hoeveel koeien zijn er in totaal?").
-insert_minidialog(sor_test_cows, s2, math_next).
-insert_minidialog(sor_test_cows, s2, math_dialog).
+move(sor_test_intro, s4, say).
+text(sor_test_intro,  s4, "Laten we gaan rekenen").
+set_max_duration(sor_test_intro,  s4, 480000). % 8 minutes
+
+minidialog(sor_test_paard, [type=chitchat, theme=math, topic=paard]).
+move(sor_test_paard, s1, continuator).
+next(sor_test_paard, s1, [[umVariable=lievelingsdier, filter=green, values=["paard"]], [personalization=1]], s2perpaard).
+next(sor_test_paard, s1, [[umVariable=lievelingsdier, filter=red, values=["paard"]], [personalization=1]], s2peranders).
+next(sor_test_paard, s1, [[personalization=0]], s2noper).
+next(sor_test_paard, s1, "true", s3).
+
+move(sor_test_paard, s2perpaard, say).
+text(sor_test_paard, s2perpaard, "Weetje wat toevallig is, ik mocht een tijdje jouw lievelingsdieren paarden verzorgen.").
+next(sor_test_paard, s2perpaard, "true", s3).
+
+move(sor_test_paard, s2peranders, say).
+text(sor_test_paard, s2peranders, "Het is geen %lievelingsdier%, maar paarden zijn ook leuk. Ik mocht ze een tijdje verzorgen.").
+next(sor_test_paard, s2peranders, "true", s3).
+
+move(sor_test_paard, s2noper, say).
+text(sor_test_paard, s2noper, "Ik heb een tijdje paarden verzorgd.").
+next(sor_test_paard, s2noper, "true", s3).
+
+move(sor_test_paard, s3, say).
+text(sor_test_paard, s3, "Er waren %math_left% stallen. En in elke stal zaten %math_right% paarden.").
+next(sor_test_paard, s3, "true", s4).
+
+move(sor_test_paard, s4, say).
+text(sor_test_paard, s4, "Hoeveel paarden moest ik in totaal verzorgen?").
+insert_minidialog(sor_test_paard, s4, math_next).
+insert_minidialog(sor_test_paard, s4, math_dialog).
+
+minidialog(sor_test_koe, [type=chitchat, theme=math, topic=koe]).
+move(sor_test_koe, s1, say).
+text(sor_test_koe, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% koeien.").
+next(sor_test_koe, s1, "true", s2).
+
+move(sor_test_koe, s2, say).
+text(sor_test_koe, s2, "Hoeveel koeien zijn er in totaal?").
+insert_minidialog(sor_test_koe, s2, math_next).
+insert_minidialog(sor_test_koe, s2, math_dialog).
+
+minidialog(sor_test_schaap, [type=chitchat, theme=math, topic=schaap]).
+move(sor_test_schaap, s1, say).
+text(sor_test_schaap, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% schapen.").
+next(sor_test_schaap, s1, "true", s2).
+
+move(sor_test_schaap, s2, say).
+text(sor_test_schaap, s2, "Hoeveel schapen zijn er in totaal?").
+insert_minidialog(sor_test_schaap, s2, math_next).
+insert_minidialog(sor_test_schaap, s2, math_dialog).

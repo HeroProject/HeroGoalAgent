@@ -248,9 +248,9 @@ module performDialogMove(Minidialog, Move) {
 	if bel(math_support(Minidialog, Move)) then 
 	{
 		% Todo: this needs to be based on the actual sum
-		if bel(supportCondition(1), session(Session)) then delete(session(Session)) + insert(session([math_help_double | Session])).
+		if bel(enableSupport(1), session(Session)) then delete(session(Session)) + insert(session([math_help_double | Session])).
 		
-		if bel(supportCondition(0), session(Session)) then delete(session(Session)) + insert(session([math_no_help | Session])).
+		if bel(enableSupport(0), session(Session)) then delete(session(Session)) + insert(session([math_no_help | Session])).
 	}
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

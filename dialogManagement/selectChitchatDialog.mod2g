@@ -6,37 +6,52 @@ order=linear.
 
 module selectChitchatDialog(SessionElement, RemainingElements) {
 
-	% Select a new minidialog of a topic with depedencies.
-	if bel(SessionElement = [topic=Topic],
-			minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),
-			dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	if bel(enablePersonalization(1)) then 
+	{
+		% Select a new minidialog of a topic with depedencies.
+		if bel(SessionElement = [topic=Topic],
+				minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),
+				dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog of a topic without dependencies.
+		if bel(SessionElement = [topic=Topic],
+				minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),
+				not(dependencies(Minidialog, _)))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog with a theme and a topic from known interests.
+		if bel(SessionElement = [theme=Theme], Theme \= '_chitchat', findSuitableChitchat(Minidialog, topic))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog with a theme with a random topic with dependencies (in case no topics of knowns interests are available)
+		if bel(SessionElement = [theme=Theme], Theme \= '_chitchat', findall(ID, (minidialog(ID, [type=chitchat, theme=Theme, topic=_]),
+				not(isInDialogHistory(ID, _)), dependencies(ID, Dependencies), matchesDepencencies(Dependencies)), Minidialogs), 
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog of a theme without dependencies.
+		if bel(SessionElement = [theme=Theme], Theme \= '_chitchat', findall(ID, (minidialog(ID, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(ID, _)), not(dependencies(ID, _))), Minidialogs), 
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog based with a topic from the known topics of interest.
+		if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, topic))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog based with a theme from the known topics of interest.
+		if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, theme))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	}
 	
-	% Select a new minidialog of a topic without dependencies.
-	if bel(SessionElement = [topic=Topic],
-			minidialog(Minidialog, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Minidialog, _)),
-			not(dependencies(Minidialog, _)))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
-	% Select a new minidialog of a theme with dependencies.
-	if bel(SessionElement = [theme=Theme], Theme \= '_chitchat',
-			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)),
-			dependencies(Minidialog, Dependencies), matchesDepencencies(Dependencies))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
-	% Select a new minidialog of a theme without dependencies.
-	if bel(SessionElement = [theme=Theme], Theme \= '_chitchat',
-			minidialog(Minidialog, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Minidialog, _)),
-			not(dependencies(Minidialog, _)))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
-	% Select a new minidialog based with a topic from the known topics of interest.
-	if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, topic))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
-	% Select a new minidialog based with a theme from the known topics of interest.
-	if bel(SessionElement = [theme='_chitchat'], findSuitableChitchat(Minidialog, theme))
-		then insert(selectedMinidialog(Minidialog, RemainingElements)).
-	
-	% Todo: decide whether or not to insert a random topic when theme='_chitchat'
+	if bel(enablePersonalization(0)) then
+	{	
+		if bel(SessionElement = [theme=math], findall(ID, (minidialog(ID, [type=chitchat, theme=math, topic=_])), Minidialogs),
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		if bel((SessionElement = [topic=_]; SessionElement = [theme=Theme], Theme\=math), findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=_])), Minidialogs),
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	}
 }

@@ -102,7 +102,8 @@ matchesConditionals([]).
 matchesConditional([umVariable=Var, filter=green, values=["_any"]]) :- getUserModelValue(Var, _).
 matchesConditional([umVariable=Var, filter=red, values=["_any"]]) :- not(getUserModelValue(Var, _)).
 matchesConditional([umVariable=Var, filter=Filter, values=Values]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values).
-matchesConditional([expCondition=Cond]) :- expCondition(Cond).
+matchesConditional([personalization=Enabled]) :- enablePersonalization(Enabled).
+
 
 extractVariablesFromConditionals(Conditionals, Vars) :- findall(Var, (flatten(Conditionals, FConds), member((umVariable=Var), FConds)), Vars).
 extractValuesFromConditionals(Conditionals, Values) :-

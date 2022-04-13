@@ -22,6 +22,7 @@ next(math_dialog, s2, "noanswer", s3f).
 next(math_dialog, s2, "timer", s3f).
 
 move(math_dialog, s3f, say).
+leds(math_dialog, s3f, reset).
 text_generator(math_dialog, s3f, math_no_answer).
 math_evaluate(math_dialog, s3f, noanswer).
 next(math_dialog, s3f, "true", s4f).

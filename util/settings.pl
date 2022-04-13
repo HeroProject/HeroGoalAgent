@@ -9,8 +9,8 @@
 multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
-%personalizationCondition(1).
-supportCondition(1).
+enablePersonalization(1).
+enableSupport(0).
 
 % Math setting
 startMathLevel(4).
@@ -21,7 +21,7 @@ mathCorrectThreshold(0).
 localVariable(first_name, "Mike"). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
-useMemory(true). % condition
+useMemory(true).
 continueSession(false).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
