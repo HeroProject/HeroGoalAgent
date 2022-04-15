@@ -35,9 +35,13 @@ module nextMinidialog {
 			
 			% Delete the current session and insert currentMinidialog, currentMove (start is default s1), and the remaining session elements.
 			% Import relevant user model variables for this minidialog.
-			if true then delete(session(Session))
+			if bel(not(moveReset(_)); Selected=general_wakeup) then delete(session(Session))
 				+ insert(currentMinidialog(Selected), currentMove(s1), session(Remaining))
 				+ setMoveHistory(UserId, s1).
+			
+			if bel(moveReset(SelectedMove), Selected\=general_wakeup) then delete(session(Session), moveReset(SelectedMove))
+				+ insert(currentMinidialog(Selected), currentMove(SelectedMove), session(Remaining))
+				+ setMoveHistory(UserId, SelectedMove). 
 			
 			% If memory is used, load interact data from memory
 			if bel(useMemory(true)) then loadInteractantData(Selected).

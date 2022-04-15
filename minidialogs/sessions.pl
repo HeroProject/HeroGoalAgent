@@ -17,7 +17,6 @@ sessionDesign(sorocova_test_1, [general_wakeup, sor_test_intro, [theme=math], ge
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 multiSessionDesign(sorocova_pilot, [sorocova_pilot_1, sorocova_pilot_2]).
-multiSessionDesign(sorocova_pilot_backup, [sorocova_pilot_backup_1, sorocova_pilot_backup_2]).
 
 multiSessionDesign(sorocova_test, [sorocova_test_1]).
 

@@ -6,7 +6,7 @@ order=linearall.
 
 module initializeUserModel {
 	% Initialize user model
-	if true then insert(userModel([]), dialogHistory([[]]), narrativeHistory([]), topicsOfInterest([])).
+	if true then insert(userModel([]), dialogHistory([[]]), narrativeHistory([]), moveHistory(s1), topicsOfInterest([])).
 
 	forall bel(localVariable(Key, Value))
 		do {
@@ -17,7 +17,7 @@ module initializeUserModel {
 	% Synchronize with remote user model and history
 	if bel(useMemory(true), userId(UserId)) then {
 		if bel(sessionId(SessionId)) then setSession(UserId, SessionId).
-		if bel(continueSession(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
+		if bel(continueSession(true)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getMoveHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
 		if bel(continueSession(false), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
 		if bel(not(getUserModelValue(mathLevel, _))) then getInteractantData(UserId, mathLevel).
 	}

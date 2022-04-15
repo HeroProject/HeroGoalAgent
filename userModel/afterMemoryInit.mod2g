@@ -6,6 +6,11 @@ order=linearall.
 
 module afterMemoryInit {
 	
+	% Smart reboot of interaction.
+	if bel(continueSession(true), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
+			moveHistory(LastMove), session(Session), getPrunedSession(Session, CurrentHistory, PrunedSession))
+		then delete(session(Session)) + insert(session(PrunedSession), moveReset(LastMove)).
+	
 	% If mathLevel is set then insert the startMathLevel.
 	if bel(userId(UserId), (not(getUserModelValue(mathLevel, _)); resetMathLevel(true)), startMathLevel(Level), 
 			userModel(UserModel), updateUserModel(mathLevel, Level, UserModel, NewUserModel)) 

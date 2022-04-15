@@ -20,7 +20,7 @@
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
 	waitingForSession/0, waitingForMetadata/0, waitingForHistory/0,
-	dialogHistory/1, narrativeHistory/1,
+	dialogHistory/1, narrativeHistory/1, moveHistory/1, moveReset/1,
 	topicsOfInterest/1, availableChitchats/1.
 
 % Predicates related to move execution and transition handling.
@@ -35,8 +35,6 @@
 	waitingForInit/0, waitingForAfterMemoryInit/0,
 	eventListener/2,
 	mathCorrect/1, activeInteraction/0, mathTime/1.
-
-:- dynamic expCondition/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move parameter handling.                               %%%
@@ -74,6 +72,8 @@ isInNestedListAtPos(L, E, NP) :- length(L, P), nth1(P, L, SubL),
 without_last([_], []).
 without_last([X|Xs], [X|WithoutLast]) :- 
     without_last(Xs, WithoutLast), !.
+
+dialogHistoryReset([H | T], [[] | T]).
 
 %%% NarrativeHistory %%%
 updateNarrativeHistory(Thread, UpdatedHistory) :- narrativeHistory(History), not(member((Thread=_), History)),
@@ -289,6 +289,18 @@ generate_text_from_source(math_praise, SelectedText) :- findall(Text, math_prais
 generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_incorrect(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
+
+% Session pruning
+getPrunedSession(Session, History, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), pruneSession(Session, History, Pruned).
+pruneSession([[narrative=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[topic=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[theme=Theme] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- Theme\=math, pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+%pruneSession([general_wakeup | SessionRemain], [general_wakeup | HistoryRemain], [general_wakeup | PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[theme=math] | SessionRemain], [_ | HistoryRemain], [[theme=math]| PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([CurrentDialog | SessionRemain], [CurrentDialog | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([CurrentDialog | SessionRemain], [CurrentHistory | HistoryRemain], PrunedRest) :- CurrentDialog\=CurrentHistory, pruneSession([CurrentDialog | SessionRemain], HistoryRemain, PrunedRest).
+pruneSession(Session, [], Session).
+pruneSession([], [], []).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Math			            		   %%%

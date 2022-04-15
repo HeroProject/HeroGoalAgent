@@ -16,7 +16,7 @@ module agent_main {
 				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))
 			then delete(waitingForSession) + insert(session(Session), waitingForMetadata, waitingForAfterMemoryInit) + afterMemoryInit.
 				
-		if bel(waitingForMetadata, session(Session)) then {
+		if bel(waitingForMetadata, not(waitingForAfterMemoryInit), session(Session)) then {
 			if bel(useMemory(true)) then loadDependencyMetadata(Session).
 			if bel(useMemory(false)) then delete(waitingForMetadata).
 		}

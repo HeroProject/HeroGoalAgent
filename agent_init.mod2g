@@ -29,8 +29,5 @@ module agent_init {
 	
 	% Show a default (empty) page on any connected browser
 	if bel(html('',Html)) then renderPage(Html).
-	
-	% Set experimantal condition
-	if bel(useMemory(true)) then insert(expCondition(memory)).
-	if bel(useMemory(false)) then insert(expCondition(control)).
+
 }
