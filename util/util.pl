@@ -289,9 +289,12 @@ generate_text_from_source(math_praise, SelectedText) :- findall(Text, math_prais
 generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_incorrect(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_incorrect_after_hint, SelectedText) :- findall(Text, math_incorrect_after_hint(Text), Texts), random_select(SelectedText, Texts, _).
 
 % Session pruning
-getPrunedSession(Session, History, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), pruneSession(Session, History, Pruned).
+excludePrunning([math_dialog, math_next]).
+getPrunedSession(Session, History, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), excludePrunning(Exclude), not(member(KeepLast, Exclude)), pruneSession(Session, History, Pruned).
+getPrunedSession(Session, History, [general_wakeup | Pruned]) :- last(History, KeepLast), excludePrunning(Exclude), member(KeepLast, Exclude), pruneSession(Session, History, Pruned).
 pruneSession([[narrative=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([[topic=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([[theme=Theme] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- Theme\=math, pruneSession(SessionRemain, HistoryRemain, PrunedRest).
@@ -318,6 +321,23 @@ math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(1
 math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
 math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right, !.
 math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right, !.
+
+math_hint_strategy(0, none).
+math_hint_strategy(1, none).
+math_hint_strategy(2, kleine_som).
+math_hint_strategy(3, kleine_som).
+math_hint_strategy(4, kleine_som).
+math_hint_strategy(5, splitsen).
+math_hint_strategy(6, kleine_som).
+math_hint_strategy(7, splitsen).
+math_hint_strategy(8, none).
+math_hint_strategy(9, none).
+math_hint_strategy(10, none).
+math_hint_strategy(11, none).
+
+math_generate_hint_splitsen(Right, Big, Small) :-  number_string(Right, RightString), string_chars(RightString, [BigChar, SmallChar]), 
+							string_chars(BigString, [BigChar, '0']), string_chars(SmallString, [SmallChar]), 
+							number_string(Big, BigString), number_string(Small, SmallString).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

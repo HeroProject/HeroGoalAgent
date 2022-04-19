@@ -228,42 +228,90 @@ module performDialogMove(Minidialog, Move) {
 		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 	
 	% Math level adaptation
-	if bel((math_evaluate(Minidialog, Move, Key), Key\=noanswer, getUserModelValue(Key, Result); math_evaluate(Minidialog, Move, Result), Result=noanswer), mathCorrect(Correct), mathCorrectThreshold(Threshold),
+	if bel((math_evaluate(Minidialog, Move, Key, Hint), Key\=noanswer, getUserModelValue(Key, Result); math_evaluate(Minidialog, Move, Result, Hint), Result=noanswer), mathCorrect(Correct), mathCorrectThreshold(Threshold),
 		userModel(UserModel), getUserModelValue(mathLevel, Level), userId(UserId)) then
 	{
-		if true then canceltimer(mathTimer).
-		
-		% After a correct answer increase the level if the number of correct answers for that level exceeds the threshold and a higher level exists.
-		if bel(Result=correct, Correct >= Threshold, mathMaxLevel(MaxLevel), Level < MaxLevel, NewLevel is Level + 1, 
-				updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
-			then delete(userModel(UserModel), mathCorrect(Correct)) + insert(userModel(UpdatedUserModel), mathCorrect(0)) + setInteractantData(UserId, mathLevel, NewLevel).
-		% After a correct answer and the level threshold is not reached up the answers correct counter.
-		if bel(Result=correct, Correct < Threshold, NewCorrect is Correct + 1)
-			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
-		% After an incorrect answer and there were prevously correct answers for this level (Correct > 0) then lower the correct counter by 1.
-		if bel((Result=incorrect; Result=noanswer), Correct > 0, NewCorrect is Correct - 1)
-			then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
-		% After an incorrect answer lower the level, if not at lowest level, by 1 if there were no correct answers previously (Correct = 0).
-		if bel((Result=incorrect; Result=noanswer), Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
-			then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).
-		
 		% Logging after a result
 		if bel(Result\=noanswer, valueListFromKeyList([math_left, math_right, math_answer, math_given_answer], [MathLeft, MathRight, CorrectAnswer, GivenAnswer]), mathTime(Time))
-			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=GivenAnswer, evaluation=Result, time=Time]).
+			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=GivenAnswer, evaluation=Result, time=Time, hint=Hint]).
 		
 		if bel(Result=noanswer, valueListFromKeyList([math_left, math_right, math_answer], [MathLeft, MathRight, CorrectAnswer]), mathTime(Time))
-			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=Result, evaluation=Result, time=Time]).			
-	}
-	
-	if bel(math_support(Minidialog, Move)) then 
-	{
-		% Todo: this needs to be based on the actual sum
-		if bel(enableSupport(1), session(Session)) then delete(session(Session)) + insert(session([math_help_double | Session])).
+			then logging('math_log', [left=MathLeft, right=MathRight, correctAnswer=CorrectAnswer, givenAnswer=Result, evaluation=Result, time=Time, hint=Hint]).			
+			
+		if bel((enableSupport(0); enableSupport(1), Hint=1)) then
+		{
+			if true then canceltimer(mathTimer).
+			
+			% After a correct answer increase the level if the number of correct answers for that level exceeds the threshold and a higher level exists.
+			if bel(Result=correct, Correct >= Threshold, mathMaxLevel(MaxLevel), Level < MaxLevel, NewLevel is Level + 1, 
+					updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
+				then delete(userModel(UserModel), mathCorrect(Correct)) + insert(userModel(UpdatedUserModel), mathCorrect(0)) + setInteractantData(UserId, mathLevel, NewLevel).
+			% After a correct answer and the level threshold is not reached up the answers correct counter.
+			if bel(Result=correct, Correct < Threshold, NewCorrect is Correct + 1)
+				then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
+			% After an incorrect answer and there were prevously correct answers for this level (Correct > 0) then lower the correct counter by 1.
+			if bel((Result=incorrect; Result=noanswer), Correct > 0, NewCorrect is Correct - 1)
+				then delete(mathCorrect(Correct)) + insert(mathCorrect(NewCorrect)).
+			% After an incorrect answer lower the level, if not at lowest level, by 1 if there were no correct answers previously (Correct = 0).
+			if bel((Result=incorrect; Result=noanswer), Correct = 0, Level > 0, NewLevel is Level - 1, updateUserModel(mathLevel, NewLevel, UserModel, UpdatedUserModel))
+				then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)) + setInteractantData(UserId, mathLevel, NewLevel).
+		}
 		
-		if bel(enableSupport(0), session(Session)) then delete(session(Session)) + insert(session([math_no_help | Session])).
 	}
 	
-	if bel(math_start_timer(Minidialog, Move)) then starttimer(mathTimer, 1000, 300000) + logging('math_log', [start=now]).
+	if bel(math_support(Minidialog, Move), session(Session)) then 
+	{
+		if bel(enableSupport(1), getUserModelValue(mathLevel, Level), math_hint_strategy(Level, Strategy), userModel(UserModel)) then
+		{
+			if bel(Strategy=splitsen, getUserModelValue(math_right, MathRight), math_generate_hint_splitsen(MathRight, MathSplitsenBig, MathSplitsenSmall), 
+				updateUserModelList([math_splitsen_big=MathSplitsenBig, math_splitsen_small=MathSplitsenSmall], UserModel, UpdatedUserModel))
+					then delete(userModel(UserModel), session(Session)) + insert(userModel(UpdatedUserModel), session([math_help_splitsen | Session])).
+			
+			if bel(Strategy=kleine_som, getUserModelValue(math_right, MathRight)) then {
+				if bel(MathRight >= 1000, MathRight < 10000, MathRight1 is MathRight / 1000, MathRight10 is MathRight / 100, MathRight100 is MathRight / 10,
+						updateUserModelList([math_kleine_som_1=MathRight1, math_kleine_som_10=MathRight10, math_kleine_som_100=MathRight100], UserModel, UpdatedUserModel))
+					then delete(userModel(UserModel), session(Session)) + insert(userModel(UpdatedUserModel), session([math_help_kleine_som_1000 | Session])).
+				if bel(MathRight >= 100, MathRight < 1000, MathRight1 is MathRight / 100, MathRight10 is MathRight / 10, 
+						updateUserModelList([math_kleine_som_1=MathRight1, math_kleine_som_10=MathRight10], UserModel, UpdatedUserModel))
+					then delete(userModel(UserModel), session(Session)) + insert(userModel(UpdatedUserModel), session([math_help_kleine_som_100 | Session])).
+				if bel(MathRight >= 10, MathRight < 100, MathRight1 is MathRight / 10,
+						updateUserModel(math_kleine_som_1, MathRight1, UserModel, UpdatedUserModel))
+					then delete(userModel(UserModel), session(Session)) + insert(userModel(UpdatedUserModel), session([math_help_kleine_som_10 | Session])).
+			}
+			
+			if bel(Strategy=none) then delete(session(Session)) + insert(session([math_help_none | Session])).
+		} 
+		
+		if bel(enableSupport(0)) then delete(session(Session)) + insert(session([math_no_help | Session])).
+	}
+	
+	if bel(math_start_timer(Minidialog, Move)) then starttimer(mathTimer, 1000, 600000) + logging('math_log', [start=now]).
+	
+	if bel(display_math(Minidialog, Move), valueListFromKeyList([math_left, math_right], Values),
+			show_math(Values, MathHtml), html(MathHtml, Html))
+		then renderPage(Html).
+	
+	if bel(display_math_hints(Minidialog, Move), valueListFromKeyList([math_left, math_right], Values),
+		getUserModelValue(mathLevel, Level), math_hint_strategy(Level, Strategy)) then
+	{
+		if bel(Strategy=splitsen, valueListFromKeyList([math_splitsen_big, math_splitsen_small], Hints),
+				show_math_with_hints(Values, Hints, MathHtml), html(MathHtml, Html))
+			then renderPage(Html). 
+		
+		if bel(Strategy=kleine_som, getUserModelValue(math_right, MathRight)) then {
+			if bel(MathRight >= 1000, MathRight < 10000, valueListFromKeyList([math_kleine_som_100, math_kleine_som_10, math_kleine_som_1], Hints),
+					show_math_with_hints(Values, Hints, MathHtml), html(MathHtml, Html))
+				then renderPage(Html). 
+			if bel(MathRight >= 100, MathRight < 1000, valueListFromKeyList([math_kleine_som_10, math_kleine_som_1], Hints),
+					show_math_with_hints(Values, Hints, MathHtml), html(MathHtml, Html))
+				then renderPage(Html). 
+			if bel(MathRight >= 10, MathRight < 100, valueListFromKeyList([math_kleine_som_1], Hints),
+					show_math_with_hints(Values, Hints, MathHtml), html(MathHtml, Html))
+				then renderPage(Html).
+		} 
+	}
+		
+	
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%				 	OTHER						%%
