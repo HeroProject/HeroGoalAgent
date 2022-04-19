@@ -9,43 +9,36 @@
 
 %% Sessie 1
 % Introductie
-move(sor_intro, s1, say).
-text(sor_intro,  s1, "Hallo ik ben Hero").
-next(sor_intro,  s1, "true",  s2).
+minidialog(sor_pilot_intro, [type=functional, function=intro]).
+move(sor_pilot_intro, s1, say).
+text(sor_pilot_intro,  s1, "Hallo ik ben Hero").
+next(sor_pilot_intro,  s1, "true",  s2).
 
-move(sor_intro, s2, say).
-text(sor_intro,  s2, "Wat fijn dat jij er bent.").
-next(sor_intro,  s2, "true",  s3).
+move(sor_pilot_intro, s2, say).
+text(sor_pilot_intro,  s2, "Wat fijn dat jullie er zijn.").
+next(sor_pilot_intro,  s2, "true",  s5).
 
-move(sor_intro, s3, say).
-moveConfig(sor_intro, s3, [waitTimer=4000]).
-text(sor_intro,  s3, "Hoe heet jij?").
-next(sor_intro,  s3, "true",  s4).
+move(sor_pilot_intro, s5, say).
+text(sor_pilot_intro,  s5, "Ik ben een reken robot.").
+next(sor_pilot_intro,  s5, "true",  s6).
 
-move(sor_intro, s4, say).
-text(sor_intro,  s4, "Wat leuk om je te ontmoeten, %first_name%. \pau=400\ ").
-next(sor_intro,  s4, "true",  s5).
+move(sor_pilot_intro, s6, say).
+text(sor_pilot_intro,  s6, "Of eigenlijk, dat probeer ik te zijn.").
+next(sor_pilot_intro,  s6, "true",  s7).
 
-move(sor_intro, s5, say).
-text(sor_intro,  s5, "Ik ben een reken robot.").
-next(sor_intro,  s5, "true",  s6).
+move(sor_pilot_intro, s7, say).
+text(sor_pilot_intro,  s7, "Ik ben aan het leren om kinderen te helpen met rekenen.").
+next(sor_pilot_intro,  s7, "true",  s8).
 
-move(sor_intro, s6, say).
-text(sor_intro,  s6, "Of eigenlijk, dat probeer ik te zijn.").
-next(sor_intro,  s6, "true",  s7).
+move(sor_pilot_intro, s8, say).
+text(sor_pilot_intro,  s8, "Maar nu ben ik diegene die wel wat hulp kan gebruiken.").
+next(sor_pilot_intro,  s8, "true",  s9).
 
-move(sor_intro, s7, say).
-text(sor_intro,  s7, "Ik ben aan het leren om kinderen te helpen met rekenen.").
-next(sor_intro,  s7, "true",  s8).
-
-move(sor_intro, s8, say).
-text(sor_intro,  s8, "Maar nu ben ik diegene die wel wat hulp kan gebruiken.").
-next(sor_intro,  s8, "true",  s9).
-
-move(sor_intro, s9, say).
-text(sor_intro,  s9, "Wat fijn dat jij mij daar bij wilt helpen.").
+move(sor_pilot_intro, s9, say).
+text(sor_pilot_intro,  s9, "Wat fijn dat jullie mij daar bij wilen helpen.").
 
 % Tutorial
+minidialog(sor_tutorial, [type=functional, function=tutorial]).
 move(sor_tutorial, s1, say).
 text(sor_tutorial,  s1, "Ik zal eerst uitleggen hoe je met mij kunt praten.").
 next(sor_tutorial,  s1, "true",  s2).
@@ -146,7 +139,7 @@ next(sor_tutorial,  s18, "true",  s19).
 
 move(sor_tutorial, s19, question).
 moveConfig(sor_tutorial, s19, [type=yesno, context='answer_yesno']).
-text(sor_tutorial, s19, "Heb je nog vragen?").
+text(sor_tutorial, s19, "Hebben jullie nog vragen?").
 next(sor_tutorial, s19, 'answer_yes', s20y).
 next(sor_tutorial, s19, 'answer_no', s21).
 next(sor_tutorial, s19, 'answer_dontknow', s20y).
@@ -154,13 +147,15 @@ next(sor_tutorial, s19, 'fail', s20y).
 
 move(sor_tutorial, s20y, say).
 moveConfig(sor_tutorial, s20y, [eventListener=['true'='FrontTactilTouched']]).
-text(sor_tutorial,  s20y, "Kunnen jullie %first_name% even helpen?").
+text(sor_tutorial,  s20y, "Mike, kun je even helpen?").
 next(sor_tutorial,  s20y, "true",  s21).
 
 move(sor_tutorial, s21, say).
 text(sor_tutorial,  s21, "Top, laten we voor het rekenen nog even kletsen.").
+set_max_duration(sor_tutorial,  s21, 480000). % 8 minutes
 
 % Kletspraat
+minidialog(sor_kletsen_dier, [type=chitchat, theme=kletsen, topic=dier]).
 move(sor_kletsen_dier, s1, say).
 text(sor_kletsen_dier,  s1, "Zo weet ik dat veel kinderen dieren erg leuk vinden.").
 next(sor_kletsen_dier,  s1, "true",  s2).
@@ -186,13 +181,13 @@ text(sor_kletsen_dier,  s7, "Ik mag af en toe op bezoek.").
 next(sor_kletsen_dier,  s7, "true",  s8).
 
 move(sor_kletsen_dier, s8, question).
-moveConfig(sor_kletsen_dier, s8, [type=input, context="animals", options=['hond', 'kat', 'dolfijn', 'leeuw', 'vogel'], fast=yes, umVariable='lievelingsdier']).
+moveConfig(sor_kletsen_dier, s8, [type=input, context="animals", options=['hond', 'kat', 'koe', 'paard', 'schaap'], fast=yes, umVariable='lievelingsdier', topics=[success=['dier', '_answer']]]).
 text(sor_kletsen_dier, s8, "Wat is jouw lievelingsdier?").
 next(sor_kletsen_dier, s8, "success", s9).
 next(sor_kletsen_dier, s8, "fail", s10).
 
 move(sor_kletsen_dier, s9, say).
-text(sor_kletsen_dier,  s9, "%lievelingsdier%, wat gaaf zeg!").
+text(sor_kletsen_dier,  s9, "Een %lievelingsdier%, wat gaaf zeg!").
 next(sor_kletsen_dier,  s9, "true",  s10).
 
 move(sor_kletsen_dier, s10, question).
@@ -204,6 +199,7 @@ next(sor_kletsen_dier, s10, "fail", s11).
 move(sor_kletsen_dier, s11, say).
 text(sor_kletsen_dier, s11, "Nu snap ik het helemaal.").
 
+minidialog(sor_kletsen_lievelingseten, [type=chitchat, theme=kletsen, topic=eten]).
 move(sor_kletsen_lievelingseten, s1, say).
 text(sor_kletsen_lievelingseten, s1, "En, weet je wat?").
 next(sor_kletsen_lievelingseten, s1, "true", s2).
@@ -225,7 +221,7 @@ text(sor_kletsen_lievelingseten, s5, "Zoals: pizza, pasta, pannenkoeken, poffert
 next(sor_kletsen_lievelingseten, s5, "true", s6).
 
 move(sor_kletsen_lievelingseten, s6, question).
-moveConfig(sor_kletsen_lievelingseten, s6, [type=input, context="lievelingseten_met_p", options=['pizza', 'pasta', 'pannenkoeken', 'poffertjes', 'patat'], fast=yes, umVariable=lievelingseten_met_p]).
+moveConfig(sor_kletsen_lievelingseten, s6, [type=input, context="lievelingseten_met_p", options=['pizza', 'pasta', 'pannenkoeken', 'poffertjes', 'patat'], fast=yes, umVariable=lievelingseten_met_p, topics=[success=[eten, '_answer']]]).
 text(sor_kletsen_lievelingseten, s6, "Welke P vind jij de allerlekkerste P?").
 next(sor_kletsen_lievelingseten, s6, "pizza", s7pizza1).
 next(sor_kletsen_lievelingseten, s6, "pasta", s7pasta1).
@@ -372,420 +368,15 @@ next(sor_kletsen_lievelingseten, s9, "true", s10).
 move(sor_kletsen_lievelingseten, s10, say).
 text(sor_kletsen_lievelingseten, s10, "Ik hoop dat er snel een robot variant komt van %lievelingseten_met_p%.").
 
-% Rekenen 8 min
-move(sor_rekenen_1, s1, say).
-text(sor_rekenen_1,  s1, "Zo, laten we maar gaan rekenen voordat we onze tijd weg kletsen").
-next(sor_rekenen_1,  s1, "true",  s2).
-
-move(sor_rekenen_1, s2, say).
-text(sor_rekenen_1,  s2, "Weet je wat toevallig is?").
-next(sor_rekenen_1,  s2, "true",  s3).
-
-move(sor_rekenen_1, s3, say).
-text(sor_rekenen_1,  s3, "Een robot vriendje zorgt namelijk voor jouw lievelingsdier, %lievelingsdier%").
-next(sor_rekenen_1,  s3, "true",  s4).
-
-move(sor_rekenen_1, s4, say).
-text(sor_rekenen_1,  s4, "Niet 1, maar heel veel.").
-math_generate(sor_rekenen_1, s4).
-next(sor_rekenen_1,  s4, "true",  s5).
-
-move(sor_rekenen_1, s5, say).
-text(sor_rekenen_1, s5, "Er zijn %math_left% verblijven. En in elk verblijf zit %math_right% keer een %lievelingsdier%.").
-next(sor_rekenen_1, s5, "true", s6).
-
-move(sor_rekenen_1, s6, say).
-text(sor_rekenen_1, s6, "Hoeveel zijn er in totaal?").
-next(sor_rekenen_1, s6, "true", s7).
-
-move(sor_rekenen_1, s7, say).
-text(sor_rekenen_1, s7, "We moeten dus uitrekenen hoeveel %math_left% keer %math_right% is.").
-display(sor_rekenen_1, s7, "%math_left% x %math_right%", always).
-next(sor_rekenen_1, s7, "true", s8).
-
-move(sor_rekenen_1, s8, say).
-text(sor_rekenen_1, s8, "Druk op mijn groene teen als je het antwoord weet.").
-moveConfig(sor_rekenen_1, s8, [eventListener=['true'='RightBumperPressed', 'help'='LeftBumperPressed'], goTimer=120000]).
-display(sor_rekenen_1, s8, "%math_left% x %math_right%", always).
-leds(sor_rekenen_1, s8, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
-next(sor_rekenen_1, s8, "true", s9).
-next(sor_rekenen_1, s8, "help", s10f).
-next(sor_rekenen_1, s8, "timer", s10f).
-
-move(sor_rekenen_1, s9, question).
-moveConfig(sor_rekenen_1, s9, [type=math, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
-text(sor_rekenen_1, s9, "Wat is %math_left% keer %math_right%?").
-display(sor_rekenen_1, s9, "%math_left% x %math_right%", always).
-leds(sor_rekenen_1, s9, reset).
-next(sor_rekenen_1, s9, 'correct', s10cor).
-next(sor_rekenen_1, s9, 'incorrect', s10incor).
-next(sor_rekenen_1, s9, 'fail', s10f).
-
-move(sor_rekenen_1, s10cor, say).
-text(sor_rekenen_1, s10cor, "Helemaal goed, top gedaan.").
-display(sor_rekenen_1,  s10cor, '', always).
-
-move(sor_rekenen_1, s10incor, say).
-text(sor_rekenen_1, s10incor, "We zijn er nog niet helemaal. Weet je wat? We gaan eerst verder met een andere som.").
-display(sor_rekenen_1,  s10incor, '', always).
-
-
-move(sor_rekenen_1, s10f, say).
-text(sor_rekenen_1, s10f, "Oh ik weet het al! Het is %math_answer%.").
-display(sor_rekenen_1,  s10f, '', always).
-leds(sor_rekenen_1, s10f, reset).
-
-% Rekenen 2
-move(sor_rekenen_2, s1, say).
-text(sor_rekenen_2,  s1, "Een %lievelingsdier% moet ook eten natuurlijk.").
-next(sor_rekenen_2,  s1, "true",  s2).
-
-move(sor_rekenen_2, s2, say).
-text(sor_rekenen_2,  s2, "Daarvoor heeft mijn robot vriend heel wat zakken voer gekocht.").
-math_generate(sor_rekenen_2, s2).
-next(sor_rekenen_2,  s2, "true",  s5).
-
-move(sor_rekenen_2, s5, say).
-text(sor_rekenen_2, s5, "Er zijn %math_left% zakken. En in elke zak zit %math_right% kilo voer.").
-next(sor_rekenen_2, s5, "true", s6).
-
-move(sor_rekenen_2, s6, say).
-text(sor_rekenen_2, s6, "Hoeveel kilo voer is dat in totaal?").
-next(sor_rekenen_2, s6, "true", s7).
-
-move(sor_rekenen_2, s7, say).
-text(sor_rekenen_2, s7, "We moeten dus uitrekenen hoeveel %math_left% keer %math_right% is.").
-display(sor_rekenen_2, s7, "%math_left% x %math_right%", always).
-next(sor_rekenen_2, s7, "true", s8).
-
-move(sor_rekenen_2, s8, say).
-text(sor_rekenen_2, s8, "Druk op mijn teen als je het antwoord weet.").
-moveConfig(sor_rekenen_2, s8, [eventListener=['true'='RightBumperPressed', 'help'='LeftBumperPressed'], goTimer=120000]).
-display(sor_rekenen_2, s8, "%math_left% x %math_right%", always).
-leds(sor_rekenen_2, s8, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
-next(sor_rekenen_2, s8, "true", s9).
-next(sor_rekenen_2, s8, "help", s10f).
-next(sor_rekenen_2, s8, "timer", s10f).
-
-move(sor_rekenen_2, s9, question).
-moveConfig(sor_rekenen_2, s9, [type=quiz, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
-text(sor_rekenen_2, s9, "Wat is %math_left% keer %math_right%?").
-display(sor_rekenen_2, s9, "%math_left% x %math_right%", always).
-leds(sor_rekenen_2, s9, reset).
-next(sor_rekenen_2, s9, 'correct', s10cor).
-next(sor_rekenen_2, s9, 'incorrect', s10incor).
-next(sor_rekenen_2, s9, 'fail', s10f).
-
-move(sor_rekenen_2, s10cor, say).
-text(sor_rekenen_2, s10cor, "Ja dat klopt helemaal!").
-display(sor_rekenen_2,  s10cor, '', always).
-
-move(sor_rekenen_2, s10incor, say).
-text(sor_rekenen_2, s10incor, "We zijn er nog niet helemaal. Weet je wat? We gaan eerst verder met een andere som.").
-display(sor_rekenen_2,  s10incor, '', always).
-
-move(sor_rekenen_2, s10f, say).
-text(sor_rekenen_2, s10f, "Oh ik weet het al! Het is %math_answer%.").
-display(sor_rekenen_2,  s10f, '', always).
-leds(sor_rekenen_2, s10f, reset).
-
-% Rekenen 3
-move(sor_rekenen_3, s1, say).
-text(sor_rekenen_3,  s1, "Over kilo's gesproken.").
-next(sor_rekenen_3,  s1, "true",  s2).
-
-move(sor_rekenen_3, s2, say).
-text(sor_rekenen_3,  s2, "Een andere robot vriend van mij is chef kok in een robot restaurant.").
-math_generate(sor_rekenen_3, s2).
-next(sor_rekenen_3,  s2, "true",  s3).
-
-move(sor_rekenen_3, s3, say).
-text(sor_rekenen_3, s3, "En %lievelingseten_met_p% staat op het menu.").
-next(sor_rekenen_3, s3, "true", s5).
-
-move(sor_rekenen_3, s5, say).
-text(sor_rekenen_3, s5, "De robot chef heeft %math_left% gasten en maakt voor elke gast %math_right% %lievelingseten_met_p%.").
-next(sor_rekenen_3, s5, "true", s6).
-
-move(sor_rekenen_3, s6, say).
-text(sor_rekenen_3, s6, "Hoeveel %lievelingseten_met_p% maakt de robot chef in totaal?").
-next(sor_rekenen_3, s6, "true", s7).
-
-move(sor_rekenen_3, s7, say).
-text(sor_rekenen_3, s7, "We moeten dus uitrekenen hoeveel %math_left% keer %math_right% is.").
-display(sor_rekenen_3, s7, "%math_left% x %math_right%", always).
-next(sor_rekenen_3, s7, "true", s8).
-
-move(sor_rekenen_3, s8, say).
-text(sor_rekenen_3, s8, "Druk op mijn teen als je het antwoord weet.").
-moveConfig(sor_rekenen_3, s8, [eventListener=['true'='RightBumperPressed', 'help'='LeftBumperPressed'], goTimer=120000]).
-display(sor_rekenen_3, s8, "%math_left% x %math_right%", always).
-leds(sor_rekenen_3, s8, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
-next(sor_rekenen_3, s8, "true", s9).
-next(sor_rekenen_3, s8, "help", s10f).
-next(sor_rekenen_3, s8, "timer", s10f).
-
-move(sor_rekenen_3, s9, question).
-moveConfig(sor_rekenen_3, s9, [type=quiz, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
-text(sor_rekenen_3, s9, "Wat is %math_left% keer %math_right%?").
-display(sor_rekenen_3, s9, "%math_left% x %math_right%", always).
-leds(sor_rekenen_3, s9, reset).
-next(sor_rekenen_3, s9, 'correct', s10cor).
-next(sor_rekenen_3, s9, 'incorrect', s10incor).
-next(sor_rekenen_3, s9, 'fail', s10f).
-
-move(sor_rekenen_3, s10cor, say).
-text(sor_rekenen_3, s10cor, "Ja! Inderdaad %math_answer% %lievelingseten_met_p%").
-display(sor_rekenen_3,  s10cor, '', always).
-
-move(sor_rekenen_3, s10incor, say).
-text(sor_rekenen_3, s10incor, "We zijn er nog niet helemaal. Weet je wat? We gaan eerst verder met een andere som.").
-display(sor_rekenen_3,  s10incor, '', always).
-
-move(sor_rekenen_3, s10f, say).
-text(sor_rekenen_3, s10f, "Oh ik weet het al! Het is %math_answer%.").
-display(sor_rekenen_3,  s10f, '', always).
-leds(sor_rekenen_3, s10f, reset).
-
-% Rekenen 4
-move(sor_rekenen_4, s1, say).
-text(sor_rekenen_4,  s1, "Na al het koken komt de afwas.").
-math_generate(sor_rekenen_4, s1).
-next(sor_rekenen_4,  s1, "true",  s5).
-
-move(sor_rekenen_4, s5, say).
-text(sor_rekenen_4, s5, "Aan het einde van de avond zijn er %math_left% stapels vuile borden en elke stapel bestaat uit %math_right% borden.").
-next(sor_rekenen_4, s5, "true", s6).
-
-move(sor_rekenen_4, s6, say).
-text(sor_rekenen_4, s6, "Hoeveel borden moeten er afgewassen worden?").
-next(sor_rekenen_4, s6, "true", s7).
-
-move(sor_rekenen_4, s7, say).
-text(sor_rekenen_4, s7, "We moeten dus uitrekenen hoeveel %math_left% keer %math_right% is.").
-display(sor_rekenen_4, s7, "%math_left% x %math_right%", always).
-next(sor_rekenen_4, s7, "true", s8).
-
-move(sor_rekenen_4, s8, say).
-text(sor_rekenen_4, s8, "Druk op mijn teen als je het antwoord weet.").
-moveConfig(sor_rekenen_4, s8, [eventListener=['true'='RightBumperPressed', 'help'='LeftBumperPressed'], goTimer=120000]).
-display(sor_rekenen_4, s8, "%math_left% x %math_right%", always).
-leds(sor_rekenen_4, s8, direct, ["RightFootLeds", "LeftFootLeds"], ["groen", "paars"]).
-next(sor_rekenen_4, s8, "true", s9).
-next(sor_rekenen_4, s8, "help", s10f).
-next(sor_rekenen_4, s8, "timer", s10f).
-
-move(sor_rekenen_4, s9, question).
-moveConfig(sor_rekenen_4, s9, [type=quiz, context='integer', correctAnswer=math_answer, maxAnswerTime=[tablet=0], form=numberField]).
-text(sor_rekenen_4, s9, "Wat is %math_left% keer %math_right%?").
-display(sor_rekenen_4, s9, "%math_left% x %math_right%", always).
-leds(sor_rekenen_4, s9, reset).
-next(sor_rekenen_4, s9, 'correct', s10cor).
-next(sor_rekenen_4, s9, 'incorrect', s10incor).
-next(sor_rekenen_4, s9, 'fail', s10f).
-
-move(sor_rekenen_4, s10cor, say).
-text(sor_rekenen_4, s10cor, "Ja dat klopt helemaal!").
-display(sor_rekenen_4,  s10cor, '', always).
-
-move(sor_rekenen_4, s10incor, say).
-text(sor_rekenen_4, s10incor, "We zijn er nog niet helemaal.").
-display(sor_rekenen_4,  s10incor, '', always).
-
-move(sor_rekenen_4, s10f, say).
-text(sor_rekenen_4, s10f, "Oh ik weet het al! Het is %math_answer%.").
-display(sor_rekenen_4,  s10f, '', always).
-leds(sor_rekenen_4, s10f, reset).
-
-% Afronding
-move(sor_afronding, s1, say).
-text(sor_afronding,  s1, "Zo, dat was het.").
-next(sor_afronding,  s1, "true",  s2).
-
-move(sor_afronding, s2, say).
-text(sor_afronding,  s2, "Ik heb weer flink kunnen oefenen.").
-next(sor_afronding,  s2, "true",  s3).
-
-move(sor_afronding, s3, say).
-text(sor_afronding,  s3, "Bedankt, %first_name%.").
-next(sor_afronding,  s3, "true",  s4).
-
-move(sor_afronding, s4, say).
-text(sor_afronding,  s4, "De studenten hebben geloof ik wat vragen voor je.").
-next(sor_afronding,  s4, "true",  s5).
-
-move(sor_afronding, s5, say).
-text(sor_afronding,  s5, "Maar als het goed is zie ik je straks weer.").
-next(sor_afronding,  s5, "true",  s6).
-
-move(sor_afronding, s6, say).
-text(sor_afronding,  s6, "Dus tot straks!").
-
-%% Sessie 2
-% Intro
-move(sor_ses2_intro, s1, say).
-text(sor_ses2_intro,  s1, "Hoi %first_name%, daar ben je weer.").
-next(sor_ses2_intro,  s1, "true",  s2).
-
-move(sor_ses2_intro, s2, say).
-text(sor_ses2_intro,  s2, "Ik had nog een paar vraagjes voor je.").
-next(sor_ses2_intro,  s2, "true",  s3).
-
-move(sor_ses2_intro, s3, say).
-text(sor_ses2_intro,  s3, "Gewoon om te oefenen of ik je goed kan verstaan.").
-next(sor_ses2_intro,  s3, "true",  s4).
-
-move(sor_ses2_intro, s4, say).
-text(sor_ses2_intro,  s4, "Hier komt de eerste.").
-
-% Vragen
-move(sor_test_artiesten, s1, question).
-moveConfig(sor_test_artiesten, s1, [type=yesno, context='yesno']).
-text(sor_test_artiesten, s1, "Luister je graag naar muziek?").
-next(sor_test_artiesten, s1, 'answer_yes', s2y).
-next(sor_test_artiesten, s1, 'answer_no', s2n).
-next(sor_test_artiesten, s1, 'answer_dontknow', s2f).
-next(sor_test_artiesten, s1, 'fail', s2f).
-
-move(sor_test_artiesten, s2n, say).
-text(sor_test_artiesten, s2n, "Ja ik ook niet, daar ben ik op het moment te druk voor.").
-
-move(sor_test_artiesten, s2f, say).
-text(sor_test_artiesten, s2f, "Oke.").
-
-move(sor_test_artiesten, s2y, question).
-moveConfig(sor_test_artiesten, s2y, [type=input, context="artiesten", options=['Nielson', 'Femke Meines', 'Nick en Simon', 'Mannes Bakker'], fast=yes, umVariable='artiesten_kind']).
-text(sor_test_artiesten, s2y, "Wie is jouw favoriete ar tiest?").
-display(sor_test_artiesten, s2y, "Wie is jouw favoriete artiest?").
-next(sor_test_artiesten, s2y, "success", s3).
-next(sor_test_artiesten, s2y, "fail", s3f).
-
-move(sor_test_artiesten, s3, say).
-text(sor_test_artiesten, s3, "Ik luister ook graag naar %artiesten_kind%").
-
-move(sor_test_artiesten, s3f, say).
-text(sor_test_artiesten, s3f, "Leuk, ik luister ook graag naar muziek.").
-
-% Buitenspelen
-move(sor_test_buitenspelen, s1, question).
-moveConfig(sor_test_buitenspelen, s1, [type=yesno, context='yesno']).
-text(sor_test_buitenspelen, s1, "En, speel je wel eens buiten?").
-next(sor_test_buitenspelen, s1, 'answer_yes', s2y).
-next(sor_test_buitenspelen, s1, 'answer_no', s2n).
-next(sor_test_buitenspelen, s1, 'answer_dontknow', s2f).
-next(sor_test_buitenspelen, s1, 'fail', s2f).
-
-move(sor_test_buitenspelen, s2n, say).
-text(sor_test_buitenspelen, s2n, "Nee, ik ook niet. Ik mag jammer genoeg niet buiten spelen, want dan ga ik misschien stuk.").
-
-move(sor_test_buitenspelen, s2f, say).
-text(sor_test_buitenspelen, s2f, "Oke").
-
-move(sor_test_buitenspelen, s2y, say).
-text(sor_test_buitenspelen,  s2y, "Ik hoor dat kinderen graag voetballen, tikkertje spelen en dat soort dingen.").
-next(sor_test_buitenspelen,  s2y, "true",  s3).
-
-move(sor_test_buitenspelen, s3, question).
-moveConfig(sor_test_buitenspelen, s3, [type=input, context="buitenspellen", options=['tikkertje', 'verstoppertje', 'voetballen'], fast=yes, umVariable='buitenspel_kind']).
-text(sor_test_buitenspelen, s3, "Wat speel jij graag met je vrienden buiten?").
-next(sor_test_buitenspelen, s3, "success", s4).
-next(sor_test_buitenspelen, s3, "fail", s4f).
-
-move(sor_test_buitenspelen, s4, say).
-text(sor_test_buitenspelen, s4, "Ik mag nog niet naar buiten. Maar als ik mag dan wil ik ook graag %buitenspel_kind% doen").
-
-move(sor_test_buitenspelen, s4f, say).
-text(sor_test_buitenspelen, s4f, "Leuk, ik mag nog niet buitenspelen.").
-
-%Pokemon
-move(sor_test_pokemon, s1, question).
-moveConfig(sor_test_pokemon, s1, [type=yesno, context='yesno']).
-text(sor_test_pokemon, s1, "En, Kijk of speel je wel eens pokemon?").
-next(sor_test_pokemon, s1, 'answer_yes', s2y).
-next(sor_test_pokemon, s1, 'answer_no', s2n).
-next(sor_test_pokemon, s1, 'answer_dontknow', s2f).
-next(sor_test_pokemon, s1, 'fail', s2f).
-
-move(sor_test_pokemon, s2n, say).
-text(sor_test_pokemon, s2n, "Ik ook niet. Ik ben nu vooral aan het rekenen.").
-
-move(sor_test_pokemon, s2f, say).
-text(sor_test_pokemon, s2f, "Oke").
-
-move(sor_test_pokemon, s2y, question).
-moveConfig(sor_test_pokemon, s2y, [type=input, context="pokemon", options=['charmander', 'pikachu', 'squirtle'], fast=yes, umVariable='pokemon_kind']).
-text(sor_test_pokemon, s2y, "Welke pokemon vind jij het leukst?").
-next(sor_test_pokemon, s2y, "success", s3).
-next(sor_test_pokemon, s2y, "fail", s3f).
-
-move(sor_test_pokemon, s3, say).
-text(sor_test_pokemon, s3, "Ik vind %pokemon_kind% ook de leukste pokemon!").
-
-move(sor_test_pokemon, s3f, say).
-text(sor_test_pokemon, s3f, "Leuk, dat vind ik ook.").
-
-% Afscheid
-move(sor_ses2_afscheid, s1, say).
-text(sor_ses2_afscheid,  s1, "Nou %first_name%, dat was het weer.").
-next(sor_ses2_afscheid,  s1, "true",  s2).
-
-move(sor_ses2_afscheid, s2, say).
-text(sor_ses2_afscheid,  s2, "Ik vond het erg leuk en ik heb veel van je geleerd.").
-next(sor_ses2_afscheid,  s2, "true",  s3).
-
-move(sor_ses2_afscheid, s3, say).
-text(sor_ses2_afscheid,  s3, "Heel erg bedankt voor je hulp.").
-next(sor_ses2_afscheid,  s3, "true",  s4).
-
-move(sor_ses2_afscheid, s4, question).
-moveConfig(sor_ses2_afscheid, s4, [type=yesno, context='yesno']).
-text(sor_ses2_afscheid, s4, "Vond jij het ook leuk?").
-next(sor_ses2_afscheid, s4, 'answer_yes', s5y).
-next(sor_ses2_afscheid, s4, 'answer_no', s5n).
-next(sor_ses2_afscheid, s4, 'answer_dontknow', s5f).
-next(sor_ses2_afscheid, s4, 'fail', s5f).
-
-move(sor_ses2_afscheid, s5y, say).
-text(sor_ses2_afscheid,  s5y, "Wat fijn om te horen!").
-next(sor_ses2_afscheid,  s5y, "true",  s6).
-
-move(sor_ses2_afscheid, s5n, say).
-text(sor_ses2_afscheid,  s5n, "Jammer om te horen, ik zal mijn beste doen om het leuker te maken.").
-next(sor_ses2_afscheid,  s5n, "true",  s6).
-
-move(sor_ses2_afscheid, s5f, say).
-text(sor_ses2_afscheid,  s5f, "Dankjewel").
-next(sor_ses2_afscheid,  s5f, "true",  s6).
-
-move(sor_ses2_afscheid, s6, say).
-text(sor_ses2_afscheid,  s6, "Doei doei.").
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Testing				                   %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-minidialog(sor_test_intro, [type=functional, function=intro]).
-move(sor_test_intro, s1, say).
-text(sor_test_intro,  s1, "Laten we kennismaken").
-next(sor_test_intro, s1, "true", s2).
-
-move(sor_test_intro, s2, question).
-moveConfig(sor_test_intro, s2, [type=input, context="animals", options=['hond', 'kat', 'koe', 'paard', 'schaap'], fast=yes, umVariable='lievelingsdier', topics=[success=['dieren', '_answer']]]).
-text(sor_test_intro, s2, "Wat is jouw lievelingsdier?").
-next(sor_test_intro, s2, "success", s3).
-next(sor_test_intro, s2, "fail", s3f).
-
-move(sor_test_intro, s3, say).
-text(sor_test_intro,  s3, "Wat leuk dat een %lievelingsdier% je lievelingsdier is.").
-next(sor_test_intro, s3, "true", s4).
-
-move(sor_test_intro, s3f, say).
-text(sor_test_intro,  s3f, "Oke").
-next(sor_test_intro, s3f, "true", s4).
-
-move(sor_test_intro, s4, say).
-text(sor_test_intro,  s4, "Laten we gaan rekenen").
-set_max_duration(sor_test_intro,  s4, 480000). % 8 minutes
-
+minidialog(sor_naar_rekenen, [type=functional, function=bridge]).
+move(sor_naar_rekenen, s1, say).
+text(sor_naar_rekenen,  s1, "Zo, laten we maar gaan rekenen voordat we onze tijd weg kletsen").
+
+%%%%%%%%%%%%%%%
+%%% REKENEN %%%
+%%%%%%%%%%%%%%%
+
+% Lievelingsdier
 minidialog(sor_test_paard, [type=chitchat, theme=math, topic=paard]).
 move(sor_test_paard, s1, continuator).
 next(sor_test_paard, s1, [[umVariable=lievelingsdier, filter=green, values=["paard"]], [personalization=1]], s2perpaard).
@@ -806,7 +397,7 @@ text(sor_test_paard, s2noper, "Ik heb een tijdje paarden verzorgd.").
 next(sor_test_paard, s2noper, "true", s3).
 
 move(sor_test_paard, s3, say).
-text(sor_test_paard, s3, "Er waren %math_left% stallen. En in elke stal zaten %math_right% paarden.").
+text(sor_test_paard, s3, "Er waren %math_right% stallen. En in elke stal zaten %math_left% paarden.").
 next(sor_test_paard, s3, "true", s4).
 
 move(sor_test_paard, s4, say).
@@ -815,21 +406,176 @@ insert_minidialog(sor_test_paard, s4, math_next).
 insert_minidialog(sor_test_paard, s4, math_dialog).
 
 minidialog(sor_test_koe, [type=chitchat, theme=math, topic=koe]).
-move(sor_test_koe, s1, say).
-text(sor_test_koe, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% koeien.").
-next(sor_test_koe, s1, "true", s2).
+move(sor_test_koe, s1, continuator).
+next(sor_test_koe, s1, [[umVariable=lievelingsdier, filter=green, values=["koe"]], [personalization=1]], s2perpaard).
+next(sor_test_koe, s1, [[umVariable=lievelingsdier, filter=red, values=["koe"]], [personalization=1]], s2peranders).
+next(sor_test_koe, s1, [[personalization=0]], s2noper).
+next(sor_test_koe, s1, "true", s3).
 
-move(sor_test_koe, s2, say).
-text(sor_test_koe, s2, "Hoeveel koeien zijn er in totaal?").
-insert_minidialog(sor_test_koe, s2, math_next).
-insert_minidialog(sor_test_koe, s2, math_dialog).
+move(sor_test_koe, s2perpaard, say).
+text(sor_test_koe, s2perpaard, "Weetje wat toevallig is, ik mocht een tijdje jouw lievelingsdieren koeien verzorgen.").
+next(sor_test_koe, s2perpaard, "true", s3).
+
+move(sor_test_koe, s2peranders, say).
+text(sor_test_koe, s2peranders, "Het is geen %lievelingsdier%, maar koeien zijn ook leuk. Ik mocht ze een tijdje verzorgen.").
+next(sor_test_koe, s2peranders, "true", s3).
+
+move(sor_test_koe, s2noper, say).
+text(sor_test_koe, s2noper, "Ik heb een tijdje koeien verzorgd.").
+next(sor_test_koe, s2noper, "true", s3).
+
+move(sor_test_koe, s3, say).
+text(sor_test_koe, s3, "Er zijn %math_right% stallen. En in elke stal zitten %math_left% koeien.").
+next(sor_test_koe, s3, "true", s4).
+
+move(sor_test_koe, s4, say).
+text(sor_test_koe, s4, "Hoeveel koeien zijn er in totaal?").
+insert_minidialog(sor_test_koe, s4, math_next).
+insert_minidialog(sor_test_koe, s4, math_dialog).
 
 minidialog(sor_test_schaap, [type=chitchat, theme=math, topic=schaap]).
-move(sor_test_schaap, s1, say).
-text(sor_test_schaap, s1, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% schapen.").
-next(sor_test_schaap, s1, "true", s2).
+move(sor_test_schaap, s1, continuator).
+next(sor_test_schaap, s1, [[umVariable=lievelingsdier, filter=green, values=["schaap"]], [personalization=1]], s2perpaard).
+next(sor_test_schaap, s1, [[umVariable=lievelingsdier, filter=red, values=["schaap"]], [personalization=1]], s2peranders).
+next(sor_test_schaap, s1, [[personalization=0]], s2noper).
+next(sor_test_schaap, s1, "true", s3).
 
-move(sor_test_schaap, s2, say).
-text(sor_test_schaap, s2, "Hoeveel schapen zijn er in totaal?").
-insert_minidialog(sor_test_schaap, s2, math_next).
-insert_minidialog(sor_test_schaap, s2, math_dialog).
+move(sor_test_schaap, s2perpaard, say).
+text(sor_test_schaap, s2perpaard, "Weetje wat toevallig is, ik mocht een tijdje jouw lievelingsdieren koeien verzorgen.").
+next(sor_test_schaap, s2perpaard, "true", s3).
+
+move(sor_test_schaap, s2peranders, say).
+text(sor_test_schaap, s2peranders, "Het is geen %lievelingsdier%, maar koeien zijn ook leuk. Ik mocht ze een tijdje verzorgen.").
+next(sor_test_schaap, s2peranders, "true", s3).
+
+move(sor_test_schaap, s2noper, say).
+text(sor_test_schaap, s2noper, "Ik heb een tijdje koeien verzorgd.").
+next(sor_test_schaap, s2noper, "true", s3).
+
+move(sor_test_schaap, s3, say).
+text(sor_test_schaap, s3, "Er zijn %math_left% stallen. En in elke stal zitten %math_right% schapen.").
+next(sor_test_schaap, s3, "true", s4).
+
+move(sor_test_schaap, s4, say).
+text(sor_test_schaap, s4, "Hoeveel schapen zijn er in totaal?").
+insert_minidialog(sor_test_schaap, s4, math_next).
+insert_minidialog(sor_test_schaap, s4, math_dialog).
+
+minidialog(sor_dieren_voer, [type=chitchat, theme=math, topic=dieren_voer]).
+move(sor_dieren_voer, s1, say).
+text(sor_dieren_voer,  s1, "Een %lievelingsdier% moet ook eten natuurlijk.").
+next(sor_dieren_voer,  s1, "true",  s2).
+
+move(sor_dieren_voer, s2, say).
+text(sor_dieren_voer,  s2, "Daarvoor heeft mijn robot vriend heel wat zakken voer gekocht.").
+next(sor_dieren_voer,  s2, "true",  s3).
+
+move(sor_dieren_voer, s3, say).
+text(sor_dieren_voer, s3, "Er zijn %math_left% zakken. En in elke zak zit %math_right% kilo voer.").
+next(sor_dieren_voer, s3, "true", s4).
+
+move(sor_dieren_voer, s4, say).
+text(sor_dieren_voer, s4, "Hoeveel kilo voer is dat in totaal?").
+insert_minidialog(sor_dieren_voer, s4, math_next).
+insert_minidialog(sor_dieren_voer, s4, math_dialog).
+
+% Eten: koken
+minidialog(sor_eten_koken, [type=chitchat, theme=math, topic=eten]).
+move(sor_eten_koken, s1, say).
+text(sor_eten_koken,  s1, "Ik heb ook een tijdje gewerkt als robot kok in een restaurant.").
+math_generate(sor_eten_koken, s1).
+next(sor_eten_koken,  s1, "true",  s2).
+
+move(sor_eten_koken, s2, say).
+text(sor_eten_koken, s2, "En %lievelingseten_met_p% staat op het menu.").
+next(sor_eten_koken, s2, "true", s3).
+
+move(sor_eten_koken, s3, say).
+text(sor_eten_koken, s3, "De robot chef heeft %math_left% gasten en maakt voor elke gast %math_right% %lievelingseten_met_p%.").
+next(sor_eten_koken, s3, "true", s4).
+
+move(sor_eten_koken, s4, say).
+text(sor_eten_koken, s4, "Hoeveel %lievelingseten_met_p% maakt de robot chef in totaal?").
+insert_minidialog(sor_eten_koken, s4, math_next).
+insert_minidialog(sor_eten_koken, s4, math_dialog).
+
+% Eten: afwassen
+minidialog(sor_eten_afwassen, [type=chitchat, theme=math, topic=eten]).
+dependencies(sor_eten_afwassen, [[[sor_eten_koken, user_model, 0]]]).
+
+move(sor_eten_afwassen, s1, say).
+text(sor_eten_afwassen,  s1, "Na al het koken komt de afwas.").
+math_generate(sor_eten_afwassen, s1).
+next(sor_eten_afwassen,  s1, "true",  s2).
+
+move(sor_eten_afwassen, s2, say).
+text(sor_eten_afwassen, s2, "Aan het einde van de avond zijn er %math_left% stapels vuile borden en elke stapel bestaat uit %math_right% borden.").
+next(sor_eten_afwassen, s2, "true", s3).
+
+move(sor_eten_afwassen, s3, say).
+text(sor_eten_afwassen, s3, "Hoeveel borden moeten er afgewassen worden?").
+insert_minidialog(sor_eten_afwassen, s3, math_next).
+insert_minidialog(sor_eten_afwassen, s3, math_dialog).
+
+% Afscheid
+minidialog(sor_ses2_afscheid, [type=functional, function=goodbye]).
+move(sor_ses2_afscheid, s1, say).
+text(sor_ses2_afscheid,  s1, "Nou dat was het weer.").
+next(sor_ses2_afscheid,  s1, "true",  s2).
+
+move(sor_ses2_afscheid, s2, say).
+text(sor_ses2_afscheid,  s2, "Ik vond het erg leuk en ik heb veel van jullie geleerd.").
+next(sor_ses2_afscheid,  s2, "true",  s3).
+
+move(sor_ses2_afscheid, s3, say).
+text(sor_ses2_afscheid,  s3, "Heel erg bedankt voor je hulp.").
+next(sor_ses2_afscheid,  s3, "true",  s4).
+
+move(sor_ses2_afscheid, s4, question).
+moveConfig(sor_ses2_afscheid, s4, [type=yesno, context='yesno']).
+text(sor_ses2_afscheid, s4, "Vonden jullie het ook leuk?").
+next(sor_ses2_afscheid, s4, 'answer_yes', s5y).
+next(sor_ses2_afscheid, s4, 'answer_no', s5n).
+next(sor_ses2_afscheid, s4, 'answer_dontknow', s5f).
+next(sor_ses2_afscheid, s4, 'fail', s5f).
+
+move(sor_ses2_afscheid, s5y, say).
+text(sor_ses2_afscheid,  s5y, "Wat fijn om te horen!").
+next(sor_ses2_afscheid,  s5y, "true",  s6).
+
+move(sor_ses2_afscheid, s5n, say).
+text(sor_ses2_afscheid,  s5n, "Jammer om te horen, ik zal mijn beste doen om het leuker te maken.").
+next(sor_ses2_afscheid,  s5n, "true",  s6).
+
+move(sor_ses2_afscheid, s5f, say).
+text(sor_ses2_afscheid,  s5f, "Dank jullie wel.").
+next(sor_ses2_afscheid,  s5f, "true",  s6).
+
+move(sor_ses2_afscheid, s6, say).
+text(sor_ses2_afscheid,  s6, "Doei doei.").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Testing				                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+minidialog(sor_test_intro, [type=functional, function=intro]).
+move(sor_test_intro, s1, say).
+text(sor_test_intro,  s1, "Laten we kennismaken").
+next(sor_test_intro, s1, "true", s2).
+
+move(sor_test_intro, s2, question).
+moveConfig(sor_test_intro, s2, [type=input, context="animals", options=['hond', 'kat', 'koe', 'paard', 'schaap'], fast=yes, umVariable='lievelingsdier', topics=[success=['dier', '_answer']]]).
+text(sor_test_intro, s2, "Wat is jouw lievelingsdier?").
+next(sor_test_intro, s2, "success", s3).
+next(sor_test_intro, s2, "fail", s3f).
+
+move(sor_test_intro, s3, say).
+text(sor_test_intro,  s3, "Wat leuk dat een %lievelingsdier% je lievelingsdier is.").
+next(sor_test_intro, s3, "true", s4).
+
+move(sor_test_intro, s3f, say).
+text(sor_test_intro,  s3f, "Oke").
+next(sor_test_intro, s3f, "true", s4).
+
+move(sor_test_intro, s4, say).
+text(sor_test_intro,  s4, "Laten we gaan rekenen").
+set_max_duration(sor_test_intro,  s4, 480000). % 8 minutes

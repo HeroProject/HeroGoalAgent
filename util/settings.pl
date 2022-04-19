@@ -6,19 +6,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_pilot). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
 enablePersonalization(1).
 enableSupport(1).
 
 % Math setting
-startMathLevel(5).
+startMathLevel(4).
 resetMathLevel(true).
 mathCorrectThreshold(0).
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "Mike"). % %fist_name% can be used in text.
+localVariable(first_name, ""). % %fist_name% can be used in text.
 
 %%% Memory settings		    %%%
 useMemory(true).
