@@ -10,7 +10,7 @@ module agent_init {
 						start, nextCondition('true'),
 						posture('Unknown'), batteryCharge(100),
 						availableChitchats([]),
-						mathCorrect(0)).
+						mathCorrect(0), mathSupportStrategy(none)).
 	
 	% Initalize pause button
 	if bel(pauseButton(PB)) then insert(waitForPause(PB)).

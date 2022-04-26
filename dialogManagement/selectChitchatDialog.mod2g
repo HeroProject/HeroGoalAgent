@@ -46,11 +46,11 @@ module selectChitchatDialog(SessionElement, RemainingElements) {
 	
 	if bel(enablePersonalization(0)) then
 	{	
-		if bel(SessionElement = [theme=math], findall(ID, (minidialog(ID, [type=chitchat, theme=math, topic=_])), Minidialogs),
+		if bel(SessionElement = [theme=math], findall(ID, (minidialog(ID, [type=chitchat, theme=math, topic=_]), not(isInDialogHistory(ID, _))), Minidialogs),
 				random_select(Minidialog, Minidialogs, _))
 			then insert(selectedMinidialog(Minidialog, RemainingElements)).
 		
-		if bel((SessionElement = [topic=_]; SessionElement = [theme=Theme], Theme\=math), findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=_])), Minidialogs),
+		if bel((SessionElement = [topic=_]; SessionElement = [theme=Theme], Theme\=math), findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=_]), not(isInDialogHistory(ID, _))), Minidialogs),
 				random_select(Minidialog, Minidialogs, _))
 			then insert(selectedMinidialog(Minidialog, RemainingElements)).
 	}

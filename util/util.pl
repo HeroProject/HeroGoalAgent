@@ -34,7 +34,7 @@
 	waitingForTimer/0,
 	waitingForInit/0, waitingForAfterMemoryInit/0,
 	eventListener/2,
-	mathCorrect/1, activeInteraction/0, mathTime/1.
+	mathCorrect/1, activeInteraction/1, mathTime/1, mathSupportStrategy/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move parameter handling.                               %%%
@@ -285,20 +285,22 @@ delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- del
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
 
 % Text generation
-generate_text_from_source(math_praise, SelectedText) :- findall(Text, math_praise(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_correct_acknowledge, SelectedText) :- findall(Text, math_correct_acknowledge(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_correct_praise, SelectedText) :- findall(Text, math_correct_praise(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_incorrect(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
 generate_text_from_source(math_incorrect_after_hint, SelectedText) :- findall(Text, math_incorrect_after_hint(Text), Texts), random_select(SelectedText, Texts, _).
 
 % Session pruning
-excludePrunning([math_dialog, math_next]).
-getPrunedSession(Session, History, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), excludePrunning(Exclude), not(member(KeepLast, Exclude)), pruneSession(Session, History, Pruned).
-getPrunedSession(Session, History, [general_wakeup | Pruned]) :- last(History, KeepLast), excludePrunning(Exclude), member(KeepLast, Exclude), pruneSession(Session, History, Pruned).
+excludePrunning(Minidialog) :- atom_string(Minidialog, MDS), split_string(MDS, "_", "", ["math" | _]).
+getPrunedSession(Session, History, 1, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), not(excludePrunning(KeepLast)), pruneSession(Session, History, Pruned), !.
+getPrunedSession(Session, History, 1, [general_wakeup | Pruned]) :- last(History, KeepLast), excludePrunning(KeepLast), pruneSession(Session, History, Pruned), !.
+getPrunedSession(Session, History, 0, [general_wakeup | Pruned]) :- pruneSession(Session, History, Pruned), !.
+
 pruneSession([[narrative=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([[topic=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([[theme=Theme] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- Theme\=math, pruneSession(SessionRemain, HistoryRemain, PrunedRest).
-%pruneSession([general_wakeup | SessionRemain], [general_wakeup | HistoryRemain], [general_wakeup | PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([[theme=math] | SessionRemain], [_ | HistoryRemain], [[theme=math]| PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([CurrentDialog | SessionRemain], [CurrentDialog | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
 pruneSession([CurrentDialog | SessionRemain], [CurrentHistory | HistoryRemain], PrunedRest) :- CurrentDialog\=CurrentHistory, pruneSession([CurrentDialog | SessionRemain], HistoryRemain, PrunedRest).
@@ -310,34 +312,45 @@ pruneSession([], [], []).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 mathMaxLevel(11).
 math_generate_left_right(0, Left, Right, Answer) :- random_member(Left, [2, 5, 10]), random(2,11, Right), Answer is Left*Right, !.
-math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right, !.
-math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), Right is R1 * 10, Answer is Left*Right, !.
-math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(2,11, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
-math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,11, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,10, Right), Answer is Left*Right, !.
+math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(1,10, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(1,10, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,10, R1), Right is R1 * 10, Answer is Left*Right, !.
 math_generate_left_right(5, Left, Right, Answer) :- random(2,11, Left), random(11,20, Right), Answer is Left*Right, !.
-math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,10, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
 math_generate_left_right(7, Left, Right, Answer) :- random(2,11, Left), random(11,100, Right), Answer is Left*Right, !.
 math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(11,100, R1), random_member(Factor, [10, 100]), Right is R1 * Factor, Answer is Left*Right, !.
-math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,11, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,10, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
 math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right, !.
 math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right, !.
 
-math_hint_strategy(0, none).
-math_hint_strategy(1, none).
-math_hint_strategy(2, kleine_som).
-math_hint_strategy(3, kleine_som).
-math_hint_strategy(4, kleine_som).
-math_hint_strategy(5, splitsen).
-math_hint_strategy(6, kleine_som).
-math_hint_strategy(7, splitsen).
-math_hint_strategy(8, none).
-math_hint_strategy(9, none).
-math_hint_strategy(10, none).
-math_hint_strategy(11, none).
+mathHintStrategies([tafel_rij, tafel, kleine_som, kleine_som, kleine_som, splitsen, kleine_som, splitsen, none, none, none, none]).
+math_get_hintstrategy(Level, _, _, Strategy) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), (Strategy=splitsen; Strategy=tafel_rij).
+math_get_hintstrategy(Level, _, Right, kleine_som_1000) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 1000, Right < 10000.
+math_get_hintstrategy(Level, _, Right, kleine_som_100) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 100, Right < 1000.
+math_get_hintstrategy(Level, _, Right, kleine_som_10) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 10, Right < 100.
+math_get_hintstrategy(Level, Left, _, tafel_rij) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel, (Left=2; Left=5; Left=10).
+math_get_hintstrategy(Level, Left, _, steunsom) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel, (Left=3; Left=6; Left=9).
+math_get_hintstrategy(Level, 4, _, verdubbelen_4) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
+math_get_hintstrategy(Level, 8, _, verdubbelen_8) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
+math_get_hintstrategy(Level, 7, _, split_7) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
 
-math_generate_hint_splitsen(Right, Big, Small) :-  number_string(Right, RightString), string_chars(RightString, [BigChar, SmallChar]), 
-							string_chars(BigString, [BigChar, '0']), string_chars(SmallString, [SmallChar]), 
-							number_string(Big, BigString), number_string(Small, SmallString).
+math_generate_hint_splitsen(Left, Right, Big, Left * Big, Small, Left * Small) :-  number_string(Right, RightString), string_chars(RightString, [BigChar, SmallChar]), 
+								string_chars(BigString, [BigChar, '0']), string_chars(SmallString, [SmallChar]), 
+								number_string(Big, BigString), number_string(Small, SmallString).
+
+math_generate_hint_kleine_som(Left, Right, Som1, Answer1, Som10, Answer10, Som100, Answer100) :- Som1 is Right / 1000, Answer1 is Left * Som1, 
+												 Som10 is Right / 100, Answer10 is Left * Som10,
+												 Som100 is Right / 10, Answer100 is Left * Som100.
+
+steunsommen([2,5,10]).
+math_generate_hint_steunsom(Left, Right, Steunsom, Steunanswer, '1 keer meer') :- steunsommen(Steunsommen), Steunsom is Left+1, Steunanswer is Steunsom * Right, member(Steunsom, Steunsommen), !.
+math_generate_hint_steunsom(Left, Right, Steunsom, Steunanswer, '1 keer minder') :- steunsommen(Steunsommen), Steunsom is Left-1, Steunanswer is Steunsom * Right, member(Steunsom, Steunsommen), !.
+
+math_generate_hint_verdubbelen(Left, Right, [Answer2, Answer4]) :- Left=8, Answer2 is 2 * Right, Answer4 is 4 * Right. 
+math_generate_hint_verdubbelen(Left, Right, [Answer2]) :- Left=4, Answer2 is 2 * Right.
+
+math_generate_hint_split_7(Right, Answer2, Answer5) :- Answer2 is 2 * Right, Answer5 is 5 * Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

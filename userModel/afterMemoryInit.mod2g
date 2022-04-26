@@ -5,11 +5,19 @@ use '../agent_actions' as actionspec.
 order=linearall.
 
 module afterMemoryInit {
-	
+		
 	% Smart reboot of interaction.
-	if bel(continueSession(true), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
-			moveHistory(LastMove), session(Session), getPrunedSession(Session, CurrentHistory, PrunedSession))
+	if bel(continueSession(true), getUserModelValue(activeInteractionTime, PassedTime), getUserModelValue(activeInteractionMax, MaxTime), 
+			PassedTime >= 0, MaxTime > 0, (Duration is MaxTime - PassedTime, Duration>=30000; Duration is 3000))
+		then insert(activeInteraction(Duration)) + starttimer(maxInteractionDuration, 30000, Duration).
+	
+	if bel(continueSession(true), not(activeInteraction(_)), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
+			moveHistory(LastMove), session(Session), getPrunedSession(Session, CurrentHistory, 1, PrunedSession))
 		then delete(session(Session)) + insert(session(PrunedSession), moveReset(LastMove)) + log(test(Session, CurrentHistory, PrunedSession)).
+	
+	if bel(continueSession(true), activeInteraction(_), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
+			session(Session), getPrunedSession(Session, CurrentHistory, 0, PrunedSession))
+		then delete(session(Session)) + insert(session(PrunedSession), moveReset(s1)) + log(test(Session, CurrentHistory, PrunedSession)).
 	
 	% If mathLevel is set then insert the startMathLevel.
 	if bel(userId(UserId), (not(getUserModelValue(mathLevel, _)); resetMathLevel(true)), startMathLevel(Level), 

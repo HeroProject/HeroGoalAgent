@@ -6,30 +6,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(sorocova_pilot). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
 userId('999').
-enablePersonalization(1).
+enablePersonalization(0).
 enableSupport(1).
-
-% Math setting
-startMathLevel(4).
-resetMathLevel(true).
-mathCorrectThreshold(0).
 
 %%% Local Variables 		    %%%
 localVariable(first_name, ""). % %fist_name% can be used in text.
+localVariable(student, "").
+
+% Math setting
+startMathLevel(1).
+resetMathLevel(true).
+mathCorrectThreshold(2).
 
 %%% Memory settings		    %%%
 useMemory(true).
-continueSession(false).
+continueSession(true).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT VALUES		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ROBOT defaults		    %%%
 pauseButton('MiddleTactilTouched').
-basePosture('Sit').
+basePosture('Stand').
 tabletUse(repair). %can be repair, explicit, or always
 
 %%% MOVECONFIG defaults		    %%% 

@@ -152,7 +152,7 @@ next(sor_tutorial,  s20y, "true",  s21).
 
 move(sor_tutorial, s21, say).
 text(sor_tutorial,  s21, "Top, laten we voor het rekenen nog even kletsen.").
-set_max_duration(sor_tutorial,  s21, 480000). % 8 minutes
+set_max_duration(sor_tutorial,  s21, 480000, 30000). % 8 minutes
 
 % Kletspraat
 minidialog(sor_kletsen_dier, [type=chitchat, theme=kletsen, topic=dier]).
@@ -578,4 +578,4 @@ next(sor_test_intro, s3f, "true", s4).
 
 move(sor_test_intro, s4, say).
 text(sor_test_intro,  s4, "Laten we gaan rekenen").
-set_max_duration(sor_test_intro,  s4, 480000). % 8 minutes
+set_max_duration(sor_test_intro,  s4, 480000, 30000). % 8 minutes
