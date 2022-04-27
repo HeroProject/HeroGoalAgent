@@ -14,6 +14,9 @@ module initializeUserModel {
 				then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 		}
 	
+	if bel(enablePersonalization(0), localVariable(first_name, _), userModel(UserModel), updateUserModel(first_name, "", UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).  
+	
 	% Synchronize with remote user model and history
 	if bel(useMemory(true), userId(UserId)) then {
 		if bel(sessionId(SessionId)) then setSession(UserId, SessionId).

@@ -6,20 +6,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(sorocova_test). % see minidialogs/session.pl for available multi-session designs
+multiSessionDesignId(sorocova_study). % see minidialogs/session.pl for available multi-session designs
 sessionId(1).
-userId('999').
-enablePersonalization(0).
+userId('998').
+enablePersonalization(1).
 enableSupport(1).
 
 %%% Local Variables 		    %%%
-localVariable(first_name, ""). % %fist_name% can be used in text.
-localVariable(student, "").
+localVariable(first_name, "Elvira").
+localVariable(student_name, "Mike").
+localVariable(robot_name, "Hero").
 
 % Math setting
 startMathLevel(1).
 resetMathLevel(true).
-mathCorrectThreshold(2).
+mathCorrectThreshold(1).
 
 %%% Memory settings		    %%%
 useMemory(true).

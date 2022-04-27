@@ -66,8 +66,17 @@ text(math_dialog, s4, "%math_given_answer%").
 moveConfig(math_dialog, s4, [eventListener=['misheard'='LeftBumperPressed'], goTimer=5000]).
 display(math_dialog, s4, "%math_given_answer%", always).
 leds(math_dialog, s4, direct, ["LeftFootLeds"], ["rood"]).
-next(math_dialog, s4, "misheard", s3).
+next(math_dialog, s4, "misheard", s4repeat).
 next(math_dialog, s4, "timer", s5).
+
+move(math_dialog, s4repeat, question).
+moveConfig(math_dialog, s4repeat, [type=math, context='integer', correctAnswer=math_answer, inputModality=[tablet=1], maxAnswerTime=[tablet=0], form=numberField, 
+	   umVariable=math_given_answer, umResult=math_result]).
+text(math_dialog, s4repeat, "Sorry! Kun je het antwoord intypen op de tè blèet.").
+display(math_dialog, s4repeat, "%math_left% x %math_right%").
+leds(math_dialog, s4repeat, reset).
+next(math_dialog, s4repeat, 'correct', s5).
+next(math_dialog, s4repeat, 'incorrect', s5).
 
 move(math_dialog, s5, say).
 math_evaluate(math_dialog, s5, math_result, 0).
@@ -178,7 +187,19 @@ display_math_hints_with_answers(math_help_steunsom_uitleg, s4).
 next(math_help_steunsom_uitleg, s4, "true", s5).
 
 move(math_help_steunsom_uitleg, s5, say).
-text(math_help_steunsom_uitleg, s5, "Gaaf hè \pau=500\ ").
+text(math_help_steunsom_uitleg, s5, "Gaaf hè").
+display_math_hints_with_answers(math_help_steunsom_uitleg, s5).
+next(math_help_steunsom_uitleg, s5, "true", s6).
+
+move(math_help_steunsom_uitleg, s6, say).
+text(math_help_steunsom_uitleg, s6, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_steunsom_uitleg, s6, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_steunsom_uitleg, s6).
+leds(math_help_steunsom_uitleg, s6, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_steunsom_uitleg, s6, "ready", s7).
+
+move(math_help_steunsom_uitleg, s7, say).
+leds(math_help_steunsom_uitleg, s7, reset).
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Verdubbelen_4 %%%
@@ -215,7 +236,19 @@ display_math_hints_with_answers(math_help_double_4_uitleg, s4).
 next(math_help_double_4_uitleg, s4, "true", s5).
 
 move(math_help_double_4_uitleg, s5, say).
-text(math_help_double_4_uitleg, s5, "Gaaf hè \pau=500\ ").
+text(math_help_double_4_uitleg, s5, "Gaaf hè").
+display_math_hints_with_answers(math_help_double_4_uitleg, s5).
+next(math_help_double_4_uitleg, s5, "true", s6).
+
+move(math_help_double_4_uitleg, s6, say).
+text(math_help_double_4_uitleg, s6, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_double_4_uitleg, s6, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_double_4_uitleg, s6).
+leds(math_help_double_4_uitleg, s6, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_double_4_uitleg, s6, "ready", s7).
+
+move(math_help_double_4_uitleg, s7, say).
+leds(math_help_double_4_uitleg, s7, reset).
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Verdubbelen_8 %%%
@@ -231,10 +264,10 @@ text(math_help_double_8, s2, "Dat is dan 4 keer %math_right%. Als we dat nog een
 display_math_hints(math_help_double_8, s2).
 next(math_help_double_8, s2, "true", s3).
 
-move(math_help_double_4, s3, say).
-text(math_help_double_4, s3, "Gebruik dit om opnieuw %math_left% keer %math_right% uit te rekenen.").
-display_math_hints(math_help_double_4, s3).
-insert_minidialog(math_help_double_4, s3, math_hint_dialog).
+move(math_help_double_8, s3, say).
+text(math_help_double_8, s3, "Gebruik dit om opnieuw %math_left% keer %math_right% uit te rekenen.").
+display_math_hints(math_help_double_8, s3).
+insert_minidialog(math_help_double_8, s3, math_hint_dialog).
 
 %%% Uitleggen van hint
 move(math_help_double_8_uitleg, s1, say).
@@ -267,7 +300,19 @@ display_math_hints_with_answers(math_help_double_8_uitleg, s6).
 next(math_help_double_8_uitleg, s6, "true", s7).
 
 move(math_help_double_8_uitleg, s7, say).
-text(math_help_double_8_uitleg, s7, "Gaaf hè \pau=500\ ").
+text(math_help_double_8_uitleg, s7, "Gaaf hè ").
+display_math_hints_with_answers(math_help_double_8_uitleg, s7).
+next(math_help_double_8_uitleg, s7, "true", s8).
+
+move(math_help_double_8_uitleg, s8, say).
+text(math_help_double_8_uitleg, s8, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_double_8_uitleg, s8, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_double_8_uitleg, s8).
+leds(math_help_double_8_uitleg, s8, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_double_8_uitleg, s8, "ready", s9).
+
+move(math_help_double_8_uitleg, s9, say).
+leds(math_help_double_8_uitleg, s9, reset).
 
 %%%%%%%%%%%%%%%%
 %%% Split 7  %%%
@@ -309,7 +354,19 @@ display_math_hints_with_answers(math_help_split_7_uitleg, s5).
 next(math_help_split_7_uitleg, s5, "true", s6).
 
 move(math_help_split_7_uitleg, s6, say).
-text(math_help_split_7_uitleg, s6, "Gaaf hè \pau=500\ ").
+text(math_help_split_7_uitleg, s6, "Gaaf hè").
+display_math_hints_with_answers(math_help_split_7_uitleg, s6).
+next(math_help_split_7_uitleg, s6, "true", s7).
+
+move(math_help_split_7_uitleg, s7, say).
+text(math_help_split_7_uitleg, s7, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_split_7_uitleg, s7, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_split_7_uitleg, s7).
+leds(math_help_split_7_uitleg, s7, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_split_7_uitleg, s7, "ready", s8).
+
+move(math_help_split_7_uitleg, s8, say).
+leds(math_help_split_7_uitleg, s8, reset).
 
 %%%%%%%%%%%%%%%%
 %%% Splitsen %%%
@@ -360,7 +417,19 @@ display_math_hints_with_answers(math_help_splitsen_uitleg, s5).
 next(math_help_splitsen_uitleg, s5, "true", s6).
 
 move(math_help_splitsen_uitleg, s6, say).
-text(math_help_splitsen_uitleg, s6, "Gaaf hè \pau=500\ ").
+text(math_help_splitsen_uitleg, s6, "Gaaf hè").
+display_math_hints_with_answers(math_help_splitsen_uitleg, s6).
+next(math_help_splitsen_uitleg, s6, "true", s7).
+
+move(math_help_splitsen_uitleg, s7, say).
+text(math_help_splitsen_uitleg, s7, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_splitsen_uitleg, s7, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_splitsen_uitleg, s7).
+leds(math_help_splitsen_uitleg, s7, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_splitsen_uitleg, s7, "ready", s8).
+
+move(math_help_splitsen_uitleg, s8, say).
+leds(math_help_splitsen_uitleg, s8, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%% De Kleine som 10 %%%
@@ -406,6 +475,19 @@ next(math_help_kleine_som_10_uitleg, s4, "true", s5).
 
 move(math_help_kleine_som_10_uitleg, s5, say).
 text(math_help_kleine_som_10_uitleg, s5, "Gaaf hè \pau=500\ ").
+display_math_hints_with_answers(math_help_kleine_som_10_uitleg, s5).
+next(math_help_kleine_som_10_uitleg, s5, "true", s6).
+
+move(math_help_kleine_som_10_uitleg, s6, say).
+text(math_help_kleine_som_10_uitleg, s6, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_kleine_som_10_uitleg, s6, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_kleine_som_10_uitleg, s6).
+leds(math_help_kleine_som_10_uitleg, s6, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_kleine_som_10_uitleg, s6, "ready", s7).
+
+move(math_help_kleine_som_10_uitleg, s7, say).
+leds(math_help_kleine_som_10_uitleg, s7, reset).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%% De Kleine som 100 %%%
@@ -461,6 +543,18 @@ next(math_help_kleine_som_100_uitleg, s6, "true", s7).
 move(math_help_kleine_som_100_uitleg, s7, say).
 display_math_hints_with_answers(math_help_kleine_som_100_uitleg, s7).
 text(math_help_kleine_som_100_uitleg, s7, "Gaaf hè \pau=500\ ").
+next(math_help_kleine_som_100_uitleg, s7, "true", s8).
+
+move(math_help_kleine_som_100_uitleg, s8, say).
+text(math_help_kleine_som_100_uitleg, s8, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_kleine_som_100_uitleg, s8, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_kleine_som_100_uitleg, s8).
+leds(math_help_kleine_som_100_uitleg, s8, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_kleine_som_100_uitleg, s8, "ready", s9).
+
+move(math_help_kleine_som_100_uitleg, s9, say).
+leds(math_help_kleine_som_100_uitleg, s9, reset).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%% De Kleine som 100 %%%
@@ -533,6 +627,17 @@ next(math_help_kleine_som_1000_uitleg, s8, "true", s9).
 move(math_help_kleine_som_1000_uitleg, s9, say).
 display_math_hints_with_answers(math_help_kleine_som_1000_uitleg, s9).
 text(math_help_kleine_som_1000_uitleg, s9, "Gaaf hè \pau=500\ ").
+next(math_help_kleine_som_1000_uitleg, s9, "true", s10).
+
+move(math_help_kleine_som_1000_uitleg, s10, say).
+text(math_help_kleine_som_1000_uitleg, s10, "Druk maar op mijn groene teen als je klaar bent om verder te gaan").
+moveConfig(math_help_kleine_som_1000_uitleg, s10, [eventListener=['ready'='RightBumperPressed']]).
+display_math_hints_with_answers(math_help_kleine_som_1000_uitleg, s10).
+leds(math_help_kleine_som_1000_uitleg, s10, direct, ["RightFootLeds"], ["groen"]).
+next(math_help_kleine_som_1000_uitleg, s10, "ready", s11).
+
+move(math_help_kleine_som_1000_uitleg, s11, say).
+leds(math_help_kleine_som_1000_uitleg, s11, reset).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Hints afhandeling %%%

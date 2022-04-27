@@ -73,8 +73,6 @@ without_last([_], []).
 without_last([X|Xs], [X|WithoutLast]) :- 
     without_last(Xs, WithoutLast), !.
 
-dialogHistoryReset([H | T], [[] | T]).
-
 %%% NarrativeHistory %%%
 updateNarrativeHistory(Thread, UpdatedHistory) :- narrativeHistory(History), not(member((Thread=_), History)),
 	append(History, [Thread=1], UpdatedHistory), !.
@@ -91,7 +89,10 @@ getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :-
 
 %%% Dependencies %%%
 matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; matchesDepencencies(Rest), !.
-matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=green] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=red] | T]) :- not(isInDialogHistory(Target, _)), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=orange] | T]) :- sessionId(Session), not(isInDialogHistory(Target, Session)), matchesDependency(T), !.
+matchesDependency([[session=Sessions] | T]) :- sessionId(Session), member(Session, Sessions), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
@@ -103,6 +104,7 @@ matchesConditional([umVariable=Var, filter=green, values=["_any"]]) :- getUserMo
 matchesConditional([umVariable=Var, filter=red, values=["_any"]]) :- not(getUserModelValue(Var, _)).
 matchesConditional([umVariable=Var, filter=Filter, values=Values]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values).
 matchesConditional([personalization=Enabled]) :- enablePersonalization(Enabled).
+matchesConditional([support=Enabled]) :- enableSupport(Enabled).
 
 
 extractVariablesFromConditionals(Conditionals, Vars) :- findall(Var, (flatten(Conditionals, FConds), member((umVariable=Var), FConds)), Vars).

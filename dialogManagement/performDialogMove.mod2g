@@ -122,8 +122,8 @@ module performDialogMove(Minidialog, Move) {
 		}
 	
 	% Save result of audio co-creation
-	%if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
-			%delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
+	if bel(save_sound(Minidialog, Move, ID, Sound), userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
+			delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, ID, Sound).
 	
 	if bel(save_sound(Minidialog, Move, OptionNumber), waitingForSoundAnim(ID), animOption(ID, OptionNumber, Sound), soundConfig(ID, RT)) then {
 		if bel(userModel(UserModel), updateUserModel(ID, Sound, UserModel, NewUserModel), userId(UserId)) then
@@ -219,6 +219,9 @@ module performDialogMove(Minidialog, Move) {
 
 	if bel(set_max_duration(Minidialog, Move, Duration, Interval), userId(UserId)) 
 		then insert(activeInteraction(Duration)) + setInteractantData(UserId, activeInteractionMax, Duration) + setInteractantData(UserId, activeInteractionTime, 0) + starttimer(maxInteractionDuration, Interval, Duration).
+	
+	if bel(set_umvariable(Minidialog, Move, Key, Value), enablePersonalization(0), userModel(UserModel), updateUserModel(Key, Value, UserModel, UpdatedUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(UpdatedUserModel)).
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	%%					Math						%%
