@@ -6,16 +6,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Session templates		                           %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-sessionDesign(zoe_kennismaking, [general_wakeup, zoe_begroeting]).
-sessionDesign(zoe_handshake, [general_wakeup, zoe_handshake_doen]).
-sessionDesign(zoe_gesprekje, [general_wakeup, lievelingsdier, lievelingseten]).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Multi-session design	                           %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-multiSessionDesign(zoe, [zoe_kennismaking, zoe_handshake, zoe_gesprekje]).
+multiSessionDesign(bieb, [bieb_1]).
+sessionDesign(bieb_1, [general_wakeup, bieb_begroeting, lievelingsdier, lievelingseten, bieb_handshake_maken, bieb_doei, general_rest]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Test Suite			                           %%%
@@ -42,4 +34,3 @@ sessionDesign(test_session_8, [general_wakeup, test_session_led_2, general_rest]
 multiSessionDesign(test_short, [testing_short]).
 multiSessionDesign(test_short_pepper, [testing_short_pepper]).
 multiSessionDesign(test_multi_session, [test_session_1, test_session_2, test_session_3, test_session_4, test_session_5, test_session_6, test_session_7, test_session_8]).
-

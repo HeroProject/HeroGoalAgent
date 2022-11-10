@@ -1,0 +1,37 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../agent_actions' as actionspec.
+
+order=linearall.
+
+module afterMemoryInit {
+		
+	% Smart reboot of interaction.
+	if bel(continueSession(true), getUserModelValue(activeInteractionTime, PassedTime), getUserModelValue(activeInteractionMax, MaxTime), interactionDurationInterval(Interval),
+			PassedTime >= 0, MaxTime > 0, (Duration is MaxTime - PassedTime, Duration>=Interval; Duration is Interval))
+		then insert(activeInteraction(Duration)) + starttimer(maxInteractionDuration, Interval, Duration).
+		
+	if bel(continueSession(true), getUserModelValue(activeInteractionCountCurrent, CurrentCount), getUserModelValue(activeInteractionCountMax, MaxCount),
+			CurrentCount >=0, MaxCount > 0, CurrentCount < MaxCount)
+		then insert(activeInteractionCount(CurrentCount, MaxCount)).
+	
+	if bel(continueSession(true), not(activeInteraction(_)), not(activeInteractionCount(_, _)), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
+			moveHistory(LastMove), session(Session), getPrunedSession(Session, CurrentHistory, 1, PrunedSession))
+		then delete(session(Session)) + insert(session(PrunedSession), moveReset(LastMove)).
+	
+	if bel(continueSession(true), activeInteraction(_), activeInteractionCount(_, _), sessionId(SessionId), dialogHistory(FullHistory), nth1(SessionId, FullHistory, CurrentHistory), 
+			session(Session), getPrunedSession(Session, CurrentHistory, 0, PrunedSession))
+		then delete(session(Session)) + insert(session(PrunedSession), moveReset(s1)).
+	
+	% If mathLevel is set then insert the startMathLevel.
+	if bel(userId(UserId), (not(getUserModelValue(mathLevel, _)); resetMathLevel(true)), startMathLevel(Level), 
+			userModel(UserModel), updateUserModel(mathLevel, Level, UserModel, NewUserModel)) 
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)) + setInteractantData(UserId, mathLevel, Level).
+	
+	% Generate initial sum
+	if bel(getUserModelValue(mathLevel, Level), math_generate_left_right(Level, Left, Right, Answer),
+		userModel(UserModel), updateUserModelList([math_left=Left, math_right=Right, math_answer=Answer], UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
+	
+	if bel(waitingForAfterMemoryInit) then delete(waitingForAfterMemoryInit).
+}

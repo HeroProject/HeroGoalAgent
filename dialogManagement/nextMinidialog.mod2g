@@ -4,6 +4,7 @@ use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../userModel/loadInteractantData' as module.
 use selectNarrativeDialog as module.
 use selectChitchatDialog as module.
+use selectMathDialog as module.
 use '../agent_actions' as actionspec.
 
 
@@ -14,7 +15,7 @@ module nextMinidialog {
 	if bel(session(Session), pop(Session, SessionElement, RemainingElements)) then
 	{
 		% SessionElements contains a direct id to a minidialog.
-		if bel(SessionElement \= [_=_])
+		if bel(SessionElement \= [_=_], SessionElement \=[_=_, _=_])
 			then insert(selectedMinidialog(SessionElement, RemainingElements)).
 		
 		% SessionElement contains a session block of a narrative thread. Select the best fitting narrative minidialog.		
@@ -23,6 +24,21 @@ module nextMinidialog {
 		
 		% SessionElement contains a session block of a chitchat. Select the best fitting chitchat minidialog.	
 		if bel(SessionElement = [topic=_] ; SessionElement = [theme=_]) then selectChitchatDialog(SessionElement, RemainingElements).
+		
+		% SessionElement contains a session block of a math minidialog. Select the best fitting math minidialog.
+		if bel(SessionElement = [type=math, params=Params], userId(UserId), interactionDurationInterval(Interval)) then
+		{
+			if bel(member((duration=Duration), Params)) then insert(activeInteraction(Duration)) + setInteractantData(UserId, activeInteractionMax, Duration) 
+				+ setInteractantData(UserId, activeInteractionTime, 0) + starttimer(maxInteractionDuration, Interval, Duration).
+				
+			if bel(member((maxMinidialog=MaxMinidialog), Params)) then insert(activeInteractionCount(0, MaxMinidialog)) 
+				+ setInteractantData(UserId, activeInteractionCountCurrent, 0) + setInteractantData(UserId, activeInteractionCountMax, MaxMinidialog).
+			 
+			if true then selectMathDialog(RemainingElements).
+		
+		}
+		
+		if bel(SessionElement = [type=math]) then selectMathDialog(RemainingElements).
 		
 		% If no minidialog could be selected, go to the next element of the session.
 		if not(bel(selectedMinidialog(_, _))) then delete(session(Session)) + insert(session(RemainingElements)) + nextMinidialog + log(dialogHistory(noneSelected)).
@@ -35,9 +51,13 @@ module nextMinidialog {
 			
 			% Delete the current session and insert currentMinidialog, currentMove (start is default s1), and the remaining session elements.
 			% Import relevant user model variables for this minidialog.
-			if true then delete(session(Session))
+			if bel(not(moveReset(_)); Selected=general_wakeup) then delete(session(Session))
 				+ insert(currentMinidialog(Selected), currentMove(s1), session(Remaining))
 				+ setMoveHistory(UserId, s1).
+			
+			if bel(moveReset(SelectedMove), Selected\=general_wakeup) then delete(session(Session), moveReset(SelectedMove))
+				+ insert(currentMinidialog(Selected), currentMove(SelectedMove), session(Remaining))
+				+ setMoveHistory(UserId, SelectedMove). 
 			
 			% If memory is used, load interact data from memory
 			if bel(useMemory(true)) then loadInteractantData(Selected).

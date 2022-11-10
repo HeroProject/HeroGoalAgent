@@ -14,24 +14,22 @@ module agent_main {
 	
 		if bel(not(waitingForInit), not(waitingForHistory), waitingForSession, memoryTasksCompleted, sessionId(SessionId), multiSessionDesignId(MultisessionID), multiSessionDesign(MultisessionID, MultiSessionDesign),
 				nth1(SessionId, MultiSessionDesign, SessionLabel), sessionDesign(SessionLabel, Session))
-			then delete(waitingForSession) + insert(session(Session), waitingForMetadata).
-		
-		if bel(waitingForMetadata, session(Session)) then {
+			then delete(waitingForSession) + insert(session(Session), waitingForMetadata, waitingForAfterMemoryInit) + afterMemoryInit.
+				
+		if bel(waitingForMetadata, not(waitingForAfterMemoryInit), session(Session)) then {
 			if bel(useMemory(true)) then loadDependencyMetadata(Session).
 			if bel(useMemory(false)) then delete(waitingForMetadata).
 		}
 				
-		if bel(session(_), not(waitingForMetadata), memoryTasksCompleted) then adopt(session([])) + nextMinidialog.
+		if bel(session(_), not(waitingForAfterMemoryInit), not(waitingForMetadata), memoryTasksCompleted) then adopt(session([])) + nextMinidialog.
 	}
 	
 	% Execute the move actions
 	if bel(currentMinidialog(Minidialog), currentMove(Move), readyForAction(Minidialog, Move)) then performDialogMove(Minidialog, Move).
 	
 	%TODO: make pretty
-	%if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
-	%if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
-	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden."). 
-	if bel(unpause_act) then delete(unpause_act, paused) + say("Laten we weer verder gaan.").
+	if bel(pause_act) then delete(pause_act) + say("Ik ga even pauze houden.") + rest + stopLedAnimation. 
+	if bel(unpause_act) then delete(unpause_act, paused) + wakeUp + say("Laten we weer verder gaan.").
 	if bel(stop_act) then delete(stop_act) + say("Weltrusten") + rest + stopLedAnimation.
 }
 	

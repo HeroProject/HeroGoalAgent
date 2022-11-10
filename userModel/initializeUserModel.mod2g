@@ -6,7 +6,7 @@ order=linearall.
 
 module initializeUserModel {
 	% Initialize user model
-	if true then insert(userModel([]), dialogHistory([[]]), narrativeHistory([]), topicsOfInterest([])).
+	if true then insert(userModel([]), dialogHistory([[]]), narrativeHistory([]), moveHistory(s1), topicsOfInterest([])).
 
 	forall bel(localVariable(Key, Value))
 		do {
@@ -14,12 +14,23 @@ module initializeUserModel {
 				then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).
 		}
 	
+	if bel(enablePersonalization(0), localVariable(first_name, _), userModel(UserModel), updateUserModel(first_name, "", UserModel, NewUserModel))
+		then delete(userModel(UserModel)) + insert(userModel(NewUserModel)).  
+	
 	% Synchronize with remote user model and history
-	if bel(useMemory(true)) then {
-		if bel(userId(UserId), sessionId(SessionId)) then setSession(UserId, SessionId).
-		if bel(continueSession(true), userId(UserId)) then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getTopicsOfInterest(UserId) + insert(waitingForHistory).
-		if bel(continueSession(false), userId(UserId), sessionId(SessionId)) then clearHistory(UserId,SessionId) + insert(waitingForHistory).
+	if bel(useMemory(true), userId(UserId)) then {
+		if bel(sessionId(SessionId)) then setSession(UserId, SessionId).
+		if bel(continueSession(true))
+			then getDialogHistory(UserId) + getNarrativeHistory(UserId) + getMoveHistory(UserId) + getTopicsOfInterest(UserId) 
+				+ getInteractantData(UserId, activeInteractionMax) + getInteractantData(UserId, activeInteractionTime) 
+				+ getInteractantData(UserId, activeInteractionCountMax) + getInteractantData(UserId, activeInteractionCountCurrent) + insert(waitingForHistory).
+		if bel(continueSession(false), sessionId(SessionId)) 
+			then clearHistory(UserId,SessionId) + setInteractantData(UserId, activeInteractionMax, 0) + setInteractantData(UserId, activeInteractionTime, -1) 
+				+ setInteractantData(UserId, activeInteractionCountMax, -1) + setInteractantData(UserId, activeInteractionCountCurrent, -1) + insert(waitingForHistory).
+		if bel(not(getUserModelValue(mathLevel, _))) then getInteractantData(UserId, mathLevel).
 	}
+	
+	
 	
 	
 	if true then delete(waitingForInit) + insert(waitingForSession).

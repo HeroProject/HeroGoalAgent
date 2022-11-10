@@ -1,0 +1,37 @@
+use '../util/*.pl' as knowledge.
+use '../minidialogs/*.pl' as knowledge.
+use '../agent_actions' as actionspec.
+
+order=linear.
+
+module selectMathDialog(RemainingElements) {
+
+	if bel(enablePersonalization(1)) then 
+	{			
+		% Select a new minidialog based with a topic from the known topics of interest.
+		if bel(findSuitableMinidialog(math, topic, Minidialog))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a new minidialog based with a theme from the known topics of interest.
+		if bel(findSuitableMinidialog(math, theme, Minidialog))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a random math minidialog (in case no topics of knowns interests are available) that has matching the dependencies.
+		if bel(findall(ID, (minidialog(ID, [type=math, theme=_, topic=_]),
+				not(isInDialogHistory(ID, _)), dependencies(ID, Dependencies), matchesDepencencies(Dependencies)), Minidialogs), 
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+		
+		% Select a random math minidialog (in case no topics of knowns interests are available) that has no dependencies.
+		if bel(findall(ID, (minidialog(ID, [type=math, theme=_, topic=_]), not(isInDialogHistory(ID, _)), not(dependencies(ID, _))), Minidialogs), 
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	}
+	
+	if bel(enablePersonalization(0)) then
+	{			
+		if bel(findall(ID, (minidialog(ID, [type=math, theme=_, topic=_]), not(isInDialogHistory(ID, _))), Minidialogs),
+				random_select(Minidialog, Minidialogs, _))
+			then insert(selectedMinidialog(Minidialog, RemainingElements)).
+	}
+}

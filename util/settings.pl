@@ -6,16 +6,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% SESSION SETTINGS		    %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-multiSessionDesignId(zoe). % see minidialogs/session.pl for available multi-session designs
-sessionId(3).
+multiSessionDesignId(bieb). % see minidialogs/session.pl for available multi-session designs
+sessionId(1).
 userId('999').
+enablePersonalization(1).
+enableSupport(0).
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "Zoey"). % %fist_name% can be used in text.
+localVariable(first_name, "Mike").
+localVariable(student_name, "").
+localVariable(robot_name, "Hero").
+
+% Math setting
+startMathLevel(2).
+resetMathLevel(false).
+mathCorrectThreshold(1).
+interactionDurationInterval(30000).
 
 %%% Memory settings		    %%%
-useMemory(true). % condition
-continueSession(true).
+useMemory(true).
+continueSession(false).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DEFAULT VALUES		    %%%
@@ -23,15 +33,14 @@ continueSession(true).
 %%% ROBOT defaults		    %%%
 pauseButton('MiddleTactilTouched').
 basePosture('Stand').
-tabletUse(always). %can be repair, explicit, or always
+tabletUse(repair). %can be repair, explicit, or always
 
 %%% MOVECONFIG defaults		    %%% 
 % override config param for specific move by using key-label in key-value list associated with that move.
 
 % Order for input modalities and respective maximum number of attempts. Available modalities are speech, feet and tablet.
 
-%keyValue(default, default, inputModality, [speech=2, feet=2]).
-keyValue(default, default, inputModality, [tablet=1]).
+keyValue(default, default, inputModality, [speech=2, feet=2]).
 %keyValue(default, default, inputModality, [speech=2, tablet=1]).
 % If no answer is given during the first attempt, add an additional attempt to the max. number of attempts.
 keyValue(default, default, additionalAttempt, true).
@@ -46,7 +55,9 @@ keyValue(default, default, maxAnswerTime, [	feet=3000,
 						speechinputfirst=5000, 
 						speechinputnoninitial=3500,
 						speechquizfirst=5000,
-						speechquiznoninitial=3500]).					 
+						speechquiznoninitial=3500,
+						speechmathfirst=5000,
+						speechmathnoninitial=3500]).					 
 
 % Default responses of robot to an input modality switch.
 keyValue(default, default, modalitySwitchResponse, [feet='Sorry, dat ging even mis. Je kunt nu mijn voeten gebruiken om je antwoord door te geven.',

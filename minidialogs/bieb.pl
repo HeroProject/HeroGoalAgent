@@ -6,220 +6,239 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Kennismaking			                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%move(zoe_begroeting, s1, say).
-%text(zoe_begroeting, s1, "Hallo, mijn naam is Hero!").
-%anim(zoe_begroeting, s1, file, "resources/gestures/wave1.json").
-%next(zoe_begroeting, s1, "true", s2).
+move(bieb_begroeting, s1, say).
+text(bieb_begroeting, s1, "Hallo, mijn naam is Hero!").
+anim(bieb_begroeting, s1, file, "resources/gestures/wave1.json").
+next(bieb_begroeting, s1, "true", s2).
 
-move(zoe_begroeting, s2, say).
-text(zoe_begroeting, s2, "En ik ben een robot.").
-next(zoe_begroeting, s2, "true", s3).
+move(bieb_begroeting, s2, say).
+text(bieb_begroeting, s2, "En ik ben een robot.").
+next(bieb_begroeting, s2, "true", s3).
 
-move(zoe_begroeting, s3, say).
-moveConfig(zoe_begroeting, s3, [waitTimer=4000]).
-text(zoe_begroeting, s3, "Hoe heet jij?").
-next(zoe_begroeting, s3, "true", s4).
+move(bieb_begroeting, s3, say).
+moveConfig(bieb_begroeting, s3, [waitTimer=4000]).
+text(bieb_begroeting, s3, "Hoe heet jij?").
+next(bieb_begroeting, s3, "true", s4).
 
-move(zoe_begroeting, s4, say).
-text(zoe_begroeting, s4, "%first_name%, wat een mooie naam!").
-next(zoe_begroeting, s4, "true", s5).
+move(bieb_begroeting, s4, say).
+text(bieb_begroeting, s4, "%first_name%, wat een mooie naam!").
+next(bieb_begroeting, s4, "true", s5).
 
-move(zoe_begroeting, s5, say).
-text(zoe_begroeting, s5, "Ik heb nog nooit iemand ontmoet die zo heet. Denk ik").
-next(zoe_begroeting, s5, "true", s6).
+move(bieb_begroeting, s5, say).
+text(bieb_begroeting, s5, "Ik heb nog nooit iemand ontmoet die zo heet. Denk ik").
+next(bieb_begroeting, s5, "true", s6).
 
-move(zoe_begroeting, s6, say).
-text(zoe_begroeting, s6, "En ik vind het erg leuk dat ik vandaag met jou op de foto mag.").
-next(zoe_begroeting, s6, "true", s7).
+move(bieb_begroeting, s6, say).
+text(bieb_begroeting, s6, "En ik vind het erg leuk dat ik vandaag met jou mag kletsen.").
+next(bieb_begroeting, s6, "true", s7).
 
-move(zoe_begroeting, s1, say).
-text(zoe_begroeting, s1, "Maar ik vind het ook een beetje spannend.").
-next(zoe_begroeting, s1, "true", s8).
+move(bieb_begroeting, s7, say).
+text(bieb_begroeting, s7, "Maar ik vind het ook een beetje spannend.").
+next(bieb_begroeting, s7, "true", s8).
 
-move(zoe_begroeting, s8, question).
-moveConfig(zoe_begroeting, s8, [type=yesno, context='answer_yesno']).
-text(zoe_begroeting, s8, "Vind jij het ook spannend?").
-next(zoe_begroeting, s8, "answer_yes", s9ja).
-next(zoe_begroeting, s8, "answer_no", s9nee).
-next(zoe_begroeting, s8, "answer_dontknow", s9weetniet).
-next(zoe_begroeting, s8, "fail", s9weetniet).
+move(bieb_begroeting, s8, question).
+moveConfig(bieb_begroeting, s8, [type=yesno, context='answer_yesno']).
+text(bieb_begroeting, s8, "Vind jij het ook spannend?").
+next(bieb_begroeting, s8, "answer_yes", s9ja).
+next(bieb_begroeting, s8, "answer_no", s9nee).
+next(bieb_begroeting, s8, "answer_dontknow", s9weetniet).
+next(bieb_begroeting, s8, "fail", s9weetniet).
 
-move(zoe_begroeting, s9ja, say).
-text(zoe_begroeting, s9ja, "Wat goed, dan ben ik niet de enige").
-next(zoe_begroeting, s9ja, "true", s10).
+move(bieb_begroeting, s9ja, say).
+text(bieb_begroeting, s9ja, "Wat goed, dan ben ik niet de enige").
+next(bieb_begroeting, s9ja, "true", s10).
 
-move(zoe_begroeting, s9nee, say).
-text(zoe_begroeting, s9nee, "Wat goed, dan ben ik blij dat jij er bij bent.").
-next(zoe_begroeting, s9nee, "true", s10).
+move(bieb_begroeting, s9nee, say).
+text(bieb_begroeting, s9nee, "Wat goed, dan ben ik blij dat jij er bij bent.").
+next(bieb_begroeting, s9nee, "true", s10).
 
-move(zoe_begroeting, s9weetniet, say).
-text(zoe_begroeting, s9weetniet, "Ik ben blij dat jij er bij bent.").
-next(zoe_begroeting, s9weetniet, "true", s10).
+move(bieb_begroeting, s9weetniet, say).
+text(bieb_begroeting, s9weetniet, "Ik ben blij dat jij er bij bent.").
+next(bieb_begroeting, s9weetniet, "true", s10).
 
-move(zoe_begroeting, s10, say).
-text(zoe_begroeting, s10, "Dan doen we het samen.").
-next(zoe_begroeting, s10, "true", s11).
-
-move(zoe_begroeting, s11, say).
-text(zoe_begroeting, s11, "Zeg Mike en Aad, wat moeten we nu doen?").
+move(bieb_begroeting, s10, say).
+text(bieb_begroeting, s10, "Laten we beginnen.").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Secret handshake			                   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% Maken %%%
-move(zoe_handshake_maken, s1, say).
-text(zoe_handshake_maken, s1, "Zeg %first_name%. \pau=300\ ").
-next(zoe_handshake_maken, s1, "true", s2).
+move(bieb_handshake_maken, s1, say).
+text(bieb_handshake_maken, s1, "Zeg %first_name%. \pau=300\ ").
+next(bieb_handshake_maken, s1, "true", s2).
 
-move(zoe_handshake_maken, s2, say).
-text(zoe_handshake_maken, s2, "Ik heb gezien dat volwassenen elkaar een hand geven als ze elkaar ontmoeten en gedag zeggen.").
-next(zoe_handshake_maken, s2, "true", s3).
+move(bieb_handshake_maken, s2, say).
+text(bieb_handshake_maken, s2, "Ik heb gezien dat volwassenen elkaar een hand geven als ze elkaar ontmoeten en gedag zeggen.").
+next(bieb_handshake_maken, s2, "true", s3).
 
-move(zoe_handshake_maken, s3, say).
-text(zoe_handshake_maken, s3, "Maar dat lijkt me eigenlijk een beetje saai.").
-next(zoe_handshake_maken, s3, "true", s4).
+move(bieb_handshake_maken, s3, say).
+text(bieb_handshake_maken, s3, "Maar dat lijkt me eigenlijk een beetje saai.").
+next(bieb_handshake_maken, s3, "true", s4).
 
-move(zoe_handshake_maken, s4, say).
-text(zoe_handshake_maken, s4, "Iedereen geeft elkaar al een hand.").
-next(zoe_handshake_maken, s4, "true", s5).
+move(bieb_handshake_maken, s4, say).
+text(bieb_handshake_maken, s4, "Iedereen geeft elkaar al een hand.").
+next(bieb_handshake_maken, s4, "true", s5).
 
-move(zoe_handshake_maken, s5, say).
-text(zoe_handshake_maken, s5, "Laten wij onze eigen geheime begroeting bedenken!").
-next(zoe_handshake_maken, s5, "true", s6).
+move(bieb_handshake_maken, s5, say).
+text(bieb_handshake_maken, s5, "Laten wij onze eigen geheime begroeting bedenken!").
+next(bieb_handshake_maken, s5, "true", s6).
 
-move(zoe_handshake_maken, s6, say).
-text(zoe_handshake_maken, s6, "De begroeting bestaat uit een liedje en een beweging").
-next(zoe_handshake_maken, s6, "true", s7).
+move(bieb_handshake_maken, s6, say).
+text(bieb_handshake_maken, s6, "De begroeting bestaat uit een liedje en een beweging").
+next(bieb_handshake_maken, s6, "true", s7).
 
-move(zoe_handshake_maken, s7, say).
-text(zoe_handshake_maken, s7, "Ik heb alleen nog geen leuk liedje.").
-next(zoe_handshake_maken, s7, "true", s8).
+move(bieb_handshake_maken, s7, say).
+text(bieb_handshake_maken, s7, "Ik heb alleen nog geen leuk liedje.").
+next(bieb_handshake_maken, s7, "true", s8).
 
-move(zoe_handshake_maken, s8, say).
-text(zoe_handshake_maken, s8, "Wacht, ik download er wel eventjes twee").
-leds(zoe_handshake_maken, s8, direct, "eyes", "rotate", ['blue'], 500).
-next(zoe_handshake_maken, s8, "true", s9).
+move(bieb_handshake_maken, s8, say).
+text(bieb_handshake_maken, s8, "Wacht, ik download er wel eventjes twee").
+leds(bieb_handshake_maken, s8, direct, "eyes", "rotate", ['blue'], 500).
+next(bieb_handshake_maken, s8, "true", s9).
 
-move(zoe_handshake_maken, s9, say).
-text(zoe_handshake_maken, s9, "Mag jij zo kiezen welke je de leukste vind").
-next(zoe_handshake_maken, s9, "true", s10).
+move(bieb_handshake_maken, s9, say).
+text(bieb_handshake_maken, s9, "Mag jij zo kiezen welke je de leukste vind").
+next(bieb_handshake_maken, s9, "true", s10).
 
-move(zoe_handshake_maken, s10, say).
-text(zoe_handshake_maken, s10, "klaar").
-leds(zoe_handshake_maken, s10, reset).
-next(zoe_handshake_maken, s10, "true", s11).
+move(bieb_handshake_maken, s10, say).
+text(bieb_handshake_maken, s10, "klaar").
+leds(bieb_handshake_maken, s10, reset).
+next(bieb_handshake_maken, s10, "true", s11).
 
-move(zoe_handshake_maken, s11, say).
-text(zoe_handshake_maken, s11, "Dit is de eerste").
-next(zoe_handshake_maken, s11, "true", s12).
+move(bieb_handshake_maken, s11, say).
+text(bieb_handshake_maken, s11, "Dit is de eerste").
+next(bieb_handshake_maken, s11, "true", s12).
 
-move(zoe_handshake_maken, s12, say).
-audio(zoe_handshake_maken, s12, file, "resources/sounds/tiktok1.wav").
-next(zoe_handshake_maken, s12, "true", s13).
+move(bieb_handshake_maken, s12, say).
+audio(bieb_handshake_maken, s12, file, "resources/sounds/tiktok1.wav").
+next(bieb_handshake_maken, s12, "true", s13).
 
-move(zoe_handshake_maken, s13, say).
-text(zoe_handshake_maken, s13, "Dit is de tweede").
-next(zoe_handshake_maken, s13, "true", s14).
+move(bieb_handshake_maken, s13, say).
+text(bieb_handshake_maken, s13, "Dit is de tweede").
+next(bieb_handshake_maken, s13, "true", s14).
 
-move(zoe_handshake_maken, s14, say).
-audio(zoe_handshake_maken, s14, file, "resources/sounds/tiktok2.wav").
-next(zoe_handshake_maken, s14, "true", s15).
+move(bieb_handshake_maken, s14, say).
+audio(bieb_handshake_maken, s14, file, "resources/sounds/tiktok2.wav").
+next(bieb_handshake_maken, s14, "true", s15).
 
-move(zoe_handshake_maken, s15, question).
-moveConfig(zoe_handshake_maken, s15, [type=input, context="involvement_which_option_or_robot", options=['eerste', 'tweede', 'hero'], fast=yes, umVariable=keuze_liedje_handshake]).
-text(zoe_handshake_maken, s15, "Vind je het eerste of tweede liedje leuker, of zal ik kiezen?").
-next(zoe_handshake_maken, s15, "eerste", s16eerste1).
-next(zoe_handshake_maken, s15, "tweede", s16tweede1).
-next(zoe_handshake_maken, s15, "hero", s16hero1).
-next(zoe_handshake_maken, s15, "fail", s16fail1).
+move(bieb_handshake_maken, s15, question).
+moveConfig(bieb_handshake_maken, s15, [type=input, context="involvement_which_option_or_robot", options=['eerste', 'tweede', 'hero'], fast=yes, umVariable=keuze_liedje_handshake]).
+text(bieb_handshake_maken, s15, "Vind je het eerste of tweede liedje leuker, of zal ik kiezen?").
+next(bieb_handshake_maken, s15, "eerste", s16eerste1).
+next(bieb_handshake_maken, s15, "tweede", s16tweede1).
+next(bieb_handshake_maken, s15, "hero", s16hero1).
+next(bieb_handshake_maken, s15, "fail", s16fail1).
 
-move(zoe_handshake_maken, s16eerste1, say).
-text(zoe_handshake_maken, s16eerste1, "Het eerste liedje, die was leuk hè").
-save_sound(zoe_handshake_maken, s16eerste1, handshake_sound, "resources/sounds/tiktok1.wav").
-next(zoe_handshake_maken, s16eerste1, "true", s17).
+move(bieb_handshake_maken, s16eerste1, say).
+text(bieb_handshake_maken, s16eerste1, "Het eerste liedje, die was leuk hè").
+save_sound(bieb_handshake_maken, s16eerste1, handshake_sound, "resources/sounds/tiktok1.wav").
+next(bieb_handshake_maken, s16eerste1, "true", s17).
 
-move(zoe_handshake_maken, s16tweede1, say).
-text(zoe_handshake_maken, s16tweede1, "Het tweede liedje, die was leuk hè").
-save_sound(zoe_handshake_maken, s16tweede1, handshake_sound, "resources/sounds/tiktok2.wav").
-next(zoe_handshake_maken, s16tweede1, "true", s17).
+move(bieb_handshake_maken, s16tweede1, say).
+text(bieb_handshake_maken, s16tweede1, "Het tweede liedje, die was leuk hè").
+save_sound(bieb_handshake_maken, s16tweede1, handshake_sound, "resources/sounds/tiktok2.wav").
+next(bieb_handshake_maken, s16tweede1, "true", s17).
 
-move(zoe_handshake_maken, s16hero1, say).
-text(zoe_handshake_maken, s16hero1, "Het eerste liedje vond ik het leukst, dus die heb ik gekozen").
-save_sound(zoe_handshake_maken, s16hero1, handshake_sound, "resources/sounds/tiktok1.wav").
-next(zoe_handshake_maken, s16hero1, "true", s17).
+move(bieb_handshake_maken, s16hero1, say).
+text(bieb_handshake_maken, s16hero1, "Het eerste liedje vond ik het leukst, dus die heb ik gekozen").
+save_sound(bieb_handshake_maken, s16hero1, handshake_sound, "resources/sounds/tiktok1.wav").
+next(bieb_handshake_maken, s16hero1, "true", s17).
 
-move(zoe_handshake_maken, s16fail1, say).
-text(zoe_handshake_maken, s16fail1, "Ik heb even gemist wat je zei, sorry. Laten we voor het eerste liedje gaan.").
-save_sound(zoe_handshake_maken, s16fail1, handshake_sound, "resources/sounds/tiktok1.wav").
-next(zoe_handshake_maken, s16fail1, "true", s17).
+move(bieb_handshake_maken, s16fail1, say).
+text(bieb_handshake_maken, s16fail1, "Ik heb even gemist wat je zei, sorry. Laten we voor het eerste liedje gaan.").
+save_sound(bieb_handshake_maken, s16fail1, handshake_sound, "resources/sounds/tiktok1.wav").
+next(bieb_handshake_maken, s16fail1, "true", s17).
 
-move(zoe_handshake_maken, s17, say).
-text(zoe_handshake_maken, s17, "En dan nu de beweging").
-next(zoe_handshake_maken, s17, "true", s18).
+move(bieb_handshake_maken, s17, say).
+text(bieb_handshake_maken, s17, "En dan nu de beweging").
+next(bieb_handshake_maken, s17, "true", s18).
 
-move(zoe_handshake_maken, s18, say).
-text(zoe_handshake_maken, s18, "Je mag zo mijn armen vastpakken").
-next(zoe_handshake_maken, s18, "true", s19).
+move(bieb_handshake_maken, s18, say).
+text(bieb_handshake_maken, s18, "Je mag zo mijn armen vastpakken").
+next(bieb_handshake_maken, s18, "true", s19).
 
-move(zoe_handshake_maken, s19, say).
-text(zoe_handshake_maken, s19, "En ze bewegen, om een begroeting te maken, passend bij het liedje").
-next(zoe_handshake_maken, s19, "true", s20).
+move(bieb_handshake_maken, s19, say).
+text(bieb_handshake_maken, s19, "En ze bewegen, om een begroeting te maken, passend bij het liedje").
+next(bieb_handshake_maken, s19, "true", s20).
 
-move(zoe_handshake_maken, s20, say).
-text(zoe_handshake_maken, s20, "Dan sla ik die beweging op, zodat ik hem daarna weer kan nadoen").
-next(zoe_handshake_maken, s20, "true", s21).
+move(bieb_handshake_maken, s20, say).
+text(bieb_handshake_maken, s20, "Dan sla ik die beweging op, zodat ik hem daarna weer kan nadoen").
+next(bieb_handshake_maken, s20, "true", s21).
 
-move(zoe_handshake_maken, s21, say).
-moveConfig(zoe_handshake_maken, s21, [eventListener=['groen'='RightBumperPressed']]).
-text(zoe_handshake_maken, s21, "Als je er klaar voor bent, kun je op mijn teen drukken onder het groene lampje").
-set_stiffness(zoe_handshake_maken, s21, ['RArm', 'LArm'], 0).
-leds(zoe_handshake_maken, s21, direct, ['RightFootLeds'], ['groen']).
-next(zoe_handshake_maken, s21, "groen", s22).
+move(bieb_handshake_maken, s21, say).
+moveConfig(bieb_handshake_maken, s21, [eventListener=['groen'='RightBumperPressed']]).
+text(bieb_handshake_maken, s21, "Als je er klaar voor bent, kun je op mijn teen drukken onder het groene lampje").
+set_stiffness(bieb_handshake_maken, s21, ['RArm', 'LArm'], 0).
+leds(bieb_handshake_maken, s21, direct, ['RightFootLeds'], ['groen']).
+next(bieb_handshake_maken, s21, "groen", s22).
 
-move(zoe_handshake_maken, s22, say).
-text(zoe_handshake_maken, s22, "Pak mijn armen maar vast. Je kunt bewegen in 3. 2. 1.").
-leds(zoe_handshake_maken, s22, direct, ['RightFootLeds'], ['wit']).
-next(zoe_handshake_maken, s22, "true", s23).
+move(bieb_handshake_maken, s22, say).
+text(bieb_handshake_maken, s22, "Pak mijn armen maar vast. Je kunt bewegen in 3. 2. 1.").
+leds(bieb_handshake_maken, s22, direct, ['RightFootLeds'], ['wit']).
+next(bieb_handshake_maken, s22, "true", s23).
 
-move(zoe_handshake_maken, s23, say).
-record_motion(zoe_handshake_maken, s23, ['RArm', 'LArm'], 0).
-audio(zoe_handshake_maken, s23, id, handshake_sound).
-next(zoe_handshake_maken, s23, "true", s24).
+move(bieb_handshake_maken, s23, say).
+record_motion(bieb_handshake_maken, s23, ['RArm', 'LArm'], 0).
+audio(bieb_handshake_maken, s23, id, handshake_sound).
+next(bieb_handshake_maken, s23, "true", s24).
 
-move(zoe_handshake_maken, s24, say).
-moveConfig(zoe_handshake_maken, s24, [noAnimation="true"]).
-text(zoe_handshake_maken, s24, "3, 2, 1, klaar.").
-next(zoe_handshake_maken, s24, "true", s25).
+move(bieb_handshake_maken, s24, say).
+moveConfig(bieb_handshake_maken, s24, [noAnimation="true"]).
+text(bieb_handshake_maken, s24, "3, 2, 1, klaar.").
+next(bieb_handshake_maken, s24, "true", s25).
 
-move(zoe_handshake_maken, s25, say).
-moveConfig(zoe_handshake_maken, s25, [umVariable=handshake_motion]).
-save_motion(zoe_handshake_maken, s25, recording, ['RArm', 'LArm']).
-next(zoe_handshake_maken, s25, "true", s26).
+move(bieb_handshake_maken, s25, say).
+moveConfig(bieb_handshake_maken, s25, [umVariable=handshake_motion]).
+save_motion(bieb_handshake_maken, s25, recording, ['RArm', 'LArm']).
+next(bieb_handshake_maken, s25, "true", s26).
 
-move(zoe_handshake_maken, s26, say).
-text(zoe_handshake_maken, s26, "Het is heel mooi geworden.").
-next(zoe_handshake_maken, s26, "true", s27).
+move(bieb_handshake_maken, s26, say).
+text(bieb_handshake_maken, s26, "Het is heel mooi geworden.").
+next(bieb_handshake_maken, s26, "true", s27).
 
-move(zoe_handshake_maken, s27, say).
-text(zoe_handshake_maken, s27, "We gaan het zo terug kijken").
+move(bieb_handshake_maken, s27, say).
+text(bieb_handshake_maken, s27, "We gaan het zo terug kijken").
 
-%% Afspelen %%
-move(zoe_handshake_doen, s1, say).
-text(zoe_handshake_doen, s1, "Zo %first_name%.").
-next(zoe_handshake_doen, s1, "true", s2).
+%% Doei %%
+minidialog(bieb_doei, [type=functional, function=goodbye]).
 
-move(zoe_handshake_doen, s2, say).
-text(zoe_handshake_doen, s2, "Laten we nu onze geheime begroeting doen.").
-next(zoe_handshake_doen, s2, "true", s3).
+move(bieb_doei, s1, say).
+text(bieb_doei, s1, "Ik vond het leuk om kennis met je te maken, %first_name% ").
+next(bieb_doei, s1, "true", s2).
 
-move(zoe_handshake_doen, s3, say).
-audio(zoe_handshake_doen, s3, id, handshake_sound).
-anim(zoe_handshake_doen, s3, id, handshake_motion).
-next(zoe_handshake_doen, s3, "true", s4).
+move(bieb_doei, s2, question).
+moveConfig(bieb_doei, s2, [type=yesno, context='answer_yesno']).
+text(bieb_doei, s2, "Vond jij het ook leuk").
+next(bieb_doei, s2, "answer_yes", s3ja1).
+next(bieb_doei, s2, "answer_no", s3nee1).
+next(bieb_doei, s2, "answer_dontknow", s3nee1).
+next(bieb_doei, s2, "fail", s3fail1).
 
-move(zoe_handshake_doen, s4, say).
-text(zoe_handshake_doen, s4, "Wauw, dat was gaaf zeg.").
+move(bieb_doei, s3ja1, say).
+text(bieb_doei, s3ja1, "Fijn om te horen!").
+next(bieb_doei, s3ja1, "true", s7).
+
+move(bieb_doei, s3nee1, say).
+text(bieb_doei, s3nee1, "Oh, dan zal ik de volgende keer wat beter mijn best doen.").
+next(bieb_doei, s3nee1, "true", s7).
+
+move(bieb_doei, s3fail1, say).
+text(bieb_doei, s3fail1, "Mooi").
+next(bieb_doei, s3fail1, "true", s7).
+
+move(bieb_doei, s7, say).
+text(bieb_doei, s7, "Dan is het nu echt tijd om doei te zeggen.").
+next(bieb_doei, s7, "true", s8).
+
+move(bieb_doei, s8, say).
+text(bieb_doei, s8, "Doei %first_name% , tot snel!").
+next(bieb_doei, s8, "true", s10).
+
+move(bieb_doei, s10, say).
+audio(bieb_doei, s10, id, handshake_sound).
+anim(bieb_doei, s10, id, handshake_motion).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Kletsen				                   %%%
@@ -402,10 +421,11 @@ move(lievelingsdier, s18lievelingsdier1, say).
 text(lievelingsdier, s18lievelingsdier1, "Een %lievelingsdier% vind ik ook een heel cool dier!").
 next(lievelingsdier, s18lievelingsdier1, "true", s18lievelingsdier2).
 
-move(lievelingsdier, s18lievelingsdier2, say).
-moveConfig(lievelingsdier, s18lievelingsdier2, [waitTimer=3000]).
+move(lievelingsdier, s18lievelingsdier2, question).
+moveConfig(lievelingsdier, s18lievelingsdier2, [type=openend, context='answer_open', inputModality=[speech=1], umVariable=waarom_lievelingsdier]).
 text(lievelingsdier, s18lievelingsdier2, "Wat vind je zo leuk aan een %lievelingsdier%?").
-next(lievelingsdier, s18lievelingsdier2, "true", s18got_waarom1).
+next(lievelingsdier, s18lievelingsdier2, "success", s18got_waarom1).
+next(lievelingsdier, s18lievelingsdier2, "fail", s18got_no_waarom1).
 
 move(lievelingsdier, s18got_no_waarom1, say).
 text(lievelingsdier, s18got_no_waarom1, "%lievelingsdier% is onbeschrijfelijk leuk!").
@@ -596,9 +616,10 @@ text(lievelingseten, s7patat7, "anders kom ik eruit als een Hero-kroket!").
 next(lievelingseten, s7patat7, "true", s8).
 
 move(lievelingseten, s8, question).
-moveConfig(lievelingseten, s8, [waitTimer=3000]).
+moveConfig(lievelingseten, s8, [type=openend, context='answer_open', inputModality=[speech=1]]).
 text(lievelingseten, s8, "Wat vind jij eigenlijk lekker aan %lievelingseten_met_p%?").
-next(lievelingseten, s8, "true", s9).
+next(lievelingseten, s8, "success", s9).
+next(lievelingseten, s8, "fail", s9).
 
 move(lievelingseten, s9, say).
 text(lievelingseten, s9, "Zo dat klinkt goed.").

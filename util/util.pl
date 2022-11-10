@@ -20,8 +20,8 @@
 :-dynamic waitingForMemoryData/1,
 	userModel/1, 
 	waitingForSession/0, waitingForMetadata/0, waitingForHistory/0,
-	dialogHistory/1, narrativeHistory/1,
-	topicsOfInterest/1, availableChitchats/1.
+	dialogHistory/1, narrativeHistory/1, moveHistory/1, moveReset/1,
+	topicsOfInterest/1, availableChitchats/1, availableMathDialogs/1.
 
 % Predicates related to move execution and transition handling.
 :-dynamic currentMinidialog/1, selectedMinidialog/2, currentMove/1, currentInputModality/1, currentAttempt/1,   
@@ -32,10 +32,9 @@
 	additionalAttempt/2, %used to signal if a user gets an additional attempt.
 	waitingForTablet/1, waitingForDelay/0,
 	waitingForTimer/0,
-	waitingForInit/0,
-	eventListener/2.
-
-:- dynamic expCondition/1.
+	waitingForInit/0, waitingForAfterMemoryInit/0,
+	eventListener/2,
+	mathCorrect/1, activeInteraction/1, activeInteractionCount/2, mathTime/1, mathSupportStrategy/1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move parameter handling.                               %%%
@@ -90,7 +89,10 @@ getNarrativeDialogs(Thread, FromPos, Amount, [NarrativeMD| RemainingMD]) :-
 
 %%% Dependencies %%%
 matchesDepencencies([Depencency | Rest]) :- matchesDependency(Depencency), ! ; matchesDepencencies(Rest), !.
-matchesDependency([[Target, _, _] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=green] | T]) :- isInDialogHistory(Target, _), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=red] | T]) :- not(isInDialogHistory(Target, _)), matchesDependency(T), !.
+matchesDependency([[history=Target, filter=orange] | T]) :- sessionId(Session), not(isInDialogHistory(Target, Session)), matchesDependency(T), !.
+matchesDependency([[session=Sessions] | T]) :- sessionId(Session), member(Session, Sessions), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=green, values=["_any"]] | T]) :- getUserModelValue(Var, _), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=red, values=["_any"]] | T]) :- not(getUserModelValue(Var, _)), matchesDependency(T), !.
 matchesDependency([[umVariable=Var, filter=Filter, values=Values] | T]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values), matchesDependency(T), !.
@@ -101,7 +103,9 @@ matchesConditionals([]).
 matchesConditional([umVariable=Var, filter=green, values=["_any"]]) :- getUserModelValue(Var, _).
 matchesConditional([umVariable=Var, filter=red, values=["_any"]]) :- not(getUserModelValue(Var, _)).
 matchesConditional([umVariable=Var, filter=Filter, values=Values]) :- Values\=["_any"], listMatchInUserModel(Var, Filter, Values).
-matchesConditional([expCondition=Cond]) :- expCondition(Cond).
+matchesConditional([personalization=Enabled]) :- enablePersonalization(Enabled).
+matchesConditional([support=Enabled]) :- enableSupport(Enabled).
+
 
 extractVariablesFromConditionals(Conditionals, Vars) :- findall(Var, (flatten(Conditionals, FConds), member((umVariable=Var), FConds)), Vars).
 extractValuesFromConditionals(Conditionals, Values) :-
@@ -111,26 +115,34 @@ extractValuesFromConditionals(Conditionals, Values) :-
     %findall(Value, (flatten(Conditionals, FConds), member((values=Value), FConds)), Values),
     %findall(Var, (flatten(Values, FValues), (   member(Var, FValues), getUserModelValue(Var, _); member(VarS, FValues), atom_string(Var, VarS), getUserModelValue(Var, _))), VarsUS), sort(VarsUS, Vars).
 
-findSuitableChitchat(Chitchat, topic) 
+findSuitableMinidialog(chitchat, topic, Minidialog) 
 	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
-	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findChitchatWithRandomTopic(Topics, Chitchat).
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findMinidialogWithRandomTopic(chitchat, Topics, Minidialog).
 
-findSuitableChitchat(Chitchat, theme) 
+findSuitableMinidialog(chitchat, theme, Minidialog) 
 	:- topicsOfInterest(TopicsOfInterest), availableChitchats(AvailableTopics),
-	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findChitchatWithRandomTheme(Topics, Chitchat).
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findMinidialogWithRandomTheme(chitchat, Topics, Minidialog).
 
-findChitchatWithRandomTopic(Topics, Chitchat) :- random_select(Topic, Topics, RemainingTopics), (findRandomChitchatWithTopic(Topic, Chitchat), ! ; not(findRandomChitchatWithTopic(Topic, _)), findChitchatWithRandomTopic(RemainingTopics, Chitchat)).
-findRandomChitchatWithTopic(Topic, Chitchat) :- findall(ID, (minidialog(ID, [type=chitchat, theme=_, topic=Topic]), chitchatMatchesTopic(Topic, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
-chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
+findSuitableMinidialog(math, topic, Minidialog) 
+	:- topicsOfInterest(TopicsOfInterest), availableMathDialogs(AvailableTopics),
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findMinidialogWithRandomTopic(math, Topics, Minidialog).
+
+findSuitableMinidialog(math, theme, Minidialog) 
+	:- topicsOfInterest(TopicsOfInterest), availableMathDialogs(AvailableTopics),
+	ord_intersection(TopicsOfInterest, AvailableTopics, Topics), findMinidialogWithRandomTheme(math, Topics, Minidialog).
+
+findMinidialogWithRandomTopic(Type, Topics, Chitchat) :- random_select(Topic, Topics, RemainingTopics), (findRandomMinidialogWithTopic(Type, Topic, Chitchat), ! ; not(findRandomMinidialogWithTopic(Type, Topic, _)), findMinidialogWithRandomTopic(Type, RemainingTopics, Chitchat)).
+findRandomMinidialogWithTopic(Type, Topic, Chitchat) :- findall(ID, (minidialog(ID, [type=Type, theme=_, topic=Topic]), minidialogMatchesTopic(Type, Topic, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
+minidialogMatchesTopic(Type, Topic, Chitchat) :- minidialog(Chitchat, [type=Type, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
 			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
-chitchatMatchesTopic(Topic, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
+minidialogMatchesTopic(Type, Topic, Chitchat) :- minidialog(Chitchat, [type=Type, theme=_, topic=Topic]), not(isInDialogHistory(Chitchat, _)),
 			not(dependencies(Chitchat, _)).
 
-findChitchatWithRandomTheme(Themes, Chitchat) :- random_select(Theme, Themes, RemainingThemes), (findRandomChitchatWithTheme(Theme, Chitchat), ! ; not(findRandomChitchatWithTheme(Theme, _)), findChitchatWithRandomTheme(RemainingThemes, Chitchat)).
-findRandomChitchatWithTheme(Theme, Chitchat) :- findall(ID, (minidialog(ID, [type=chitchat, theme=Theme, topic=_]), chitchatMatchesTheme(Theme, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
-chitchatMatchesTheme(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+findMinidialogWithRandomTheme(Type, Themes, Chitchat) :- random_select(Theme, Themes, RemainingThemes), (findRandomMinidialogWithTheme(Type, Theme, Chitchat), ! ; not(findRandomMinidialogWithTheme(Type, Theme, _)), findMinidialogWithRandomTheme(Type, RemainingThemes, Chitchat)).
+findRandomMinidialogWithTheme(Type, Theme, Chitchat) :- findall(ID, (minidialog(ID, [type=Type, theme=Theme, topic=_]), minidialogMatchesTheme(Type, Theme, ID)), Chitchats), random_select(Chitchat, Chitchats, _).
+minidialogMatchesTheme(Type, Theme, Chitchat) :- minidialog(Chitchat, [type=Type, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
 			dependencies(Chitchat, Dependencies), matchesDepencencies(Dependencies).
-chitchatMatchesTheme(Theme, Chitchat) :- minidialog(Chitchat, [type=chitchat, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
+minidialogMatchesTheme(Type, Theme, Chitchat) :- minidialog(Chitchat, [type=Type, theme=Theme, topic=_]), not(isInDialogHistory(Chitchat, _)),
 			not(dependencies(Chitchat, _)).
 
 addToTopicsOfInterest([answer_yes=Topics | T], ToI, UpdatedToI) :- append(ToI, Topics, ToII), sort(ToII, ToIII), addToTopicsOfInterest(T, ToIII, UpdatedToI).
@@ -178,7 +190,6 @@ updateUserModelList([Key=Value | T], OldUserModel, NewUserModel) :- updateUserMo
 updateUserModelList([], UserModel, UserModel).
 
 getUserModelValue(Key, Value) :- userModel(UserModel), member((Key=Value), UserModel).
-%getUserModelValue(Key, Key) :- userModel(UserModel), not(member((Key=_), UserModel)).
 getUserModelWithoutLocal(ProcessedUserModel) :- userModel(UserModel), member((first_name=FirstName), UserModel), delete(UserModel, (first_name=FirstName), ProcessedUserModel).
 getUserModelWithoutLocal(UserModel) :- userModel(UserModel), not(member((first_name=_), UserModel)).
 
@@ -283,11 +294,74 @@ is_nested_list(Canditate):- atom_chars(Canditate, ['[' | _]).
 delete_minidialogs(MinidialogsList, [H | Minidialog], NewMinidialogsList) :- delete(MinidialogsList, H, IntermidiateList), delete_minidialogs(IntermidiateList, Minidialog, NewMinidialogsList), !.
 delete_minidialogs(MinidialogsList, [H | []], NewMinidialogsList):- delete(MinidialogsList, H, NewMinidialogsList), !.
 
+% Text generation
+generate_text_from_source(math_correct_acknowledge, SelectedText) :- findall(Text, math_correct_acknowledge(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_correct_praise, SelectedText) :- findall(Text, math_correct_praise(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_incorrect, SelectedText) :- findall(Text, math_incorrect(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_no_answer, SelectedText) :- findall(Text, math_no_answer(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_move_on, SelectedText) :- findall(Text, math_move_on(Text), Texts), random_select(SelectedText, Texts, _).
+generate_text_from_source(math_incorrect_after_hint, SelectedText) :- findall(Text, math_incorrect_after_hint(Text), Texts), random_select(SelectedText, Texts, _).
+
+% Session pruning
+excludePrunning(Minidialog) :- atom_string(Minidialog, MDS), split_string(MDS, "_", "", ["math" | _]).
+getPrunedSession(Session, History, 1, [general_wakeup, KeepLast | Pruned]) :- last(History, KeepLast), not(excludePrunning(KeepLast)), pruneSession(Session, History, Pruned), !.
+getPrunedSession(Session, History, 1, [general_wakeup | Pruned]) :- last(History, KeepLast), excludePrunning(KeepLast), pruneSession(Session, History, Pruned), !.
+getPrunedSession(Session, History, 0, [general_wakeup | Pruned]) :- pruneSession(Session, History, Pruned), !.
+
+pruneSession([[narrative=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[topic=_] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[theme=Theme] | SessionRemain], [_ | HistoryRemain], PrunedRest) :- Theme\=math, pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[type=math, params=_] | SessionRemain], [_ | HistoryRemain], [[type=math]| PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([[type=math] | SessionRemain], [_ | HistoryRemain], [[type=math]| PrunedRest]) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([CurrentDialog | SessionRemain], [CurrentDialog | HistoryRemain], PrunedRest) :- pruneSession(SessionRemain, HistoryRemain, PrunedRest).
+pruneSession([CurrentDialog | SessionRemain], [CurrentHistory | HistoryRemain], PrunedRest) :- CurrentDialog\=CurrentHistory, pruneSession([CurrentDialog | SessionRemain], HistoryRemain, PrunedRest).
+pruneSession(Session, [], Session).
+pruneSession([], [], []).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Math			            		   %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+mathMaxLevel(11).
+math_generate_left_right(0, Left, Right, Answer) :- random_member(Left, [2, 5, 10]), random(2,11, Right), Answer is Left*Right, !.
+math_generate_left_right(1, Left, Right, Answer) :- random(2,11, Left), random(2,10, Right), Answer is Left*Right, !.
+math_generate_left_right(2, Left, Right, Answer) :- random(2,11, Left), random(1,10, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(3, Left, Right, Answer) :- random(2,11, Left), random(1,10, R1), random_member(Factor, [100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(4, Left, Right, Answer) :- random(2,11, L1), Left is L1 * 10, random(2,10, R1), Right is R1 * 10, Answer is Left*Right, !.
+math_generate_left_right(5, Left, Right, Answer) :- random(2,11, Left), random(11,20, Right), Answer is Left*Right, !.
+math_generate_left_right(6, Left, Right, Answer) :- random(11,20, Left), random(2,10, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(7, Left, Right, Answer) :- random(2,11, Left), random(11,100, Right), Answer is Left*Right, !.
+math_generate_left_right(8, Left, Right, Answer) :- random(2,11, Left), random(11,100, R1), random_member(Factor, [10, 100]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(9, Left, Right, Answer) :- random(11,100, Left), random(2,10, R1), random_member(Factor, [10, 100, 1000]), Right is R1 * Factor, Answer is Left*Right, !.
+math_generate_left_right(10, Left, Right, Answer) :- random(11,20, Left), random(11,20, Right), Answer is Left*Right, !.
+math_generate_left_right(11, Left, Right, Answer) :- random(11,100, Left), random(11,100, Right), Answer is Left*Right, !.
 
-math_generate_left_right(Left, Right, Answer) :- random(2,11, Left), random(2,11, Right), Answer is Left*Right.
+mathHintStrategies([tafel_rij, tafel_rij, kleine_som, kleine_som, kleine_som, splitsen, kleine_som, splitsen, none, none, none, none]).
+math_get_hintstrategy(Level, _, _, Strategy) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), (Strategy=splitsen; Strategy=tafel_rij).
+math_get_hintstrategy(Level, _, Right, kleine_som_1000) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 1000, Right < 10000.
+math_get_hintstrategy(Level, _, Right, kleine_som_100) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 100, Right < 1000.
+math_get_hintstrategy(Level, _, Right, kleine_som_10) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=kleine_som, Right >= 10, Right < 100.
+math_get_hintstrategy(Level, Left, _, tafel_rij) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel, (Left=2; Left=5; Left=10).
+math_get_hintstrategy(Level, Left, _, steunsom) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel, (Left=3; Left=6; Left=9).
+math_get_hintstrategy(Level, 4, _, verdubbelen_4) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
+math_get_hintstrategy(Level, 8, _, verdubbelen_8) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
+math_get_hintstrategy(Level, 7, _, split_7) :- mathHintStrategies(Strategies), nth0(Level, Strategies, Strategy), Strategy=tafel.
+
+math_generate_hint_splitsen(Left, Right, Big, Left * Big, Small, Left * Small) :-  number_string(Right, RightString), string_chars(RightString, [BigChar, SmallChar]), 
+								string_chars(BigString, [BigChar, '0']), string_chars(SmallString, [SmallChar]), 
+								number_string(Big, BigString), number_string(Small, SmallString).
+
+math_generate_hint_kleine_som(Left, Right, Som1, Answer1, Som10, Answer10, Som100, Answer100) :- Som1 is Right / 1000, Answer1 is Left * Som1, 
+												 Som10 is Right / 100, Answer10 is Left * Som10,
+												 Som100 is Right / 10, Answer100 is Left * Som100.
+
+steunsommen([2,5,10]).
+math_generate_hint_steunsom(Left, Right, Steunsom, Steunanswer, '1 keer meer') :- steunsommen(Steunsommen), Steunsom is Left+1, Steunanswer is Steunsom * Right, member(Steunsom, Steunsommen), !.
+math_generate_hint_steunsom(Left, Right, Steunsom, Steunanswer, '1 keer minder') :- steunsommen(Steunsommen), Steunsom is Left-1, Steunanswer is Steunsom * Right, member(Steunsom, Steunsommen), !.
+
+math_generate_hint_verdubbelen(Left, Right, [Answer2, Answer4]) :- Left=8, Answer2 is 2 * Right, Answer4 is 4 * Right. 
+math_generate_hint_verdubbelen(Left, Right, [Answer2]) :- Left=4, Answer2 is 2 * Right.
+
+math_generate_hint_split_7(Right, Answer2, Answer5) :- Answer2 is 2 * Right, Answer5 is 5 * Right.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Move completion logic               		   %%%

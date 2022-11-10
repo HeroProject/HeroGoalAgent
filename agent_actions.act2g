@@ -172,6 +172,10 @@ define setTopicsOfInterest(ID, Topics) with
 define clearHistory(ID, SessionId) with
 	pre { true }
 	post { waitingForEvent('HistoryCleared') }
+	
+define clearDialogHistory(ID, SessionId) with
+	pre { true }
+	post { waitingForEvent('DialogHistoryCleared') }
 
 define deleteInteractant(ID) with
 	pre { true }

@@ -3,9 +3,9 @@ use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../agent_actions' as actionspec.
 
-module logging(Entry) {
+module logging(Type, Entry) {
 	if bel(userId(UID)) then {
-		if bel(useMemory(true)) then setMemoryEntry(UID, 'interaction_history', Entry) + log(interaction_history(UID, 'interaction_history', Entry)).
-		if not(bel(useMemory(true))) then log(interaction_history(UID, 'interaction_history', Entry)).
+		if bel(useMemory(true)) then setMemoryEntry(UID, Type, Entry) + log(system_log(UID, Type, Entry)).
+		if not(bel(useMemory(true))) then log(interaction_history(UID, Type, Entry)).
 	}
 }

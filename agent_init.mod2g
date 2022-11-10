@@ -9,7 +9,8 @@ module agent_init {
 	if true then insert(waitingForInit,
 						start, nextCondition('true'),
 						posture('Unknown'), batteryCharge(100),
-						availableChitchats([])).
+						availableChitchats([]), availableMathDialogs([]),
+						mathCorrect(0), mathSupportStrategy(none)).
 	
 	% Initalize pause button
 	if bel(pauseButton(PB)) then insert(waitForPause(PB)).
@@ -22,14 +23,14 @@ module agent_init {
 	if bel(availableChitchats(Chitchats), findall([Th, To], minidialog(_, [type=chitchat, theme=Th, topic=To]), L), flatten(L, FL), sort(FL, ChitchatsSet))
 		then delete(availableChitchats(Chitchats)) + insert(availableChitchats(ChitchatsSet)).
 	
+	if bel(availableMathDialogs(Chitchats), findall([Th, To], minidialog(_, [type=math, theme=Th, topic=To]), L), flatten(L, FL), sort(FL, MathSet))
+		then delete(availableMathDialogs(Chitchats)) + insert(availableMathDialogs(MathSet)).
+	
 	% If first move is a question move, initialize required properties
 	if bel(currentMinidialog(Minidialog), currentMove(Move), move(Minidialog, Move, question), getInputModalityOrder(Minidialog, Move, Order), nth0(0, Order, NewModality)) 
 		then insert(currentInputModality(NewModality), modalityCounter(0), currentAttempt(1), mcCounter(0)).
 	
 	% Show a default (empty) page on any connected browser
 	if bel(html('',Html)) then renderPage(Html).
-	
-	% Set experimantal condition
-	if bel(useMemory(true)) then insert(expCondition(memory)).
-	if bel(useMemory(false)) then insert(expCondition(control)).
+
 }

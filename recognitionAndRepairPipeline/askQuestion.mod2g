@@ -2,7 +2,6 @@ use '../util/*.pl' as knowledge.
 use '../minidialogs/*.pl' as knowledge.
 use '../minidialogs/co_creation/*.pl' as knowledge.
 use '../agent_actions' as actionspec.
-use '../util/logging' as module.
 
 module askQuestion(Minidialog, Move) {
 	if bel(currentAttempt(CurrentAttempt))

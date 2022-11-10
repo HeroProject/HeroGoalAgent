@@ -16,6 +16,9 @@ module loadDependencyMetadata(Session) {
 				
 			if bel(SessionItem = [thread=Thread], findall(ID, (minidialog(ID, [type=narrative, thread=Thread, position=_])), Minidialogs))
 				then loadDependencyMetadataHelper(Minidialogs).
+			
+			if bel((SessionItem = [type=math]; SessionItem = [type=math, params=_]), findall(ID, (minidialog(ID, [type=math, theme=_, topic=_])), Minidialogs))
+				then loadDependencyMetadataHelper(Minidialogs).
 						
 			if bel(L \= 0) then loadDependencyMetadata(RestOfSession).
 			

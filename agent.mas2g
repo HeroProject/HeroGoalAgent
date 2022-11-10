@@ -1,4 +1,4 @@
-use '..\..\clients\sic-eis-connector.jar' as environment with
+use '../../clients/sic-eis-connector.jar' as environment with
 		server='localhost',
 		flowkey='util/dialogflowagent_hero.json',
 		flowagent='mikeagent-dsvpjs',
