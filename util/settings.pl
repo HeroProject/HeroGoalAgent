@@ -13,9 +13,8 @@ enablePersonalization(1).
 enableSupport(0).
 
 %%% Local Variables 		    %%%
-localVariable(first_name, "Mike").
-localVariable(student_name, "").
-localVariable(robot_name, "Hero").
+localVariable(first_name, "Noortje").
+localVariable(supervisor_name, "Mike").
 
 % Math setting
 startMathLevel(2).
