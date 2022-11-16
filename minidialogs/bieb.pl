@@ -42,18 +42,12 @@ next(bieb_begroeting, s8, "fail", s9weetniet).
 
 move(bieb_begroeting, s9ja, say).
 text(bieb_begroeting, s9ja, "Wat goed, dan ben ik niet de enige").
-next(bieb_begroeting, s9ja, "true", s10).
 
 move(bieb_begroeting, s9nee, say).
 text(bieb_begroeting, s9nee, "Wat goed, dan ben ik blij dat jij er bij bent.").
-next(bieb_begroeting, s9nee, "true", s10).
 
 move(bieb_begroeting, s9weetniet, say).
 text(bieb_begroeting, s9weetniet, "Ik ben blij dat jij er bij bent.").
-next(bieb_begroeting, s9weetniet, "true", s10).
-
-move(bieb_begroeting, s10, say).
-text(bieb_begroeting, s10, "").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Secret handshake			                   %%%
@@ -682,12 +676,12 @@ text(robospelen_1_intro, s14, "Zoals wie het hoogst kan springen.").
 next(robospelen_1_intro, s14, "true", s15).
 
 move(robospelen_1_intro, s15, say).
-anim(robospelen_1_intro, s15, onRobot, "jump_attempt/behavior_1").
+%anim(robospelen_1_intro, s15, onRobot, "jump_attempt/behavior_1").
 next(robospelen_1_intro, s15, "true", s16).
 
 move(robospelen_1_intro, s16, say).
 text(robospelen_1_intro, s16, "En wie het best origami kan vouwen").
-anim(robospelen_1_intro, s16, onRobot, "wiggle_fingers/behavior_1").
+%anim(robospelen_1_intro, s16, onRobot, "wiggle_fingers/behavior_1").
 next(robospelen_1_intro, s16, "true", s17).
 
 move(robospelen_1_intro, s17, say).
@@ -710,11 +704,6 @@ next(robospelen_1_intro, s20, "true", s21).
 move(robospelen_1_intro, s21, say).
 text(robospelen_1_intro, s21, "dat al mijn lichtjes kapot sprongen.").
 next(robospelen_1_intro, s21, "true", s22).
-
-move(robospelen_1_intro, s22, say).
-text(robospelen_1_intro, s22, "Dus ik moet nog veel oefenen voor de Robo Spelen er zijn!").
-leds(robospelen_1_intro, s22, reset).
-next(robospelen_1_intro, s22, "true", s23).
 
 move(robospelen_1_intro, s22, say).
 text(robospelen_1_intro, s22, "Dus ik moet nog veel oefenen voor de Robo Spelen er zijn!").
